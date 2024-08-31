@@ -1,6 +1,6 @@
 <template>
-  <div className="min-h-screen">
-    <Card className="mt-4 pb-10 px-0">
+  <div className="min-h-screen flex justify-center items-center">
+    <Card className="pb-10 px-0">
       <div className="px-4">
         <h3 className="mb-8 text-center text-lg font-semibold">
           Wähle dein Profil aus:
@@ -16,12 +16,7 @@
           :id="profile.id"
           avatarSrc="/images/yannik.jpeg"
           :title="profile.type"
-          :interests="[
-            { value: '1', label: 'Surfen' },
-            { value: '2', label: 'Tauchen' },
-            { value: '3', label: 'Dog Walken' },
-            { value: '4', label: 'Programmieren' },
-          ]"
+          :interests="profile.interests"
           @click="selectProfile(profile)"
         />
       </ul>
@@ -48,7 +43,7 @@ const session = inject('session');
 const profile = inject('profile');
 const user = computed(() => session.value?.user);
 
-async function fetchProfiles(userId: number) {
+const fetchProfiles = async (userId: number) => {
   try {
     const res = await fetch(`http://localhost:3000/api/profile/?userId=${userId}`);
     if (!res.ok) throw new Error('Network response error');
@@ -62,6 +57,7 @@ async function fetchProfiles(userId: number) {
 
 async function selectProfile(selected: Object) {
   profile.value = selected;
+  localStorage.setItem('profile', JSON.stringify(selected));
   router.push(`/main`);
 }
 

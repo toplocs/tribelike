@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import prisma from './lib/prisma';
 
-//make index file
 import authRouter from './api/auth';
 import userRouter from './api/user';
 import profileRouter from './api/profile';
+import interestRouter from './api/interest';
 
 dotenv.config();
 
@@ -26,6 +26,8 @@ app.use(cors({
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/interest', interestRouter);
+
 app.get('/', (req: Request, res: Response) => res.redirect(URL as string));
 
 

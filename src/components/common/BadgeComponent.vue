@@ -4,12 +4,15 @@
   >
     <component :is="icon" class="w-4 h-4 text-blue-900 dark:text-blue-400" v-if="icon" />
     <span>{{ title }}</span>
+    <XMarkIcon @click="remove(title)" class="w-4 h-4 cursor-pointer" />
   </span>
 </template>
 
 <script setup lang="ts">
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 const props = defineProps<{
-  title: string;
-  icon?: any;
+  title: String,
+  icon?: Function,
+  remove?: Function,
 }>();
 </script>

@@ -69,7 +69,7 @@ const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-async function sendLogin() {
+const sendLogin = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const res = await fetch('http://localhost:3000/api/auth/login', {
@@ -86,7 +86,7 @@ async function sendLogin() {
   }
 }
 
-async function onSubmit() {
+const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
@@ -99,5 +99,4 @@ async function onSubmit() {
     console.error(error);
   }
 }
-
 </script>

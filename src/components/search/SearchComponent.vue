@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" ref="selectContainer">
+  <div class="relative w-full" ref="selectContainer">
     <input
       v-model="inputValue"
       type="text"
@@ -21,11 +21,11 @@
       <ul class="max-h-60 overflow-y-auto">
         <li
           v-for="option in filteredOptions"
-          :key="option.value"
+          :key="option.id"
           @click="selectOption(option)"
           class="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
-          {{ option.label }}
+          {{ option.title }}
         </li>
         <li v-if="filteredOptions.length === 0" class="px-4 py-2 text-gray-500">
           Keine Suchergebnisse
@@ -36,12 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
-  options: {
-    type: Array as () => { value: string; label: string }[],
+  findOptions: {
+    type: Function,
     required: true
   },
   placeholder: {
@@ -61,18 +61,18 @@ const props = defineProps({
 const inputValue = ref('');
 const selectedOption = ref(null);
 const isOpen = ref(false);
+const filteredOptions = ref([]);
 const selectContainer = ref<HTMLElement | null>(null);
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: { value: string; label: string } | string): void;
-  (event: 'selected', value: { value: string; label: string }): void;
+  (event: 'update:modelValue', value: { id: number; title: string } | string): void;
+  (event: 'selected', value: { id: number; title: string }): void;
 }>();
 
-const filteredOptions = computed(() => {
-  if (inputValue.value.length < 3) return [];
-  return props.options.filter(option => 
-    option.label.toLowerCase().includes(inputValue.value.toLowerCase())
-  );
-});
+const fetchFilteredOptions = async () => {
+  if (inputValue.value.length < 3) return filteredOptions.value = [];
+  
+  filteredOptions.value = await props.findOptions(inputValue.value);
+};
 
 const openDropdown = () => {
   isOpen.value = true;
@@ -86,12 +86,9 @@ const onInput = () => {
   openDropdown();
 };
 
-const selectOption = (option: {
-  value: string;
-  label: string
-}) => {
+const selectOption = (option: { id: number; title: string }) => {
   selectedOption.value = option;
-  inputValue.value = option.label;
+  inputValue.value = '';
   emit('update:modelValue', option);
   emit('selected', option);
   closeDropdown();
@@ -109,5 +106,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside);
+});
+
+watch(inputValue, () => {
+  fetchFilteredOptions();
 });
 </script>

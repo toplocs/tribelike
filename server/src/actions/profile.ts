@@ -8,6 +8,9 @@ export async function findProfiles(query: {
     const profiles = await prisma.profile.findMany({
       where: {
         userId: query.userId,
+      },
+      include: {
+        interests: true,
       }
     });
 

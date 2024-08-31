@@ -34,16 +34,11 @@ const getSession = async () => {
   }
 }
 
-const getProfile = async (userId: string) => {
+const getProfile = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/api/profile`, {
-      method: 'GET',
-      headers: {
-        'UserId': userId,
-        'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+    const storage = localStorage.getItem('profile');
+
+    return JSON.parse(storage);
   } catch (e) {
     console.error(e);
   }
@@ -51,6 +46,7 @@ const getProfile = async (userId: string) => {
 
 onMounted(async () => {
   session.value = await getSession();
+  profile.value = await getProfile();
 });
 
 provide('session', session);

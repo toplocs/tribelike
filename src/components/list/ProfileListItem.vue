@@ -12,7 +12,11 @@
         {{ title }}
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <Badge v-for="interest in interests" :key="interest.value" :title="interest.label" />
+        <Badge
+          v-for="interest in interests"
+          :key="interest.id"
+          :title="interest.title"
+        />
       </div>
     </div>
     <div class="flex-2 h-full p-4">

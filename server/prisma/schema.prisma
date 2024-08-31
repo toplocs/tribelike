@@ -32,6 +32,6 @@ model Profile {
 
 model Interest {
   id       Int       @id @default(autoincrement())
-  name     String    @unique() // Ensuring the interest name is unique
+  title     String    @unique()
   profiles Profile[] @relation("ProfileInterests")
 }
