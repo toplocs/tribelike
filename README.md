@@ -37,3 +37,9 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Generate ERD for Database Schema
+
+```sh
+npm run erd
+```
