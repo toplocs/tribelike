@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma';
-import { auth, login, logout } from '../lib/auth';
+import { auth } from '../lib/auth';
 
 export async function findProfiles(query: {
   userId?: string,
@@ -10,7 +10,11 @@ export async function findProfiles(query: {
         userId: query.userId,
       },
       include: {
-        interests: true,
+        interests: {
+          include: {
+            parent: true,
+          }
+        }
       }
     });
 
@@ -21,16 +25,46 @@ export async function findProfiles(query: {
   }
 }
 
-export async function createProfile(userId: string, formData: {
-  image: string,
+export async function createProfile(formData: {
+  authHeader: string,
   type: string,
+  image: string,
+  email: string,
 }) {
   try {
+    const session = await auth(formData.authHeader);
+    const user = session?.user;
     const profile = await prisma.profile.create({
       data: {
-        userId: userId,
+        userId: user.id,
         type: formData.type,
         image: formData.image || '/images/yannik.jpeg',
+        email: formData.email,
+      }
+    });
+
+    return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function changeProfile(formData: {
+  authHeader: string,
+  type: string,
+  image: string,
+  email: string,
+}) {
+  try {
+    const session = await auth(formData.authHeader);
+    const user = session?.user;
+    const profile = await prisma.profile.create({
+      data: {
+        userId: user.id,
+        type: formData.type,
+        image: formData.image || '/images/yannik.jpeg',
+        email: formData.email,
       }
     });
 

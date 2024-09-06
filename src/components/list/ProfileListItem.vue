@@ -26,10 +26,24 @@
       />
     </div>
     <div class="flex-3 h-full p-4">
-      <TrashIcon
-        class="w-6 h-6 text-red-200 hover:text-red-400"
-        @click.stop="openDeleteDialog"
-      />
+    <Dialog>
+      <template #trigger="{ openDialog }">
+        <TrashIcon
+          class="w-6 h-6 text-red-200 hover:text-red-400"
+          @click.stop="openDialog"
+        />
+      </template>
+
+      <template #content="{ closeDialog }">
+        <ConfirmDialog
+          text="Möchtest du dieses Profil wirklich löschen?"
+          :closeDialog="(x) => {
+            console.log(x);
+            closeDialog();
+          }"
+        />
+      </template>
+    </Dialog>
     </div>
   </div>
 </template>
@@ -37,6 +51,8 @@
 <script setup lang="ts">
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import Badge from '../../components/common/BadgeComponent.vue';
+import Dialog from '../../components/dialog/DialogComponent.vue';
+import ConfirmDialog from '../../components/dialog/ConfirmDialog.vue';
 
 const props = defineProps({
   avatarSrc: {
@@ -44,7 +60,7 @@ const props = defineProps({
     required: true
   },
   id: {
-    type: Number,
+    type: String,
     required: true
   },
   title: {

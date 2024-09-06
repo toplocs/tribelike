@@ -82,27 +82,6 @@
           />
         </div>
 
-        <div className="mb-2">
-          <label
-            for="select"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Account Typ
-          </label>
-
-          <SelectInput
-            name="type"
-            :options="[
-              { label: 'Privat', value: 'privat' },
-              { label: 'Business', value: 'business' },
-              { label: 'Hobby', value: 'hobby' },
-              { label: 'Reisen', value: 'reisen' }
-            ]"
-            placeholder="Wähle eine Option aus"
-            defaultValue=0
-          />
-        </div>
-
         <SubmitButton className="w-full mt-4">
           Account erstellen
         </SubmitButton>

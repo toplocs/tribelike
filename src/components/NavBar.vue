@@ -1,9 +1,9 @@
 <template>
-  <div v-if="session && profile" class="fixed w-full top-0 bg-slate-50 border-b dark:bg-neutral-900 z-10">
+  <div v-if="session && profile" class="fixed w-full top-0 bg-opacity-30 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10">
     <div class="px-2 max-w-2xl  mx-auto flex flex-row justify-between items-center gap-4">
 
       <span class="flex items-center gap-2">
-        <h1 class="text-center font-bold text-gray-600 tracking-wider">
+        <h1 class="text-center font-bold text-gray-600 dark:text-white tracking-wider">
           {{ title.toUpperCase() }}
         </h1>
       </span>

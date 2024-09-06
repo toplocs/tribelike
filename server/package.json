@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.9.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/multer": "^1.4.11",
@@ -21,6 +22,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
     "prisma": "^5.17.0",
+    "prisma-erd-generator": "^1.11.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },

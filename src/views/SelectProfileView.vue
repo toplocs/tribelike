@@ -2,9 +2,9 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10 px-0">
       <div className="px-4">
-        <h3 className="mb-8 text-center text-lg font-semibold">
+        <Title>
           Wähle dein Profil aus:
-        </h3>
+        </Title>
       </div>
 
       <ul
@@ -35,6 +35,7 @@ import { ref, provide, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
 import Card from '../components/common/CardComponent.vue';
+import Title from '../components/common/TitleComponent.vue';
 import ProfileListItem from '../components/list/ProfileListItem.vue';
 
 const router = useRouter();

@@ -29,7 +29,7 @@ const simulatePendingStatus = () => {
   pending.value = true;
   setTimeout(() => {
     pending.value = false;
-  }, 2000); // Simulate a 2-second delay
+  }, 2000);
 };
 
 watch(pending, (newValue) => {

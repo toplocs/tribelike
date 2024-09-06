@@ -18,10 +18,12 @@
           </template>
 
           <template #content="{ closeDialog }">
-            <InterestDialog :closeDialog="(x) => {
-              handleSelection(x);
-              closeDialog();
-            }" />
+            <InterestDialog
+              :closeDialog="(x) => {
+                handleSelection(x);
+                closeDialog();
+              }"
+            />
           </template>
         </Dialog>
       </div>
@@ -124,5 +126,6 @@ const handleRemove = async (title: string) => {
 
 onMounted(() => {
   interests.value = profile.value?.interests || [];
+  console.log(interests.value)
 });
 </script>
