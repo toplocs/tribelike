@@ -4,24 +4,22 @@
   </Title>
 
   <p className="dark:text-white">{{ text }}</p>
-  <SubmitButton className="w-full mt-4">
-    Schließen
-  </SubmitButton>
-
-  <form
-    ref="form"
-    @submit.prevent="onSubmit"
-    class="flex flex-col gap-4"
-  >
-    <SubmitButton className="w-full mt-4">
+    <SubmitButton
+      @click.stop="props.closeDialog(true)"
+      className="w-full mt-4"
+    >
       Bestätigen
     </SubmitButton>
-  </form>
+
+  <SubmitButton
+    @click.stop="props.closeDialog(false)"
+    className="w-full mt-1"
+  >
+    Schließen
+  </SubmitButton>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import Title from '../../components/common/TitleComponent.vue';
 import SelectInput from '../../components/common/SelectInput.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue'
@@ -36,13 +34,4 @@ const props = defineProps({
     required: true,
   },
 });
-
-const router = useRouter();
-const errorMessage = ref('');
-const form = ref<HTMLFormElement | null>(null);
-const selectedModel = ref('');
-
-const onSubmit = async () => {
-  props.closeDialog(true);
-}
 </script>

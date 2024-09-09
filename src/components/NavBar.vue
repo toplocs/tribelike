@@ -12,7 +12,7 @@
         <router-link to="/profiles">
           <span class="size-16">
             <img
-              src="/images/yannik.jpeg"
+              :src="profile.image"
               alt="logo"
               width="40"
               height="40"

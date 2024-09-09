@@ -38,9 +38,12 @@ router.route('/login').post(upload.none(), async (req: Request, res: Response) =
   }
 });
 
-router.route('/logout').post(upload.none(), async (req: Request, res: Response) => {
+router.route('/logout').get(async (req: Request, res: Response) => {
+  const authHeader = req.get('Authorization');
+  const session = await auth(authHeader);
   await logout();
-  res.json({ message: 'Logged out' });
+
+  return res.status(200).json({ session });
 });
 
 router.route('/refresh').post(upload.none(), async (req: Request, res: Response) => {

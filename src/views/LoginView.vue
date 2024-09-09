@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
 import SubmitButton from '../components/common/SubmitButton.vue';
@@ -66,6 +66,7 @@ import TextInput from '../components/common/TextInput.vue';
 import Card from '../components/common/CardComponent.vue';
 
 const router = useRouter();
+const session = inject('session');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
@@ -86,11 +87,29 @@ const sendLogin = async () => {
   }
 }
 
+const getSession = async (authHeader: string) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/auth`, {
+      method: 'GET',
+      headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      }
+    });
+    const { session } = await res.json();
+
+    return session;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
     const authHeader = await sendLogin();
+    session.value = await getSession(JSON.stringify(authHeader));
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
     
     return router.push(`/profiles`);

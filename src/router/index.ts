@@ -4,7 +4,6 @@ import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import MainView from '@/views/MainView.vue';
 import SelectProfileView from '@/views/SelectProfileView.vue';
-import AddProfileView from '@/views/profiles/AddProfileView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,12 +33,6 @@ const router = createRouter({
       path: '/profiles',
       name: 'profiles',
       component: SelectProfileView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/profiles/add',
-      name: 'addProfile',
-      component: AddProfileView,
       meta: { requiresAuth: true },
     },
   ]

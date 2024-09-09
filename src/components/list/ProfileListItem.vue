@@ -3,27 +3,43 @@
     class="flex items-center p-4 w-full border-t border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer"
   >
     <img
-      :src="avatarSrc"
+      :src="profile.image"
       alt="Avatar"
       class="w-12 h-12 rounded-full object-cover mr-4"
+      @click="onClick(profile)"
     />
-    <div class="flex-1">
+    <div
+      class="flex-1"
+      @click="onClick(profile)"
+    >
       <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        {{ title }}
+        {{ profile.type }}
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
         <Badge
-          v-for="interest in interests"
+          v-for="interest in profile.interests"
           :key="interest.id"
           :title="interest.title"
         />
       </div>
     </div>
     <div class="flex-2 h-full p-4">
-      <Cog6ToothIcon
-        class="w-6 h-6 text-gray-200 hover:text-gray-400"
-        @click.stop="openProfileSettings"
-      />
+      <Dialog>
+        <template #trigger="{ openDialog }">
+          <Cog6ToothIcon
+            class="w-6 h-6 text-gray-200 hover:text-gray-400"
+            @click.stop="openDialog"
+          />
+        </template>
+
+        <template #content="{ closeDialog }">
+          <ProfileSettingsDialog
+            :closeDialog="closeDialog"
+            :profile="profile"
+            @updateProfile="handleProfileUpdate"
+          />
+        </template>
+      </Dialog>
     </div>
     <div class="flex-3 h-full p-4">
     <Dialog>
@@ -38,7 +54,7 @@
         <ConfirmDialog
           text="Möchtest du dieses Profil wirklich löschen?"
           :closeDialog="(x) => {
-            console.log(x);
+            if (x == true) onDelete();
             closeDialog();
           }"
         />
@@ -49,43 +65,39 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import Badge from '../../components/common/BadgeComponent.vue';
 import Dialog from '../../components/dialog/DialogComponent.vue';
+import ProfileSettingsDialog from '../../components/dialog/ProfileSettingsDialog.vue';
 import ConfirmDialog from '../../components/dialog/ConfirmDialog.vue';
 
 const props = defineProps({
-  avatarSrc: {
-    type: String,
-    required: true
+  profile: {
+    type: Object,
+    required: true,
   },
-  id: {
-    type: String,
-    required: true
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  interests: {
-    type: Array,
-    required: true
+  onClick: {
+    type: Function,
+    required: false,
   }
 });
+const emit = defineEmits(['updateProfiles']);
 
-async function openProfileSettings() {
-  try {
-    console.log('settings'+props.id)
-
-  } catch (error) {
-    console.error(error);
-  }
+const handleProfileUpdate = (response: Object) => {
+  emit('updateProfiles', response);
 }
 
-async function openDeleteDialog() {
+const onDelete = async (profile: Object) => {
   try {
-    console.log('delete'+props.id)
+    const res = await fetch(`http://localhost:3000/api/profile?profileId=${props.profile.id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': localStorage.getItem('authHeader') },
+    });
+    const response = await res.json();
+    if (!res.ok) throw new Error(response);
 
+    return;
   } catch (error) {
     console.error(error);
   }
