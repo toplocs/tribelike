@@ -28,19 +28,23 @@
         </Dialog>
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <Badge
+        <router-link
           v-for="interest in interests"
-          :key="interest.id"
-          :title="interest.title"
-          :remove="handleRemove"
-        />
+          :to="`/interests/${interest.id}`"
+        >
+          <Badge
+            
+            :key="interest.id"
+            :title="interest.title"
+          />
+        </router-link>
       </div>
-      
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { PlusIcon } from '@heroicons/vue/24/outline';
@@ -57,10 +61,9 @@ const interests = ref([]);
 
 const findInterests = async (title: String) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/interest?title=${title}`);
-    if (!res.ok) throw new Error('Network response error');
+    const response = await axios.get(`/api/interest?title=${title}`);
 
-    return await res.json();
+    return response.data
   } catch (error) {
     console.error(error);
   }
@@ -75,57 +78,20 @@ const handleSelection = async (result: {
   addInterests(result.id);
 };
 
-// make a list component InterestList
-const addInterests = async (interestId: number) => {
+const addInterest = async (interestId: string) => {
   try {
-    const res = await fetch('http://localhost:3000/api/interest/add', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        profileId: profile.value?.id,
-        interestId: interestId,
-      }),
+    const response = await axios.put(`/api/interest/add`, {
+      profileId: profile.value?.id,
+      interestId: interestId,
     });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
-
-const removeInterests = async (interestId: number) => {
-  try {
-    const res = await fetch('http://localhost:3000/api/interest/remove', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        profileId: profile.value?.id,
-        interestId: interestId,
-      }),
-    });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
-
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const handleRemove = async (title: string) => {
-  const { id } = interests.value.find(x => x.title == title);
-  interests.value = interests.value.filter(x => x.title != title);
-  removeInterests(id);
 }
 
 onMounted(() => {
   interests.value = profile.value?.interests || [];
-  console.log(interests.value)
 });
 </script>

@@ -91,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
@@ -106,12 +107,7 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/user', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json()
-    if (!res.ok) throw new Error(response);
+    const response = await axios.post(`/api/user`, formData);
 
     return router.push('/login')
   } catch (error) {

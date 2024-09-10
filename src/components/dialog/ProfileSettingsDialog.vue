@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Title from '../../components/common/TitleComponent.vue';
@@ -49,17 +50,11 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/profile', {
-      method: 'PUT',
-      headers: { 'Authorization': localStorage.getItem('authHeader') },
-      body: formData,
-    });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
+    const response = await axios.put(`/api/profile`, formData);
     successMessage.value = 'Dein Profil wurde erfolgreich geändert!';
-    emit('updateProfile', response);
+    emit('updateProfile', response.data);
 
-    return response;
+    return response.data;
   } catch (error) {
     errorMessage.value = (error as Error).message;
     console.error(error);

@@ -19,7 +19,8 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 })
 .post(upload.none(), async (req: Request, res: Response) => {
-  const { success, error } = await createProfile(req.body);
+  const authHeader = req.get('Authorization');
+  const { success, error } = await createProfile(req.body, authHeader);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

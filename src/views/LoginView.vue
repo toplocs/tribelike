@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
@@ -70,37 +71,31 @@ const session = inject('session');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-const sendLogin = async () => {
-  try {
-    const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/auth/login', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json()
-    if (!res.ok) throw new Error(response);
-
-    return response;
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
-    console.error(error);
-  }
-}
-
 const getSession = async (authHeader: string) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/auth`, {
-      method: 'GET',
+    const response = await axios.get(`/api/auth`, {
       headers: {
         'Authorization': authHeader,
         'Content-Type': 'application/json'
       }
     });
-    const { session } = await res.json();
+    const { session } = response.data;
 
     return session;
   } catch (e) {
     console.error(e);
+  }
+}
+
+const sendLogin = async () => {
+  try {
+    const formData = new FormData(form.value ?? undefined);
+    const response = await axios.post(`/api/auth/login`, formData);
+
+    return response.data;
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+    console.error(error);
   }
 }
 
@@ -109,8 +104,9 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const authHeader = await sendLogin();
-    session.value = await getSession(JSON.stringify(authHeader));
+    axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
+    session.value = await getSession(JSON.stringify(authHeader));
     
     return router.push(`/profiles`);
   } catch (error) {

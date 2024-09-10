@@ -25,12 +25,15 @@ export async function getProfiles(authHeader?: string) {
   }
 }
 
-export async function createProfile(formData: {
-  authHeader: string,
-  type: string,
-  image: string,
-  email: string,
-}) {
+export async function createProfile(
+  formData: {
+    authHeader: string,
+    type: string,
+    image: string,
+    email: string,
+  },
+  authHeader?: string
+) {
   try {
     const session = await auth(formData.authHeader);
     const user = session?.user;

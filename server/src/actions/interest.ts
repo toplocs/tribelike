@@ -44,6 +44,27 @@ export async function createInterest(formData: {
   }
 }
 
+
+export async function getInterestById(params: {
+  id?: string
+}) {
+  try {
+    const interest = await prisma.interest.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        parent: true,
+      }
+    });
+
+    return { success: interest };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 export async function addInterest({
   profileId,
   interestId,

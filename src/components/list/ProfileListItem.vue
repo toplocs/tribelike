@@ -65,6 +65,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import Badge from '../../components/common/BadgeComponent.vue';
@@ -90,14 +91,9 @@ const handleProfileUpdate = (response: Object) => {
 
 const onDelete = async (profile: Object) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/profile?profileId=${props.profile.id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': localStorage.getItem('authHeader') },
-    });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
+    const response = await axios.delete(`/api/profile?profileId=${props.profile.id}`);
 
-    return;
+    return response.data;
   } catch (error) {
     console.error(error);
   }

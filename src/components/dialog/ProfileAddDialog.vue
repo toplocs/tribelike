@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import Title from '../../components/common/TitleComponent.vue';
 import ProfileSettings from '../../components/ProfileSettings.vue';
@@ -38,17 +39,11 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    formData.append('authHeader', localStorage.getItem('authHeader'));
-    const res = await fetch('http://localhost:3000/api/profile', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
-    props.closeDialog()
-    emit('addToList', response);
+    const response = await axios.post(`/api/profile`, formData);
+    emit('addToList', response.data);
+    props.closeDialog();
 
-    return response;
+    return response.data;
   } catch (error) {
     errorMessage.value = (error as Error).message;
     console.error(error);

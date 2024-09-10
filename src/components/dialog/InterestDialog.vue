@@ -51,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Title from '../../components/common/TitleComponent.vue';
@@ -73,10 +74,9 @@ const parents = ref([]);
 
 const findInterests = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/api/interest`);
-    if (!res.ok) throw new Error('Network response error');
+    const response = await axios.get(`/api/interest`);
 
-    return await res.json();
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -87,15 +87,10 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
-    const res = await fetch('http://localhost:3000/api/interest', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json();
-    if (!res.ok) throw new Error(response);
-    props.closeDialog(response);
+    const response = await axios.post(`/api/interest`, formData);
+    props.closeDialog(response.data);
 
-    return response;
+    return response.data;
   } catch (error) {
     errorMessage.value = (error as Error).message;
     console.error(error);

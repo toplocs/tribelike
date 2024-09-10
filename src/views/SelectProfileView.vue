@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, provide, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
@@ -76,19 +77,9 @@ const handleUpdateProfiles = (data: Object) => {
 
 const fetchProfiles = async () => {
   try {
-    const authHeader = localStorage.getItem('authHeader');
-    if (!authHeader) return null;
-    const res = await fetch(`http://localhost:3000/api/profile`, {
-      method: 'GET',
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!res.ok) throw new Error('Network response error');
-    const result = await res.json();
+    const response = await axios.get(`/api/profile`);
 
-    return result;
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -103,6 +94,7 @@ async function selectProfile(selected: Object) {
 const logout = async (userId: number) => {
   try {
     session.value = null;
+    axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('authHeader');
     router.push('/login');
   } catch (error) {

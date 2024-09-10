@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-green-200 to-yellow-200">
+  <div class="min-h-screen bg-gradient-to-br from-green-200 to-yellow-200 dark:from-gray-700 dark:to-yellow-700">
     <NavBar />
     <div class="mx-auto max-w-2xl">
       <RouterView />
@@ -8,25 +8,21 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, provide, onMounted, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 
+const serverURL = import.meta.env.VITE_SERVER_URL;
+const authHeader = localStorage.getItem('authHeader');
 const session = ref(null);
 const profile = ref(null);
 
 const getSession = async () => {
   try {
-    const authHeader = localStorage.getItem('authHeader');
     if (!authHeader) return null;
-    const res = await fetch(`http://localhost:3000/api/auth`, {
-      method: 'GET',
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = await res.json();
+    const response = await axios.get(`/api/auth`);
+    const { session } = response.data;
 
     return session;
   } catch (e) {
@@ -36,7 +32,7 @@ const getSession = async () => {
 
 const getProfile = async () => {
   try {
-    const storage = localStorage.getItem('profile');
+    const storage = localStorage.getItem('profile'); //save only id and get profile from server
 
     return JSON.parse(storage);
   } catch (e) {
@@ -51,4 +47,7 @@ onMounted(async () => {
 
 provide('session', session);
 provide('profile', profile);
+
+axios.defaults.baseURL = serverURL;
+axios.defaults.headers.common['Authorization'] = authHeader;
 </script>

@@ -4,6 +4,7 @@ import multer from 'multer';
 import {
   findInterests,
   createInterest,
+  getInterestById,
   addInterest,
   removeInterest
 } from '../actions/interest';
@@ -18,8 +19,14 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 })
 .post(upload.none(), async (req: Request, res: Response) => {
-  console.log(req.body);
   const { success, error } = await createInterest(req.body);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/byId/:id').get(async (req: Request, res: Response) => {
+  const { success, error } = await getInterestById(req.params);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
