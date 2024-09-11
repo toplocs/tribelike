@@ -16,7 +16,7 @@
         {{ profile.type }}
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <Badge
+        <InterestBadge
           v-for="interest in profile.interests"
           :key="interest.id"
           :title="interest.title"
@@ -68,7 +68,7 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
-import Badge from '../../components/common/BadgeComponent.vue';
+import InterestBadge from '../../components/badges/InterestBadge.vue';
 import Dialog from '../../components/dialog/DialogComponent.vue';
 import ProfileSettingsDialog from '../../components/dialog/ProfileSettingsDialog.vue';
 import ConfirmDialog from '../../components/dialog/ConfirmDialog.vue';

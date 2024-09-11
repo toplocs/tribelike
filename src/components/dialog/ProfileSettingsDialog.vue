@@ -56,7 +56,7 @@ async function onSubmit() {
 
     return response.data;
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }

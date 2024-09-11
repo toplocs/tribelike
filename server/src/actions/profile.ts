@@ -73,6 +73,9 @@ export async function updateProfile(
         type: formData.type,
         image: formData.image || '/images/default.jpeg',
         email: formData.email,
+      },
+      include: {
+        interests: true,
       }
     });
 
@@ -97,6 +100,26 @@ export async function deleteProfile(
     });
 
     return { success: 'Successfully deleted' };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getProfileById(params: {
+  id?: string
+}) {
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        interests: true,
+      }
+    });
+
+    return { success: profile };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

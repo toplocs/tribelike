@@ -23,8 +23,7 @@
           <button
             @click="openDialog"
             className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-          >
-            Neues Profil hinzufügen
+          > Neues Profil hinzufügen
           </button>
         </template>
 
@@ -38,8 +37,7 @@
       <button
         @click="logout"
         className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-      >
-        Abmelden
+      > Abmelden
       </button>
     </Card>
   </div>
@@ -87,7 +85,7 @@ const fetchProfiles = async () => {
 
 async function selectProfile(selected: Object) {
   profile.value = selected;
-  localStorage.setItem('profile', JSON.stringify(selected));
+  localStorage.setItem('profile', selected.id);
   router.push(`/main`);
 }
 

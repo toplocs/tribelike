@@ -1,22 +1,27 @@
 <template>
   <div v-if="session && profile" class="fixed w-full top-0 bg-opacity-30 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10">
-    <div class="px-2 max-w-2xl  mx-auto flex flex-row justify-between items-center gap-4">
+    <div class="p-2 max-w-2xl mx-auto flex flex-row justify-between items-center gap-4">
 
       <span class="flex items-center gap-2">
-        <h1 class="text-center font-bold text-gray-600 dark:text-white tracking-wider">
+        <h1 class="text-center text-lg font-bold text-gray-600 dark:text-white tracking-wider">
           {{ title.toUpperCase() }}
         </h1>
       </span>
 
-      <span class="size-16 flex flex-row items-center gap-4">
+      <span class="flex flex-row items-center gap-4">
+        <router-link to="/locations">
+          <MapPinIcon
+            class="size-10 text-gray-600 hover:text-gray-500"
+          />
+        </router-link>
         <router-link to="/profiles">
-          <span class="size-16">
+          <span class="size-10">
             <img
               :src="profile.image"
               alt="logo"
-              width="40"
-              height="40"
-              class="mt-2 size-12 rounded-full"
+              width="30"
+              height="30"
+              class="size-10 rounded-full"
             />
           </span>
         </router-link>
@@ -28,6 +33,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { MapPinIcon } from '@heroicons/vue/24/outline';
 
 const session = inject('session');
 const profile = inject('profile');

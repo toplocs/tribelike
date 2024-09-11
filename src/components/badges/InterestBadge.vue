@@ -2,7 +2,6 @@
   <span
     class="inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-900 ring-blue-500/30 cursor-pointer dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30"
   >
-    <component :is="icon" class="w-4 h-4 text-blue-900 dark:text-blue-400" v-if="icon" />
     <span>{{ title }}</span>
     <XMarkIcon v-if="remove" @click="remove(title)" class="w-4 h-4 cursor-pointer" />
   </span>
@@ -15,10 +14,6 @@ const props = defineProps({
   title: {
     type: String,
     required: true,
-  },
-  icon: {
-    type: Function,
-    required: false,
   },
   remove: {
     type: Function,

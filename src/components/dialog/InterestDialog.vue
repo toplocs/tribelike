@@ -92,7 +92,7 @@ const onSubmit = async () => {
 
     return response.data;
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }

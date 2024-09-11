@@ -32,9 +32,10 @@ const getSession = async () => {
 
 const getProfile = async () => {
   try {
-    const storage = localStorage.getItem('profile'); //save only id and get profile from server
+    const profileId = localStorage.getItem('profile');
+    const response = await axios.get(`/api/profile/byId/${profileId}`);
 
-    return JSON.parse(storage);
+    return response.data;
   } catch (e) {
     console.error(e);
   }

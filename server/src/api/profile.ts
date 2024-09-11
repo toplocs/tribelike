@@ -6,6 +6,7 @@ import {
   createProfile,
   updateProfile,
   deleteProfile,
+  getProfileById,
 } from '../actions/profile';
 
 const router = express.Router();
@@ -35,6 +36,13 @@ router.route('/').get(async (req: Request, res: Response) => {
 .delete(async (req: Request, res: Response) => {
   const authHeader = req.get('Authorization');
   const { success, error } = await deleteProfile(req.query, authHeader);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/byId/:id').get(async (req: Request, res: Response) => {
+  const { success, error } = await getProfileById(req.params);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

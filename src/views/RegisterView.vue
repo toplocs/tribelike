@@ -111,7 +111,7 @@ async function onSubmit() {
 
     return router.push('/login')
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }

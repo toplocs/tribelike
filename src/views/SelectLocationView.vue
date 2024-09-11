@@ -2,12 +2,12 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
       <Title>
-        Interessen auswählen:
+        Orte auswählen:
       </Title>
 
       <div className="flex flex-row gap-2">
         <Search
-          placeholder="Suche nach Interessen ..."
+          placeholder="Suche nach Orten ..."
           name="selectedItem"
           :findOptions="findInterests"
           @selected="handleSelection"
@@ -32,9 +32,10 @@
           v-for="interest in interests"
           :to="`/interests/${interest.id}`"
         >
-          <InterestBadge
+          <LocationBadge
             :key="interest.id"
             :title="interest.title"
+            color="orange"
           />
         </router-link>
       </div>
@@ -49,7 +50,7 @@ import { useRoute } from 'vue-router';
 import { PlusIcon } from '@heroicons/vue/24/outline';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
-import InterestBadge from '../components/badges/InterestBadge.vue';
+import LocationBadge from '../components/badges/LocationBadge.vue';
 import IconButton from '../components/common/IconButton.vue';
 import Dialog from '../components/dialog/DialogComponent.vue';
 import InterestDialog from '../components/dialog/InterestDialog.vue';

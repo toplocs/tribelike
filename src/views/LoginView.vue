@@ -94,7 +94,7 @@ const sendLogin = async () => {
 
     return response.data;
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }
@@ -110,7 +110,7 @@ const onSubmit = async () => {
     
     return router.push(`/profiles`);
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }

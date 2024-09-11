@@ -44,7 +44,6 @@ export async function createInterest(formData: {
   }
 }
 
-
 export async function getInterestById(params: {
   id?: string
 }) {

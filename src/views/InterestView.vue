@@ -22,7 +22,7 @@
       <span v-if="interest?.parent">
         Übergeordnete Interesse:
         <router-link :to="`/interests/${interest.parent?.id}`">
-         <Badge :title="interest.parent?.title" />
+         <InterestBadge :title="interest.parent?.title" />
         </router-link>
       </span>
     </Card>
@@ -36,7 +36,7 @@ import { useRoute } from 'vue-router';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
-import Badge from '../components/common/BadgeComponent.vue';
+import InterestBadge from '../components/badges/InterestBadge.vue';
 
 const route = useRoute();
 const interest = ref(null);

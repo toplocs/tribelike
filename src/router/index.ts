@@ -4,6 +4,7 @@ import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import SelectProfileView from '@/views/SelectProfileView.vue';
+import SelectLocationView from '@/views/SelectLocationView.vue';
 import MainView from '@/views/MainView.vue';
 import InterestView from '@/views/InterestView.vue';
 
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/profiles',
       name: 'profiles',
       component: SelectProfileView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/locations',
+      name: 'locations',
+      component: SelectLocationView,
       meta: { requiresAuth: true },
     },
     {
