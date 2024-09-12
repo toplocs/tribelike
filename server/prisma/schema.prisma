@@ -19,13 +19,13 @@ generator erd {
 }
 
 model User {
-  id       String     @id @default(uuid())
-  username String     @unique()
-  email    String     @unique() // As email is in Profiles, maybe not needed
+  id        String     @id @default(uuid())
+  username  String     @unique()
+  email     String     @unique() // As email is in Profiles, maybe not needed
   password  String
   profiles  Profile[]
-  Settings  Settings[]
-  Locations Locations[]
+  settings  Settings[]
+  locations Location[] @relation("LocationUsers")
 }
 
 model Settings {
@@ -58,4 +58,13 @@ model Interest {
   parentId String? // Matches Parent Interest ID
   parent   Interest?  @relation("ParentChildren", fields: [parentId], references: [id]) // Superior category
   children Interest[] @relation("ParentChildren") // Sub categories
+}
+
+model Location {
+  id       String     @id @default(uuid()) // Changed to uuid
+  title    String
+  users    User[]     @relation("LocationUsers")
+  parentId String?
+  parent   Location?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children Location[] @relation("ParentChildren")
 }

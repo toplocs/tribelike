@@ -8,6 +8,7 @@ import authRouter from './api/auth';
 import userRouter from './api/user';
 import profileRouter from './api/profile';
 import interestRouter from './api/interest';
+import locationRouter from './api/location';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/interest', interestRouter);
+app.use('/api/location', locationRouter);
 
 app.get('/', (req: Request, res: Response) => res.redirect(URL as string));
 

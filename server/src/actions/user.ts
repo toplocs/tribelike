@@ -24,3 +24,23 @@ export async function createUser(formData: {
     return { error: e.message };
   }
 }
+
+export async function getUserById(params: {
+  id?: string
+}) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        locations: true,
+      }
+    });
+
+    return { success: user };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}

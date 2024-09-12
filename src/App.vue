@@ -16,6 +16,7 @@ import NavBar from './components/NavBar.vue';
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
 const session = ref(null);
+const user = ref(null);
 const profile = ref(null);
 
 const getSession = async () => {
@@ -25,6 +26,17 @@ const getSession = async () => {
     const { session } = response.data;
 
     return session;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const getUser = async () => {
+  try {
+    const userId = session.value?.user.id;
+    const response = await axios.get(`/api/user/byId/${userId}`);
+
+    return response.data;
   } catch (e) {
     console.error(e);
   }
@@ -43,10 +55,12 @@ const getProfile = async () => {
 
 onMounted(async () => {
   session.value = await getSession();
+  user.value = await getUser();
   profile.value = await getProfile();
 });
 
 provide('session', session);
+provide('user', user);
 provide('profile', profile);
 
 axios.defaults.baseURL = serverURL;

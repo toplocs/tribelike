@@ -2,7 +2,7 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
       <Title>
-        Interessen auswählen:
+        Meine Interessen:
       </Title>
 
       <div className="flex flex-row gap-2">
@@ -58,7 +58,7 @@ import Search from '../components/search/SearchComponent.vue';
 const profile = inject('profile');
 const interests = computed(() => profile.value?.interests || []);
 
-const findInterests = async (title: String) => {
+const findInterests = async (title: string) => {
   try {
     const response = await axios.get(`/api/interest?title=${title}`);
 

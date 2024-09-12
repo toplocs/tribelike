@@ -2,23 +2,26 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
       <Title>
-        Orte auswählen:
+        Meine Standorte:
       </Title>
 
       <div className="flex flex-row gap-2">
         <Search
           placeholder="Suche nach Orten ..."
           name="selectedItem"
-          :findOptions="findInterests"
+          :findOptions="findLocations"
           @selected="handleSelection"
         />
         <Dialog>
           <template #trigger="{ openDialog }">
-            <IconButton :icon="PlusIcon"  @click="openDialog"/>
+            <IconButton
+              :icon="PlusIcon"
+              @click="openDialog"
+            />
           </template>
 
           <template #content="{ closeDialog }">
-            <InterestDialog
+            <LocationDialog
               :closeDialog="(x) => {
                 handleSelection(x);
                 closeDialog();
@@ -29,13 +32,12 @@
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
         <router-link
-          v-for="interest in interests"
-          :to="`/interests/${interest.id}`"
+          v-for="location in locations"
+          :to="`/locations/${location.id}`"
         >
           <LocationBadge
-            :key="interest.id"
-            :title="interest.title"
-            color="orange"
+            :key="location.id"
+            :title="location.title"
           />
         </router-link>
       </div>
@@ -53,15 +55,16 @@ import Title from '../components/common/TitleComponent.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import IconButton from '../components/common/IconButton.vue';
 import Dialog from '../components/dialog/DialogComponent.vue';
-import InterestDialog from '../components/dialog/InterestDialog.vue';
+import LocationDialog from '../components/dialog/LocationDialog.vue';
 import Search from '../components/search/SearchComponent.vue';
 
-const profile = inject('profile');
-const interests = computed(() => profile.value?.interests || []);
+const user = inject('user');
+const locations = computed(() => user.value?.locations || []);
+console.log(locations.value);
 
-const findInterests = async (title: String) => {
+const findLocations = async (name: string) => {
   try {
-    const response = await axios.get(`/api/interest?title=${title}`);
+    const response = await axios.get(`/api/location?name=${name}`);
 
     return response.data
   } catch (error) {
@@ -73,16 +76,15 @@ const handleSelection = async (result: {
   id: number,
   title: string
 }) => {
-  if (interests.value.some(x => x.id === result.id)) return;
-  interests.value.push(result);
-  addInterests(result.id);
+  if (locations.value.some(x => x.id === result.id)) return;
+  locations.value.push(result);
+  addLocation(result.id);
 };
 
-const addInterest = async (interestId: string) => {
+const addLocation = async (locationId: string) => {
   try {
-    const response = await axios.put(`/api/interest/add`, {
-      profileId: profile.value?.id,
-      interestId: interestId,
+    const response = await axios.put(`/api/location/add`, {
+      locationId: locationId,
     });
 
     return response.data;

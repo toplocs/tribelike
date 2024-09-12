@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Neue Interesse erstellen
+    Einen neuen Ort erstellen
   </Title>
   <p v-if="errorMessage" class="text-red-500 mt-4">
     {{ errorMessage }}
@@ -15,7 +15,7 @@
       <label
         for="title"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      > Titel
+      > Name
       </label>
 
       <TextInput
@@ -23,7 +23,7 @@
         id="title"
         name="title"
         autoComplete="title"
-        placeholder="Benenne deine Interesse"
+        placeholder="Benenne den Ort"
       />
     </div>
 
@@ -31,16 +31,54 @@
       <label
         for="parentId"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      > Übergeordnete Interesse
+      > Übergeordneter Ort
       </label>
 
       <SelectInput
         name="parentId"
-        placeholder="Wähle eine übergeordnete Interesse aus"
+        placeholder="Wähle einen übergeordneten Ort aus"
         v-model="selectedModel"
         :options="parents"
       />
     </div>
+
+    <div className="flex flex-row gap-2">
+      <div className="mb-2">
+        <label
+          for="xCoordinate"
+          class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+        > X Koordinaten
+        </label>
+
+        <TextInput
+          type="text"
+          id="xCoordinate"
+          name="xCoordinate"
+          autoComplete="xCoordinate"
+          placeholder="00.0000"
+          :disabled="true"
+        />
+      </div>
+
+      <div className="mb-2">
+        <label
+          for="yCoordinate"
+          class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+        > Y Koordinaten
+        </label>
+
+        <TextInput
+          type="text"
+          id="yCoordinate"
+          name="yCoordinate"
+          autoComplete="yCoordinate"
+          placeholder="00.0000"
+          :disabled="true"
+        />
+      </div>
+    </div>
+
+    <Map />
 
     <SubmitButton className="w-full mt-4">
       Absenden
@@ -56,6 +94,7 @@ import Title from '../../components/common/TitleComponent.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue';
 import TextInput from '../../components/common/TextInput.vue';
 import SelectInput from '../../components/common/SelectInput.vue';
+import Map from '../../components/MapComponent.vue';
 
 const props = defineProps({
   closeDialog: {
@@ -70,9 +109,9 @@ const form = ref<HTMLFormElement | null>(null);
 const selectedModel = ref('');
 const parents = ref([]);
 
-const findInterests = async () => {
+const findLocations = async () => {
   try {
-    const response = await axios.get(`/api/interest`);
+    const response = await axios.get(`/api/location`);
 
     return response.data;
   } catch (error) {
@@ -85,7 +124,7 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
-    const response = await axios.post(`/api/interest`, formData);
+    const response = await axios.post(`/api/location`, formData);
     props.closeDialog(response.data);
 
     return response.data;
@@ -96,7 +135,7 @@ const onSubmit = async () => {
 }
 
 onMounted(async () => {
-  const interests = await findInterests();
-  parents.value = interests.map(x => ({ ...x, label: x.title }));
+  const locations = await findLocations();
+  parents.value = locations.map(x => ({ ...x, label: x.title }));
 });
 </script>
