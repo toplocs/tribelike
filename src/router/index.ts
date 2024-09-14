@@ -7,6 +7,7 @@ import SelectProfileView from '@/views/SelectProfileView.vue';
 import SelectLocationView from '@/views/SelectLocationView.vue';
 import MainView from '@/views/MainView.vue';
 import InterestView from '@/views/InterestView.vue';
+import LocationView from '@/views/LocationView.vue';
 
 
 const router = createRouter({
@@ -47,8 +48,14 @@ const router = createRouter({
     },
     {
       path: '/interests/:id',
-      name: 'interests',
+      name: 'interest',
       component: InterestView,
+      props: true,
+    },
+    {
+      path: '/locations/:id',
+      name: 'location',
+      component: LocationView,
       props: true,
     }
   ]

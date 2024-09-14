@@ -61,10 +61,12 @@ model Interest {
 }
 
 model Location {
-  id       String     @id @default(uuid()) // Changed to uuid
-  title    String
-  users    User[]     @relation("LocationUsers")
-  parentId String?
-  parent   Location?  @relation("ParentChildren", fields: [parentId], references: [id])
-  children Location[] @relation("ParentChildren")
+  id          String     @id @default(uuid()) // Changed to uuid
+  title       String
+  xCoordinate String?
+  yCoordinate String?
+  users       User[]     @relation("LocationUsers")
+  parentId    String?
+  parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children    Location[] @relation("ParentChildren")
 }

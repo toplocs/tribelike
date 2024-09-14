@@ -39,6 +39,7 @@
         placeholder="Wähle einen übergeordneten Ort aus"
         v-model="selectedModel"
         :options="parents"
+        @update:modelValue="handleSelectParent"
       />
     </div>
 
@@ -51,12 +52,12 @@
         </label>
 
         <TextInput
-          type="text"
           id="xCoordinate"
           name="xCoordinate"
           autoComplete="xCoordinate"
           placeholder="00.0000"
           :disabled="true"
+          :modelValue="xCoordinate"
         />
       </div>
 
@@ -68,17 +69,20 @@
         </label>
 
         <TextInput
-          type="text"
           id="yCoordinate"
           name="yCoordinate"
           autoComplete="yCoordinate"
           placeholder="00.0000"
           :disabled="true"
+          :modelValue="yCoordinate"
         />
       </div>
     </div>
 
-    <Map />
+    <Map
+      :defaultLocation="defaultLocation"
+      @changeLocation="handleChangeLocation"
+    />
 
     <SubmitButton className="w-full mt-4">
       Absenden
@@ -95,6 +99,10 @@ import SubmitButton from '../../components/common/SubmitButton.vue';
 import TextInput from '../../components/common/TextInput.vue';
 import SelectInput from '../../components/common/SelectInput.vue';
 import Map from '../../components/MapComponent.vue';
+
+const defaultLocation = ref([7, 51]);
+const yCoordinate = ref('0');
+const xCoordinate = ref('0');
 
 const props = defineProps({
   closeDialog: {
@@ -119,11 +127,26 @@ const findLocations = async () => {
   }
 }
 
+const handleSelectParent = (selectedId: string) => {
+  const selected = parents.value.find(x => x.id == selectedId);
+  defaultLocation.value = [
+    Number(selected.yCoordinate),
+    Number(selected.xCoordinate),
+  ];
+}
+
+const handleChangeLocation = ({ y, x }) => {
+  yCoordinate.value = String(y);
+  xCoordinate.value = String(x);
+}
+
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
+    formData.append('yCoordinate', JSON.stringify(yCoordinate.value));
+    formData.append('xCoordinate', JSON.stringify(xCoordinate.value));
     const response = await axios.post(`/api/location`, formData);
     props.closeDialog(response.data);
 

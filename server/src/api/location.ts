@@ -4,6 +4,7 @@ import multer from 'multer';
 import {
   findLocations,
   createLocation,
+  getLocationById,
   addLocation,
 } from '../actions/location';
 
@@ -18,6 +19,13 @@ router.route('/').get(async (req: Request, res: Response) => {
 })
 .post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createLocation(req.body);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/byId/:id').get(async (req: Request, res: Response) => {
+  const { success, error } = await getLocationById(req.params);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

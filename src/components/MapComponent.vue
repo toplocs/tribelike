@@ -1,47 +1,87 @@
 <template>
-<ol-map
-  :loadTilesWhileAnimating="true"
-  :loadTilesWhileInteracting="true"
-  style="height: 300px;"
->
-  <ol-view
-    ref="view"
-    :center="center"
-    :rotation="rotation"
-    :zoom="zoom"
-    :projection="projection"
-  />
+  <ol-map
+    :loadTilesWhileAnimating="true"
+    :loadTilesWhileInteracting="true"
+    style="height: 300px;"
+    :controls="locked ? []: undefined"
+  >
+    <ol-view
+      ref="view"
+      :center="center"
+      :zoom="zoom"
+      :projection="projection"
+      @change:center="handleMoveEvent"
+    />
 
-  <ol-tile-layer>
-    <ol-source-osm />
-  </ol-tile-layer>
-</ol-map>
+    <ol-tile-layer>
+      <ol-source-osm />
+    </ol-tile-layer>
+
+    <ol-geolocation
+      v-if="!locked"
+      :projection="projection"
+      @change:position="geoLocChange"
+    >
+      <ol-control-bar>
+        <ol-toggle-control
+          html="◎"
+          title="Center"
+          className="bg-white"
+          :onToggle="(active) =>
+            active && view.setCenter(position)
+          "
+        />
+      </ol-control-bar>
+    </ol-geolocation>
+
+  </ol-map>
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
+import type Pointer from 'ol/interaction/Pointer';
+import { UserIcon } from '@heroicons/vue/24/outline';
+import { ref, emit, watchEffect } from 'vue';
+import type { View } from 'ol';
+import type { ObjectEvent } from 'ol/Object';
 
-const center = ref([40, 40]);
+const props = defineProps({
+  locked: {
+    type: Boolean,
+    default: false,
+  },
+  defaultLocation: {
+    type: Array,
+    default: [0, 0],
+  },
+});
+
+const emit = defineEmits(['changeLocation']);
+const center = ref(null);
 const projection = ref('EPSG:4326');
 const zoom = ref(10);
-const rotation = ref(0);
+const view = ref<View>();
+const map = ref(null);
+const position = ref(null);
 
-const format = inject('ol-format');
-const geoJson = new format.GeoJSON();
+const geoLocChange = (e: ObjectEvent) => {
+  position.value = e.target.getPosition();
+  view.value?.setCenter(e.target?.getPosition());
+  emit('changeLocation', {
+    y: position.value[0],
+    x: position.value[1],
+  });
+};
 
-onMounted(() => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        center.value = [lng, lat];
-      }, (error) => {
-        console.error(`Error: ${error.message}`);
-      }
-    );
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
-})
+const handleMoveEvent = (e: ObjectEvent, x) => {
+  const values = e.target?.targetCenter_;
+  emit('changeLocation', {
+    y: values[0],
+    x: values[1],
+  });
+}
+
+watchEffect(() => {
+  center.value = props.defaultLocation;
+  position.value = props.defaultLocation;
+});
 </script>

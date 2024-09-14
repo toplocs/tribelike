@@ -24,14 +24,39 @@ export async function findLocations(query: {
 
 export async function createLocation(formData: {
   title: string,
+  xCoordinate: string,
+  yCoordinate: string,
   parentId: string,
 }) {
   try {
     const location = await prisma.location.create({
       data: {
         title: formData.title,
+        yCoordinate: formData.yCoordinate,
+        xCoordinate: formData.xCoordinate,
         ...(formData.parentId && { parentId: formData.parentId }),
       },
+    });
+    console.log(location);
+
+    return { success: location };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getLocationById(params: {
+  id?: string
+}) {
+  try {
+    const location = await prisma.location.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        parent: true,
+      }
     });
 
     return { success: location };

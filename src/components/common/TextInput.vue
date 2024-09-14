@@ -3,8 +3,8 @@
     class="relative w-full flex items-center min-w-[100px] outline-none rounded-md transition duration-100 border bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
   >
     <input
+      type="text"
       :id="id"
-      :type="type"
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -21,10 +21,6 @@ const props = defineProps({
     type: String,
     required: false,
   },
-  type: {
-    type: String,
-    default: 'text',
-  },
   name: {
     type: String,
     required: false,
@@ -38,7 +34,7 @@ const props = defineProps({
     default: false,
   },
   modelValue: {
-    type: [String, Number],
+    type: String,
     default: '',
   },
 });
