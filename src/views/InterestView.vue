@@ -41,9 +41,7 @@ import InterestBadge from '../components/badges/InterestBadge.vue';
 const route = useRoute();
 const interest = ref(null);
 const profile = inject('profile');
-const subscribed = computed(() => 
-  profile.value?.interests.some(x => x.id == interest.value?.id)
-);
+const subscribed = computed(() => profile.value?.interests.some(x => x.id == interest.value?.id));
 
 const fetchInterest = async (id: string) => {
   try {
@@ -62,7 +60,9 @@ const addInterest = async () => {
       interestId: interest.value?.id,
     });
     if (profile.value && interest.value) {
-      profile.value.interests = [...profile.value.interests, interest.value];
+      profile.value.interests = [
+        ...profile.value.interests, interest.value
+      ];
     }
 
     return response.data;
@@ -77,9 +77,10 @@ const removeInterest = async () => {
       profileId: profile.value?.id,
       interestId: interest.value?.id,
     });
-    if (!res.ok) throw new Error(response);
     if (profile.value && interest.value) {
-      profile.value.interests = profile.value.interests.filter(x => x.id !== interest.value.id);
+      profile.value.interests = profile.value.interests.filter(
+        x => x.id !== interest.value.id
+      );
     }
 
     return response.data;

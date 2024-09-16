@@ -37,7 +37,6 @@ export async function createLocation(formData: {
         ...(formData.parentId && { parentId: formData.parentId }),
       },
     });
-    console.log(location);
 
     return { success: location };
   } catch(e: any) {
@@ -56,6 +55,7 @@ export async function getLocationById(params: {
       },
       include: {
         parent: true,
+        profiles: true,
       }
     });
 
@@ -66,25 +66,48 @@ export async function getLocationById(params: {
   }
 }
 
-export async function addLocation(
-  body: {
-    locationId: string,
-  },
-  authHeader?: string,
-) {
+export async function addLocation({
+  profileId,
+  locationId,
+}: {
+  profileId: string,
+  locationId: string,
+}) {
   try {
-    const session = await auth(authHeader);
-    const user = session?.user;
-    const result = await prisma.user.update({
+    const profile = await prisma.profile.update({
       where: {
-        id: user?.id,
+        id: profileId,
       },
       data: {
-        locations: { connect: { id: body.locationId } },
+        locations: { connect: { id: locationId } },
       }
     });
 
-    return { success: result };
+    return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function removeLocation({
+  profileId,
+  locationId,
+}: {
+  profileId: string,
+  locationId: string,
+}) {
+  try {
+    const profile = await prisma.profile.update({
+      where: {
+        id: profileId,
+      },
+      data: {
+        locations: { disconnect: { id: locationId } },
+      }
+    });
+
+    return { success: profile };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

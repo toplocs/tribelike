@@ -34,6 +34,7 @@ const getSession = async () => {
 const getUser = async () => {
   try {
     const userId = session.value?.user.id;
+    if (!userId) return null;
     const response = await axios.get(`/api/user/byId/${userId}`);
 
     return response.data;
@@ -45,6 +46,7 @@ const getUser = async () => {
 const getProfile = async () => {
   try {
     const profileId = localStorage.getItem('profile');
+    if (!profileId) return null;
     const response = await axios.get(`/api/profile/byId/${profileId}`);
 
     return response.data;

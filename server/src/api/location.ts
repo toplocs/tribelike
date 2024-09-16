@@ -6,6 +6,7 @@ import {
   createLocation,
   getLocationById,
   addLocation,
+  removeLocation,
 } from '../actions/location';
 
 const router = express.Router();
@@ -32,8 +33,14 @@ router.route('/byId/:id').get(async (req: Request, res: Response) => {
 });
 
 router.route('/add').put(async (req: Request, res: Response) => {
-  const authHeader = req.get('Authorization');
-  const { success, error } = await addLocation(req.body, authHeader);
+  const { success, error } = await addLocation(req.body);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/remove').put(async (req: Request, res: Response) => {
+  const { success, error } = await removeLocation(req.body);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

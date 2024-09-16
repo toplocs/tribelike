@@ -11,7 +11,7 @@
     @submit.prevent="onSubmit"
     class="flex flex-col gap-4"
   >
-    <ProfileSettings />
+    <ProfileSettings :profile="user" />
     <SubmitButton className="w-full mt-4">
       Erstellen
     </SubmitButton>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, computed, onMounted } from 'vue';
+import { ref, inject, computed } from 'vue';
 import Title from '../../components/common/TitleComponent.vue';
 import ProfileSettings from '../../components/ProfileSettings.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue';
@@ -34,6 +34,8 @@ const props = defineProps({
 const emit = defineEmits(['addToList']);
 
 const errorMessage = ref('');
+const session = inject('session');
+const user = computed(() => session.value?.user);
 const form = ref<HTMLFormElement | null>(null);
 
 async function onSubmit() {

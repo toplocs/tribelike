@@ -69,12 +69,12 @@ const findInterests = async (title: string) => {
 }
 
 const handleSelection = async (result: {
-  id: number,
+  id: string,
   title: string
 }) => {
   if (interests.value.some(x => x.id === result.id)) return;
   interests.value.push(result);
-  addInterests(result.id);
+  addInterest(result.id);
 };
 
 const addInterest = async (interestId: string) => {

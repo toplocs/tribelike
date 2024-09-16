@@ -58,13 +58,12 @@ import Dialog from '../components/dialog/DialogComponent.vue';
 import LocationDialog from '../components/dialog/LocationDialog.vue';
 import Search from '../components/search/SearchComponent.vue';
 
-const user = inject('user');
-const locations = computed(() => user.value?.locations || []);
-console.log(locations.value);
+const profile = inject('profile');
+const locations = computed(() => profile.value?.locations || []);
 
-const findLocations = async (name: string) => {
+const findLocations = async (title: string) => {
   try {
-    const response = await axios.get(`/api/location?name=${name}`);
+    const response = await axios.get(`/api/location?title=${title}`);
 
     return response.data
   } catch (error) {
@@ -73,7 +72,7 @@ const findLocations = async (name: string) => {
 }
 
 const handleSelection = async (result: {
-  id: number,
+  id: string,
   title: string
 }) => {
   if (locations.value.some(x => x.id === result.id)) return;
@@ -84,6 +83,7 @@ const handleSelection = async (result: {
 const addLocation = async (locationId: string) => {
   try {
     const response = await axios.put(`/api/location/add`, {
+      profileId: profile.value?.id,
       locationId: locationId,
     });
 

@@ -19,33 +19,31 @@ generator erd {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  username  String     @unique()
-  email     String     @unique() // As email is in Profiles, maybe not needed
-  password  String
-  profiles  Profile[]
-  settings  Settings[]
-  locations Location[] @relation("LocationUsers")
+  id       String     @id @default(uuid())
+  username String     @unique()
+  email    String     @unique() // As email is in Profiles, maybe not needed
+  password String
+  profiles Profile[]
+  settings Settings[]
 }
 
 model Settings {
-  id        String   @id @default(uuid())
-  userId    String? // Matches User ID type
-  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  language  String   @default("en") // Default language
-  profileId String? // Matches User ID type
-  profile   Profile? @relation(fields: [profileId], references: [id]) // Users default Profile
+  id       String  @id @default(uuid())
+  userId   String? // Matches User ID type
+  User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language String  @default("en") // Default language
 }
 
 model Profile {
   id        String     @id @default(uuid()) // Changed to uuid
+  username  String
   type      String
   image     String
   email     String // Every Profile can have an own email for notifications. Can be used for logins aswell
   userId    String? // Matches User ID type
   User      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   interests Interest[] @relation("ProfileInterests")
-  Settings  Settings[]
+  locations Location[] @relation("ProfileLocations")
 }
 
 model Interest {
@@ -65,7 +63,7 @@ model Location {
   title       String
   xCoordinate String?
   yCoordinate String?
-  users       User[]     @relation("LocationUsers")
+  profiles    Profile[]  @relation("ProfileLocations")
   parentId    String?
   parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
   children    Location[] @relation("ParentChildren")

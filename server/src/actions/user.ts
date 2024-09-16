@@ -33,9 +33,6 @@ export async function getUserById(params: {
       where: {
         id: params?.id,
       },
-      include: {
-        locations: true,
-      }
     });
 
     return { success: user };

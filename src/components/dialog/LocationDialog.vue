@@ -145,8 +145,8 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
-    formData.append('yCoordinate', JSON.stringify(yCoordinate.value));
-    formData.append('xCoordinate', JSON.stringify(xCoordinate.value));
+    formData.append('yCoordinate', yCoordinate.value);
+    formData.append('xCoordinate', xCoordinate.value);
     const response = await axios.post(`/api/location`, formData);
     props.closeDialog(response.data);
 

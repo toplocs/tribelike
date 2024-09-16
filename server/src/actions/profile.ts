@@ -10,11 +10,8 @@ export async function getProfiles(authHeader?: string) {
         userId: user.id,
       },
       include: {
-        interests: {
-          include: {
-            parent: true,
-          }
-        }
+        interests: true,
+        locations: true,
       }
     });
 
@@ -27,21 +24,22 @@ export async function getProfiles(authHeader?: string) {
 
 export async function createProfile(
   formData: {
-    authHeader: string,
     type: string,
     image: string,
+    username: string,
     email: string,
   },
   authHeader?: string
 ) {
   try {
-    const session = await auth(formData.authHeader);
+    const session = await auth(authHeader);
     const user = session?.user;
     const profile = await prisma.profile.create({
       data: {
-        userId: user.id,
+        userId: user?.id,
         type: formData.type,
         image: formData.image || '/images/default.jpeg',
+        username: formData.username,
         email: formData.email,
       }
     });
@@ -58,6 +56,7 @@ export async function updateProfile(
     profileId: string,
     type: string,
     image: string,
+    username: string,
     email: string,
   },
   authHeader?: string,
@@ -72,6 +71,7 @@ export async function updateProfile(
       data: {
         type: formData.type,
         image: formData.image || '/images/default.jpeg',
+        username: formData.username,
         email: formData.email,
       },
       include: {
@@ -116,6 +116,7 @@ export async function getProfileById(params: {
       },
       include: {
         interests: true,
+        locations: true,
       }
     });
 

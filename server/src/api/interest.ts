@@ -46,5 +46,4 @@ router.route('/remove').put(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
-
 export default router;

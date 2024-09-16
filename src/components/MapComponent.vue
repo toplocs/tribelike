@@ -2,7 +2,7 @@
   <ol-map
     :loadTilesWhileAnimating="true"
     :loadTilesWhileInteracting="true"
-    style="height: 300px;"
+    :style="`height: ${height}px;`"
     :controls="locked ? []: undefined"
   >
     <ol-view
@@ -27,9 +27,7 @@
           html="◎"
           title="Center"
           className="bg-white"
-          :onToggle="(active) =>
-            active && view.setCenter(position)
-          "
+          :onToggle="(active) => active && view.setCenter(position)"
         />
       </ol-control-bar>
     </ol-geolocation>
@@ -45,6 +43,10 @@ import type { View } from 'ol';
 import type { ObjectEvent } from 'ol/Object';
 
 const props = defineProps({
+  height: {
+    type: String,
+    default: '300',
+  },
   locked: {
     type: Boolean,
     default: false,
@@ -72,7 +74,7 @@ const geoLocChange = (e: ObjectEvent) => {
   });
 };
 
-const handleMoveEvent = (e: ObjectEvent, x) => {
+const handleMoveEvent = (e: ObjectEvent) => {
   const values = e.target?.targetCenter_;
   emit('changeLocation', {
     y: values[0],

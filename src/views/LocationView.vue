@@ -5,7 +5,7 @@
         <BackButton href="/locations" />
         <button
           v-if="subscribed"
-          @click="removeInterest"
+          @click="removeLocation"
           class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
         > Deabonnieren
         </button>
@@ -17,9 +17,7 @@
         </button>
       </div>
 
-      <Title>
-        {{ location?.title }}
-      </Title>
+      <Title>{{ location?.title }}</Title>
 
       <span v-if="location?.parent">
         Übergeordneter Ort:
@@ -29,9 +27,23 @@
       </span>
 
       <Map
+        height="200"
         :locked="true"
-        :defaultLocation="[yCoordinate, xCoordinate]"
+        :defaultLocation="[
+          Number(yCoordinate),
+          Number(xCoordinate)
+        ]"
       />
+
+      <Title>Personen an diesem Ort:</Title>
+      <div className="flex flex-row gap-2">
+        <div v-for="suggestion of people">
+          <ProfileImage
+            :src="suggestion.image"
+            :tooltipText="suggestion.username"
+          />
+        </div>
+      </div>
 
 
     </Card>
@@ -46,17 +58,16 @@ import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
+import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
 
 const route = useRoute();
 const location = ref(null);
-const user = inject('user');
-const yCoordinate = computed(() => location.value?.yCoordinate || 0);
-const xCoordinate = computed(() => location.value?.xCoordinate || 0);
-const subscribed = computed(() => 
-  user.value?.locations.some(x => x.id == location.value?.id)
-);
-
+const profile = inject('profile');
+const yCoordinate = computed(() => location.value?.yCoordinate || '0');
+const xCoordinate = computed(() => location.value?.xCoordinate || '0');
+const subscribed = computed(() => profile.value?.locations.some(x => x.id == location.value?.id));
+const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 const fetchLocation = async (id: string) => {
   try {
@@ -68,11 +79,18 @@ const fetchLocation = async (id: string) => {
   }
 }
 
-const addLocation = async (locationId: string) => {
+const addLocation = async () => {
   try {
+    console.log(profile.value)
     const response = await axios.put(`/api/location/add`, {
-      locationId: locationId,
+      profileId: profile.value?.id,
+      locationId: location.value?.id,
     });
+    if (profile.value && location.value) {
+      profile.value.locations = [
+        ...profile.value.locations, location.value
+      ];
+    }
 
     return response.data;
   } catch (error) {
@@ -80,11 +98,17 @@ const addLocation = async (locationId: string) => {
   }
 }
 
-const removeLocation = async (locationId: string) => {
+const removeLocation = async () => {
   try {
     const response = await axios.put(`/api/location/remove`, {
-      locationId: locationId,
+      profileId: profile.value?.id,
+      locationId: location.value?.id,
     });
+    if (profile.value && location.value) {
+      profile.value.locations = profile.value.locations.filter(
+        x => x.id !== location.value.id
+      );
+    }
 
     return response.data;
   } catch (error) {
@@ -94,7 +118,6 @@ const removeLocation = async (locationId: string) => {
 
 onMounted(async () => {
   location.value = await fetchLocation(route.params.id);
-  console.log(location.value)
 });
 
 watch(() => route.params.id, async (newId) => {
