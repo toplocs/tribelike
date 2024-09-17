@@ -13,25 +13,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../../schema.svg"
+}
+
 model User {
-  id       String    @id @default(uuid())
-  username String    @unique()
-  email    String    @unique()
+  id       String     @id @default(uuid())
+  username String     @unique()
+  email    String     @unique() // As email is in Profiles, maybe not needed
   password String
   profiles Profile[]
+  settings Settings[]
+}
+
+model Settings {
+  id       String  @id @default(uuid())
+  userId   String? // Matches User ID type
+  User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language String  @default("en") // Default language
 }
 
 model Profile {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(uuid()) // Changed to uuid
+  username  String
   type      String
   image     String
+  email     String // Every Profile can have an own email for notifications. Can be used for logins aswell
   userId    String? // Matches User ID type
   User      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   interests Interest[] @relation("ProfileInterests")
+  locations Location[] @relation("ProfileLocations")
 }
 
 model Interest {
-  id       Int       @id @default(autoincrement())
-  title     String    @unique()
-  profiles Profile[] @relation("ProfileInterests")
+  id       String     @id @default(uuid()) // Changed to uuid
+  title    String
+  language String     @default("en") // The interest's language
+  profiles Profile[]  @relation("ProfileInterests")
+  same     Interest[] @relation("SameInterests") // List of same / synonymous / translations
+  sameOf   Interest[] @relation("SameInterests")
+  parentId String? // Matches Parent Interest ID
+  parent   Interest?  @relation("ParentChildren", fields: [parentId], references: [id]) // Superior category
+  children Interest[] @relation("ParentChildren") // Sub categories
+}
+
+model Location {
+  id          String     @id @default(uuid()) // Changed to uuid
+  title       String
+  xCoordinate String?
+  yCoordinate String?
+  profiles    Profile[]  @relation("ProfileLocations")
+  parentId    String?
+  parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children    Location[] @relation("ParentChildren")
 }

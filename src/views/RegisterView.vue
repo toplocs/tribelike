@@ -82,27 +82,6 @@
           />
         </div>
 
-        <div className="mb-2">
-          <label
-            for="select"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Account Typ
-          </label>
-
-          <SelectInput
-            name="type"
-            :options="[
-              { label: 'Privat', value: 'privat' },
-              { label: 'Business', value: 'business' },
-              { label: 'Hobby', value: 'hobby' },
-              { label: 'Reisen', value: 'reisen' }
-            ]"
-            placeholder="Wähle eine Option aus"
-            defaultValue=0
-          />
-        </div>
-
         <SubmitButton className="w-full mt-4">
           Account erstellen
         </SubmitButton>
@@ -112,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
@@ -127,16 +107,11 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/user', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json()
-    if (!res.ok) throw new Error(response);
+    const response = await axios.post(`/api/user`, formData);
 
     return router.push('/login')
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }

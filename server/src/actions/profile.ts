@@ -1,16 +1,17 @@
 import prisma from '../lib/prisma';
-import { auth, login, logout } from '../lib/auth';
+import { auth } from '../lib/auth';
 
-export async function findProfiles(query: {
-  userId?: string,
-}) {
+export async function getProfiles(authHeader?: string) {
   try {
+    const session = await auth(authHeader);
+    const user = session?.user;
     const profiles = await prisma.profile.findMany({
       where: {
-        userId: query.userId,
+        userId: user.id,
       },
       include: {
         interests: true,
+        locations: true,
       }
     });
 
@@ -21,16 +22,101 @@ export async function findProfiles(query: {
   }
 }
 
-export async function createProfile(userId: string, formData: {
-  image: string,
-  type: string,
-}) {
+export async function createProfile(
+  formData: {
+    type: string,
+    image: string,
+    username: string,
+    email: string,
+  },
+  authHeader?: string
+) {
   try {
+    const session = await auth(authHeader);
+    const user = session?.user;
     const profile = await prisma.profile.create({
       data: {
-        userId: userId,
+        userId: user?.id,
         type: formData.type,
-        image: formData.image || '/images/yannik.jpeg',
+        image: formData.image || '/images/default.jpeg',
+        username: formData.username,
+        email: formData.email,
+      }
+    });
+
+    return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function updateProfile(
+  formData: {
+    profileId: string,
+    type: string,
+    image: string,
+    username: string,
+    email: string,
+  },
+  authHeader?: string,
+) {
+  try {
+    const session = await auth(authHeader);
+    const user = session?.user;
+    const profile = await prisma.profile.update({
+      where: {
+        id: formData.profileId,
+      },
+      data: {
+        type: formData.type,
+        image: formData.image || '/images/default.jpeg',
+        username: formData.username,
+        email: formData.email,
+      },
+      include: {
+        interests: true,
+      }
+    });
+
+    return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function deleteProfile(
+  query: { profileId?: string },
+  authHeader?: string,
+) {
+  try {
+    const session = await auth(authHeader);
+    const user = session?.user;
+    await prisma.profile.delete({
+      where: {
+        id: query.profileId,
+      }
+    });
+
+    return { success: 'Successfully deleted' };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getProfileById(params: {
+  id?: string
+}) {
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        interests: true,
+        locations: true,
       }
     });
 

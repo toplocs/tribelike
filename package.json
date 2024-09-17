@@ -13,8 +13,13 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.1.5",
+    "axios": "^1.7.7",
+    "ol": "^10.1.0",
+    "ol-contextmenu": "^5.5.0",
+    "ol-ext": "^4.0.23",
     "vue": "^3.4.29",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "vue3-openlayers": "^11.2.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

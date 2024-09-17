@@ -15,8 +15,7 @@
       <label
         for="title"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      >
-        Titel
+      > Titel
       </label>
 
       <TextInput
@@ -28,6 +27,21 @@
       />
     </div>
 
+    <div className="mb-2">
+      <label
+        for="parentId"
+        class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+      > Übergeordnete Interesse
+      </label>
+
+      <SelectInput
+        name="parentId"
+        placeholder="Wähle eine übergeordnete Interesse aus"
+        v-model="selectedModel"
+        :options="parents"
+      />
+    </div>
+
     <SubmitButton className="w-full mt-4">
       Absenden
     </SubmitButton>
@@ -35,11 +49,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Title from '../../components/common/TitleComponent.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue';
 import TextInput from '../../components/common/TextInput.vue';
+import SelectInput from '../../components/common/SelectInput.vue';
 
 const props = defineProps({
   closeDialog: {
@@ -51,24 +67,36 @@ const props = defineProps({
 const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
+const selectedModel = ref('');
+const parents = ref([]);
+
+const findInterests = async () => {
+  try {
+    const response = await axios.get(`/api/interest`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
-    const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/interest', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json()
-    if (!res.ok) throw new Error(response);
-    props.closeDialog(response);
+    const formData = new FormData(form.value);
+    const response = await axios.post(`/api/interest`, formData);
+    props.closeDialog(response.data);
 
-    return response;
+    return response.data;
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }
+
+onMounted(async () => {
+  const interests = await findInterests();
+  parents.value = interests.map(x => ({ ...x, label: x.title }));
+});
 </script>

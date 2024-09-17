@@ -11,6 +11,9 @@ export async function findInterests(query: {
           mode: 'insensitive'
         }
       },
+      include: {
+        parent: true,
+      },
       take: 20,
     });
 
@@ -23,11 +26,34 @@ export async function findInterests(query: {
 
 export async function createInterest(formData: {
   title: string,
+  parentId: string,
 }) {
   try {
     const interest = await prisma.interest.create({
       data: {
-        title: formData.title
+        title: formData.title,
+        ...(formData.parentId && { parentId: formData.parentId }),
+      },
+    });
+
+
+    return { success: interest };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getInterestById(params: {
+  id?: string
+}) {
+  try {
+    const interest = await prisma.interest.findUnique({
+      where: {
+        id: params?.id,
+      },
+      include: {
+        parent: true,
       }
     });
 
@@ -42,8 +68,8 @@ export async function addInterest({
   profileId,
   interestId,
 }: {
-  profileId: number,
-  interestId: number,
+  profileId: string,
+  interestId: string,
 }) {
   try {
     const profile = await prisma.profile.update({
@@ -66,8 +92,8 @@ export async function removeInterest({
   profileId,
   interestId,
 }: {
-  profileId: number,
-  interestId: number,
+  profileId: string,
+  interestId: string,
 }) {
   try {
     const profile = await prisma.profile.update({
@@ -76,7 +102,7 @@ export async function removeInterest({
       },
       data: {
         interests: { disconnect: { id: interestId } },
-      }
+      },
     });
 
     return { success: profile };

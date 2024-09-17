@@ -58,7 +58,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import axios from 'axios';
+import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
 import SubmitButton from '../components/common/SubmitButton.vue';
@@ -66,22 +67,34 @@ import TextInput from '../components/common/TextInput.vue';
 import Card from '../components/common/CardComponent.vue';
 
 const router = useRouter();
+const session = inject('session');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
+
+const getSession = async (authHeader: string) => {
+  try {
+    const response = await axios.get(`/api/auth`, {
+      headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      }
+    });
+    const { session } = response.data;
+
+    return session;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 const sendLogin = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const res = await fetch('http://localhost:3000/api/auth/login', {
-      method: 'POST',
-      body: formData,
-    });
-    const response = await res.json()
-    if (!res.ok) throw new Error(response);
+    const response = await axios.post(`/api/auth/login`, formData);
 
-    return response;
+    return response.data;
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }
@@ -91,11 +104,13 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const authHeader = await sendLogin();
+    axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
+    session.value = await getSession(JSON.stringify(authHeader));
     
     return router.push(`/profiles`);
   } catch (error) {
-    errorMessage.value = (error as Error).message;
+    errorMessage.value = error.response.data;
     console.error(error);
   }
 }
