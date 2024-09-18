@@ -86,7 +86,7 @@ const fetchProfiles = async () => {
 async function selectProfile(selected: Object) {
   profile.value = selected;
   localStorage.setItem('profile', selected.id);
-  router.push(`/main`);
+  router.push(`/interests`);
 }
 
 const logout = async (userId: number) => {

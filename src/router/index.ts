@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
-import SelectProfileView from '@/views/SelectProfileView.vue';
-import SelectLocationView from '@/views/SelectLocationView.vue';
-import MainView from '@/views/MainView.vue';
-import InterestView from '@/views/InterestView.vue';
-import LocationView from '@/views/LocationView.vue';
+import ProfileListView from '@/views/ProfileListView.vue';
+import InterestFindView from '@/views/InterestFindView.vue';
+import InterestDetailView from '@/views/InterestDetailView.vue';
+import LocationFindView from '@/views/LocationFindView.vue';
+import LocationDetailView from '@/views/LocationDetailView.vue';
 
 
 const router = createRouter({
@@ -31,31 +31,37 @@ const router = createRouter({
     {
       path: '/profiles',
       name: 'profiles',
-      component: SelectProfileView,
+      component: ProfileListView,
       meta: { requiresAuth: true },
     },
     {
-      path: '/locations',
-      name: 'locations',
-      component: SelectLocationView,
-      meta: { requiresAuth: true },
+      path: '/profiles/:id',
+      name: 'profile',
+      component: {},
+      props: true,
     },
-    {
-      path: '/main',
-      name: 'main',
-      component: MainView,
+        {
+      path: '/interests',
+      name: 'interests',
+      component: InterestFindView,
       meta: { requiresAuth: true },
     },
     {
       path: '/interests/:id',
       name: 'interest',
-      component: InterestView,
+      component: InterestDetailView,
       props: true,
     },
     {
+      path: '/locations',
+      name: 'locations',
+      component: LocationFindView,
+      meta: { requiresAuth: true },
+    },
+        {
       path: '/locations/:id',
       name: 'location',
-      component: LocationView,
+      component: LocationDetailView,
       props: true,
     }
   ]
