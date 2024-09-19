@@ -8,8 +8,6 @@ import InterestFindView from '@/views/InterestFindView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import LocationFindView from '@/views/LocationFindView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
->>>>>>> structure
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,7 +61,6 @@ const router = createRouter({
       path: '/locations/:id',
       name: 'location',
       component: LocationDetailView,
->>>>>>> structure
       props: true,
     }
   ]
