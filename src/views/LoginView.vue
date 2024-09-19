@@ -68,10 +68,7 @@ import Card from '../components/common/CardComponent.vue';
 
 const router = useRouter();
 const session = inject('session');
-<<<<<<< HEAD
-=======
 const profile = inject('profile');
->>>>>>> structure
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
