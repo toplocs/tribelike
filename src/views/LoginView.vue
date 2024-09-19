@@ -68,6 +68,10 @@ import Card from '../components/common/CardComponent.vue';
 
 const router = useRouter();
 const session = inject('session');
+<<<<<<< HEAD
+=======
+const profile = inject('profile');
+>>>>>>> structure
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
@@ -107,6 +111,7 @@ const onSubmit = async () => {
     axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
     session.value = await getSession(JSON.stringify(authHeader));
+    if (profile.value) return router.push(`/interests`);
     
     return router.push(`/profiles`);
   } catch (error) {
