@@ -39,11 +39,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { chatService } from './service';
 
 const props = defineProps({
   user: Object,
   conversation: Object,
+  chatService: Object
 });
 
 const form = ref<HTMLFormElement | null>(null);
@@ -54,7 +54,9 @@ async function onSubmit() {
    const formData = new FormData(form.value);
    if (formData.get('chatInput').trim() === '') return;
    formData.append('userId', props.user.id);
-   chatService.emit('message', Object.fromEntries(formData.entries()));
+   props.chatService.emit(
+      'message', Object.fromEntries(formData.entries())
+   );
    textareaKey.value += 1;
    autoResize();
 };

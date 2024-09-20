@@ -7,6 +7,7 @@
     <ChatPanel
       :user="user"
       :conversation="conversation"
+      :chatService="chatService"
     />
   </div>
 </template>
@@ -16,16 +17,15 @@ import {
   ref,
   inject,
   computed,
-  watch,
-  watchEffect,
   onMounted,
   onBeforeUnmount
 } from 'vue';
 import { useRoute } from 'vue-router';
-import { chatService } from './service';
+import ChatService from './service';
 import ChatList from './ChatList.vue';
 import ChatPanel from './ChatPanel.vue';
 
+const chatService = new ChatService();
 const route = useRoute();
 const conversation = ref<Object>({});
 const messages = ref<Array>([]);
@@ -39,7 +39,6 @@ const props = defineProps({
 });
 
 const onConnect = () => {
-  console.log(user.value)
   console.log('Chat connected!');
 }
 
@@ -58,11 +57,6 @@ const testResponse = async (msg: Object) => {
   }
 }
 
-// Watch for changes to messages
-watch(messages, (newMessages, oldMessages) => {
-  console.log('Messages changed:', newMessages, oldMessages);
-});
-
 onMounted(() => {
   chatService.on('connect', onConnect);
   chatService.on('disconnect', onDisconnect);
@@ -73,7 +67,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  console.log('unmount')
   chatService.off('connect', onConnect);
   chatService.off('disconnect', onDisconnect);
   chatService.off('message');
