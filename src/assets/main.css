@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-editor h1 {
+  @apply text-3xl font-bold;
+}
+
+.custom-editor h2 {
+  @apply text-2xl font-bold;
+}
+
+.custom-editor h3 {
+  @apply text-xl font-bold;
+}
