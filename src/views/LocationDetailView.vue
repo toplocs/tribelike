@@ -45,6 +45,9 @@
         </div>
       </div>
 
+      <div className="mt-4">
+        <WikiPlugin />
+      </div>
 
     </Card>
   </div>
@@ -60,6 +63,8 @@ import BackButton from '../components/common/BackButton.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
+
+import WikiPlugin from '../components/plugins/wiki/Index.vue';
 
 const route = useRoute();
 const location = ref(null);

@@ -3,9 +3,13 @@
     ref="form"
     @submit.prevent="onSubmit"
   >
-    <Callout v-if="successMessage" title="Success" color="green">
+    <Callout v-if="successMessage" color="green">
       {{ successMessage }}
     </Callout>
+    <Callout v-if="errorMessage" color="red">
+      {{ errorMessage }}
+    </Callout>
+    
     <div v-if="editor" class="min-h-[300px]">
       <div class="control-group">
         <div class="button-group mb-4 text-sm">
@@ -103,34 +107,41 @@ const editor = useEditor({
     }),
   ],
   content: `
-    <h2>
-      Hi there,
+   <h2>
+      Welcome to the Wiki
     </h2>
+
     <p>
-      this is a basic <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
+      This is a simple <em>wiki</em> page made for your <strong>text editor</strong>. It includes basic text styles that you would expect from any modern editor. But there’s more than just text. Take a look at the lists below:
     </p>
+
     <ul>
       <li>
-        That’s a bullet list with one …
+        A standard bullet point …
       </li>
       <li>
-        … or two list items.
+        … with two items, just for fun.
       </li>
     </ul>
+
     <p>
-      Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
+      Pretty cool, right? But that’s not all! Here’s a code block for you to try:
     </p>
-<pre><code class="language-css">body {
-  display: none;
-}</code></pre>
+
+    <pre><code class="language-js">function greet() {
+      console.log("Hello, world!");
+    }</code></pre>
+
     <p>
-      I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
+      Nice, isn’t it? Don’t stop there, explore more features by trying out different options. Maybe even create some more code or lists of your own.
     </p>
+
     <blockquote>
-      Wow, that’s amazing. Good work, boy! 👏
+      "This wiki page looks fantastic, keep up the good work!" 👏
       <br />
-      — Mom
+      — Your Mentor
     </blockquote>
+
   `,
 });
 
