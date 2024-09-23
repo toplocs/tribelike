@@ -45,6 +45,10 @@
         </div>
       </div>
 
+      <div className="mt-8">
+        <Title>Upcoming events at this place:</Title>
+        <EventPlugin />
+      </div>
 
     </Card>
   </div>
@@ -60,6 +64,8 @@ import BackButton from '../components/common/BackButton.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
+
+import EventPlugin from '../components/plugins/event/Index.vue';
 
 const route = useRoute();
 const location = ref(null);
