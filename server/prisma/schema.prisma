@@ -40,6 +40,7 @@ model Profile {
   type      String
   image     String
   email     String // Every Profile can have an own email for notifications. Can be used for logins aswell
+  about     String?    
   userId    String? // Matches User ID type
   User      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   interests Interest[] @relation("ProfileInterests")
