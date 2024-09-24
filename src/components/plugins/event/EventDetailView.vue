@@ -20,16 +20,27 @@
             {{ event?.description }}
           </p>
 
+          <div v-if="event?.location" class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">
+              Happening here:
+            </h2>
+            <router-link :to="`/locations/${event?.location.id}`">
+              <LocationBadge :title="event?.location.title" />
+            </router-link>
+          </div>
+
           <div class="mb-8">
             <h2 class="text-lg font-semibold text-gray-900 mb-2">
               Relevant interests:
             </h2>
             <div class="flex flex-wrap gap-2">
-              <InterestBadge
+              <router-link
                 v-for="interest in event?.interests"
                 :key="interest.id"
-                :title="interest.title"
-              />
+                :to="`/interests/${interest.id}`"
+              >
+                <InterestBadge :title="interest.title" />
+              </router-link>
             </div>
           </div>
 
@@ -59,14 +70,16 @@
 </template>
 
 <script setup lang="ts">
-import events from './service.ts';
 import { ref, inject, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Card from '@/components/common/CardComponent.vue';
 import Title from '@/components/common/TitleComponent.vue';
 import BackButton from '@/components/common/BackButton.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
+
+import events from './service.ts';
 
 const route = useRoute();
 const event = ref(null);

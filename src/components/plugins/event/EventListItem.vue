@@ -15,6 +15,7 @@
         {{ event.description }}
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
+        <LocationBadge :title="event?.location.title" />
         <InterestBadge
           v-for="interest in event.interests"
           :key="interest.id"
@@ -27,6 +28,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import LocationBadge from '../../../components/badges/LocationBadge.vue';
 import InterestBadge from '../../../components/badges/InterestBadge.vue';
 
 const props = defineProps({

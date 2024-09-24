@@ -14,10 +14,12 @@ import { ref } from 'vue';
 import Dialog from '../../../components/dialog/DialogComponent.vue';
 import EventListItem from './EventListItem.vue';
 import EventDetailDialog from './EventDetailDialog.vue';
-import events from './service.ts';
 
 const props = defineProps({
-
+  events: {
+    type: Array,
+    required: true,
+  }
 });
 
 </script>

@@ -4,6 +4,7 @@ const events = [
     title: 'Beach cleaning',
     date: new Date(),
     description: 'We will be cleaning the beach in Ponta do sol',
+    location: { id: 1, title: 'Ponta do Sol'},
     interests: [
       { id: 1, title: 'Nature' },
       { id: 2, title: 'Beach' },
@@ -15,6 +16,7 @@ const events = [
     title: 'Dog sitting',
     date: new Date(),
     description: 'Looking for a dog sitter',
+    location: { id: 1, title: 'Ponta do Sol'},
     interests: [
       { id: 1, title: 'House' },
       { id: 2, title: 'Animals' }
@@ -25,6 +27,7 @@ const events = [
     title: 'Tree planting',
     date: new Date(),
     description: 'Gathering people for a tree planting',
+    location: { id: 1, title: 'Ponta do Sol'},
     interests: [
       { id: 1, title: 'Nature' },
       { id: 2, title: 'Tree' },
