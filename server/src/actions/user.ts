@@ -1,6 +1,24 @@
 import prisma from '../lib/prisma';
 import { auth, login, logout } from '../lib/auth';
 
+export async function getUsers(query: {
+  username?: string
+}) {
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        username: query?.username,
+      },
+      take: 20,
+    });
+
+    return { success: users };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 export async function createUser(formData: {
   username: string,
   email: string,
