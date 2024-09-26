@@ -4,6 +4,7 @@ import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import ProfileListView from '@/views/ProfileListView.vue';
+import ProfileDetailView from '@/views/ProfileDetailView.vue';
 import InterestFindView from '@/views/InterestFindView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import LocationFindView from '@/views/LocationFindView.vue';
@@ -39,10 +40,10 @@ const router = createRouter({
     {
       path: '/profiles/:id',
       name: 'profile',
-      component: {},
+      component: ProfileDetailView,
       props: true,
     },
-        {
+    {
       path: '/interests',
       name: 'interests',
       component: InterestFindView,

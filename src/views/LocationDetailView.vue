@@ -38,10 +38,12 @@
       <Title>Personen an diesem Ort:</Title>
       <div className="flex flex-row gap-2">
         <div v-for="suggestion of people">
-          <ProfileImage
-            :src="suggestion.image"
-            :tooltipText="suggestion.username"
-          />
+          <router-link :to="`/profiles/${suggestion.id}`">
+            <ProfileImage
+              :src="suggestion.image"
+              :tooltipText="suggestion.username"
+            />
+          </router-link>
         </div>
       </div>
 

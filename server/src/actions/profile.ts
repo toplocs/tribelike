@@ -28,6 +28,7 @@ export async function createProfile(
     image: string,
     username: string,
     email: string,
+    about: string,
   },
   authHeader?: string
 ) {
@@ -41,6 +42,7 @@ export async function createProfile(
         image: formData.image || '/images/default.jpeg',
         username: formData.username,
         email: formData.email,
+        about: formData.about,
       }
     });
 
@@ -58,6 +60,7 @@ export async function updateProfile(
     image: string,
     username: string,
     email: string,
+    about: string,
   },
   authHeader?: string,
 ) {
@@ -73,6 +76,7 @@ export async function updateProfile(
         image: formData.image || '/images/default.jpeg',
         username: formData.username,
         email: formData.email,
+        about: formData.about,
       },
       include: {
         interests: true,
