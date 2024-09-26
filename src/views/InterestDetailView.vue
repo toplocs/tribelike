@@ -29,6 +29,10 @@
       <div className="mt-4">
         <WikiPlugin />
       </div>
+      <div className="mt-8">
+        <Title>Events related to this interest:</Title>
+        <EventPlugin :events="events" />
+      </div>
     </Card>
   </div>
 </template>
@@ -43,6 +47,8 @@ import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
 
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
+import events from '../components/plugins/event/service.ts';
+import EventPlugin from '../components/plugins/event/Index.vue';
 
 const route = useRoute();
 const interest = ref(null);

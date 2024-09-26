@@ -14,6 +14,21 @@
             class="size-10 text-gray-600 hover:text-gray-500"
           />
         </router-link>
+        <Dialog>
+          <template #trigger="{ openDialog }">
+            <ChatBubbleLeftIcon
+              class="size-10 cursor-pointer text-gray-600 hover:text-gray-500"
+              @click.stop="openDialog"
+            />
+          </template>
+
+          <template #content="{ closeDialog }">
+            <ChatDialog :closeDialog="closeDialog"/>
+          </template>
+        </Dialog>
+        <div>
+          
+        </div>
         <router-link to="/profiles">
           <span class="size-10">
             <img
@@ -33,7 +48,9 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { MapPinIcon } from '@heroicons/vue/24/outline';
+import { MapPinIcon, ChatBubbleLeftIcon } from '@heroicons/vue/24/outline';
+import Dialog from './dialog/DialogComponent.vue';
+import ChatDialog from './dialog/ChatDialog.vue';
 
 const session = inject('session');
 const profile = inject('profile');
