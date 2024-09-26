@@ -9,6 +9,9 @@ import InterestDetailView from '@/views/InterestDetailView.vue';
 import LocationFindView from '@/views/LocationFindView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
 
+//Plugin
+import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -57,12 +60,20 @@ const router = createRouter({
       component: LocationFindView,
       meta: { requiresAuth: true },
     },
-        {
+    {
       path: '/locations/:id',
       name: 'location',
       component: LocationDetailView,
       props: true,
-    }
+    },
+
+    //Plugins
+    {
+      path: '/events/:id',
+      name: 'event',
+      component: EventDetailView,
+      props: true,
+    },
   ]
 });
 

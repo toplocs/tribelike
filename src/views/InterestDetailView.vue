@@ -25,6 +25,11 @@
          <InterestBadge :title="interest.parent?.title" />
         </router-link>
       </span>
+
+      <div className="mt-8">
+        <Title>Events related to this interest:</Title>
+        <EventPlugin :events="events" />
+      </div>
     </Card>
   </div>
 </template>
@@ -37,6 +42,9 @@ import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
+
+import events from '../components/plugins/event/service.ts';
+import EventPlugin from '../components/plugins/event/Index.vue';
 
 const route = useRoute();
 const interest = ref(null);

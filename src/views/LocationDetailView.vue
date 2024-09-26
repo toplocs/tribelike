@@ -45,6 +45,10 @@
         </div>
       </div>
 
+      <div className="mt-8">
+        <Title>Upcoming events at this place:</Title>
+        <EventPlugin :events="events" />
+      </div>
 
     </Card>
   </div>
@@ -60,6 +64,9 @@ import BackButton from '../components/common/BackButton.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
+
+import events from '../components/plugins/event/service.ts';
+import EventPlugin from '../components/plugins/event/Index.vue';
 
 const route = useRoute();
 const location = ref(null);
@@ -81,7 +88,6 @@ const fetchLocation = async (id: string) => {
 
 const addLocation = async () => {
   try {
-    console.log(profile.value)
     const response = await axios.put(`/api/location/add`, {
       profileId: profile.value?.id,
       locationId: location.value?.id,
