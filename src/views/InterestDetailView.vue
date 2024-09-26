@@ -2,7 +2,7 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
       <div className="mb-2 flex flex-row justify-between">
-        <BackButton href="/main" />
+        <BackButton href="/interests" />
         <button
           v-if="subscribed"
           @click="removeInterest"
@@ -26,6 +26,9 @@
         </router-link>
       </span>
 
+      <div className="mt-4">
+        <WikiPlugin />
+      </div>
       <div className="mt-8">
         <Title>Events related to this interest:</Title>
         <EventPlugin :events="events" />
@@ -43,6 +46,7 @@ import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
 
+import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';
 

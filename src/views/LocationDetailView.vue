@@ -45,6 +45,9 @@
         </div>
       </div>
 
+      <div className="mt-4">
+        <WikiPlugin />
+      </div>
       <div className="mt-8">
         <Title>Upcoming events at this place:</Title>
         <EventPlugin :events="events" />
@@ -65,6 +68,7 @@ import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
 
+import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';
 
