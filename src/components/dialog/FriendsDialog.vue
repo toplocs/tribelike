@@ -1,13 +1,12 @@
 <template>
-  <Title>
-    Chat with: {{partner?.username}}
-  </Title>
-
   <span v-if="partner">
     <Chat :partner="partner" />
   </span>
 
   <span v-if="!partner" v-for="user of users" :key="user.id">
+    <Title float="center">
+      A list of your friends:
+    </Title>
     <ChatListItem :user="user" :onClick="openChat" />
   </span>
 

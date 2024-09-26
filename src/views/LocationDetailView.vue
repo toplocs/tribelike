@@ -1,6 +1,6 @@
 <template>
-  <div className="min-h-screen flex justify-center items-center">
-    <Card className="space-y-2">
+  <div className="min-h-screen py-20 flex justify-center items-center">
+    <Card className="space-y-4">
       <div className="mb-2 flex flex-row justify-between">
         <BackButton href="/locations" />
         <button
@@ -17,7 +17,9 @@
         </button>
       </div>
 
-      <Title>{{ location?.title }}</Title>
+      <Title float="center">
+        {{ location?.title }}
+      </Title>
 
       <span v-if="location?.parent">
         Übergeordneter Ort:
@@ -35,25 +37,31 @@
         ]"
       />
 
-      <Title>Personen an diesem Ort:</Title>
-      <div className="flex flex-row gap-2">
-        <div v-for="suggestion of people">
-          <router-link :to="`/profiles/${suggestion.id}`">
-            <ProfileImage
-              :src="suggestion.image"
-              :tooltipText="suggestion.username"
-            />
-          </router-link>
+      <div className="mt-4">
+        <Title>Other people at this location:</Title>
+        <div className="flex flex-row gap-2">
+          <div v-for="suggestion of people">
+            <router-link :to="`/profiles/${suggestion.id}`">
+              <ProfileImage
+                :src="suggestion.image"
+                :tooltipText="suggestion.username"
+                size="small"
+              />
+            </router-link>
+          </div>
         </div>
       </div>
 
-      <div className="mt-4">
-        <WikiPlugin />
-      </div>
-      <div className="mt-8">
-        <Title>Upcoming events at this place:</Title>
-        <EventPlugin :events="events" />
-      </div>
+      <Plugins>
+        <div className="mt-4">
+          <WikiPlugin />
+        </div>
+
+        <div className="mt-8">
+          <Title>Upcoming events at this place:</Title>
+          <EventPlugin :events="events" />
+        </div>
+      </Plugins>
 
     </Card>
   </div>
@@ -70,6 +78,7 @@ import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
 
+import Plugins from '../components/plugins/Plugins.vue';
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';

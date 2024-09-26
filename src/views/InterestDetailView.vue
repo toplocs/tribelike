@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-screen flex justify-center items-center">
+  <div className="min-h-screen py-20 flex justify-center items-center">
     <Card className="pb-10">
       <div className="mb-2 flex flex-row justify-between">
         <BackButton href="/interests" />
@@ -16,9 +16,10 @@
         > Abonnieren
         </button>
       </div>
-      <Title>
+      <Title float="center">
         {{ interest?.title }}
       </Title>
+
       <span v-if="interest?.parent">
         Übergeordnete Interesse:
         <router-link :to="`/interests/${interest.parent?.id}`">
@@ -27,12 +28,30 @@
       </span>
 
       <div className="mt-4">
-        <WikiPlugin />
+        <Title>Other people with this interest:</Title>
+        <div className="flex flex-row gap-2">
+          <div v-for="suggestion of people">
+            <router-link :to="`/profiles/${suggestion.id}`">
+              <ProfileImage
+                :src="suggestion.image"
+                :tooltipText="suggestion.username"
+                size="small"
+              />
+            </router-link>
+          </div>
+        </div>
       </div>
-      <div className="mt-8">
-        <Title>Events related to this interest:</Title>
-        <EventPlugin :events="events" />
-      </div>
+
+      <Plugins>
+        <div className="mt-4">
+          <WikiPlugin />
+        </div>
+
+        <div className="mt-8">
+          <Title>Events related to this interest:</Title>
+          <EventPlugin :events="events" />
+        </div>
+      </Plugins>
     </Card>
   </div>
 </template>
@@ -45,7 +64,9 @@ import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
+import ProfileImage from '../components/common/ProfileImage.vue';
 
+import Plugins from '../components/plugins/Plugins.vue';
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';
@@ -54,6 +75,7 @@ const route = useRoute();
 const interest = ref(null);
 const profile = inject('profile');
 const subscribed = computed(() => profile.value?.interests.some(x => x.id == interest.value?.id));
+const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 const fetchInterest = async (id: string) => {
   try {

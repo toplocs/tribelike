@@ -1,8 +1,8 @@
 <template>
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
-      <Title>
-        Meine Interessen:
+      <Title float="center">
+        My interests:
       </Title>
 
       <div className="flex flex-row gap-2">

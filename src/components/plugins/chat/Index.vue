@@ -1,4 +1,7 @@
 <template>
+  <Title float="center">
+    Chat with {{ partner?.username }}
+  </Title>
   <div class="flex-1 p:2 justify-between flex flex-col min-h-[500px]">
     <ChatList
       :user="user"
@@ -21,6 +24,7 @@ import {
   onBeforeUnmount
 } from 'vue';
 import { useRoute } from 'vue-router';
+import Title from '@/components/common/TitleComponent.vue';
 import ChatService from './service';
 import ChatList from './ChatList.vue';
 import ChatPanel from './ChatPanel.vue';

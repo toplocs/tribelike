@@ -2,8 +2,8 @@
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10 px-0">
       <div className="px-4">
-        <Title>
-          Wähle dein Profil aus:
+        <Title float="center">
+          Select your profile:
         </Title>
       </div>
 
@@ -18,12 +18,13 @@
           @updateProfiles="handleUpdateProfiles"
         />
       </ul>
+
       <Dialog>
         <template #trigger="{ openDialog }">
           <button
             @click="openDialog"
             className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-          > Neues Profil hinzufügen
+          > Create a new profile
           </button>
         </template>
 
@@ -34,10 +35,11 @@
           />
         </template>
       </Dialog>
+      
       <button
         @click="logout"
         className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-      > Abmelden
+      > Logout
       </button>
     </Card>
   </div>

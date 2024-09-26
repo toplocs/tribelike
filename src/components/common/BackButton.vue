@@ -15,12 +15,13 @@ import { useRouter } from 'vue-router';
 const props = defineProps({
   href: {
     type: String,
-    default: '/'
+    required: false,
   }
 });
 const router = useRouter();
 
 const goBack = () => {
-  router.push(props.href);
+  if (props.rhef) return router.push(props.href);
+  return router.back();
 };
 </script>
