@@ -4,13 +4,13 @@
       <router-link
         to="/login"
         :class="buttonClass"
-      > Zum Login
+      > Sign In
       </router-link>
 
       <router-link
         to="/register"
         :class="buttonClass"
-      > Zur Anmeldung
+      > Sign Up
       </router-link>  
     </div>
   </div>

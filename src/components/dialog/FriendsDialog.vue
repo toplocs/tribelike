@@ -3,11 +3,15 @@
     <Chat :partner="partner" />
   </span>
 
-  <span v-if="!partner" v-for="user of users" :key="user.id">
+  <span v-if="!partner">
     <Title float="center">
       A list of your friends:
     </Title>
-    <ChatListItem :user="user" :onClick="openChat" />
+    <ChatListItem
+      v-for="user of users" :key="user.id"
+      :user="user"
+      :onClick="openChat"
+    />
   </span>
 
 </template>

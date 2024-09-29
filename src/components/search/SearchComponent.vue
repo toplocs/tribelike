@@ -33,7 +33,7 @@
           </span>
         </li>
         <li v-if="filteredOptions.length === 0" class="px-4 py-2 text-gray-500">
-          Keine Suchergebnisse
+          No search results
         </li>
       </ul>
     </div>

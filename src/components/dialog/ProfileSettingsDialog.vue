@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Profil Einstellungen
+    Profile settings
   </Title>
   <p v-if="errorMessage" class="text-center text-red-500 my-2">
     {{ errorMessage }}
@@ -17,7 +17,7 @@
     <input name="profileId" type="hidden" :value="profile.id" />
     <ProfileSettings :profile="profile" />
     <SubmitButton className="w-full mt-4">
-      Speichern
+      Submit
     </SubmitButton>
   </form>
 </template>

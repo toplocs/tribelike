@@ -7,7 +7,7 @@
 
       <div className="flex flex-row gap-2">
         <Search
-          placeholder="Suche nach Interessen ..."
+          placeholder="Search for an interest ..."
           name="selectedItem"
           :findOptions="findInterests"
           @selected="handleSelection"

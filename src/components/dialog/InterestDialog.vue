@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Neue Interesse erstellen
+    Create a new interest
   </Title>
   <p v-if="errorMessage" class="text-red-500 mt-4">
     {{ errorMessage }}
@@ -15,7 +15,7 @@
       <label
         for="title"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      > Titel
+      > Title
       </label>
 
       <TextInput
@@ -23,7 +23,7 @@
         id="title"
         name="title"
         autoComplete="title"
-        placeholder="Benenne deine Interesse"
+        placeholder="The title of the interest"
       />
     </div>
 
@@ -31,19 +31,19 @@
       <label
         for="parentId"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      > Übergeordnete Interesse
+      > This interest is part of
       </label>
 
       <SelectInput
         name="parentId"
-        placeholder="Wähle eine übergeordnete Interesse aus"
+        placeholder="Select a parent interest"
         v-model="selectedModel"
         :options="parents"
       />
     </div>
 
     <SubmitButton className="w-full mt-4">
-      Absenden
+      Submit
     </SubmitButton>
   </form>
 </template>

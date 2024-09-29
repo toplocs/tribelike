@@ -3,7 +3,7 @@
     <Card className="pb-10 max-w-sm">
       <BackButton />
       <h3 className="mb-8 text-center text-lg font-semibold">
-        Anmeldung
+        Create an account
       </h3>
       <p v-if="errorMessage" class="text-red-500 mt-4">
         {{ errorMessage }}
@@ -19,7 +19,7 @@
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Benutzername
+            Username
           </label>
 
           <TextInput
@@ -27,7 +27,7 @@
             id="username"
             name="username"
             autoComplete="username"
-            placeholder="Gib deinen Benutzernamen ein"
+            placeholder="Enter your username"
           />
         </div>
 
@@ -36,7 +36,7 @@
             for="email"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Email Addresse
+            Email Address
           </label>
 
           <TextInput
@@ -44,7 +44,7 @@
             id="email"
             name="email"
             autoComplete="email"
-            placeholder="Gib deine Email Addresse ein"
+            placeholder="Enter your email address"
           />
         </div>
 
@@ -53,7 +53,7 @@
             for="password"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Passwort
+            Password
           </label>
 
           <TextInput
@@ -70,7 +70,7 @@
             for="password2"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Passwort wiederholen
+            Confirm the password
           </label>
 
           <TextInput
@@ -83,7 +83,7 @@
         </div>
 
         <SubmitButton className="w-full mt-4">
-          Account erstellen
+          Submit
         </SubmitButton>
       </form>
     </Card>

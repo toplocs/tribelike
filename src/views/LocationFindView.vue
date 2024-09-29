@@ -7,7 +7,7 @@
 
       <div className="flex flex-row gap-2">
         <Search
-          placeholder="Suche nach Orten ..."
+          placeholder="Search for a location ..."
           name="selectedItem"
           :findOptions="findLocations"
           @selected="handleSelection"

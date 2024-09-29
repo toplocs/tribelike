@@ -7,13 +7,13 @@
           v-if="subscribed"
           @click="removeInterest"
           class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Deabonnieren
+        > Remove
         </button>
         <button
           v-if="!subscribed"
           @click="addInterest"
           class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Abonnieren
+        > Add
         </button>
       </div>
       <Title float="center">
@@ -21,7 +21,7 @@
       </Title>
 
       <span v-if="interest?.parent">
-        Übergeordnete Interesse:
+        Is a part of:
         <router-link :to="`/interests/${interest.parent?.id}`">
          <InterestBadge :title="interest.parent?.title" />
         </router-link>
@@ -43,6 +43,10 @@
       </div>
 
       <Plugins>
+        <Card className="mt-4">
+          <ChatPlugin />
+        </Card>
+
         <div className="mt-4">
           <WikiPlugin />
         </div>
@@ -67,6 +71,7 @@ import InterestBadge from '../components/badges/InterestBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 
 import Plugins from '../components/plugins/Plugins.vue';
+import ChatPlugin from '../components/plugins/chat/Index.vue';
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';
