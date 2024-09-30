@@ -49,7 +49,7 @@
 import axios from 'axios';
 import { ref, inject, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { PlusIcon } from '@heroicons/vue/24/outline';
+import { PlusIcon } from '@heroicons/vue/24/solid';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';

@@ -23,18 +23,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Dialog from './dialog/DialogComponent.vue';
 import AvatarDialog from './dialog/AvatarDialog.vue';
 
 const props = defineProps({
   src: {
     type: String,
+    default: '/images/default.jpeg',
+    required: true,
   },
 });
-const imageSrc = ref(props.src || '/images/default.jpeg');
+const imageSrc = ref(props.src);
 
 const handleSelection = async (src: string) => {
   imageSrc.value = src;
 }
+
+watchEffect(() => {
+  imageSrc.value = props.src;
+});
 </script>

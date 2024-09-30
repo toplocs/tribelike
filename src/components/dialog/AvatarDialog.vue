@@ -2,9 +2,6 @@
   <Title>
     Change your avatar
   </Title>
-  <p v-if="errorMessage" class="text-red-500 mt-4">
-    {{ errorMessage }}
-  </p>
 
   <form
     ref="form"

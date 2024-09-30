@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
+import { ArrowLeftIcon } from '@heroicons/vue/24/solid';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({

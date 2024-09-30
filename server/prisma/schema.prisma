@@ -25,13 +25,13 @@ model User {
   image    String?
   password String
   profiles Profile[]
-  settings Settings[]
+  settings Settings?
 }
 
 model Settings {
   id       String  @id @default(uuid())
-  userId   String? // Matches User ID type
-  User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String  @unique()
+  User     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   language String  @default("en") // Default language
 }
 

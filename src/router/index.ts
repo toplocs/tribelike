@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
+import SettingsView from '@/views/SettingsView.vue';
 import ProfileListView from '@/views/ProfileListView.vue';
 import ProfileDetailView from '@/views/ProfileDetailView.vue';
 import InterestFindView from '@/views/InterestFindView.vue';
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterView
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/profiles',

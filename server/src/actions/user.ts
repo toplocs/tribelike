@@ -43,6 +43,37 @@ export async function createUser(formData: {
   }
 }
 
+export async function updateUser(
+  formData: {
+    image: string,
+    username: string,
+    email: string,
+    password: string,
+    password2: string,
+  },
+  authHeader?: string,
+) {
+  try {
+    const session = await auth(authHeader);
+    const user = session?.user;
+    const result = await prisma.user.update({
+      where: {
+        id: user?.id,
+      },
+      data: {
+        image: formData.image || '/images/default.jpeg',
+        username: formData.username,
+        email: formData.email,
+      },
+    });
+
+    return { success: result };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 export async function getUserById(params: {
   id?: string
 }) {

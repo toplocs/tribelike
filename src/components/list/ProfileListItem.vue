@@ -42,24 +42,24 @@
       </Dialog>
     </div>
     <div class="flex-3 h-full p-4">
-    <Dialog>
-      <template #trigger="{ openDialog }">
-        <TrashIcon
-          class="w-6 h-6 text-red-200 hover:text-red-400"
-          @click.stop="openDialog"
-        />
-      </template>
+      <Dialog>
+        <template #trigger="{ openDialog }">
+          <TrashIcon
+            class="w-6 h-6 text-red-200 hover:text-red-400"
+            @click.stop="openDialog"
+          />
+        </template>
 
-      <template #content="{ closeDialog }">
-        <ConfirmDialog
-          text="Do you want to delete the profile?"
-          :closeDialog="(x) => {
-            if (x == true) onDelete();
-            closeDialog();
-          }"
-        />
-      </template>
-    </Dialog>
+        <template #content="{ closeDialog }">
+          <ConfirmDialog
+            text="Do you want to delete the profile?"
+            :closeDialog="(x) => {
+              if (x == true) onDelete();
+              closeDialog();
+            }"
+          />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref } from 'vue';
-import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
+import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/solid';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ProfileSettingsDialog from '@/components/dialog/ProfileSettingsDialog.vue';
