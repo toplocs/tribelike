@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-screen flex justify-center items-center">
+  <div className="min-h-screen py-20 flex justify-center items-center">
     <Card className="pb-10">
       <div className="mb-2 flex flex-row justify-between">
         <BackButton href="/interests" />
@@ -7,32 +7,55 @@
           v-if="subscribed"
           @click="removeInterest"
           class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Deabonnieren
+        > Remove
         </button>
         <button
           v-if="!subscribed"
           @click="addInterest"
           class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Abonnieren
+        > Add
         </button>
       </div>
-      <Title>
+      <Title float="center">
         {{ interest?.title }}
       </Title>
+
       <span v-if="interest?.parent">
-        Übergeordnete Interesse:
+        Is a part of:
         <router-link :to="`/interests/${interest.parent?.id}`">
          <InterestBadge :title="interest.parent?.title" />
         </router-link>
       </span>
 
       <div className="mt-4">
-        <WikiPlugin />
+        <Title>Other people with this interest:</Title>
+        <div className="flex flex-row gap-2">
+          <div v-for="suggestion of people">
+            <router-link :to="`/profiles/${suggestion.id}`">
+              <ProfileImage
+                :src="suggestion.image"
+                :tooltipText="suggestion.username"
+                size="small"
+              />
+            </router-link>
+          </div>
+        </div>
       </div>
-      <div className="mt-8">
-        <Title>Events related to this interest:</Title>
-        <EventPlugin :events="events" />
-      </div>
+
+      <Plugins>
+        <Card className="mt-4">
+          <ChatPlugin />
+        </Card>
+
+        <div className="mt-4">
+          <WikiPlugin />
+        </div>
+
+        <div className="mt-8">
+          <Title>Events related to this interest:</Title>
+          <EventPlugin :events="events" />
+        </div>
+      </Plugins>
     </Card>
   </div>
 </template>
@@ -45,7 +68,10 @@ import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
+import ProfileImage from '../components/common/ProfileImage.vue';
 
+import Plugins from '../components/plugins/Plugins.vue';
+import ChatPlugin from '../components/plugins/chat/Index.vue';
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';
@@ -54,6 +80,7 @@ const route = useRoute();
 const interest = ref(null);
 const profile = inject('profile');
 const subscribed = computed(() => profile.value?.interests.some(x => x.id == interest.value?.id));
+const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 const fetchInterest = async (id: string) => {
   try {

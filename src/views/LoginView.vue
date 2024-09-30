@@ -1,7 +1,7 @@
 <template>
   <div className="min-h-screen flex flex-col justify-center items-center">
     <Card className="pb-10 max-w-sm">
-      <BackButton />
+      <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
         Login
       </h3>
@@ -20,7 +20,7 @@
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Benutzername
+            Username
           </label>
 
           <TextInput
@@ -28,7 +28,7 @@
             id="username"
             name="username"
             autoComplete="username"
-            placeholder="Gib deinen Benutzernamen ein"
+            placeholder="Enter your username"
           />
         </div>
 
@@ -37,7 +37,7 @@
             for="password"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Passwort
+            Password
           </label>
 
           <TextInput
@@ -50,7 +50,7 @@
         </div>
 
         <SubmitButton className="w-full mt-4">
-          Einloggen
+          Sign In
         </SubmitButton>
       </form>
     </Card>

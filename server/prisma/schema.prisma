@@ -22,7 +22,7 @@ model User {
   id       String     @id @default(uuid())
   username String     @unique()
   email    String     @unique() // As email is in Profiles, maybe not needed
-  image    String
+  image    String?
   password String
   profiles Profile[]
   settings Settings[]

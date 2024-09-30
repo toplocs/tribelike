@@ -13,8 +13,7 @@
       <button
         class="mt-4 bg-green-500 text-white inline-flex justify-center px-4 py-2 text-sm font-medium border rounded-lg hover:bg-green-600 transition"
         @click="editContent"
-      >
-        Edit the Wiki
+      > Edit the Wiki
       </button>
     </div>
   </div>

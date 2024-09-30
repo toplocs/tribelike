@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Einen neuen Ort erstellen
+    Create a new location
   </Title>
   <p v-if="errorMessage" class="text-red-500 mt-4">
     {{ errorMessage }}
@@ -23,7 +23,7 @@
         id="title"
         name="title"
         autoComplete="title"
-        placeholder="Benenne den Ort"
+        placeholder="The title of the location"
       />
     </div>
 
@@ -31,12 +31,12 @@
       <label
         for="parentId"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      > Übergeordneter Ort
+      > Located in
       </label>
 
       <SelectInput
         name="parentId"
-        placeholder="Wähle einen übergeordneten Ort aus"
+        placeholder="Select where this location is"
         v-model="selectedModel"
         :options="parents"
         @update:modelValue="handleSelectParent"
@@ -48,7 +48,7 @@
         <label
           for="xCoordinate"
           class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-        > X Koordinaten
+        > X coordinate
         </label>
 
         <TextInput
@@ -65,7 +65,7 @@
         <label
           for="yCoordinate"
           class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-        > Y Koordinaten
+        > Y coordinate
         </label>
 
         <TextInput
@@ -85,7 +85,7 @@
     />
 
     <SubmitButton className="w-full mt-4">
-      Absenden
+      Submit
     </SubmitButton>
   </form>
 </template>

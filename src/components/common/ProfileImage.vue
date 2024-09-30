@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative inline-block"
+    class="relative"
     @mouseenter="showTooltip"
     @mouseleave="hideTooltip"
   >

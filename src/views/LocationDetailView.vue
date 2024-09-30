@@ -1,26 +1,28 @@
 <template>
-  <div className="min-h-screen flex justify-center items-center">
-    <Card className="space-y-2">
+  <div className="min-h-screen py-20 flex justify-center items-center">
+    <Card className="space-y-4">
       <div className="mb-2 flex flex-row justify-between">
         <BackButton href="/locations" />
         <button
           v-if="subscribed"
           @click="removeLocation"
           class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Deabonnieren
+        > Remove
         </button>
         <button
           v-if="!subscribed"
           @click="addLocation"
           class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Abonnieren
+        > Add
         </button>
       </div>
 
-      <Title>{{ location?.title }}</Title>
+      <Title float="center">
+        {{ location?.title }}
+      </Title>
 
       <span v-if="location?.parent">
-        Übergeordneter Ort:
+        Is located in:
         <router-link :to="`/locations/${location.parent?.id}`">
          <LocationBadge :title="location.parent?.title" />
         </router-link>
@@ -35,25 +37,35 @@
         ]"
       />
 
-      <Title>Personen an diesem Ort:</Title>
-      <div className="flex flex-row gap-2">
-        <div v-for="suggestion of people">
-          <router-link :to="`/profiles/${suggestion.id}`">
-            <ProfileImage
-              :src="suggestion.image"
-              :tooltipText="suggestion.username"
-            />
-          </router-link>
+      <div className="mt-4">
+        <Title>Other people at this location:</Title>
+        <div className="flex flex-row gap-2">
+          <div v-for="suggestion of people">
+            <router-link :to="`/profiles/${suggestion.id}`">
+              <ProfileImage
+                :src="suggestion.image"
+                :tooltipText="suggestion.username"
+                size="small"
+              />
+            </router-link>
+          </div>
         </div>
       </div>
 
-      <div className="mt-4">
-        <WikiPlugin />
-      </div>
-      <div className="mt-8">
-        <Title>Upcoming events at this place:</Title>
-        <EventPlugin :events="events" />
-      </div>
+      <Plugins>
+        <Card className="mt-4">
+          <ChatPlugin />
+        </Card>
+
+        <div className="mt-4">
+          <WikiPlugin />
+        </div>
+
+        <div className="mt-8">
+          <Title>Upcoming events at this place:</Title>
+          <EventPlugin :events="events" />
+        </div>
+      </Plugins>
 
     </Card>
   </div>
@@ -70,6 +82,8 @@ import LocationBadge from '../components/badges/LocationBadge.vue';
 import ProfileImage from '../components/common/ProfileImage.vue';
 import Map from '../components/MapComponent.vue';
 
+import Plugins from '../components/plugins/Plugins.vue';
+import ChatPlugin from '../components/plugins/chat/Index.vue';
 import WikiPlugin from '../components/plugins/wiki/Index.vue';
 import events from '../components/plugins/event/service.ts';
 import EventPlugin from '../components/plugins/event/Index.vue';

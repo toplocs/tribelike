@@ -54,6 +54,7 @@ export async function getInterestById(params: {
       },
       include: {
         parent: true,
+        profiles: true,
       }
     });
 

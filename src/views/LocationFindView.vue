@@ -1,13 +1,13 @@
 <template>
   <div className="min-h-screen flex justify-center items-center">
     <Card className="pb-10">
-      <Title>
-        Meine Standorte:
+      <Title float="center">
+        My locations:
       </Title>
 
       <div className="flex flex-row gap-2">
         <Search
-          placeholder="Suche nach Orten ..."
+          placeholder="Search for a location ..."
           name="selectedItem"
           :findOptions="findLocations"
           @selected="handleSelection"

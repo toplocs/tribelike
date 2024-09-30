@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Avatar ändern
+    Change your avatar
   </Title>
   <p v-if="errorMessage" class="text-red-500 mt-4">
     {{ errorMessage }}
@@ -21,20 +21,19 @@
       <label
         for="parentId"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-      >
-        Bild auswählen
+      > Select the image
       </label>
 
       <SelectInput
         name="avatar"
-        placeholder="Wähle ein passendes Bild aus"
+        placeholder="Select an image"
         v-model="selectedModel"
         :options="avatars"
       />
     </div>
 
     <SubmitButton className="w-full mt-4">
-      Auswählen
+      Save
     </SubmitButton>
   </form>
 </template>

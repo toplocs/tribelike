@@ -7,7 +7,7 @@
     <label
       for="type"
       class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-    > Art des Profils
+    > Profile type
     </label>
 
     <TextInput
@@ -15,8 +15,8 @@
       id="type"
       name="type"
       autoComplete="type"
-      placeholder="Gib den Typ des Profils an"
-      :modelValue="profile?.type || 'Privat'"
+      placeholder="The type of your profile"
+      :modelValue="profile?.type || 'Private'"
     />
   </div>
 
@@ -24,7 +24,7 @@
     <label
       for="select"
       class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-    > Benutzername
+    > Username
     </label>
 
     <TextInput
@@ -32,7 +32,7 @@
       id="username"
       name="username"
       autoComplete="username"
-      placeholder="Gib den Benutzernamen des Profils an"
+      placeholder="Enter the name of your profile"
       :modelValue="profile?.username || ''"
     />
   </div>
@@ -41,7 +41,7 @@
     <label
       for="email"
       class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-    > Email Addresse
+    > Email Address
     </label>
 
     <TextInput
@@ -49,7 +49,7 @@
       id="email"
       name="email"
       autoComplete="email"
-      placeholder="Gib die Email des Profils an"
+      placeholder="Enter your email address"
       :modelValue="profile?.email || ''"
     />
   </div>
@@ -66,7 +66,7 @@
       id="about"
       name="about"
       autoComplete="about"
-      placeholder="Write something about you ..."
+      placeholder="Write something about yourself ..."
       :modelValue="profile?.about || ''"
     />
   </div>

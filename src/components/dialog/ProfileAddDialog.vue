@@ -1,6 +1,6 @@
 <template>
   <Title>
-    Profil hinzufügen
+    Add a profile
   </Title>
   <p v-if="errorMessage" class="text-center text-red-500 my-2">
     {{ errorMessage }}
@@ -13,7 +13,7 @@
   >
     <ProfileSettings :profile="user" />
     <SubmitButton className="w-full mt-4">
-      Erstellen
+      Create
     </SubmitButton>
   </form>
 </template>

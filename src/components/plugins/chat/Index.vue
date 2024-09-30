@@ -1,4 +1,9 @@
 <template>
+  <Title float="center">
+    Chat with 
+    <span v-if="partner">{{ partner?.username }}</span>
+    <span v-if="!partner">the community</span>
+  </Title>
   <div class="flex-1 p:2 justify-between flex flex-col min-h-[500px]">
     <ChatList
       :user="user"
@@ -21,6 +26,7 @@ import {
   onBeforeUnmount
 } from 'vue';
 import { useRoute } from 'vue-router';
+import Title from '@/components/common/TitleComponent.vue';
 import ChatService from './service';
 import ChatList from './ChatList.vue';
 import ChatPanel from './ChatPanel.vue';
@@ -34,7 +40,7 @@ const user = computed(() => session.value?.user);
 const props = defineProps({
    partner: {
     type: Object,
-    required: true,
+    required: false,
    },
 });
 
@@ -50,7 +56,11 @@ const testResponse = async (msg: Object) => {
   if (msg.userId == user.value?.id) {
     setTimeout(() => {
       chatService.emit('message', {
-        userId: props.partner.id,
+        user: {
+          username: 'System',
+          image: '/images/default.jpeg',
+        },
+        userId: props.partner?.id || 0,
         chatInput: 'Hello this is an automated test response',
       });
     }, 1500);

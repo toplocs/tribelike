@@ -52,7 +52,7 @@
 
       <template #content="{ closeDialog }">
         <ConfirmDialog
-          text="Möchtest du dieses Profil wirklich löschen?"
+          text="Do you want to delete the profile?"
           :closeDialog="(x) => {
             if (x == true) onDelete();
             closeDialog();
@@ -68,10 +68,10 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
-import InterestBadge from '../../components/badges/InterestBadge.vue';
-import Dialog from '../../components/dialog/DialogComponent.vue';
-import ProfileSettingsDialog from '../../components/dialog/ProfileSettingsDialog.vue';
-import ConfirmDialog from '../../components/dialog/ConfirmDialog.vue';
+import InterestBadge from '@/components/badges/InterestBadge.vue';
+import Dialog from '@/components/dialog/DialogComponent.vue';
+import ProfileSettingsDialog from '@/components/dialog/ProfileSettingsDialog.vue';
+import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 
 const props = defineProps({
   profile: {

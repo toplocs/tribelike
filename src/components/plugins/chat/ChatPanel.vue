@@ -54,8 +54,13 @@ async function onSubmit() {
    const formData = new FormData(form.value);
    if (formData.get('chatInput').trim() === '') return;
    formData.append('userId', props.user.id);
-   props.chatService.emit(
-      'message', Object.fromEntries(formData.entries())
+   props.chatService.emit('message', {
+         ...Object.fromEntries(formData.entries()),
+         user: {
+            ...props.user,
+            image: '/images/default.jpeg',
+         }
+      }
    );
    textareaKey.value += 1;
    autoResize();

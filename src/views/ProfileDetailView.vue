@@ -1,10 +1,25 @@
 <template>
-  <div className="min-h-screen flex justify-center items-center">
+  <div className="min-h-screen py-20 flex justify-center items-center">
     <Card className="pb-10">
       <div className="mb-2 flex flex-row justify-between">
         <BackButton />
+
+        <Plugins>
+          <Dialog>
+            <template #trigger="{ openDialog }">
+              <ChatBubbleLeftIcon
+                class="size-10 cursor-pointer text-gray-600 hover:text-gray-500"
+                @click.stop="openDialog"
+              />
+            </template>
+
+            <template #content="{ closeDialog }">
+              <Chat :partner="profile" />
+            </template>
+          </Dialog>
+        </Plugins>
       </div>
-      <Title>
+      <Title float="center">
         {{ profile?.type }} – {{ profile?.username }}
       </Title>
       <img
@@ -13,7 +28,7 @@
         class="w-48 h-48 rounded-full object-cover mx-auto mb-8"
       />
 
-      <div class="mb-8">
+      <div v-if="profile?.about" class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 mb-2">
           About myself:
         </h2>
@@ -22,7 +37,7 @@
         </p>
       </div>
 
-      <div class="mb-8">
+      <div v-if="profile?.interests.length" class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 mb-2">
           My interests:
         </h2>
@@ -37,7 +52,7 @@
         </div>
       </div>
 
-      <div class="mb-8">
+      <div v-if="profile?.locations.length" class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 mb-2">
           My locations:
         </h2>
@@ -52,7 +67,7 @@
         </div>
       </div>
 
-      <div class="mb-8">
+      <div v-if="profileFeed.length" class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 mb-2">
           My activities:
         </h2>
@@ -67,6 +82,10 @@
         </div>
       </div>
 
+      <Plugins>
+
+      </Plugins>
+
     </Card>
   </div>
 </template>
@@ -74,6 +93,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
+import { ChatBubbleLeftIcon } from '@heroicons/vue/24/outline';
 import { useRoute } from 'vue-router';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
@@ -81,6 +101,10 @@ import BackButton from '../components/common/BackButton.vue';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
 import FeedListItem from '../components/list/FeedListItem.vue';
+import Dialog from '@/components/dialog/DialogComponent.vue';
+
+import Plugins from '@/components/plugins/Plugins.vue';
+import Chat from '@/components/plugins/chat/Index.vue';
 
 const route = useRoute();
 const profile = ref(null);
