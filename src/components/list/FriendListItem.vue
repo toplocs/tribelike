@@ -4,7 +4,7 @@
     @click="onClick(user)"
   >
     <img
-      src="/images/default.jpeg"
+      :src="user?.image"
       alt="Avatar"
       class="w-12 h-12 rounded-full object-cover mr-4"
     />
@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref } from 'vue';
+import ProfileImage from '@/components/common/ProfileImage.vue';
 
 const props = defineProps({
   user: {

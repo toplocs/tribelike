@@ -41,15 +41,13 @@
 
         <Dropdown className="min-w-40">
           <template #trigger>
-            <span class="size-10">
-              <img
-                :src="profile.image"
-                alt="logo"
-                width="30"
-                height="30"
-                class="size-10 rounded-full"
-              />
-            </span>
+            <img
+              :src="profile.image"
+              alt="logo"
+              width="30"
+              height="30"
+              class="ml-4 size-8 rounded-full"
+            />
           </template>
 
           <template #default="{ closeDropdown }">

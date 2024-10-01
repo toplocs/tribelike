@@ -1,35 +1,38 @@
 <template>
   <div
-    class="relative"
-    @mouseenter="showTooltip"
-    @mouseleave="hideTooltip"
+    v-if="isVisible"
+    class="absolute top-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded mt-1 whitespace-nowrap z-10"
   >
-    <div v-if="isTooltipVisible"
-      class="absolute top-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded mt-1 whitespace-nowrap z-10"
-    >
-      {{ text }}
-    </div>
+    {{ content }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
-// Props definition
 const props = defineProps({
-  text: {
+  content: {
     type: String,
     required: true,
   },
+  targetRef: {
+    type: Object,
+    required: false,
+  },
 });
 
-const isTooltipVisible = ref(false);
+const isVisible = ref(false);
 
 const showTooltip = () => {
-  isTooltipVisible.value = true;
+  isVisible.value = true;
 };
 
 const hideTooltip = () => {
-  isTooltipVisible.value = false;
+  isVisible.value = false;
 };
+
+onMounted(() => {
+  props.targetRef?.addEventListener('mouseover', showTooltip);
+  props.targetRef?.addEventListener('mouseout', hideTooltip);
+});
 </script>

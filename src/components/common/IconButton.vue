@@ -1,28 +1,51 @@
 <template>
-  <button
+  <button 
+    :class="buttonClasses"
+    :disabled="disabled"
+    aria-label="Icon Button"
+    ref="tooltipTarget"
     @click="onClick"
-    class="inline-flex items-center px-4 py-2 text-sm font-medium bg-blue-50 dark:bg-blue-800 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
   >
-    <icon class="w-5 h-5" />
+    <component :is="icon" class="h-6 w-6"/>
+
+    <Tooltip
+      v-if="tooltipTarget && tooltipText"
+      :targetRef="tooltipTarget"
+      :content="tooltipText"
+    />
   </button>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+import Tooltip from '@/components/common/TooltipComponent.vue';
 
 const props = defineProps({
-  onClick: {
-    type: Function,
-    required: false,
-  },
   icon: {
     type: Function,
     required: true,
-  }
+  },
+  tooltipText: {
+    type: String,
+    required: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  className: {
+    type: String,
+    default: '',
+  },
 });
-const router = useRouter();
 
-const href = () => {
-  router.push(props.href);
-};
+const tooltipTarget = ref(null);
+const buttonClasses = computed(() =>
+  `relative inline-flex items-center justify-center 
+   bg-gray-200 dark:bg-gray-700
+   text-blue-500 dark:text-blue-400 
+   rounded-lg px-2 py-2 
+   ${props.disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-300 dark:hover:bg-gray-600'} 
+   ${props.className}`
+);
 </script>

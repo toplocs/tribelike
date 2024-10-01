@@ -1,8 +1,7 @@
 <template>
   <div
     class="relative"
-    @mouseenter="showTooltip"
-    @mouseleave="hideTooltip"
+    ref="tooltipTarget"
   >
     <img
       :src="src"
@@ -12,17 +11,18 @@
       :class="sizeClass"
       class="rounded-full object-cover border-2"
     />
-    <div
-      v-if="isTooltipVisible"
-      class="absolute top-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded mt-1 whitespace-nowrap z-10"
-    >
-      {{ tooltipText }}
-    </div>
+
+    <Tooltip
+      v-if="tooltipTarget && tooltipText"
+      :targetRef="tooltipTarget"
+      :content="tooltipText"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import Tooltip from '@/components/common/TooltipComponent.vue';
 
 const props = defineProps({
   src: {
@@ -38,6 +38,8 @@ const props = defineProps({
     required: false,
   },
 });
+
+const tooltipTarget = ref(null);
 
 const getSizeClasses = (size: string): string => {
   const sizes: { [key: string]: string } = {

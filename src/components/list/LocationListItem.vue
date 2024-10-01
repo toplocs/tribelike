@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import Title from '@/components/common/TitleComponent.vue';
+  import Title from '@/components/common/TitleComponent.vue';
 import StatusBadge from '@/components/badges/StatusBadge.vue';
 
 const props = defineProps({

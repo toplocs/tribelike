@@ -2,7 +2,17 @@
   <div className="min-h-screen py-20 flex justify-center items-center">
     <Card className="pb-10">
       <div className="mb-2 flex flex-row justify-between">
-        <BackButton href="/interests" />
+        <span class="flex flex-row gap-2">
+          <span v-if="interest?.parent">
+            <router-link :to="`/interests/${interest.parent?.id}`">
+              <InterestBadge :title="interest.parent?.title" />
+            </router-link>
+          </span>
+          <Title float="center">
+            {{ interest?.title }}
+          </Title>
+        </span>
+
         <button
           v-if="subscribed"
           @click="removeInterest"
@@ -16,16 +26,6 @@
         > Add
         </button>
       </div>
-      <Title float="center">
-        {{ interest?.title }}
-      </Title>
-
-      <span v-if="interest?.parent">
-        Is a part of:
-        <router-link :to="`/interests/${interest.parent?.id}`">
-         <InterestBadge :title="interest.parent?.title" />
-        </router-link>
-      </span>
 
       <div className="mt-4">
         <Title>Other people with this interest:</Title>
@@ -43,13 +43,13 @@
       </div>
 
       <Plugins>
-        <Card className="mt-4">
-          <ChatPlugin />
-        </Card>
-
         <div className="mt-4">
           <WikiPlugin />
         </div>
+
+        <Card className="mt-4">
+          <ChatPlugin />
+        </Card>
 
         <div className="mt-8">
           <Title>Events related to this interest:</Title>

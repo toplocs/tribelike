@@ -29,42 +29,23 @@
       />
 
       <div v-if="profile?.about" class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">
-          About myself:
-        </h2>
+        <span class="flex flex-row items-center gap-2 mb-2">
+          <IconButton :icon="Cog6ToothIcon" />
+          <h2 class="text-lg font-semibold text-gray-900">
+            About myself:
+          </h2>
+        </span>
         <p v-if="profile?.about">
           {{ profile?.about }}
         </p>
       </div>
 
       <div v-if="profile?.interests.length" class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">
-          My interests:
-        </h2>
-        <div class="flex flex-wrap gap-2">
-          <router-link
-            v-for="interest in profile?.interests"
-            :key="interest.id"
-            :to="`/interests/${interest.id}`"
-          >
-            <InterestBadge :title="interest.title" />
-          </router-link>
-        </div>
+        <FindInterest />
       </div>
 
       <div v-if="profile?.locations.length" class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">
-          My locations:
-        </h2>
-        <div class="flex flex-wrap gap-2">
-          <router-link
-            v-for="location in profile?.locations"
-            :key="location.id"
-            :to="`/locations/${location.id}`"
-          >
-            <LocationBadge :title="location.title" />
-          </router-link>
-        </div>
+        <FindLocation />
       </div>
 
       <div v-if="profileFeed.length" class="mb-8">
@@ -93,7 +74,11 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
-import { ChatBubbleLeftIcon } from '@heroicons/vue/24/solid';
+import {
+  ChatBubbleLeftIcon,
+  PencilIcon,
+  Cog6ToothIcon,
+} from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
@@ -102,6 +87,9 @@ import LocationBadge from '../components/badges/LocationBadge.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';
 import FeedListItem from '../components/list/FeedListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
+import IconButton from '@/components/common/IconButton.vue';
+import FindInterest from '@/components/FindInterest.vue';
+import FindLocation from '@/components/FindLocation.vue';
 
 import Plugins from '@/components/plugins/Plugins.vue';
 import Chat from '@/components/plugins/chat/Index.vue';
