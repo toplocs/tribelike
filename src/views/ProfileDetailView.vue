@@ -93,7 +93,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
-import { ChatBubbleLeftIcon } from '@heroicons/vue/24/outline';
+import { ChatBubbleLeftIcon } from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';

@@ -3,7 +3,7 @@
     <div class="flex items-start">
       <h4 v-if="title" class="font-semibold">{{ title }}</h4>
     </div>
-    <p class="overflow-y-auto mt-2">
+    <p class="overflow-y-auto text-xs">
       <slot></slot>
     </p>
   </div>
