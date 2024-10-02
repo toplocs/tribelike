@@ -7,7 +7,11 @@
       class="w-4 h-4 text-orange-900 dark:text-orange-400"
     />
     <span>{{ title }}</span>
-    <XMarkIcon v-if="remove" @click="remove(title)" class="w-4 h-4 cursor-pointer" />
+    <XMarkIcon
+      v-if="remove"
+      @click.prevent="remove"
+      class="w-4 h-4"
+    />
   </span>
 </template>
 

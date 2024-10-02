@@ -3,11 +3,11 @@
     v-if="session && profile"
     class="fixed w-full top-0 bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
   >
-    <div class="p-2 max-w-2xl mx-auto flex flex-row justify-between items-center gap-4">
+    <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
 
       <span class="flex items-center gap-2">
         <h1 class="text-center text-sm font-bold text-gray-600 dark:text-white tracking-wider">
-          {{ title.toUpperCase() }}
+          TOPLOCS
         </h1>
       </span>
 

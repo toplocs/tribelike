@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-green-200 to-yellow-200 dark:from-gray-700 dark:to-yellow-700">
+  <div class="min-h-screen bg-white dark:bg-black">
     <NavBar />
-    <div class="mx-auto max-w-2xl">
+    <div class="mx-auto max-w-4xl">
       <RouterView />
     </div>
   </div>

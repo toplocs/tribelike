@@ -4,6 +4,7 @@
     :loadTilesWhileInteracting="true"
     :style="`height: ${height}px;`"
     :controls="locked ? []: undefined"
+    className="min-w-[300px]"
   >
     <ol-view
       ref="view"

@@ -22,6 +22,7 @@
       <LocationBadge
         :key="location.id"
         :title="location.title"
+        :remove="() => removeLocation(location.id)"
       />
     </router-link>
   </div>
@@ -74,4 +75,23 @@ const addLocation = async (locationId: string) => {
     console.error(error);
   }
 }
+
+const removeLocation = async (locationId: string) => {
+  try {
+    const response = await axios.put(`/api/location/remove`, {
+      profileId: profile.value?.id,
+      locationId: locationId,
+    });
+    if (profile.value) {
+      profile.value.locations = profile.value.locations.filter(
+        x => x.id !== locationId,
+      );
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 </script>

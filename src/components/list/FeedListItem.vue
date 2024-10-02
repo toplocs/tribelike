@@ -11,13 +11,11 @@
         </div>
 
         <div class="flex items-center">
-          <router-link>
             <a
               v-if="feed.location"
               class="text-sm text-blue-500 font-medium"
             > @{{ feed.location?.name }}
             </a>
-          </router-link>
         </div>
       </div>
 

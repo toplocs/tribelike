@@ -1,6 +1,6 @@
 <template>
-  <div className="min-h-screen py-20 flex justify-center items-center">
-    <Card className="pb-10">
+  <Container className="mt-10">
+    <div class="w-full">
       <div className="mb-2 flex flex-row justify-between">
         <span class="flex flex-row gap-2">
           <span v-if="interest?.parent">
@@ -27,7 +27,25 @@
         </button>
       </div>
 
-      <div className="mt-4">
+      <Plugins>
+        <div className="mb-4">
+          <WikiPlugin />
+        </div>
+
+        <Card className="mb-4">
+          <ChatPlugin />
+        </Card>
+
+        <div className="mb-4">
+          <Title>Events related to this interest:</Title>
+          <EventPlugin :events="events" />
+        </div>
+        
+      </Plugins>
+    </div>
+
+    <Sidebar>
+      <div className="mb-8">
         <Title>Other people with this interest:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
@@ -41,23 +59,9 @@
           </div>
         </div>
       </div>
+    </Sidebar>
 
-      <Plugins>
-        <div className="mt-4">
-          <WikiPlugin />
-        </div>
-
-        <Card className="mt-4">
-          <ChatPlugin />
-        </Card>
-
-        <div className="mt-8">
-          <Title>Events related to this interest:</Title>
-          <EventPlugin :events="events" />
-        </div>
-      </Plugins>
-    </Card>
-  </div>
+  </Container>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +69,8 @@ import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Card from '../components/common/CardComponent.vue';
+import Container from '../components/common/ContainerComponent.vue';
+import Sidebar from '@/components/SideBar.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
 import InterestBadge from '../components/badges/InterestBadge.vue';

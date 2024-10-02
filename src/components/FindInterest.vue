@@ -22,6 +22,7 @@
       <InterestBadge
         :key="interest.id"
         :title="interest.title"
+        :remove="() => removeInterest(interest.id)"
       />
     </router-link>
   </div>
@@ -68,6 +69,24 @@ const addInterest = async (interestId: string) => {
       profileId: profile.value?.id,
       interestId: interestId,
     });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const removeInterest = async (interestId: string) => {
+  try {
+    const response = await axios.put(`/api/interest/remove`, {
+      profileId: profile.value?.id,
+      interestId: interestId,
+    });
+    if (profile.value) {
+      profile.value.interests = profile.value.interests.filter(
+        x => x.id !== interestId
+      );
+    }
 
     return response.data;
   } catch (error) {

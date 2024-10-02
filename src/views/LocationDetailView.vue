@@ -1,8 +1,18 @@
 <template>
-  <div className="min-h-screen py-20 flex justify-center items-center">
-    <Card className="space-y-4">
+  <Container className="mt-10">
+    <div class="w-full">
       <div className="mb-2 flex flex-row justify-between">
-        <BackButton href="/locations" />
+        <span class="flex flex-row gap-2">
+          <span v-if="location?.parent">
+            <router-link :to="`/locations/${location.parent?.id}`">
+              <LocationBadge :title="location.parent?.title" />
+            </router-link>
+          </span>
+          <Title float="center">
+            {{ location?.title }}
+          </Title>
+        </span>
+
         <button
           v-if="subscribed"
           @click="removeLocation"
@@ -15,41 +25,6 @@
           class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
         > Add
         </button>
-      </div>
-
-      <Title float="center">
-        {{ location?.title }}
-      </Title>
-
-      <span v-if="location?.parent">
-        Is located in:
-        <router-link :to="`/locations/${location.parent?.id}`">
-         <LocationBadge :title="location.parent?.title" />
-        </router-link>
-      </span>
-
-      <Map
-        height="200"
-        :locked="true"
-        :defaultLocation="[
-          Number(yCoordinate),
-          Number(xCoordinate)
-        ]"
-      />
-
-      <div className="mt-4">
-        <Title>Other people at this location:</Title>
-        <div className="flex flex-row gap-2">
-          <div v-for="suggestion of people">
-            <router-link :to="`/profiles/${suggestion.id}`">
-              <ProfileImage
-                :src="suggestion.image"
-                :tooltipText="suggestion.username"
-                size="small"
-              />
-            </router-link>
-          </div>
-        </div>
       </div>
 
       <Plugins>
@@ -66,15 +41,46 @@
           <EventPlugin :events="events" />
         </div>
       </Plugins>
+    </div>
 
-    </Card>
-  </div>
+    <Sidebar>
+      <div className="pb-4 border-b-2">
+        <Title>Map:</Title>
+        <Map
+          height="200"
+          :locked="true"
+          :defaultLocation="[
+            Number(yCoordinate),
+            Number(xCoordinate)
+          ]"
+        />
+      </div>
+      
+      <div className="pb-4">
+        <Title>Other people at this location:</Title>
+        <div className="flex flex-row gap-2">
+          <div v-for="suggestion of people">
+            <router-link :to="`/profiles/${suggestion.id}`">
+              <ProfileImage
+                :src="suggestion.image"
+                :tooltipText="suggestion.username"
+                size="small"
+              />
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </Sidebar>
+
+  </Container>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import Container from '@/components/common/ContainerComponent.vue';
+import Sidebar from '@/components/SideBar.vue';
 import Card from '../components/common/CardComponent.vue';
 import Title from '../components/common/TitleComponent.vue';
 import BackButton from '../components/common/BackButton.vue';
