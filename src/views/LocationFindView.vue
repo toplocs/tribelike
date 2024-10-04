@@ -56,7 +56,7 @@ import LocationBadge from '../components/badges/LocationBadge.vue';
 import IconButton from '../components/common/IconButton.vue';
 import Dialog from '../components/dialog/DialogComponent.vue';
 import LocationDialog from '../components/dialog/LocationDialog.vue';
-import Search from '../components/search/SearchComponent.vue';
+import Search from '../components/search/Index.vue';
 
 const profile = inject('profile');
 const locations = computed(() => profile.value?.locations || []);

@@ -1,5 +1,5 @@
 <template>
-  <div className=" min-h-screen flex flex-col justify-center items-center">
+  <div className="min-h-screen flex flex-col justify-center items-center">
     <div className="space-x-4">
       <router-link
         to="/login"
@@ -13,6 +13,11 @@
       > Sign Up
       </router-link>  
     </div>
+
+    Interests and places
+    Maybe hierarchical view
+    search for Interests and locations
+    show the map (with location markers later)
   </div>
 </template>
 

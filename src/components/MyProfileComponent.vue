@@ -45,7 +45,7 @@
         <span
           v-for="feed of profileFeed"
           :key="feed.id"
-          className="w-full pb-2 border-b-2"
+          className="w-full pb-2"
         >
           <FeedListItem :feed="feed" />
         </span>

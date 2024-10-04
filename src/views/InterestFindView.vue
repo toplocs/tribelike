@@ -53,7 +53,7 @@ import InterestBadge from '../components/badges/InterestBadge.vue';
 import IconButton from '../components/common/IconButton.vue';
 import Dialog from '../components/dialog/DialogComponent.vue';
 import InterestDialog from '../components/dialog/InterestDialog.vue';
-import Search from '../components/search/SearchComponent.vue';
+import Search from '../components/search/Index.vue';
 
 const profile = inject('profile');
 const interests = computed(() => profile.value?.interests || []);

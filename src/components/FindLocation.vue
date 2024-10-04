@@ -34,7 +34,7 @@ import { ref, inject, computed } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import LocationBadge from '../components/badges/LocationBadge.vue';
 import IconButton from '../components/common/IconButton.vue';
-import Search from '../components/search/SearchComponent.vue';
+import Search from '../components/search/Index.vue';
 
 const profile = inject('profile');
 const hideSearch = ref(true);

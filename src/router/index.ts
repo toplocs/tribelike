@@ -14,14 +14,16 @@ import LocationActivityView from '@/views/location/ActivityView.vue';
 import LocationChatView from '@/views/location/ChatView.vue';
 import LocationWikiView from '@/views/location/WikiView.vue';
 import LocationEventsView from '@/views/location/EventsView.vue';
+import LocationSettingsView from '@/views/location/SettingsView.vue';
 
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import InterestActivityView from '@/views/interest/ActivityView.vue';
 import InterestChatView from '@/views/interest/ChatView.vue';
 import InterestWikiView from '@/views/interest/WikiView.vue';
 import InterestEventsView from '@/views/interest/EventsView.vue';
+import InterestSettingsView from '@/views/interest/SettingsView.vue';
 
-//Plugin
+//Plugins
 import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
 
 const router = createRouter({
@@ -91,6 +93,11 @@ const router = createRouter({
           name: 'interestEvents',
           component: InterestEventsView,
         },
+        {
+          path: 'settings',
+          name: 'interestSettings',
+          component: InterestSettingsView,
+        },
       ],
     },
     {
@@ -123,6 +130,11 @@ const router = createRouter({
           path: 'events',
           name: 'locationEvents',
           component: LocationEventsView,
+        },
+        {
+          path: 'settings',
+          name: 'locationSettings',
+          component: LocationSettingsView,
         },
       ],
     },

@@ -63,7 +63,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const isOpen = ref(false);
-const selectedOption = ref('');
+const selectedOption = ref(props.modelValue);
 const selectContainer = ref(null);
 
 const toggleDropdown = () => {

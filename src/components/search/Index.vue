@@ -7,10 +7,10 @@
       :placeholder="placeholder"
       @focus="openDropdown"
       @input="onInput"
-      class="w-full rounded-md border px-3 py-2 shadow-sm outline-none transition sm:text-sm border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-950/50 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 dark:focus:ring-blue-700 dark:focus:border-blue-700"
+      class="w-full rounded-md border p-2 shadow-sm outline-none transition sm:text-sm border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-950/50 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 dark:focus:ring-blue-700 dark:focus:border-blue-700"
     />
     <button class="absolute inset-y-0 right-0 flex gap-2 items-center pr-2">
-      <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+      <MagnifyingGlassIcon class="size-4 text-gray-400" />
     </button>
 
     <div

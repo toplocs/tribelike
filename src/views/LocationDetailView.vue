@@ -6,6 +6,7 @@
       { value: 'Chat', href: `/location/${location?.id}/chat` },
       { value: 'Wiki', href: `/location/${location?.id}/wiki` },
       { value: 'Events', href: `/location/${location?.id}/events` },
+      { value: 'Settings', href: `/location/${location?.id}/settings` },
     ]"
   />
 

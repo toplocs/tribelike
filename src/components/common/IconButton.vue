@@ -6,7 +6,7 @@
     ref="tooltipTarget"
     @click="onClick"
   >
-    <component :is="icon" class="h-6 w-6"/>
+    <component :is="icon" class="size-6"/>
 
     <Tooltip
       v-if="tooltipTarget && tooltipText"

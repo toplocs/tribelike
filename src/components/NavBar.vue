@@ -6,7 +6,7 @@
     <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
 
       <span v-if="interest" class="flex flex-row gap-2">
-        <span class="mt-1" v-if="interest?.parent">
+        <span v-if="interest?.parent">
           <router-link :to="`/interest/${interest.parent?.id}`">
             <InterestBadge :title="interest.parent?.title" />
           </router-link>
@@ -17,7 +17,7 @@
       </span>
 
       <span v-else-if="location" class="flex flex-row gap-2">
-        <span class="mt-1" v-if="location?.parent">
+        <span v-if="location?.parent">
           <router-link :to="`/location/${location.parent?.id}`">
             <LocationBadge :title="location.parent?.title" />
           </router-link>
@@ -33,33 +33,22 @@
         </Title>
       </span>
 
-      <span class="flex flex-row items-center gap-4">
-        <router-link to="/interests">
-          <UsersIcon
-            class="size-6 text-gray-600 text-center hover:text-gray-500"
+      <span class="flex flex-row w-full max-w-sm">
+        <div className="w-full flex flex-row justify-end items-center gap-2">
+          <Search
+            v-if="!hideSearch"
+            placeholder="Search for new interests ..."
+            name="selectedItem"
+            :findOptions="findInterests"
+            @selected="handleSelection"
           />
-        </router-link>
 
-        <router-link to="/locations">
-          <MapPinIcon
-            class="size-6 text-gray-600 text-center hover:text-gray-500"
+          <IconButton
+            tooltipText="Open search field"
+            :icon="MagnifyingGlassIcon"
+            @click="toggleSearch"
           />
-        </router-link>
-
-        <Plugins>
-          <Dialog>
-            <template #trigger="{ openDialog }">
-              <ChatBubbleLeftIcon
-                class="size-6 cursor-pointer text-center text-gray-600 hover:text-gray-500"
-                @click.stop="openDialog"
-              />
-            </template>
-
-            <template #content="{ closeDialog }">
-              <FriendsDialog :closeDialog="closeDialog"/>
-            </template>
-          </Dialog>
-        </Plugins>
+        </div>
 
         <Dropdown className="min-w-40">
           <template #trigger>
@@ -68,7 +57,7 @@
               alt="logo"
               width="30"
               height="30"
-              class="ml-4 size-8 rounded-full"
+              class="ml-4 size-10 rounded-full"
             />
           </template>
 
@@ -93,24 +82,44 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
-import {
-  UsersIcon,
-  MapPinIcon,
-  ChatBubbleLeftIcon
-} from '@heroicons/vue/24/solid';
+import axios from 'axios';
+import { inject, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import Title from './common/TitleComponent.vue';
 import InterestBadge from './badges/InterestBadge.vue';
 import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/DropdownComponent.vue';
-import Dialog from './dialog/DialogComponent.vue';
-import FriendsDialog from './dialog/FriendsDialog.vue';
+import Search from './search/Index.vue';
+import IconButton from '../components/common/IconButton.vue';
 
-import Plugins from '@/components/plugins/Plugins.vue';
-
+const router = useRouter();
 const session = inject('session');
 const profile = inject('profile');
 const location = inject('location');
 const interest = inject('interest');
+const hideSearch = ref(true);
 const user = computed(() => session?.value?.user);
+
+const findInterests = async (title: string) => {
+  try {
+    const response = await axios.get(`/api/interest?title=${title}`);
+
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const handleSelection = async (result: {
+  id: string,
+  title: string
+}) => {
+  console.log(result);
+  router.push(`/interest/${result.id}`)
+};
+
+const toggleSearch = () => {
+  hideSearch.value = !hideSearch.value;
+}
 </script>

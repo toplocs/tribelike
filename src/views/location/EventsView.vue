@@ -62,6 +62,8 @@ const route = useRoute();
 const location = inject('location')
 const profile = inject('profile');
 const tab = inject('tab');
+const yCoordinate = computed(() => location.value?.yCoordinate || '0');
+const xCoordinate = computed(() => location.value?.xCoordinate || '0');
 const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 onMounted(() => {
