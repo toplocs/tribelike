@@ -12,12 +12,15 @@ import axios from 'axios';
 import { ref, provide, onMounted, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
+import SubNav from './components/SubNav.vue';
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
 const session = ref(null);
 const user = ref(null);
 const profile = ref(null);
+const location = ref(null);
+const interest = ref(null);
 
 const getSession = async () => {
   try {
@@ -64,6 +67,8 @@ onMounted(async () => {
 provide('session', session);
 provide('user', user);
 provide('profile', profile);
+provide('location', location);
+provide('interest', interest);
 
 axios.defaults.baseURL = serverURL;
 axios.defaults.headers.common['Authorization'] = authHeader;

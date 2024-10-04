@@ -1,106 +1,27 @@
 <template>
-  <Container className="mt-10">
-    <div class="w-full">
-      <div className="mb-2 flex flex-row justify-between">
-        <span class="flex flex-row gap-2">
-          <span v-if="location?.parent">
-            <router-link :to="`/locations/${location.parent?.id}`">
-              <LocationBadge :title="location.parent?.title" />
-            </router-link>
-          </span>
-          <Title float="center">
-            {{ location?.title }}
-          </Title>
-        </span>
+  <SubNav
+    :initialTab="tab"
+    :tabs="[
+      { value: 'Activity', href: `/location/${location?.id}` },
+      { value: 'Chat', href: `/location/${location?.id}/chat` },
+      { value: 'Wiki', href: `/location/${location?.id}/wiki` },
+      { value: 'Events', href: `/location/${location?.id}/events` },
+    ]"
+  />
 
-        <button
-          v-if="subscribed"
-          @click="removeLocation"
-          class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Remove
-        </button>
-        <button
-          v-if="!subscribed"
-          @click="addLocation"
-          class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Add
-        </button>
-      </div>
+  <router-view />
 
-      <Plugins>
-        <Card className="mt-4">
-          <ChatPlugin />
-        </Card>
-
-        <div className="mt-4">
-          <WikiPlugin />
-        </div>
-
-        <div className="mt-8">
-          <Title>Upcoming events at this place:</Title>
-          <EventPlugin :events="events" />
-        </div>
-      </Plugins>
-    </div>
-
-    <Sidebar>
-      <div className="pb-4 border-b-2">
-        <Title>Map:</Title>
-        <Map
-          height="200"
-          :locked="true"
-          :defaultLocation="[
-            Number(yCoordinate),
-            Number(xCoordinate)
-          ]"
-        />
-      </div>
-      
-      <div className="pb-4">
-        <Title>Other people at this location:</Title>
-        <div className="flex flex-row gap-2">
-          <div v-for="suggestion of people">
-            <router-link :to="`/profiles/${suggestion.id}`">
-              <ProfileImage
-                :src="suggestion.image"
-                :tooltipText="suggestion.username"
-                size="small"
-              />
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </Sidebar>
-
-  </Container>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, computed, watch, onMounted } from 'vue';
+import { ref, provide, inject, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Container from '@/components/common/ContainerComponent.vue';
-import Sidebar from '@/components/SideBar.vue';
-import Card from '../components/common/CardComponent.vue';
-import Title from '../components/common/TitleComponent.vue';
-import BackButton from '../components/common/BackButton.vue';
-import LocationBadge from '../components/badges/LocationBadge.vue';
-import ProfileImage from '../components/common/ProfileImage.vue';
-import Map from '../components/MapComponent.vue';
-
-import Plugins from '../components/plugins/Plugins.vue';
-import ChatPlugin from '../components/plugins/chat/Index.vue';
-import WikiPlugin from '../components/plugins/wiki/Index.vue';
-import events from '../components/plugins/event/service.ts';
-import EventPlugin from '../components/plugins/event/Index.vue';
+import SubNav from '@/components/SubNav.vue';
 
 const route = useRoute();
-const location = ref(null);
-const profile = inject('profile');
-const yCoordinate = computed(() => location.value?.yCoordinate || '0');
-const xCoordinate = computed(() => location.value?.xCoordinate || '0');
-const subscribed = computed(() => profile.value?.locations.some(x => x.id == location.value?.id));
-const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
+const location = inject('location');
+const tab = ref('');
 
 const fetchLocation = async (id: string) => {
   try {
@@ -148,11 +69,18 @@ const removeLocation = async () => {
   }
 }
 
+watch(() => route.params.id, async (newId) => {
+  console.log(newId)
+  if (newId) location.value = await fetchLocation(newId);
+});
+
 onMounted(async () => {
   location.value = await fetchLocation(route.params.id);
 });
 
-watch(() => route.params.id, async (newId) => {
-  if (newId) location.value = await fetchLocation(newId);
+onUnmounted(() => {
+  location.value = null;
 });
+
+provide('tab', tab);
 </script>

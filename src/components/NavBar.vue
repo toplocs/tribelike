@@ -1,14 +1,36 @@
 <template>
   <div
     v-if="session && profile"
-    class="fixed w-full top-0 bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
+    class="sticky top-0 w-full bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
   >
     <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
 
-      <span class="flex items-center gap-2">
-        <h1 class="text-center text-sm font-bold text-gray-600 dark:text-white tracking-wider">
+      <span v-if="interest" class="flex flex-row gap-2">
+        <span class="mt-1" v-if="interest?.parent">
+          <router-link :to="`/interest/${interest.parent?.id}`">
+            <InterestBadge :title="interest.parent?.title" />
+          </router-link>
+        </span>
+        <Title>
+          {{ interest?.title }}
+        </Title>
+      </span>
+
+      <span v-else-if="location" class="flex flex-row gap-2">
+        <span class="mt-1" v-if="location?.parent">
+          <router-link :to="`/location/${location.parent?.id}`">
+            <LocationBadge :title="location.parent?.title" />
+          </router-link>
+        </span>
+        <Title float="left">
+          {{ location?.title }}
+        </Title>
+      </span>
+
+      <span v-else>
+        <Title>
           TOPLOCS
-        </h1>
+        </Title>
       </span>
 
       <span class="flex flex-row items-center gap-4">
@@ -71,13 +93,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, inject } from 'vue';
 import {
   UsersIcon,
   MapPinIcon,
   ChatBubbleLeftIcon
 } from '@heroicons/vue/24/solid';
+import Title from './common/TitleComponent.vue';
+import InterestBadge from './badges/InterestBadge.vue';
+import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/DropdownComponent.vue';
 import Dialog from './dialog/DialogComponent.vue';
 import FriendsDialog from './dialog/FriendsDialog.vue';
@@ -86,7 +110,7 @@ import Plugins from '@/components/plugins/Plugins.vue';
 
 const session = inject('session');
 const profile = inject('profile');
+const location = inject('location');
+const interest = inject('interest');
 const user = computed(() => session?.value?.user);
-const route = useRoute();
-const title = computed<string>(() => `${profile.value?.type} – ${user.value?.username}`);
 </script>

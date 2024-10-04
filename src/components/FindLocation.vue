@@ -17,7 +17,7 @@
   <div class="mt-4 flex flex-wrap gap-2">
     <router-link
       v-for="location in locations"
-      :to="`/locations/${location.id}`"
+      :to="`/location/${location.id}`"
     >
       <LocationBadge
         :key="location.id"

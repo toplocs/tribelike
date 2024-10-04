@@ -21,9 +21,6 @@
         <Card v-if="profile?.about" class="mb-8">
           <span class="flex flex-row items-center gap-2 mb-2">
             <IconButton :icon="Cog6ToothIcon" />
-            <h2 class="text-lg font-semibold text-gray-900">
-              About myself:
-            </h2>
           </span>
           <p v-if="profile?.about">
             {{ profile?.about }}
@@ -69,7 +66,7 @@
         <span
           v-for="feed of profileFeed"
           :key="feed.id"
-          className="w-full pb-2 border-b-2"
+          className="w-full pb-2"
         >
           <FeedListItem :feed="feed" />
         </span>

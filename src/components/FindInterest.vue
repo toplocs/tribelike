@@ -17,7 +17,7 @@
   <div class="mt-4 flex flex-wrap gap-2">
     <router-link
       v-for="interest in interests"
-      :to="`/interests/${interest.id}`"
+      :to="`/interest/${interest.id}`"
     >
       <InterestBadge
         :key="interest.id"

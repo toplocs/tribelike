@@ -7,9 +7,19 @@ import SettingsView from '@/views/SettingsView.vue';
 import ProfileListView from '@/views/ProfileListView.vue';
 import ProfileDetailView from '@/views/ProfileDetailView.vue';
 import InterestFindView from '@/views/InterestFindView.vue';
-import InterestDetailView from '@/views/InterestDetailView.vue';
 import LocationFindView from '@/views/LocationFindView.vue';
+
 import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationActivityView from '@/views/location/ActivityView.vue';
+import LocationChatView from '@/views/location/ChatView.vue';
+import LocationWikiView from '@/views/location/WikiView.vue';
+import LocationEventsView from '@/views/location/EventsView.vue';
+
+import InterestDetailView from '@/views/InterestDetailView.vue';
+import InterestActivityView from '@/views/interest/ActivityView.vue';
+import InterestChatView from '@/views/interest/ChatView.vue';
+import InterestWikiView from '@/views/interest/WikiView.vue';
+import InterestEventsView from '@/views/interest/EventsView.vue';
 
 //Plugin
 import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
@@ -57,10 +67,31 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/interests/:id',
-      name: 'interest',
+      path: '/interest/:id',
       component: InterestDetailView,
       props: true,
+      children: [
+        {
+          path: '',
+          name: 'interestActivity',
+          component: InterestActivityView,
+        },
+        {
+          path: 'chat',
+          name: 'interestChat',
+          component: InterestChatView,
+        },
+        {
+          path: 'wiki',
+          name: 'interestWiki',
+          component: InterestWikiView,
+        },
+        {
+          path: 'events',
+          name: 'interestEvents',
+          component: InterestEventsView,
+        },
+      ],
     },
     {
       path: '/locations',
@@ -69,10 +100,31 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/locations/:id',
-      name: 'location',
+      path: '/location/:id',
       component: LocationDetailView,
       props: true,
+      children: [
+        {
+          path: '',
+          name: 'locationActivity',
+          component: LocationActivityView,
+        },
+        {
+          path: 'chat',
+          name: 'locationChat',
+          component: LocationChatView,
+        },
+        {
+          path: 'wiki',
+          name: 'locationWiki',
+          component: LocationWikiView,
+        },
+        {
+          path: 'events',
+          name: 'locationEvents',
+          component: LocationEventsView,
+        },
+      ],
     },
 
     //Plugins

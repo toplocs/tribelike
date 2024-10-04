@@ -1,5 +1,5 @@
 <template>
-  <h3 :class="`mb-4 text-${float} text-lg text-gray-800 dark:text-gray-100 font-semibold`">
+  <h3 :class="`my-auto text-${float} text-lg text-gray-800 dark:text-gray-100 font-semibold`">
     <slot />
   </h3>
 </template>

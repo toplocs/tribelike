@@ -1,92 +1,27 @@
 <template>
-  <Container className="mt-10">
-    <div class="w-full">
-      <div className="mb-2 flex flex-row justify-between">
-        <span class="flex flex-row gap-2">
-          <span v-if="interest?.parent">
-            <router-link :to="`/interests/${interest.parent?.id}`">
-              <InterestBadge :title="interest.parent?.title" />
-            </router-link>
-          </span>
-          <Title float="center">
-            {{ interest?.title }}
-          </Title>
-        </span>
+  <SubNav
+    :initialTab="tab"
+    :tabs="[
+      { value: 'Activity', href: `/interest/${interest?.id}` },
+      { value: 'Chat', href: `/interest/${interest?.id}/chat` },
+      { value: 'Wiki', href: `/interest/${interest?.id}/wiki` },
+      { value: 'Events', href: `/interest/${interest?.id}/events` },
+    ]"
+  />
 
-        <button
-          v-if="subscribed"
-          @click="removeInterest"
-          class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Remove
-        </button>
-        <button
-          v-if="!subscribed"
-          @click="addInterest"
-          class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Add
-        </button>
-      </div>
+  <router-view />
 
-      <Plugins>
-        <div className="mb-4">
-          <WikiPlugin />
-        </div>
-
-        <Card className="mb-4">
-          <ChatPlugin />
-        </Card>
-
-        <div className="mb-4">
-          <Title>Events related to this interest:</Title>
-          <EventPlugin :events="events" />
-        </div>
-        
-      </Plugins>
-    </div>
-
-    <Sidebar>
-      <div className="mb-8">
-        <Title>Other people with this interest:</Title>
-        <div className="flex flex-row gap-2">
-          <div v-for="suggestion of people">
-            <router-link :to="`/profiles/${suggestion.id}`">
-              <ProfileImage
-                :src="suggestion.image"
-                :tooltipText="suggestion.username"
-                size="small"
-              />
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </Sidebar>
-
-  </Container>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, computed, watch, onMounted } from 'vue';
+import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Card from '../components/common/CardComponent.vue';
-import Container from '../components/common/ContainerComponent.vue';
-import Sidebar from '@/components/SideBar.vue';
-import Title from '../components/common/TitleComponent.vue';
-import BackButton from '../components/common/BackButton.vue';
-import InterestBadge from '../components/badges/InterestBadge.vue';
-import ProfileImage from '../components/common/ProfileImage.vue';
-
-import Plugins from '../components/plugins/Plugins.vue';
-import ChatPlugin from '../components/plugins/chat/Index.vue';
-import WikiPlugin from '../components/plugins/wiki/Index.vue';
-import events from '../components/plugins/event/service.ts';
-import EventPlugin from '../components/plugins/event/Index.vue';
+import SubNav from '../components/SubNav.vue';
 
 const route = useRoute();
-const interest = ref(null);
-const profile = inject('profile');
-const subscribed = computed(() => profile.value?.interests.some(x => x.id == interest.value?.id));
-const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
+const interest = inject('interest');
+const tab = ref('');
 
 const fetchInterest = async (id: string) => {
   try {
@@ -134,11 +69,18 @@ const removeInterest = async () => {
   }
 }
 
-onMounted(async () => {
-  interest.value = await fetchInterest(route.params.id);
-});
 
 watch(() => route.params.id, async (newId) => {
   if (newId) interest.value = await fetchInterest(newId);
 });
+
+onMounted(async () => {
+  interest.value = await fetchInterest(route.params.id);
+});
+
+onUnmounted(() => {
+  interest.value = null;
+});
+
+provide('tab', tab);
 </script>
