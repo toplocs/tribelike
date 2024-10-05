@@ -63,6 +63,11 @@
 
           <template #default="{ closeDropdown }">
             <ul>
+              <router-link to="/plugins" @click.native="closeDropdown">
+                <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  Plugins
+                </li>
+              </router-link>
               <router-link to="/profiles" @click.native="closeDropdown">
                 <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Profiles
@@ -113,9 +118,7 @@ const findInterests = async (title: string) => {
 
 const handleSelection = async (result: {
   id: string,
-  title: string
 }) => {
-  console.log(result);
   router.push(`/interest/${result.id}`)
 };
 

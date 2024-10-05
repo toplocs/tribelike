@@ -52,6 +52,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  zoom: {
+    type: Number,
+    default: 10,
+  },
   defaultLocation: {
     type: Array,
     default: [0, 0],
@@ -61,7 +65,7 @@ const props = defineProps({
 const emit = defineEmits(['changeLocation']);
 const center = ref(null);
 const projection = ref('EPSG:4326');
-const zoom = ref(10);
+const zoom = ref(props.zoom);
 const view = ref<View>();
 const map = ref(null);
 const position = ref(null);

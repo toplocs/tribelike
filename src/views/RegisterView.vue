@@ -1,7 +1,7 @@
 <template>
   <div className="min-h-screen flex flex-col justify-center items-center">
     <Card className="pb-10 max-w-sm">
-      <BackButton />
+      <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
         Create an account
       </h3>

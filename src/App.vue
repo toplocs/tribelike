@@ -1,9 +1,12 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-black">
     <NavBar />
+
     <div class="mx-auto max-w-4xl">
       <RouterView />
     </div>
+    
+    <Footer />
   </div>
 </template>
 
@@ -13,6 +16,7 @@ import { ref, provide, onMounted, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import SubNav from './components/SubNav.vue';
+import Footer from '@/components/FooterComponent.vue';
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');

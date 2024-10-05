@@ -6,6 +6,8 @@ import RegisterView from '@/views/RegisterView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import ProfileListView from '@/views/ProfileListView.vue';
 import ProfileDetailView from '@/views/ProfileDetailView.vue';
+import PluginListView from '@/views/PluginListView.vue';
+
 import InterestFindView from '@/views/InterestFindView.vue';
 import LocationFindView from '@/views/LocationFindView.vue';
 
@@ -28,6 +30,9 @@ import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0, behavior: 'smooth' }
+  },
   routes: [
     {
       path: '/',
@@ -63,11 +68,12 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/interests',
-      name: 'interests',
-      component: InterestFindView,
+      path: '/plugins',
+      name: 'plugins',
+      component: PluginListView,
       meta: { requiresAuth: true },
     },
+    //interests
     {
       path: '/interest/:id',
       component: InterestDetailView,
@@ -100,12 +106,7 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: '/locations',
-      name: 'locations',
-      component: LocationFindView,
-      meta: { requiresAuth: true },
-    },
+    //locations
     {
       path: '/location/:id',
       component: LocationDetailView,
