@@ -108,7 +108,7 @@ const onSubmit = async () => {
     axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
     session.value = await getSession(JSON.stringify(authHeader));
-    if (profile.value) return router.push(`/profiles/${profile.value.id}`);
+    if (profile.value) return router.push(`/profile/${profile.value.id}`);
     
     return router.push(`/profiles`);
   } catch (error) {

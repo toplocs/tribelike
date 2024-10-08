@@ -24,8 +24,9 @@
       <SelectInput
         name="avatar"
         placeholder="Select an image"
-        v-model="selectedModel"
         :options="avatars"
+        :modelValue="selectedImage"
+        @update:modelValue="onImageSelect"
       />
     </div>
 
@@ -38,9 +39,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Title from '../../components/common/Title.vue';
-import SelectInput from '../../components/common/SelectInput.vue';
-import SubmitButton from '../../components/common/SubmitButton.vue'
+import Title from '@/components/common/Title.vue';
+import SelectInput from '@/components/common/SelectInput.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue'
 
 const props = defineProps({
   closeDialog: {
@@ -74,6 +75,11 @@ const selectedModel = ref('');
 const selectedImage = computed(() =>
   avatars.find(x => x.id == selectedModel.value)?.image
 );
+
+const onImageSelect = (data) => {
+  console.log(data);
+  selectedModel.value = data;
+}
 
 const onSubmit = async () => {
   props.closeDialog(selectedImage.value);

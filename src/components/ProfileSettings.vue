@@ -73,10 +73,10 @@
 </template>
 
 <script setup lang="ts">
-import SubmitButton from '../components/common/SubmitButton.vue';
-import TextInput from '../components/common/TextInput.vue';
-import TextArea from '../components/common/TextArea.vue';
-import SelectAvatar from '../components/SelectAvatar.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
+import TextInput from '@/components/common/TextInput.vue';
+import TextArea from '@/components/common/TextArea.vue';
+import SelectAvatar from '@/components/SelectAvatar.vue';
 
 const props = defineProps({
   profile: {

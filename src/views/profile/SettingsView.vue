@@ -1,7 +1,7 @@
 <template>
   <Container>
     <div class="w-full">
-      <Card className="mt-4">
+      <Card>
         <Callout v-if="successMessage" color="green">
           {{ successMessage }}
         </Callout>
@@ -18,7 +18,7 @@
 			    @submit.prevent="onSubmit"
 			    class="flex flex-col gap-4"
 			  >
-			    <input name="profileId" type="hidden" :value="profile.id" />
+			    <input name="profileId" type="hidden" :value="profile?.id" />
 
 			    <ProfileSettings :profile="profile" />
 
@@ -32,7 +32,7 @@
     <Sidebar>
       <Plugins>
         <div className="mb-8">
-          <Title>Moderate access:</Title>
+          <Title>Sidebar actions:</Title>
           <div v-for="friend of friends">
             <FriendListItem
               :key="friend.id"
@@ -50,14 +50,17 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import Title from '@/components/common/Title.vue';
+import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import ProfileSettings from '@/components/ProfileSettings.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import Callout from '@/components/common/Callout.vue';
+import FriendListItem from '@/components/list/FriendListItem.vue';
 
+const route = useRoute();
 const profile = inject('profile');
 const errorMessage = ref('');
 const successMessage = ref('');
@@ -78,6 +81,10 @@ const onSubmit = async () => {
     const formData = new FormData(form.value ?? undefined);
     const response = await axios.put(`/api/profile`, formData);
     successMessage.value = 'Dein Profil wurde erfolgreich geändert!';
+    profile.value = {
+      ...profile.value,
+      ...response.data,
+    }
 
     return response.data;
   } catch (error) {
