@@ -10,7 +10,11 @@
 
     <Container>
       <div class="mx-auto max-w-lg w-full">
-       <Map height="300" :zoom="5" />
+         <Map
+          height="300"
+          :defaultLocation="[9, 51]"
+          :zoom="5"
+        />
       </div>
     </Container>
 

@@ -19,7 +19,7 @@
     </ol-tile-layer>
 
     <ol-geolocation
-      v-if="!locked || !defaultLocation"
+      v-if="!defaultLocation"
       :projection="projection"
       @change:position="geoLocChange"
     >
