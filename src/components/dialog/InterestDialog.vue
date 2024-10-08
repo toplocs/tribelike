@@ -52,7 +52,7 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Title from '../../components/common/TitleComponent.vue';
+import Title from '../../components/common/Title.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue';
 import TextInput from '../../components/common/TextInput.vue';
 import SelectInput from '../../components/common/SelectInput.vue';

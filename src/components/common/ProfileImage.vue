@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import Tooltip from '@/components/common/TooltipComponent.vue';
+import Tooltip from '@/components/common/Tooltip.vue';
 
 const props = defineProps({
   src: {

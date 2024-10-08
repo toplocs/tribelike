@@ -28,9 +28,11 @@
       </span>
 
       <span v-else>
-        <Title>
-          TOPLOCS
-        </Title>
+        <router-link to="/">
+          <Title>
+            TOPLOCS
+          </Title>
+        </router-link>
       </span>
 
       <span class="flex flex-row w-full max-w-sm">
@@ -44,10 +46,30 @@
           />
 
           <IconButton
-            tooltipText="Open search field"
             :icon="MagnifyingGlassIcon"
             @click="toggleSearch"
           />
+
+          <Dropdown className="min-w-40">
+            <template #trigger>
+              <IconButton :icon="PlusIcon" />
+            </template>
+
+            <template #default="{ closeDropdown }">
+              <ul>
+                <router-link to="/interest/create" @click.native="closeDropdown">
+                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Add interest
+                  </li>
+                </router-link>
+                <router-link to="/location/create" @click.native="closeDropdown">
+                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Add location
+                  </li>
+                </router-link>
+              </ul>
+            </template>
+          </Dropdown>
         </div>
 
         <Dropdown className="min-w-40">
@@ -63,11 +85,6 @@
 
           <template #default="{ closeDropdown }">
             <ul>
-              <router-link to="/plugins" @click.native="closeDropdown">
-                <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                  Plugins
-                </li>
-              </router-link>
               <router-link to="/profiles" @click.native="closeDropdown">
                 <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Profiles
@@ -90,11 +107,11 @@
 import axios from 'axios';
 import { inject, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
-import Title from './common/TitleComponent.vue';
+import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/24/solid';
+import Title from './common/Title.vue';
 import InterestBadge from './badges/InterestBadge.vue';
 import LocationBadge from './badges/LocationBadge.vue';
-import Dropdown from './common/DropdownComponent.vue';
+import Dropdown from './common/Dropdown.vue';
 import Search from './search/Index.vue';
 import IconButton from '../components/common/IconButton.vue';
 

@@ -4,26 +4,29 @@ import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import SettingsView from '@/views/SettingsView.vue';
+
+//Profile
 import ProfileListView from '@/views/ProfileListView.vue';
 import ProfileDetailView from '@/views/ProfileDetailView.vue';
-import PluginListView from '@/views/PluginListView.vue';
+import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
-import InterestFindView from '@/views/InterestFindView.vue';
-import LocationFindView from '@/views/LocationFindView.vue';
-
-import LocationDetailView from '@/views/LocationDetailView.vue';
-import LocationActivityView from '@/views/location/ActivityView.vue';
-import LocationChatView from '@/views/location/ChatView.vue';
-import LocationWikiView from '@/views/location/WikiView.vue';
-import LocationEventsView from '@/views/location/EventsView.vue';
-import LocationSettingsView from '@/views/location/SettingsView.vue';
-
+//Interest
+import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import InterestActivityView from '@/views/interest/ActivityView.vue';
 import InterestChatView from '@/views/interest/ChatView.vue';
 import InterestWikiView from '@/views/interest/WikiView.vue';
 import InterestEventsView from '@/views/interest/EventsView.vue';
 import InterestSettingsView from '@/views/interest/SettingsView.vue';
+
+//Location
+import LocationCreateView from '@/views/LocationCreateView.vue';
+import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationActivityView from '@/views/location/ActivityView.vue';
+import LocationChatView from '@/views/location/ChatView.vue';
+import LocationWikiView from '@/views/location/WikiView.vue';
+import LocationEventsView from '@/views/location/EventsView.vue';
+import LocationSettingsView from '@/views/location/SettingsView.vue';
 
 //Plugins
 import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
@@ -62,18 +65,29 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/profiles/:id',
-      name: 'profile',
-      component: ProfileDetailView,
+      path: '/profile/:id',
       props: true,
+      children: [
+        {
+          path: '',
+          name: 'profile',
+          component: ProfileDetailView,
+        },
+        {
+          path: 'settings',
+          name: 'profileSettings',
+          component: ProfileSettingsView,
+        },
+      ]
     },
+
+    //interests
     {
-      path: '/plugins',
-      name: 'plugins',
-      component: PluginListView,
+      path: '/interest/create',
+      name: 'interestCreate',
+      component: InterestCreateView,
       meta: { requiresAuth: true },
     },
-    //interests
     {
       path: '/interest/:id',
       component: InterestDetailView,
@@ -106,7 +120,14 @@ const router = createRouter({
         },
       ],
     },
+
     //locations
+    {
+      path: '/location/create',
+      name: 'locationCreate',
+      component: LocationCreateView,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/location/:id',
       component: LocationDetailView,

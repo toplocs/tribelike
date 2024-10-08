@@ -9,6 +9,21 @@
         <Plugins>
 
         </Plugins>
+        <Dialog>
+          <template #trigger="{ openDialog }">
+            <router-link :to="`/profile/${profile?.id}/settings`">
+              <IconButton :icon="Cog6ToothIcon" />
+            </router-link>
+          </template>
+
+          <template #content="{ closeDialog }">
+            <ProfileSettingsDialog
+              :closeDialog="closeDialog"
+              :profile="profile"
+              @updateProfile="handleProfileUpdate"
+            />
+          </template>
+        </Dialog>
       </div>
 
       <div class="mb-8 flex flex-row gap-2">
@@ -18,10 +33,7 @@
           class="w-48 h-48 rounded-full object-cover mr-10"
         />
 
-        <Card v-if="profile?.about" class="mb-8">
-          <span class="flex flex-row items-center gap-2 mb-2">
-            <IconButton :icon="Cog6ToothIcon" />
-          </span>
+        <Card v-if="profile?.about.length" class="mb-8">
           <p v-if="profile?.about">
             {{ profile?.about }}
           </p>
@@ -65,12 +77,13 @@ import {
   Cog6ToothIcon,
 } from '@heroicons/vue/24/solid';
 import SideBar from '@/components/SideBar.vue';
-import Container from '@/components/common/ContainerComponent.vue';
-import Card from '@/components/common/CardComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Container from '@/components/common/Container.vue';
+import Card from '@/components/common/Card.vue';
+import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import FeedListItem from '@/components/list/FeedListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
+import ProfileSettingsDialog from '@/components/dialog/ProfileSettingsDialog.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import FindInterest from '@/components/FindInterest.vue';
 import FindLocation from '@/components/FindLocation.vue';

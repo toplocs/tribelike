@@ -1,24 +1,7 @@
 <template>
   <Container>
     <div class="w-full">
-      <div className="mb-2 flex flex-row justify-between">
-        <button
-          v-if="subscribed"
-          @click="removeInterest"
-          class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Remove
-        </button>
-        <button
-          v-if="!subscribed"
-          @click="addInterest"
-          class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Add
-        </button>
-      </div>
-
-
       <div>
-        <Title>This is happening:</Title>
         <div
           v-for="feed of interestFeed"
           :key="feed.id"
@@ -31,7 +14,7 @@
     </div>
 
     <Sidebar>
-      <div className="pb-4">
+      <div className="py-4 border-t">
         <Title>Other people at this interest:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
@@ -45,6 +28,10 @@
           </div>
         </div>
       </div>
+
+      <div class="py-4 border-t">
+        <AddInterestButton :interest="interest" />
+      </div>
     </Sidebar>
 
   </Container>
@@ -54,11 +41,12 @@
 import axios from 'axios';
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Container from '@/components/common/ContainerComponent.vue';
+import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import FeedListItem from '@/components/list/FeedListItem.vue';
+import AddInterestButton from '@/components/AddInterestButton.vue';
 
 const route = useRoute();
 const interest = inject('interest');
@@ -79,7 +67,7 @@ const fetchInterestFeed = async (id: string) => {
         activity: "Felix joined Ponta do sol",
         status: "CURRENTLY_AT",
         date: new Date(),
-        interests: [...profile.value?.interests],
+        interests: profile.value?.interests,
         locationId: "location-1",
         location: {
           id: "location-1",
@@ -104,7 +92,7 @@ const fetchInterestFeed = async (id: string) => {
         activity: "Working",
         status: "GOING_NEXT",
         date: new Date(),
-        interests: [...profile.value?.interests],
+        interests: profile.value?.interests,
         locationId: "location-3",
         location: {
           id: "location-3",
@@ -117,7 +105,7 @@ const fetchInterestFeed = async (id: string) => {
         activity: "Working",
         status: "CURRENTLY_AT",
         date: new Date(),
-        interests: [...profile.value?.interests],
+        interests: profile.value?.interests,
         locationId: "location-4",
         location: {
           id: "location-4",
@@ -130,7 +118,7 @@ const fetchInterestFeed = async (id: string) => {
         activity: "Working",
         status: "FAVOURITE",
         date: new Date(),
-        interests: [...profile.value?.interests],
+        interests: profile.value?.interests,
         locationId: "location-5",
         location: {
           id: "location-5",

@@ -1,17 +1,13 @@
 <template>
   <Container>
     <div class="w-full">
-      <Card className="mt-4">
-        <Callout v-if="successMessage" color="green">
-          {{ successMessage }}
-        </Callout>
-        <Callout v-if="errorMessage" color="red">
-          {{ errorMessage }}
-        </Callout>
-
+      <Card>
         <Title>
-          Settings for {{ location?.title }}
+          Creating a new location:
         </Title>
+        <p v-if="errorMessage" class="text-red-500 mt-4">
+          {{ errorMessage }}
+        </p>
 
         <form
           ref="form"
@@ -45,8 +41,10 @@
             <SelectInput
               name="parentId"
               placeholder="Select where this location is"
+              v-model="selectedModel"
               :options="parents"
-              :modelValue="location?.parentId"
+              :modelValue="location?.parent?.id"
+              @update:modelValue="handleSelectParent"
             />
           </div>
 
@@ -86,19 +84,13 @@
             </div>
           </div>
 
-          <input
-            type="hidden"
-            name="locationId"
-            :value="location?.id"
-          >
-
           <Map
             :defaultLocation="defaultLocation"
             @changeLocation="handleChangeLocation"
           />
 
           <SubmitButton className="w-full mt-4">
-            Update Settings
+            Create location
           </SubmitButton>
         </form>
       </Card>
@@ -107,7 +99,7 @@
     <Sidebar>
       <Plugins>
         <div className="mb-8">
-          <Title>Moderate access:</Title>
+          <Title>Invite your friends:</Title>
           <div v-for="friend of friends">
             <FriendListItem
               :key="friend.id"
@@ -125,7 +117,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
@@ -134,21 +126,19 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import Map from '@/components/MapComponent.vue';
-import Callout from '@/components/common/Callout.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
+
+import Plugins from '@/components/plugins/Plugins.vue';
 
 const defaultLocation = ref([7, 51]);
 const yCoordinate = ref('0');
 const xCoordinate = ref('0');
 
-const route = useRoute();
-const location = inject('location');
+const router = useRouter();
 const profile = inject('profile');
-const tab = inject('tab');
+const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 const selectedModel = ref('');
-const successMessage = ref('');
-const errorMessage = ref('');
 const parents = ref([]);
 const friends = ref([]);
 
@@ -185,6 +175,19 @@ const handleChangeLocation = ({ y, x }) => {
   xCoordinate.value = String(x);
 }
 
+const addLocation = async (locationId: string) => {
+  try {
+    const response = await axios.put(`/api/location/add`, {
+      profileId: profile.value?.id,
+      locationId: locationId,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
@@ -192,24 +195,20 @@ const onSubmit = async () => {
     const formData = new FormData(form.value);
     formData.append('yCoordinate', yCoordinate.value);
     formData.append('xCoordinate', xCoordinate.value);
-    const response = await axios.put(`/api/location`, formData);
-    successMessage.value = 'Your settings have been updated successfully!';
+    formData.append('zoom', zoom.value);
+    const response = await axios.post(`/api/location`, formData);
+    await addLocation(response.data?.id);
 
-    return response.data;
+    return router.push(`/location/${response.data?.id}`);
   } catch (error) {
-    errorMessage.value = error.response.data;
     console.error(error);
+    errorMessage.value = error.response.data;
   }
 }
 
 onMounted(async () => {
   const locations = await findLocations();
-  friends.value = await findProfiles();
   parents.value = locations.map(x => ({ ...x, label: x.title }));
-  defaultLocation.value = [
-    Number(location.value?.yCoordinate),
-    Number(location.value?.xCoordinate),
-  ];
-  tab.value = 'Settings';
+  friends.value = await findProfiles();
 });
 </script>

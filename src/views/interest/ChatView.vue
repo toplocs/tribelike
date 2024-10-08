@@ -33,10 +33,10 @@
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Card from '@/components/common/CardComponent.vue';
-import Container from '@/components/common/ContainerComponent.vue';
+import Card from '@/components/common/Card.vue';
+import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';

@@ -98,7 +98,7 @@ import BackButton from '../components/common/BackButton.vue';
 import SubmitButton from '../components/common/SubmitButton.vue';
 import TextInput from '../components/common/TextInput.vue';
 import SelectInput from '../components/common/SelectInput.vue';
-import Card from '../components/common/CardComponent.vue';
+import Card from '../components/common/Card.vue';
 
 const router = useRouter();
 const errorMessage = ref('');

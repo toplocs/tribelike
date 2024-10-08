@@ -26,6 +26,7 @@ export async function createLocation(formData: {
   title: string,
   xCoordinate: string,
   yCoordinate: string,
+  zoom: string,
   parentId: string,
 }) {
   try {
@@ -34,6 +35,36 @@ export async function createLocation(formData: {
         title: formData.title,
         yCoordinate: formData.yCoordinate,
         xCoordinate: formData.xCoordinate,
+        zoom: Number(formData.zoom),
+        ...(formData.parentId && { parentId: formData.parentId }),
+      },
+    });
+
+    return { success: location };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function updateLocation(formData: {
+  locationId: string,
+  title: string,
+  xCoordinate: string,
+  yCoordinate: string,
+  zoom: string,
+  parentId: string,
+}) {
+  try {
+    const location = await prisma.location.update({
+      where: {
+        id: formData?.locationId,
+      },
+      data: {
+        title: formData.title,
+        yCoordinate: formData.yCoordinate,
+        xCoordinate: formData.xCoordinate,
+        zoom: Number(formData.zoom),
         ...(formData.parentId && { parentId: formData.parentId }),
       },
     });

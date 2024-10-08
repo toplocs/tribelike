@@ -79,7 +79,7 @@ import { useEditor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
-import Callout from '../../../components/common/CalloutComponent.vue';
+import Callout from '../../../components/common/Callout.vue';
 import SubmitButton from '../../../components/common/SubmitButton.vue';
 
 const props = defineProps({

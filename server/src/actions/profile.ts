@@ -12,7 +12,7 @@ export async function getProfiles(authHeader?: string) {
       include: {
         interests: true,
         locations: true,
-      }
+      },
     });
 
     return { success: profiles };
@@ -104,6 +104,19 @@ export async function deleteProfile(
     });
 
     return { success: 'Successfully deleted' };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getAllProfiles() {
+  try {
+    const profiles = await prisma.profile.findMany({
+      take: 20,
+    });
+
+    return { success: profiles };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

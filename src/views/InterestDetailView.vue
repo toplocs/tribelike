@@ -34,42 +34,6 @@ const fetchInterest = async (id: string) => {
   }
 }
 
-const addInterest = async () => {
-  try {
-    const response = await axios.put(`/api/interest/add`, {
-      profileId: profile.value?.id,
-      interestId: interest.value?.id,
-    });
-    if (profile.value && interest.value) {
-      profile.value.interests = [
-        ...profile.value.interests, interest.value
-      ];
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const removeInterest = async () => {
-  try {
-    const response = await axios.put(`/api/interest/remove`, {
-      profileId: profile.value?.id,
-      interestId: interest.value?.id,
-    });
-    if (profile.value && interest.value) {
-      profile.value.interests = profile.value.interests.filter(
-        x => x.id !== interest.value.id
-      );
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 
 watch(() => route.params.id, async (newId) => {
   if (newId) interest.value = await fetchInterest(newId);

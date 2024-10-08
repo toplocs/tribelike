@@ -1,9 +1,10 @@
 <template>
   <div className="min-h-screen flex flex-col justify-center">
     <div class="my-4">
-      <p class="text-center uppercase tracking-wide text-lg">
-        Welcome Stranger. Explore TOPLOCS
-      </p>
+      <h1 class="text-center uppercase tracking-wide text-sm">
+        <p class="text-lg font-bold">Welcome Stranger.</p><br />
+        Communities, Activities, Interests and Locations. Worldwide!
+      </h1>
     </div>
 
 
@@ -63,8 +64,8 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Container from '@/components/common/ContainerComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Container from '@/components/common/Container.vue';
+import Title from '@/components/common/Title.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import Search from '@/components/search/Index.vue';

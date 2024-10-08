@@ -73,13 +73,13 @@
 import axios from 'axios';
 import { ref, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Card from '../components/common/CardComponent.vue';
-import Title from '../components/common/TitleComponent.vue';
+import Card from '../components/common/Card.vue';
+import Title from '../components/common/Title.vue';
 import SubmitButton from '../components/common/SubmitButton.vue';
 import TextInput from '../components/common/TextInput.vue';
 import TextArea from '../components/common/TextArea.vue';
 import SelectAvatar from '../components/SelectAvatar.vue';
-import Callout from '../components/common/CalloutComponent.vue';
+import Callout from '../components/common/Callout.vue';
 
 const router = useRouter();
 const session = inject('session');

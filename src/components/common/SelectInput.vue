@@ -15,10 +15,11 @@
       class="group flex w-full items-center justify-between gap-2 truncate rounded-md border px-3 py-2 shadow-sm outline-none transition sm:text-sm border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-950/50 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 dark:focus:ring-blue-700 dark:focus:border-blue-700"
     >
       <span>
-        {{ options.find(x => x.id == selectedOption)?.label || placeholder }}
+        {{ options.find(x => x.id === selectedOption)?.label || placeholder }}
       </span>
       <ChevronDownIcon class="w-4 h-4" />
     </button>
+
     <div
       v-if="isOpen"
       class="absolute z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
@@ -39,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps({
@@ -56,14 +57,13 @@ const props = defineProps({
     required: true
   },
   modelValue: {
-    type: [String, Number],
-    default: '',
+    type: String,
+    required: true,
   },
 });
 
-const emit = defineEmits(['update:modelValue']);
 const isOpen = ref(false);
-const selectedOption = ref(props.modelValue);
+const selectedOption = ref(null);
 const selectContainer = ref(null);
 
 const toggleDropdown = () => {
@@ -72,7 +72,6 @@ const toggleDropdown = () => {
 
 const selectOption = (optionId: string) => {
   selectedOption.value = optionId;
-  emit('update:modelValue', optionId);
   isOpen.value = false;
 };
 
@@ -81,6 +80,10 @@ const handleClickOutside = (event) => {
     isOpen.value = false;
   }
 };
+
+watchEffect(() => {
+  selectedOption.value = props.modelValue;
+});
 
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside);

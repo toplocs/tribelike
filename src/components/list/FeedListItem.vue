@@ -8,7 +8,7 @@
           <div class="mt-2 flex flex-wrap gap-2">
             <router-link
               v-for="interest in feed.interests"
-              :to="`/interests/${interest.id}`"
+              :to="`/interest/${interest.id}`"
             >
               <InterestBadge
                 :key="interest.id"
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import Title from '@/components/common/TitleComponent.vue';
+import Title from '@/components/common/Title.vue';
 import StatusBadge from '@/components/badges/StatusBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 

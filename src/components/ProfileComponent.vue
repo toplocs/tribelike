@@ -32,7 +32,7 @@
         <div class="mt-4 flex flex-wrap gap-2">
           <router-link
             v-for="interest in profile?.interests"
-            :to="`/interests/${interest.id}`"
+            :to="`/interest/${interest.id}`"
           >
             <InterestBadge
               :key="interest.id"
@@ -46,7 +46,7 @@
         <div class="mt-4 flex flex-wrap gap-2">
           <router-link
             v-for="location in profile?.locations"
-            :to="`/locations/${location.id}`"
+            :to="`/location/${location.id}`"
           >
             <LocationBadge
               :key="location.id"
@@ -85,9 +85,9 @@ import {
   Cog6ToothIcon,
 } from '@heroicons/vue/24/solid';
 import Sidebar from '@/components/SideBar.vue';
-import Container from '@/components/common/ContainerComponent.vue';
-import Card from '@/components/common/CardComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Container from '@/components/common/Container.vue';
+import Card from '@/components/common/Card.vue';
+import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import FeedListItem from '@/components/list/FeedListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';

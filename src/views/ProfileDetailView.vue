@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-screen pt-10">
+  <div className="min-h-screen">
     <MyProfileComponent
       v-if="profile?.id == myProfile?.id"
       :profile="myProfile"
@@ -21,7 +21,7 @@ import {
   Cog6ToothIcon,
 } from '@heroicons/vue/24/solid';
 import { useRoute } from 'vue-router';
-import Container from '../components/common/ContainerComponent.vue';
+import Container from '../components/common/Container.vue';
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 

@@ -72,8 +72,8 @@
 <script setup lang="ts">
 import { ref, inject, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Card from '@/components/common/CardComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Card from '@/components/common/Card.vue';
+import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';

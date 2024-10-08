@@ -44,6 +44,30 @@ export async function createInterest(formData: {
   }
 }
 
+export async function updateInterest(formData: {
+  interestId: string,
+  title: string,
+  parentId: string,
+}) {
+  try {
+    const interest = await prisma.interest.update({
+      where: {
+        id: formData?.interestId,
+      },
+      data: {
+        title: formData.title,
+        ...(formData.parentId && { parentId: formData.parentId }),
+      },
+    });
+
+
+    return { success: interest };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 export async function getInterestById(params: {
   id?: string
 }) {

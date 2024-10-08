@@ -26,9 +26,9 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { inject, onMounted } from 'vue';
-import Container from '@/components/common/ContainerComponent.vue';
+import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Title from '@/components/common/Title.vue';
 
 import Plugins from '@/components/plugins/Plugins.vue';
 import WikiPlugin from '@/components/plugins/wiki/Index.vue';

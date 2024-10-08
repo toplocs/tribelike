@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Title from '../../../components/common/TitleComponent.vue';
+import Title from '../../../components/common/Title.vue';
 import WikiEdit from './WikiEdit.vue';
 
 const content = ref('Initial content goes here...');

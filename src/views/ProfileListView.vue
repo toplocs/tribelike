@@ -44,8 +44,8 @@ import axios from 'axios';
 import { ref, provide, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
-import Card from '../components/common/CardComponent.vue';
-import Title from '../components/common/TitleComponent.vue';
+import Card from '../components/common/Card.vue';
+import Title from '../components/common/Title.vue';
 import ProfileListItem from '../components/list/ProfileListItem.vue';
 import Dialog from '../components/dialog/DialogComponent.vue';
 import ProfileAddDialog from '../components/dialog/ProfileAddDialog.vue';
@@ -85,16 +85,6 @@ async function selectProfile(selected: Object) {
   router.push(`/profiles/${selected.id}`);
 }
 
-const logout = async (userId: number) => {
-  try {
-    session.value = null;
-    axios.defaults.headers.common['Authorization'] = null;
-    localStorage.removeItem('authHeader');
-    router.push('/login');
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 onMounted(async () => {
   profiles.value = await fetchProfiles();

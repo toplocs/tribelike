@@ -64,7 +64,7 @@ import { useRouter } from 'vue-router';
 import BackButton from '../components/common/BackButton.vue';
 import SubmitButton from '../components/common/SubmitButton.vue';
 import TextInput from '../components/common/TextInput.vue';
-import Card from '../components/common/CardComponent.vue';
+import Card from '../components/common/Card.vue';
 
 const router = useRouter();
 const session = inject('session');
@@ -108,7 +108,7 @@ const onSubmit = async () => {
     axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
     localStorage.setItem('authHeader', JSON.stringify(authHeader));
     session.value = await getSession(JSON.stringify(authHeader));
-    if (profile.value) return router.push(`/interests`);
+    if (profile.value) return router.push(`/profiles/${profile.value.id}`);
     
     return router.push(`/profiles`);
   } catch (error) {

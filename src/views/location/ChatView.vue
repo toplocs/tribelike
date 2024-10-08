@@ -32,10 +32,10 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, onMounted } from 'vue';
-import Container from '@/components/common/ContainerComponent.vue';
+import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
-import Card from '@/components/common/CardComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Card from '@/components/common/Card.vue';
+import Title from '@/components/common/Title.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 

@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, watch, onMounted } from 'vue';
-import Title from '../../components/common/TitleComponent.vue';
+import Title from '../../components/common/Title.vue';
 import Chat from '../../components/plugins/chat/Index.vue';
 import FriendListItem from  '../../components/list/FriendListItem.vue';
 

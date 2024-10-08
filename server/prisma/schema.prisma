@@ -80,6 +80,7 @@ model Location {
   title       String
   xCoordinate String?
   yCoordinate String?
+  zoom        Int?
   profiles    Profile[]     @relation("ProfileLocations")
   parentId    String?
   parent      Location?     @relation("ParentChildren", fields: [parentId], references: [id])

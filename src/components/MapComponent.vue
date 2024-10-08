@@ -19,7 +19,7 @@
     </ol-tile-layer>
 
     <ol-geolocation
-      v-if="!locked"
+      v-if="!locked || !defaultLocation"
       :projection="projection"
       @change:position="geoLocChange"
     >
@@ -58,7 +58,7 @@ const props = defineProps({
   },
   defaultLocation: {
     type: Array,
-    default: [0, 0],
+    required: false,
   },
 });
 

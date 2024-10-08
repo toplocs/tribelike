@@ -26,7 +26,7 @@
 import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Title from '../../components/common/TitleComponent.vue';
+import Title from '../../components/common/Title.vue';
 import ProfileSettings from '../../components/ProfileSettings.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue';
 

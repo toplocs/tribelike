@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Title from '../../components/common/TitleComponent.vue';
+import Title from '../../components/common/Title.vue';
 import SelectInput from '../../components/common/SelectInput.vue';
 import SubmitButton from '../../components/common/SubmitButton.vue'
 

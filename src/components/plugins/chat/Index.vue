@@ -26,7 +26,7 @@ import {
   onBeforeUnmount
 } from 'vue';
 import { useRoute } from 'vue-router';
-import Title from '@/components/common/TitleComponent.vue';
+import Title from '@/components/common/Title.vue';
 import ChatService from './service';
 import ChatList from './ChatList.vue';
 import ChatPanel from './ChatPanel.vue';

@@ -34,44 +34,7 @@ const fetchLocation = async (id: string) => {
   }
 }
 
-const addLocation = async () => {
-  try {
-    const response = await axios.put(`/api/location/add`, {
-      profileId: profile.value?.id,
-      locationId: location.value?.id,
-    });
-    if (profile.value && location.value) {
-      profile.value.locations = [
-        ...profile.value.locations, location.value
-      ];
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const removeLocation = async () => {
-  try {
-    const response = await axios.put(`/api/location/remove`, {
-      profileId: profile.value?.id,
-      locationId: location.value?.id,
-    });
-    if (profile.value && location.value) {
-      profile.value.locations = profile.value.locations.filter(
-        x => x.id !== location.value.id
-      );
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 watch(() => route.params.id, async (newId) => {
-  console.log(newId)
   if (newId) location.value = await fetchLocation(newId);
 });
 

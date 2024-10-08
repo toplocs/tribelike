@@ -1,24 +1,7 @@
 <template>
   <Container>
     <div class="w-full">
-      <div className="mb-2 flex flex-row justify-between">
-        <button
-          v-if="subscribed"
-          @click="removeLocation"
-          class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-transparent rounded-lg hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-        > Remove
-        </button>
-        <button
-          v-if="!subscribed"
-          @click="addLocation"
-          class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        > Add
-        </button>
-      </div>
-
-
       <div>
-        <Title>This is happening:</Title>
         <div
           v-for="feed of locationFeed"
           :key="feed.id"
@@ -31,10 +14,10 @@
     </div>
 
     <Sidebar>
-      <div className="mb-4 border-b">
-        <Title>Map:</Title>
+      <div className="py-4 border-t">
         <Map
           height="200"
+          :zoom="7"
           :locked="true"
           :defaultLocation="[
             Number(yCoordinate),
@@ -43,7 +26,11 @@
         />
       </div>
 
-      <div className="pb-4">
+      <div className="py-4 border-t">
+        <AddLocationButton :location="location" />
+      </div>
+
+      <div className="py-4 border-t">
         <Title>Other people at this location:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
@@ -66,13 +53,14 @@
 import axios from 'axios';
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import Container from '@/components/common/ContainerComponent.vue';
-import Title from '@/components/common/TitleComponent.vue';
+import Container from '@/components/common/Container.vue';
+import Title from '@/components/common/Title.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Map from '@/components/MapComponent.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import FeedListItem from '@/components/list/FeedListItem.vue';
+import AddLocationButton from '@/components/AddLocationButton.vue';
 
 const route = useRoute();
 const locationFeed = ref([]);
@@ -81,7 +69,6 @@ const profile = inject('profile');
 const tab = inject('tab');
 const yCoordinate = computed(() => location.value?.yCoordinate || '0');
 const xCoordinate = computed(() => location.value?.xCoordinate || '0');
-const subscribed = computed(() => profile.value?.locations.some(x => x.id == location.value?.id));
 const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 const fetchLocationFeed = async (id: string) => {
@@ -97,7 +84,7 @@ const fetchLocationFeed = async (id: string) => {
         status: "CURRENTLY_AT",
         date: new Date(),
         interestId: "interest-1",
-        interests: [...profile.value?.interests],
+        interests: profile.value?.interests,
         locationId: "location-1",
         location: {
           id: "location-1",
@@ -174,7 +161,7 @@ const fetchLocationFeed = async (id: string) => {
 }
 
 watchEffect(async () => {
-  locationFeed.value = await fetchLocationFeed(location.value.id);
+  locationFeed.value = await fetchLocationFeed(location.value?.id);
 });
 
 onMounted(() => {
