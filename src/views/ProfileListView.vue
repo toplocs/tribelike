@@ -1,6 +1,6 @@
 <template>
-  <div className="min-h-screen py-20 flex justify-center items-center">
-    <Card className="pb-10 px-0">
+  <div className="min-h-screen">
+    <Card className="mt-10 px-0">
       <div className="px-4">
         <Title float="center">
           Select your profile:
@@ -82,7 +82,7 @@ const fetchProfiles = async () => {
 async function selectProfile(selected: Object) {
   profile.value = selected;
   localStorage.setItem('profile', selected.id);
-  router.push(`/profiles/${selected.id}`);
+  router.push(`/profile/${selected.id}`);
 }
 
 

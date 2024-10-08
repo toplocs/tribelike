@@ -17,6 +17,7 @@ import InterestActivityView from '@/views/interest/ActivityView.vue';
 import InterestChatView from '@/views/interest/ChatView.vue';
 import InterestWikiView from '@/views/interest/WikiView.vue';
 import InterestEventsView from '@/views/interest/EventsView.vue';
+import InterestPluginsView from '@/views/interest/PluginsView.vue';
 import InterestSettingsView from '@/views/interest/SettingsView.vue';
 
 //Location
@@ -26,6 +27,7 @@ import LocationActivityView from '@/views/location/ActivityView.vue';
 import LocationChatView from '@/views/location/ChatView.vue';
 import LocationWikiView from '@/views/location/WikiView.vue';
 import LocationEventsView from '@/views/location/EventsView.vue';
+import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
 
 //Plugins
@@ -114,6 +116,11 @@ const router = createRouter({
           component: InterestEventsView,
         },
         {
+          path: 'plugins',
+          name: 'interestPlugins',
+          component: InterestPluginsView,
+        },
+        {
           path: 'settings',
           name: 'interestSettings',
           component: InterestSettingsView,
@@ -152,6 +159,11 @@ const router = createRouter({
           path: 'events',
           name: 'locationEvents',
           component: LocationEventsView,
+        },
+        {
+          path: 'plugins',
+          name: 'locationPlugins',
+          component: LocationPluginsView,
         },
         {
           path: 'settings',

@@ -6,6 +6,7 @@
       { value: 'Chat', href: `/interest/${interest?.id}/chat` },
       { value: 'Wiki', href: `/interest/${interest?.id}/wiki` },
       { value: 'Events', href: `/interest/${interest?.id}/events` },
+      { value: 'Plugins', href: `/interest/${interest?.id}/plugins` },
       { value: 'Settings', href: `/interest/${interest?.id}/settings` },
     ]"
   />

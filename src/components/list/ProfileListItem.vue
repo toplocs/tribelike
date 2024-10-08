@@ -24,22 +24,9 @@
       </div>
     </div>
     <div class="flex-2 h-full p-4">
-      <Dialog>
-        <template #trigger="{ openDialog }">
-          <Cog6ToothIcon
-            class="w-6 h-6 text-gray-200 hover:text-gray-400"
-            @click.stop="openDialog"
-          />
-        </template>
-
-        <template #content="{ closeDialog }">
-          <ProfileSettingsDialog
-            :closeDialog="closeDialog"
-            :profile="profile"
-            @updateProfile="handleProfileUpdate"
-          />
-        </template>
-      </Dialog>
+      <router-link :to="`/profile/${profile.id}/settings`">
+        <Cog6ToothIcon class="w-6 h-6 text-gray-200 hover:text-gray-400" />
+      </router-link>
     </div>
     <div class="flex-3 h-full p-4">
       <Dialog>
@@ -70,7 +57,6 @@ import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/solid';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
-import ProfileSettingsDialog from '@/components/dialog/ProfileSettingsDialog.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 
 const props = defineProps({
@@ -83,11 +69,6 @@ const props = defineProps({
     required: false,
   }
 });
-const emit = defineEmits(['updateProfiles']);
-
-const handleProfileUpdate = (response: Object) => {
-  emit('updateProfiles', response);
-}
 
 const onDelete = async (profile: Object) => {
   try {

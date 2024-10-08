@@ -1,6 +1,6 @@
 <template>
-  <div className="min-h-screen py-20 flex justify-center items-center">
-    <Card className="max-w-md">
+  <div className="min-h-screen flex justify-center">
+    <Card className="mt-10 max-w-md">
       <Title float="center">
          Account settings:
       </Title>
