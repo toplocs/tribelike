@@ -10,7 +10,7 @@
     </div>
 
     <Sidebar>
-      <div className="mb-4 border-b min-w-[200px]">
+      <div className="mb-4 min-w-[200px]">
         <Title>Wiki pages:</Title>
         <WikiListItem
           v-for="page of wikiPages"

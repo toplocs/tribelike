@@ -27,7 +27,7 @@ const props = defineProps({
 });
 
 const calloutClasses = computed(() => {
-  const baseClasses = "flex flex-col overflow-hidden rounded-lg border-l-4 p-4 mb-2";
+  const baseClasses = "flex flex-col overflow-hidden rounded-lg border-l-4 p-4 mb-2 opacity-75";
   const colorClasses = props.color === 'red'
     ? 'bg-red-100 border-red-500 text-red-700'
     : 'bg-green-100 border-green-500 text-green-700';

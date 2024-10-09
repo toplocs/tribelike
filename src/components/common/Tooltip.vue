@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isVisible"
-    class="absolute top-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded mt-1 whitespace-nowrap z-10"
+    class="absolute top-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded mt-1 whitespace-nowrap z-10 dark:bg-gray-500"
   >
     {{ content }}
   </div>

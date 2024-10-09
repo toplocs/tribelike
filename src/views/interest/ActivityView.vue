@@ -14,8 +14,8 @@
     </div>
 
     <Sidebar>
-      <div className="py-4 border-t">
-        <Title>Other people at this interest:</Title>
+      <div className="py-4 border-t dark:border-gray-700">
+        <Title>Other people with this interest:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
             <router-link :to="`/profiles/${suggestion.id}`">
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="py-4 border-t">
+      <div class="py-4 border-t dark:border-gray-700">
         <AddInterestButton :interest="interest" />
       </div>
     </Sidebar>

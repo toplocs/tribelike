@@ -14,43 +14,43 @@
       <div class="control-group">
         <div class="button-group mb-4 text-sm">
           <button
-            @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-            :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 1 }) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+            @click.prevent="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+            :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 1 }) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             H1
           </button>
           <button
             @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-            :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 2 }) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+            :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 2 }) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             H2
           </button>
-          <button @click.prevent="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 3 }) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="['px-2 py-1 border transition-colors', editor.isActive('heading', { level: 3 }) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             H3
           </button>
-          <button @click.prevent="editor.chain().focus().setParagraph().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('paragraph') ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().setParagraph().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('paragraph') ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Paragraph
           </button>
-          <button @click.prevent="editor.chain().focus().toggleBold().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('bold') ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().toggleBold().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('bold') ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Bold
           </button>
-          <button @click.prevent="editor.chain().focus().toggleItalic().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('italic') ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().toggleItalic().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('italic') ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Italic
           </button>
-          <button @click.prevent="editor.chain().focus().toggleStrike().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('strike') ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().toggleStrike().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('strike') ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Strike
           </button>
-          <button @click.prevent="editor.chain().focus().toggleHighlight().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('highlight') ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().toggleHighlight().run()" :class="['px-2 py-1 border transition-colors', editor.isActive('highlight') ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Highlight
           </button>
-          <button @click.prevent="editor.chain().focus().setTextAlign('left').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'left'}) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().setTextAlign('left').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'left'}) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Left
           </button>
-          <button @click.prevent="editor.chain().focus().setTextAlign('center').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'center'}) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().setTextAlign('center').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'center'}) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Center
           </button>
-          <button @click.prevent="editor.chain().focus().setTextAlign('right').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'right'}) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().setTextAlign('right').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'right'}) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Right
           </button>
-          <button @click.prevent="editor.chain().focus().setTextAlign('justify').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'justify'}) ? 'bg-blue-100' : 'bg-gray-100 text-black']">
+          <button @click.prevent="editor.chain().focus().setTextAlign('justify').run()" :class="['px-2 py-1 border transition-colors', editor.isActive({'textAlign': 'justify'}) ? 'bg-blue-200 text-black' : 'bg-gray-100 text-black']">
             Justify
           </button>
         </div>
@@ -60,12 +60,14 @@
     </div>
     
     <div class="mt-2 space-x-2">
-      <SubmitButton>
-        Save
-      </SubmitButton>
+      <button
+        type="submit"
+        class="px-4 py-2 rounded font-semibold transition-colors duration-200 bg-green-500 hover:bg-green-600 text-white"
+      > Save
+      </button>
       <button
         type="button"
-        class="bg-gray-500 text-white inline-flex justify-center px-4 py-2 text-sm font-medium border rounded-lg hover:bg-gray-600 transition"
+        class="px-4 py-2 rounded font-semibold transition-colors duration-200 bg-gray-500 hover:bg-gray-600 text-white"
         @click.prevent="cancelEdit"
       > Cancel
       </button>

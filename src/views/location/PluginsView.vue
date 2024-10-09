@@ -10,7 +10,6 @@
       <ul
         v-for="plugin in plugins"
         :key="plugin.id"
-        className="border-b border-gray-100"
       >
         <PluginListItem :plugin="plugin" />
       </ul>

@@ -14,7 +14,7 @@
     </div>
 
     <Sidebar>
-      <div className="py-4 border-t">
+      <div className="py-4 border-t dark:border-gray-700">
         <Map
           height="200"
           :zoom="7"
@@ -26,11 +26,11 @@
         />
       </div>
 
-      <div className="py-4 border-t">
+      <div className="py-4 border-t dark:border-gray-700">
         <AddLocationButton :location="location" />
       </div>
 
-      <div className="py-4 border-t">
+      <div className="py-4 border-t dark:border-gray-700">
         <Title>Other people at this location:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">

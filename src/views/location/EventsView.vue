@@ -9,7 +9,7 @@
     </div>
 
     <Sidebar>
-      <div className="pb-4 border-b">
+      <div className="pb-4 border-b dark:border-gray-700">
         <Title>Map:</Title>
         <Map
           height="200"

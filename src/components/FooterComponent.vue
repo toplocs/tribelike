@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full pt-4 bg-gray-50">
+  <div class="w-full min-h-[100px] mt-4 pt-4 bg-gray-50 dark:bg-gray-900">
     <Container>
-      <div class="w-full mx-auto max-w-4xl flex flex-row justify-between gap-2">
+      <div class="w-full mx-auto max-w-4xl flex flex-row justify-between gap-2 dark:text-white">
         <!--<span>
           Interests and places
           <br />

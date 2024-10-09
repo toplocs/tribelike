@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 border-t hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer">
+  <div class="p-2 border-t hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer">
     <StatusBadge :title="feed?.status" />
 
     <div class="min-h-[100px] flex flex-col justify-between gap-2">

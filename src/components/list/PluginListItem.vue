@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center px-2 w-full border-t border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer"
+    class="flex items-center px-2 w-full border-t border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-150 ease-in-out cursor-pointer"
   >
     <div
       class="flex-1"

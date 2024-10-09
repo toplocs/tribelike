@@ -50,7 +50,7 @@
     </div>
 
     <SideBar>
-      <h2 class="text-lg font-semibold text-gray-900 mb-2">
+      <h2 class="text-lg font-semibold text-gray-900 mb-2 dark:text-gray-300">
         My activities:
       </h2>
       <div class="flex flex-wrap gap-2">

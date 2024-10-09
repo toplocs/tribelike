@@ -1,7 +1,7 @@
 <template>
   <div className="min-h-screen flex flex-col justify-center">
     <div class="my-4">
-      <h1 class="text-center uppercase tracking-wide text-sm">
+      <h1 class="text-center uppercase tracking-wide text-sm dark:text-white">
         <p class="text-lg font-bold">Welcome Stranger.</p><br />
         Communities, Activities, Interests and Locations. Worldwide!
       </h1>

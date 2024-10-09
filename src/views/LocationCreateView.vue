@@ -133,6 +133,7 @@ import Plugins from '@/components/plugins/Plugins.vue';
 const defaultLocation = ref([7, 51]);
 const yCoordinate = ref('0');
 const xCoordinate = ref('0');
+const zoom = ref(10);
 
 const router = useRouter();
 const profile = inject('profile');
@@ -173,6 +174,7 @@ const handleSelectParent = (selectedId: string) => {
 const handleChangeLocation = ({ y, x }) => {
   yCoordinate.value = String(y);
   xCoordinate.value = String(x);
+  zoom.value = Number(10);
 }
 
 const addLocation = async (locationId: string) => {
