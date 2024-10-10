@@ -40,11 +40,11 @@
         </Card>
       </div>
 
-      <div v-if="profile?.interests.length" class="mb-8">
+      <div v-if="profile?.interests?.length" class="mb-8">
         <FindInterest />
       </div>
 
-      <div v-if="profile?.locations.length" class="mb-8">
+      <div v-if="profile?.locations?.length" class="mb-8">
         <FindLocation />
       </div>
     </div>

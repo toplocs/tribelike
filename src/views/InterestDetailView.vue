@@ -3,9 +3,13 @@
     :initialTab="tab"
     :tabs="[
       { value: 'Activity', href: `/interest/${interest?.id}` },
+      
+      //Plugins
       { value: 'Chat', href: `/interest/${interest?.id}/chat` },
       { value: 'Wiki', href: `/interest/${interest?.id}/wiki` },
       { value: 'Events', href: `/interest/${interest?.id}/events` },
+      { value: 'Discussion', href: `/interest/${interest?.id}/discussion` },
+
       { value: 'Plugins', href: `/interest/${interest?.id}/plugins` },
       { value: 'Settings', href: `/interest/${interest?.id}/settings` },
     ]"

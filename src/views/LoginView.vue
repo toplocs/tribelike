@@ -5,9 +5,9 @@
       <h3 className="mb-8 text-center text-lg font-semibold">
         Login
       </h3>
-      <p v-if="errorMessage" class="text-red-500 mt-4">
+      <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
-      </p>
+      </Callout>
 
       <form
         ref="form"
@@ -61,10 +61,11 @@
 import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import BackButton from '../components/common/BackButton.vue';
-import SubmitButton from '../components/common/SubmitButton.vue';
-import TextInput from '../components/common/TextInput.vue';
-import Card from '../components/common/Card.vue';
+import BackButton from '@/components/common/BackButton.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
+import TextInput from '@/components/common/TextInput.vue';
+import Card from '@/components/common/Card.vue';
+import Callout from '@/components/common/Callout.vue';
 
 const router = useRouter();
 const session = inject('session');
@@ -105,12 +106,14 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const authHeader = await sendLogin();
-    axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
-    localStorage.setItem('authHeader', JSON.stringify(authHeader));
-    session.value = await getSession(JSON.stringify(authHeader));
-    if (profile.value) return router.push(`/profile/${profile.value.id}`);
-    
-    return router.push(`/profiles`);
+    if (authHeader) {
+      axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
+      localStorage.setItem('authHeader', JSON.stringify(authHeader));
+      session.value = await getSession(JSON.stringify(authHeader));
+      if (profile.value) return router.push(`/profile/${profile.value.id}`);
+      
+      return router.push(`/profiles`);
+    }
   } catch (error) {
     errorMessage.value = error.response.data;
     console.error(error);

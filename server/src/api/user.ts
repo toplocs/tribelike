@@ -7,6 +7,7 @@ import {
   updateUser,
   getUserById,
 } from '../actions/user';
+import { login } from '../lib/auth';
 
 const router = express.Router();
 const upload = multer();
@@ -19,9 +20,11 @@ router.route('/').get(async (req: Request, res: Response) => {
 })
 .post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createUser(req.body);
-
-	if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+    
+	if (success) {
+    const { token, expires } = await login(success);
+    return res.status(200).json({ token, expires });
+  } else return res.status(400).json(error);
 })
 .put(upload.none(), async (req: Request, res: Response) => {
   const authHeader = req.get('Authorization');

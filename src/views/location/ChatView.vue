@@ -2,7 +2,7 @@
   <Container>
     <div class="w-full">
       <Plugins>
-        <Card className="mt-4">
+        <Card>
           <ChatPlugin />
         </Card>
       </Plugins>

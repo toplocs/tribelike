@@ -13,22 +13,24 @@ import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 //Interest
 import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
+import InterestPluginsView from '@/views/interest/PluginsView.vue';
+import InterestSettingsView from '@/views/interest/SettingsView.vue';
 import InterestActivityView from '@/views/interest/ActivityView.vue';
 import InterestChatView from '@/views/interest/ChatView.vue';
 import InterestWikiView from '@/views/interest/WikiView.vue';
 import InterestEventsView from '@/views/interest/EventsView.vue';
-import InterestPluginsView from '@/views/interest/PluginsView.vue';
-import InterestSettingsView from '@/views/interest/SettingsView.vue';
+import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationPluginsView from '@/views/location/PluginsView.vue';
+import LocationSettingsView from '@/views/location/SettingsView.vue';
 import LocationActivityView from '@/views/location/ActivityView.vue';
 import LocationChatView from '@/views/location/ChatView.vue';
 import LocationWikiView from '@/views/location/WikiView.vue';
 import LocationEventsView from '@/views/location/EventsView.vue';
-import LocationPluginsView from '@/views/location/PluginsView.vue';
-import LocationSettingsView from '@/views/location/SettingsView.vue';
+import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 
 //Plugins
 import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
@@ -116,6 +118,12 @@ const router = createRouter({
           component: InterestEventsView,
         },
         {
+          path: 'discussion',
+          name: 'interestDiscussion',
+          component: InterestDiscussionView,
+        },
+
+        {
           path: 'plugins',
           name: 'interestPlugins',
           component: InterestPluginsView,
@@ -125,6 +133,7 @@ const router = createRouter({
           name: 'interestSettings',
           component: InterestSettingsView,
         },
+        
       ],
     },
 
@@ -160,6 +169,12 @@ const router = createRouter({
           name: 'locationEvents',
           component: LocationEventsView,
         },
+        {
+          path: 'discussion',
+          name: 'locationDiscussion',
+          component: LocationDiscussionView,
+        },
+
         {
           path: 'plugins',
           name: 'locationPlugins',

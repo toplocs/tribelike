@@ -83,6 +83,7 @@ import Callout from '../components/common/Callout.vue';
 
 const router = useRouter();
 const session = inject('session');
+const profile = inject('profile');
 const user = computed(() => session.value?.user);
 const form = ref<HTMLFormElement | null>(null);
 const account = ref(null);
@@ -116,6 +117,7 @@ const onSubmit = async () => {
 const logout = async (userId: number) => {
   try {
     session.value = null;
+    profile.value = null;
     axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('authHeader');
     router.push('/login');

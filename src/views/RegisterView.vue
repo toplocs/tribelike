@@ -5,9 +5,9 @@
       <h3 className="mb-8 text-center text-lg font-semibold">
         Create an account
       </h3>
-      <p v-if="errorMessage" class="text-red-500 mt-4">
+      <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
-      </p>
+      </Callout>
 
       <form
         ref="form"
@@ -92,27 +92,52 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import BackButton from '../components/common/BackButton.vue';
-import SubmitButton from '../components/common/SubmitButton.vue';
-import TextInput from '../components/common/TextInput.vue';
-import SelectInput from '../components/common/SelectInput.vue';
-import Card from '../components/common/Card.vue';
+import BackButton from '@/components/common/BackButton.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
+import TextInput from '@/components/common/TextInput.vue';
+import SelectInput from '@/components/common/SelectInput.vue';
+import Card from '@/components/common/Card.vue';
+import Callout from '@/components/common/Callout.vue';
 
 const router = useRouter();
+const session = inject('session');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
+
+const getSession = async (authHeader: string) => {
+  try {
+    const response = await axios.get(`/api/auth`, {
+      headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      }
+    });
+    const { session } = response.data;
+
+    return session;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     const response = await axios.post(`/api/user`, formData);
+    const authHeader = response.data;
 
-    return router.push('/login')
+    if (authHeader) {
+      axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
+      localStorage.setItem('authHeader', JSON.stringify(authHeader));
+      session.value = await getSession(JSON.stringify(authHeader));
+      
+      return router.push(`/profiles`);
+    }
   } catch (error) {
-    errorMessage.value = error.response.data;
     console.error(error);
+    errorMessage.value = error.response.data;
   }
 }
 

@@ -2,16 +2,15 @@
   <Container>
     <div class="w-full">
       <Card>
+        <Title>
+          Profile Settings
+        </Title>
         <Callout v-if="successMessage" color="green">
           {{ successMessage }}
         </Callout>
         <Callout v-if="errorMessage" color="red">
           {{ errorMessage }}
         </Callout>
-
-        <Title>
-          Profile Settings
-        </Title>
 
         <form
 			    ref="form"

@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="session && profile"
     class="sticky top-0 w-full bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
   >
     <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
@@ -35,7 +34,10 @@
         </router-link>
       </span>
 
-      <span class="flex flex-row w-full max-w-sm">
+      <span
+        v-if="session && profile"
+        class="flex flex-row w-full max-w-sm"
+      >
         <div className="w-full flex flex-row justify-end items-center gap-2">
           <Search
             v-if="!hideSearch"
@@ -98,6 +100,20 @@
             </ul>
           </template>
         </Dropdown>
+      </span>
+
+      <span v-else>
+        <router-link
+          to="/login"
+          class="font-semibold hover:underline"
+        > Sign In
+        </router-link>
+         or 
+        <router-link
+          to="/register"
+          class="font-semibold hover:underline"
+        > Sign Up
+        </router-link>
       </span>
     </div>
   </div>

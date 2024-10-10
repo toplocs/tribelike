@@ -22,13 +22,14 @@ router.route('/').get(async (req: Request, res: Response) => {
 router.route('/login').post(upload.none(), async (req: Request, res: Response) => {
   try {
     const formData = req.body;
+    if (formData.username.length < 3) return res.status(401).json('This account does not exist');
     const user = await prisma.user.findUnique({
       where: {
         username: formData.username,
       }
     });
-    if (!user) return res.status(401).json('Dieser Benutzer existiert nicht');
-    if (formData.password != user.password) return res.status(401).json('Das Passwort ist inkorrekt');
+    if (!user) return res.status(401).json('This account does not exist');
+    if (formData.password != user.password) return res.status(401).json('The password is not correct');
 
     const { token, expires } = await login(user);
     return res.status(200).json({ token, expires });

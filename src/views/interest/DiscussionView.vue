@@ -3,7 +3,12 @@
     <div class="w-full">
       <Plugins>
         <Card>
-          <ChatPlugin />
+          <ul>
+            <li>- Polls</li>
+            <li>- Votings</li>
+            <li>- Trust System</li>
+            <li>- Governance</li>
+          </ul>
         </Card>
       </Plugins>
       
@@ -37,15 +42,9 @@ import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
-import BackButton from '@/components/common/BackButton.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 
 import Plugins from '@/components/plugins/Plugins.vue';
-import ChatPlugin from '@/components/plugins/chat/Index.vue';
-import WikiPlugin from '@/components/plugins/wiki/Index.vue';
-import events from '@/components/plugins/event/service.ts';
-import EventPlugin from '@/components/plugins/event/Index.vue';
 
 const route = useRoute();
 const interest = inject('interest');
@@ -54,6 +53,6 @@ const tab = inject('tab');
 const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 onMounted(() => {
-  tab.value = 'Chat';
+  tab.value = 'Discussion';
 });
 </script>

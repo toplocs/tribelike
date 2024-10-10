@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma';
-import { auth, login, logout } from '../lib/auth';
+import { auth } from '../lib/auth';
 
 export async function getUsers(query: {
   username?: string
@@ -23,10 +23,12 @@ export async function createUser(formData: {
   username: string,
   email: string,
   password: string,
-  type: string,
-  image: string,
+  password2: string,
 }) {
   try {
+    if (formData.username.length < 3) throw new Error('Your username is too short');
+    if (formData.email.length < 3) throw new Error('Your email is too short');
+    if (formData.password != formData.password2) throw new Error('The password confirmation failed');
     const user = await prisma.user.create({
       data: {
         username: formData.username,
@@ -38,7 +40,8 @@ export async function createUser(formData: {
     return { success: user };
   } catch(e: any) {
     console.error(e);
-    if (e.meta.target.includes('username')) return { error: 'Your username is already taken' };
+    if (e.meta?.target.includes('username')) return { error: 'Your username is already taken' };
+    if (e.meta?.target.includes('username')) return { error: 'Your email is already taken' };
     return { error: e.message };
   }
 }
