@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
   options: {

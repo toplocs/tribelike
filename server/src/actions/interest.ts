@@ -36,7 +36,6 @@ export async function createInterest(formData: {
       },
     });
 
-
     return { success: interest };
   } catch(e: any) {
     console.error(e);
@@ -59,7 +58,6 @@ export async function updateInterest(formData: {
         ...(formData.parentId && { parentId: formData.parentId }),
       },
     });
-
 
     return { success: interest };
   } catch(e: any) {

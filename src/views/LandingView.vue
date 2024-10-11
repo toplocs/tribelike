@@ -2,7 +2,9 @@
   <div className="min-h-screen flex flex-col justify-center">
     <div class="my-4">
       <h1 class="text-center uppercase tracking-wide text-sm dark:text-white">
-        <p class="text-lg font-bold">Welcome Stranger.</p><br />
+        <p class="text-lg font-bold">
+          Welcome {{ profile?.username || Stranger }}.
+        </p><br />
         Communities, Activities, Interests and Locations. Worldwide!
       </h1>
     </div>
@@ -66,7 +68,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Container from '@/components/common/Container.vue';
 import Title from '@/components/common/Title.vue';
@@ -76,6 +78,7 @@ import Search from '@/components/search/Index.vue';
 import Map from '@/components/MapComponent.vue';
 
 const router = useRouter();
+const profile = inject('profile');
 const interests = ref([]);
 const locations = ref([]);
 

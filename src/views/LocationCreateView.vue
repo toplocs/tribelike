@@ -84,6 +84,12 @@
             </div>
           </div>
 
+          <input
+            type="hidden"
+            name="profileId"
+            :value="profile?.id"
+          >
+
           <Map
             :defaultLocation="defaultLocation"
             @changeLocation="handleChangeLocation"

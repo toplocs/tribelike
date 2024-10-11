@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import type Pointer from 'ol/interaction/Pointer';
-import { UserIcon } from '@heroicons/vue/24/solid';
+import { UserIcon } from '@heroicons/vue/24/outline';
 import { ref, watchEffect } from 'vue';
 import type { View } from 'ol';
 import type { ObjectEvent } from 'ol/Object';

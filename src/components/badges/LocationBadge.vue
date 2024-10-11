@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { MapPinIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { MapPinIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
   title: {

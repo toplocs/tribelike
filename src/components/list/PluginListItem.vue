@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { CheckIcon, NoSymbolIcon } from '@heroicons/vue/24/solid';
+import { CheckIcon, NoSymbolIcon } from '@heroicons/vue/24/outline';
 import Title from '@/components/common/Title.vue';
 import IconButton from '@/components/common/IconButton.vue';
 

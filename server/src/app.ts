@@ -5,6 +5,7 @@ import cors from 'cors';
 import path from 'path';
 import prisma from './lib/prisma';
 
+import activityRouter from './api/activity';
 import authRouter from './api/auth';
 import userRouter from './api/user';
 import profileRouter from './api/profile';
@@ -27,6 +28,7 @@ app.use(cors({
 }));
 if (!DEVELOPMENT) app.use(express.static(path.join(__dirname, 'views')));
 
+app.use('/api/activity', activityRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);

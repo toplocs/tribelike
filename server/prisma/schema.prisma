@@ -19,9 +19,9 @@ generator erd {
 }
 
 model User {
-  id       String     @id @default(uuid())
-  username String     @unique()
-  email    String     @unique() // As email is in Profiles, maybe not needed
+  id       String    @id @default(uuid())
+  username String    @unique()
+  email    String    @unique() // As email is in Profiles, maybe not needed
   image    String?
   password String
   profiles Profile[]
@@ -29,66 +29,80 @@ model User {
 }
 
 model Settings {
-  id       String  @id @default(uuid())
-  userId   String  @unique()
-  User     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  language String  @default("en") // Default language
+  id       String @id @default(uuid())
+  userId   String @unique()
+  User     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language String @default("en") // Default language
 }
 
 model Profile {
-  id          String        @id @default(uuid()) // Changed to uuid
-  username    String
-  type        String
-  image       String
-  email       String // Every Profile can have an own email for notifications. Can be used for logins aswell
-  about       String?
-  userId      String? // Matches User ID type
-  User        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  interests   Interest[]    @relation("ProfileInterests")
-  locations   Location[]    @relation("ProfileLocations")
-  ProfileFeed ProfileFeed[]
-}
-
-model ProfileFeed {
-  id        String  @id @default(uuid())
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  status    Status
-
-  interestId String?
-  interest   Interest? @relation(fields: [interestId], references: [id], onDelete: Cascade)
-
-  locationId String?
-  location   Location? @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  id         String     @id @default(uuid()) // Changed to uuid
+  username   String
+  type       String
+  image      String
+  email      String // Every Profile can have an own email for notifications. Can be used for logins aswell
+  about      String?
+  userId     String? // Matches User ID type
+  User       User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interests  Interest[] @relation("ProfileInterests")
+  locations  Location[] @relation("ProfileLocations")
+  activities Activity[]
 }
 
 model Interest {
-  id          String        @id @default(uuid()) // Changed to uuid
-  title       String
-  language    String        @default("en") // The interest's language
-  profiles    Profile[]     @relation("ProfileInterests")
-  same        Interest[]    @relation("SameInterests") // List of same / synonymous / translations
-  sameOf      Interest[]    @relation("SameInterests")
-  parentId    String? // Matches Parent Interest ID
-  parent      Interest?     @relation("ParentChildren", fields: [parentId], references: [id]) // Superior category
-  children    Interest[]    @relation("ParentChildren") // Sub categories
-  ProfileFeed ProfileFeed[]
+  id         String     @id @default(uuid())
+  title      String
+  language   String     @default("en")
+  profiles   Profile[]  @relation("ProfileInterests")
+  activities Activity[] @relation("ActivityInterests")
+  same       Interest[] @relation("SameInterests")
+  sameOf     Interest[] @relation("SameInterests")
+  parentId   String?
+  parent     Interest?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children   Interest[] @relation("ParentChildren")
 }
 
 model Location {
-  id          String        @id @default(uuid()) // Changed to uuid
+  id          String     @id @default(uuid()) // Changed to uuid
   title       String
   xCoordinate String?
   yCoordinate String?
   zoom        Int?
-  profiles    Profile[]     @relation("ProfileLocations")
+  profiles    Profile[]  @relation("ProfileLocations")
   parentId    String?
-  parent      Location?     @relation("ParentChildren", fields: [parentId], references: [id])
-  children    Location[]    @relation("ParentChildren")
-  ProfileFeed ProfileFeed[]
+  parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children    Location[] @relation("ParentChildren")
+  activities  Activity[]
+}
+
+model Activity {
+  id         String     @id @default(uuid())
+  profileId  String
+  profile    Profile    @relation(fields: [profileId], references: [id])
+  text       String
+  href       String?
+  status     Status
+  type       Type
+  date       DateTime   @default(now())
+  locationId String?
+  location   Location?  @relation(fields: [locationId], references: [id])
+  interests  Interest[] @relation("ActivityInterests")
+
+  @@index([profileId])
+  @@index([locationId])
+}
+
+enum Type {
+  NORMAL
+  DISCUSSION
+  POLL
+  GOVERNANCE
+  EVENT
 }
 
 enum Status {
+  IMPORTANT
+  ONGOING
   LEARNING
   TEACHING
   INTERESTED

@@ -13,9 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, inject, computed, watch } from 'vue';
 
 const props = defineProps({
+  name: {
+    type: String,
+    default: ''
+  },
   className: {
     type: String,
     default: ''
@@ -23,16 +27,21 @@ const props = defineProps({
 });
 
 const isOpen = ref(false);
-
+const dropdown = inject('dropdown');
 const dropdownClass = computed(() => 
   `absolute right-0 z-10 mt-1 ring-1 rounded-sm bg-white cursor-pointer dark:bg-gray-800 ring-gray-300 dark:ring-gray-700 shadow-md dark:shadow-lg border-transparent dark:border-gray-600 dark:text-white ${props.className}`
 );
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
+  dropdown.value = props.name;
 };
 
 const closeDropdown = () => {
   isOpen.value = false;
 };
+
+watch(() => {
+  if (dropdown.value != props.name) closeDropdown();
+});
 </script>

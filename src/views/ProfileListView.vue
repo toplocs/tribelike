@@ -10,7 +10,6 @@
       <ul
         v-for="profile in profiles"
         :key="profile.id"
-        className="border-b border-gray-100"
       >
         <ProfileListItem
           :profile="profile"

@@ -3,11 +3,11 @@
     <div class="w-full">
       <div>
         <div
-          v-for="feed of locationFeed"
-          :key="feed.id"
+          v-for="activity of locationActivity"
+          :key="activity.id"
           className="w-full"
         >
-          <FeedListItem :feed="feed" />
+          <ActivityListItem :activity="activity" />
         </div>
       </div>
       
@@ -59,11 +59,11 @@ import Sidebar from '@/components/SideBar.vue';
 import Map from '@/components/MapComponent.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
-import FeedListItem from '@/components/list/FeedListItem.vue';
+import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddLocationButton from '@/components/AddLocationButton.vue';
 
 const route = useRoute();
-const locationFeed = ref([]);
+const locationActivity = ref([]);
 const location = inject('location');
 const profile = inject('profile');
 const tab = inject('tab');
@@ -71,97 +71,18 @@ const yCoordinate = computed(() => location.value?.yCoordinate || '0');
 const xCoordinate = computed(() => location.value?.xCoordinate || '0');
 const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
 
-const fetchLocationFeed = async (id: string) => {
+const fetchLocationActivity = async (id: string) => {
   try {
-    /*const response = await axios.get(`/api/location/${id}/activity`);
+    const response = await axios.get(`/api/activity`);
 
-    return response.data;*/
-    return [
-      {
-        id: "1",
-        profileId: "profile-1",
-        activity: "Felix joined Ponta do sol",
-        status: "CURRENTLY_AT",
-        date: new Date(),
-        interestId: "interest-1",
-        interests: profile.value?.interests,
-        locationId: "location-1",
-        location: {
-          id: "location-1",
-          name: "New York City",
-        },
-      },
-      {
-        id: "2",
-        profileId: "profile-2",
-        activity: "Working",
-        status: "FAVOURITE",
-        date: new Date(),
-        locationId: "location-2",
-        location: {
-          id: "location-2",
-          name: "Paris",
-        },
-      },
-      {
-        id: "3",
-        profileId: "profile-3",
-        activity: "Working",
-        status: "GOING_NEXT",
-        date: new Date(),
-        interestId: "interest-3",
-        interest: {
-          id: "interest-3",
-          title: "Rock Climbing",
-        },
-        locationId: "location-3",
-        location: {
-          id: "location-3",
-          name: "Yosemite National Park",
-        },
-      },
-      {
-        id: "4",
-        profileId: "profile-4",
-        activity: "Working",
-        status: "CURRENTLY_AT",
-        date: new Date(),
-        interestId: "interest-4",
-        interest: {
-          id: "interest-4",
-          title: "Writing",
-        },
-        locationId: "location-4",
-        location: {
-          id: "location-4",
-          name: "Bali",
-        },
-      },
-      {
-        id: "5",
-        profileId: "profile-5",
-        activity: "Working",
-        status: "FAVOURITE",
-        date: new Date(),
-        interestId: "interest-5",
-        interest: {
-          id: "interest-5",
-          title: "Video Editing",
-        },
-        locationId: "location-5",
-        location: {
-          id: "location-5",
-          name: "Tokyo",
-        },
-      },
-    ]
+    return response.data;
   } catch (error) {
     console.error(error);
   }
 }
 
 watchEffect(async () => {
-  locationFeed.value = await fetchLocationFeed(location.value?.id);
+  locationActivity.value = await fetchLocationActivity(location.value?.id);
 });
 
 onMounted(() => {

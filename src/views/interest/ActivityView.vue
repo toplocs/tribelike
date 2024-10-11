@@ -3,11 +3,11 @@
     <div class="w-full">
       <div>
         <div
-          v-for="feed of interestFeed"
-          :key="feed.id"
+          v-for="activity of interestActivity"
+          :key="activity.id"
           className="w-full"
         >
-          <FeedListItem :feed="feed" />
+          <ActivityListItem :activity="activity" />
         </div>
       </div>
       
@@ -18,7 +18,7 @@
         <Title>Other people with this interest:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
-            <router-link :to="`/profiles/${suggestion.id}`">
+            <router-link :to="`/profile/${suggestion.id}`">
               <ProfileImage
                 :src="suggestion.image"
                 :tooltipText="suggestion.username"
@@ -45,94 +45,28 @@ import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
-import FeedListItem from '@/components/list/FeedListItem.vue';
+import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddInterestButton from '@/components/AddInterestButton.vue';
 
 const route = useRoute();
 const interest = inject('interest');
 const profile = inject('profile');
 const tab = inject('tab');
-const interestFeed = ref([]);
+const interestActivity = ref([]);
 const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
-const fetchInterestFeed = async (id: string) => {
+const fetchInterestActivity = async (id: string) => {
   try {
-    /*const response = await axios.get(`/api/interest/${id}/activity`);
+    const response = await axios.get(`/api/activity`);
 
-    return response.data;*/
-    return [
-      {
-        id: "1",
-        profileId: "profile-1",
-        activity: "Felix joined Ponta do sol",
-        status: "CURRENTLY_AT",
-        date: new Date(),
-        interests: profile.value?.interests,
-        locationId: "location-1",
-        location: {
-          id: "location-1",
-          name: "New York City",
-        },
-      },
-      {
-        id: "2",
-        profileId: "profile-2",
-        activity: "Working",
-        status: "FAVOURITE",
-        date: new Date(),
-        locationId: "location-2",
-        location: {
-          id: "location-2",
-          name: "Paris",
-        },
-      },
-      {
-        id: "3",
-        profileId: "profile-3",
-        activity: "Working",
-        status: "GOING_NEXT",
-        date: new Date(),
-        interests: profile.value?.interests,
-        locationId: "location-3",
-        location: {
-          id: "location-3",
-          name: "Yosemite National Park",
-        },
-      },
-      {
-        id: "4",
-        profileId: "profile-4",
-        activity: "Working",
-        status: "CURRENTLY_AT",
-        date: new Date(),
-        interests: profile.value?.interests,
-        locationId: "location-4",
-        location: {
-          id: "location-4",
-          name: "Bali",
-        },
-      },
-      {
-        id: "5",
-        profileId: "profile-5",
-        activity: "Working",
-        status: "FAVOURITE",
-        date: new Date(),
-        interests: profile.value?.interests,
-        locationId: "location-5",
-        location: {
-          id: "location-5",
-          name: "Tokyo",
-        },
-      },
-    ]
+    return response.data;
   } catch (error) {
     console.error(error);
   }
 }
 
 watchEffect(async () => {
-  interestFeed.value = await fetchInterestFeed(interest.value.id);
+  interestActivity.value = await fetchInterestActivity(interest.value?.id);
 });
 
 onMounted(() => {

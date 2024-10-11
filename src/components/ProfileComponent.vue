@@ -22,7 +22,7 @@
           <span class="flex flex-row items-center gap-2 mb-2">
             <IconButton :icon="Cog6ToothIcon" />
           </span>
-          <p v-if="profile?.about">
+          <p v-if="profile?.about?.length">
             {{ profile?.about }}
           </p>
         </Card>
@@ -64,11 +64,11 @@
       </h2>
       <div class="flex flex-wrap gap-2">
         <span
-          v-for="feed of profileFeed"
-          :key="feed.id"
+          v-for="activity of profileActivity"
+          :key="activity.id"
           className="w-full pb-2"
         >
-          <FeedListItem :feed="feed" />
+          <ActivityListItem :activity="activity" />
         </span>
       </div>
     </Sidebar>
@@ -83,13 +83,13 @@ import {
   ChatBubbleLeftIcon,
   PencilIcon,
   Cog6ToothIcon,
-} from '@heroicons/vue/24/solid';
+} from '@heroicons/vue/24/outline';
 import Sidebar from '@/components/SideBar.vue';
 import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
-import FeedListItem from '@/components/list/FeedListItem.vue';
+import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
@@ -104,10 +104,10 @@ const props = defineProps({
   }
 });
 
-const profileFeed = ref([]);
+const profileActivity = ref([]);
 
 const formatDate = (date) => {
-  return new Intl.DateTimeFormat('de', {
+  return new Intl.DateTimeFormat('en', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -115,9 +115,9 @@ const formatDate = (date) => {
 }
 
 
-const fetchProfileFeed = async (id: string) => {
+const fetchProfileActivity = async (id: string) => {
   try {
-    /*const response = await axios.get(`/api/profile/feed/${id}`);
+    /*const response = await axios.get(`/api/profile/activity/${id}`);
 
     return response.data;*/
     return [
@@ -208,6 +208,6 @@ const fetchProfileFeed = async (id: string) => {
 }
 
 onMounted(async () => {
-  profileFeed.value = await fetchProfileFeed(props.profile?.id);
+  profileActivity.value = await fetchProfileActivity(props.profile?.id);
 });
 </script>

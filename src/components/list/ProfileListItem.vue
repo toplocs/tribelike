@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center p-4 w-full border-t border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer"
+    class="flex items-center p-4 w-full border-b border-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
   >
     <img
       :src="profile.image"
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref } from 'vue';
-import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/solid';
+import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';

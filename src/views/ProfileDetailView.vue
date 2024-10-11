@@ -19,7 +19,7 @@ import {
   ChatBubbleLeftIcon,
   PencilIcon,
   Cog6ToothIcon,
-} from '@heroicons/vue/24/solid';
+} from '@heroicons/vue/24/outline';
 import { useRoute } from 'vue-router';
 import Container from '../components/common/Container.vue';
 import MyProfileComponent from '@/components/MyProfileComponent.vue';

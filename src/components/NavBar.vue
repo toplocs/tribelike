@@ -36,7 +36,7 @@
 
       <span
         v-if="session && profile"
-        class="flex flex-row w-full max-w-sm"
+        class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
           <Search
@@ -52,7 +52,7 @@
             @click="toggleSearch"
           />
 
-          <Dropdown className="min-w-40">
+          <Dropdown name="dropdown1" className="min-w-40">
             <template #trigger>
               <IconButton :icon="PlusIcon" />
             </template>
@@ -72,9 +72,19 @@
               </ul>
             </template>
           </Dropdown>
+
+          <Dropdown name="dropdown2" className="min-w-40">
+            <template #trigger>
+              <IconButton :icon="BellIcon" :counter="100" />
+            </template>
+
+            <template #default="{ closeDropdown }">
+              <NotificationList />
+            </template>
+          </Dropdown>
         </div>
 
-        <Dropdown className="min-w-40">
+        <Dropdown name="dropdown3" className="min-w-40">
           <template #trigger>
             <img
               :src="profile.image"
@@ -102,7 +112,7 @@
         </Dropdown>
       </span>
 
-      <span v-else>
+      <span v-else class="dark:text-white">
         <router-link
           to="/login"
           class="font-semibold hover:underline"
@@ -121,15 +131,20 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { inject, ref, computed } from 'vue';
+import { ref, inject, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/24/solid';
+import {
+  MagnifyingGlassIcon,
+  PlusIcon,
+  BellIcon
+} from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
 import InterestBadge from './badges/InterestBadge.vue';
 import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/Dropdown.vue';
 import Search from './search/Index.vue';
-import IconButton from '../components/common/IconButton.vue';
+import IconButton from '@/components/common/IconButton.vue';
+import NotificationList from '@/components/list/NotificationList.vue';
 
 const router = useRouter();
 const session = inject('session');
@@ -137,6 +152,7 @@ const profile = inject('profile');
 const location = inject('location');
 const interest = inject('interest');
 const hideSearch = ref(true);
+const dropdown = ref(null);
 const user = computed(() => session?.value?.user);
 
 const findInterests = async (title: string) => {
@@ -153,9 +169,11 @@ const handleSelection = async (result: {
   id: string,
 }) => {
   router.push(`/interest/${result.id}`)
-};
+}
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
+
+provide('dropdown', dropdown);
 </script>

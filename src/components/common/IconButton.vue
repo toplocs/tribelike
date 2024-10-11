@@ -6,7 +6,11 @@
     ref="tooltipTarget"
     @click="onClick"
   >
-    <component :is="icon" class="size-6"/>
+    <component :is="icon" class="size-6" />
+
+    <span v-if="counter > 0" class="absolute top-2 right-2 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ counter < 100 && counter || 99 }}
+    </span>
 
     <Tooltip
       v-if="tooltipTarget && tooltipText"
@@ -36,6 +40,10 @@ const props = defineProps({
   className: {
     type: String,
     default: '',
+  },
+  counter: {
+    type: Number,
+    default: 0,
   },
 });
 

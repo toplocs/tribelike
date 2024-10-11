@@ -46,6 +46,11 @@
               :modelValue="interest.parent?.id"
             />
           </div>
+          <input
+            type="hidden"
+            name="profileId"
+            :value="profile?.id"
+          >
 
           <SubmitButton className="w-full mt-4">
             Create interest

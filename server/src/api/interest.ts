@@ -9,6 +9,7 @@ import {
   addInterest,
   removeInterest
 } from '../actions/interest';
+import { createActivity } from '../actions/activity';
 
 const router = express.Router();
 const upload = multer();
@@ -20,6 +21,13 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 }).post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createInterest(req.body);
+  if (success) {
+    await createActivity({
+      profileId: req.body?.profileId,
+      text: `The interest ${success.title} was created!`,
+      interests: [...success],
+    });
+  }
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

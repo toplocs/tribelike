@@ -9,6 +9,7 @@ import {
   addLocation,
   removeLocation,
 } from '../actions/location';
+import { createActivity } from '../actions/activity';
 
 const router = express.Router();
 const upload = multer();
@@ -20,6 +21,14 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 }).post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createLocation(req.body);
+  console.log(req.body?.profileId);
+  if (success) {
+    await createActivity({
+      profileId: req.body?.profileId,
+      text: `The location ${success.title} was created!`,
+      locationId: success.id,
+    });
+  }
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
