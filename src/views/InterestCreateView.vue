@@ -27,7 +27,7 @@
               name="title"
               autoComplete="title"
               placeholder="The title of the interest"
-              :modelValue="interest?.title"
+              :modelValue="title"
             />
           </div>
 
@@ -41,9 +41,8 @@
             <SelectInput
               name="parentId"
               placeholder="Select a parent interest"
-              v-model="selectedModel"
               :options="parents"
-              :modelValue="interest.parent?.id"
+              :modelValue="parent?.id"
             />
           </div>
           <input
@@ -80,7 +79,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
@@ -92,6 +91,7 @@ import FriendListItem from '@/components/list/FriendListItem.vue';
 
 import Plugins from '@/components/plugins/Plugins.vue';
 
+const route = useRoute();
 const router = useRouter();
 const profile = inject('profile');
 const errorMessage = ref('');
@@ -99,6 +99,10 @@ const form = ref<HTMLFormElement | null>(null);
 const selectedModel = ref('');
 const parents = ref([]);
 const friends = ref([]);
+const title = computed(() => route.query.title);
+const parent = computed(() => parents.value.find(
+  x => x.title.toLowerCase() == route.query.parent?.toLowerCase()
+));
 
 const findInterests = async () => {
   try {
@@ -126,8 +130,6 @@ const addInterest = async (interestId: string) => {
       profileId: profile.value?.id,
       interestId: interestId,
     });
-
-    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -140,6 +142,9 @@ const onSubmit = async () => {
     const formData = new FormData(form.value);
     const response = await axios.post(`/api/interest`, formData);
     await addInterest(response.data?.id);
+    profile.value.interests = [
+      ...profile.value.interests, response.data
+    ];
 
     return router.push(`/interest/${response.data?.id}`);
   } catch (error) {

@@ -21,13 +21,14 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SubNav from '../components/SubNav.vue';
 
 const route = useRoute();
 const interest = inject('interest');
 const tab = ref('');
+const wikiPages = computed(() => interest.value?.wikis);
 
 const fetchInterest = async (id: string) => {
   try {

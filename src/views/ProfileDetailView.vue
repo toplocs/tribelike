@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, watch, onMounted } from 'vue';
+import { ref, inject, watchEffect, onMounted, onUnmounted } from 'vue';
 import {
   ChatBubbleLeftIcon,
   PencilIcon,
@@ -31,6 +31,7 @@ import Chat from '@/components/plugins/chat/Index.vue';
 const route = useRoute();
 const profile = ref(null);
 const myProfile = inject('profile');
+const title = inject('title');
 
 const fetchProfile = async (id: string) => {
   try {
@@ -44,9 +45,14 @@ const fetchProfile = async (id: string) => {
 
 onMounted(async () => {
   profile.value = await fetchProfile(route.params.id);
+  title.value = profile.value?.username+' – '+profile.value?.type;
 });
 
-watch(() => route.params.id, async (newId) => {
+onUnmounted(() => {
+  title.value = null;
+});
+
+watchEffect(() => route.params.id, async (newId) => {
   if (newId) profile.value = await fetchProfile(newId);
 });
 </script>

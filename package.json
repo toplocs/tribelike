@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@helia/dag-json": "^4.0.0",
     "@heroicons/vue": "^2.1.5",
     "@tiptap/extension-heading": "^2.7.2",
     "@tiptap/extension-highlight": "^2.7.2",
@@ -20,6 +21,7 @@
     "@tiptap/starter-kit": "^2.7.2",
     "@tiptap/vue-3": "^2.7.2",
     "axios": "^1.7.7",
+    "helia": "^5.0.0",
     "ol": "^10.1.0",
     "ol-contextmenu": "^5.5.0",
     "ol-ext": "^4.0.23",

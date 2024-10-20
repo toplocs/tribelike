@@ -9,7 +9,7 @@ import {
   getAllProfiles,
   getProfileById,
 } from '../actions/profile';
-import { createActivity } from '../actions/activity';
+//import { createActivity } from '../actions/activity';
 
 const router = express.Router();
 const upload = multer();
@@ -24,12 +24,6 @@ router.route('/').get(async (req: Request, res: Response) => {
 .post(upload.none(), async (req: Request, res: Response) => {
   const authHeader = req.get('Authorization');
   const { success, error } = await createProfile(req.body, authHeader);
-  if (success) {
-    await createActivity({
-      profileId: success.id,
-      text: `The profile ${success.username} was created!`,
-    });
-  }
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
@@ -62,7 +56,5 @@ router.route('/byId/:id').get(async (req: Request, res: Response) => {
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
 });
-
-
 
 export default router;

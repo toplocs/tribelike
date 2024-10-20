@@ -3,7 +3,7 @@
     <div class="w-full">
       <Plugins>
         <div className="mt-4">
-          <WikiPlugin />
+          <WikiPlugin :wiki="wiki" />
         </div>
       </Plugins>
       
@@ -15,7 +15,12 @@
         <WikiListItem
           v-for="page of wikiPages"
           :key="page.id"
-          :page="page"
+          :title="page.title"
+          :href="`/interest/${interest?.id}/wiki?id=${page.id}`"
+        />
+        <WikiListItem
+          title="Create a new Page"
+          href="/wiki/create"
         />
       </div>
     </Sidebar>
@@ -25,7 +30,8 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { inject, onMounted } from 'vue';
+import { ref, computed, inject, watchEffect, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
@@ -34,17 +40,31 @@ import Plugins from '@/components/plugins/Plugins.vue';
 import WikiPlugin from '@/components/plugins/wiki/Index.vue';
 import WikiListItem from '@/components/plugins/wiki/WikiListItem.vue';
 
+const route = useRoute();
 const interest = inject('interest');
 const profile = inject('profile');
 const tab = inject('tab');
+const wiki = ref(null);
+const wikiPages = computed(() => interest.value?.wikis);
 
-const wikiPages = [
-  { id: 1, title: 'Page 1', href: `/interest/${interest?.id}/wiki/1` },
-  { id: 2, title: 'Page 2', href: `/interest/${interest?.id}/wiki/2` },
-  { id: 3, title: 'Page 3', href: `/interest/${interest?.id}/wiki/3` },
-];
+const fetchWikiById = async (id: String) => {
+  try {
+    const response = await axios.get(`/api/plugins/wiki/byId/${id}`);
 
-onMounted(() => {
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+watchEffect(async () => {
+  if (route.query.id) wiki.value = await fetchWikiById(route.query.id);
+  else if (wikiPages.value) {
+    wiki.value = await fetchWikiById(wikiPages.value[0].id);
+  }
+});
+
+onMounted(async () => {
   tab.value = 'Wiki';
 });
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <button 
-    :class="buttonClasses"
-    :disabled="disabled"
+  <button
     aria-label="Icon Button"
     ref="tooltipTarget"
-    @click="onClick"
+    type="button"
+    :class="buttonClasses"
+    :disabled="disabled"
   >
     <component :is="icon" class="size-6" />
 

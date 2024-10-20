@@ -34,6 +34,8 @@ import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 
 //Plugins
 import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
+import WikiPageView from '@/components/plugins/wiki/views/WikiPageView.vue';
+import WikiCreateView from '@/components/plugins/wiki/views/WikiCreateView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -195,6 +197,19 @@ const router = createRouter({
       component: EventDetailView,
       props: true,
     },
+    {
+      path: '/wiki/:id',
+      name: 'wiki',
+      component: WikiPageView,
+      props: true,
+    },
+    {
+      path: '/wiki/create',
+      name: 'wikiCreate',
+      component: WikiCreateView,
+      meta: { requiresAuth: true },
+    },
+
   ]
 });
 

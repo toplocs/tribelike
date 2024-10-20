@@ -18,6 +18,7 @@ export async function findActivities(query: {
         interests: true,
       },
       take: 20,
+      orderBy: { date: 'desc' },
     });
 
     return { success: activities };
@@ -52,7 +53,7 @@ export async function createActivity(props: {
       },
     });
 
-    return activity;
+    return { success: activity };
   } catch (e: any) {
     console.error(e);
     return { error: e.message };

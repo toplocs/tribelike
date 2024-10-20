@@ -12,6 +12,9 @@ import profileRouter from './api/profile';
 import interestRouter from './api/interest';
 import locationRouter from './api/location';
 
+//Plugins
+import wikiRouter from './api/plugins/wiki';
+
 dotenv.config();
 
 const { URL, PORT, DEVELOPMENT } = process.env;
@@ -34,6 +37,9 @@ app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/interest', interestRouter);
 app.use('/api/location', locationRouter);
+
+//Plugins
+app.use('/api/plugins/wiki', wikiRouter);
 
 if (DEVELOPMENT == 'true') {
   app.get('/', (req: Request, res: Response) => res.redirect(URL as string));

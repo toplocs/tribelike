@@ -25,6 +25,7 @@ const user = ref(null);
 const profile = ref(null);
 const location = ref(null);
 const interest = ref(null);
+const title = ref(null);
 
 const getSession = async () => {
   try {
@@ -73,6 +74,7 @@ provide('user', user);
 provide('profile', profile);
 provide('location', location);
 provide('interest', interest);
+provide('title', title);
 
 axios.defaults.baseURL = serverURL;
 axios.defaults.headers.common['Authorization'] = authHeader;

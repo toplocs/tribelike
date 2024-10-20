@@ -189,8 +189,6 @@ const addLocation = async (locationId: string) => {
       profileId: profile.value?.id,
       locationId: locationId,
     });
-
-    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -206,6 +204,9 @@ const onSubmit = async () => {
     formData.append('zoom', zoom.value);
     const response = await axios.post(`/api/location`, formData);
     await addLocation(response.data?.id);
+    profile.value.locations = [
+      ...profile.value.locations, response.data
+    ];
 
     return router.push(`/location/${response.data?.id}`);
   } catch (error) {

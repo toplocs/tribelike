@@ -60,6 +60,8 @@ model Interest {
   parentId   String?
   parent     Interest?  @relation("ParentChildren", fields: [parentId], references: [id])
   children   Interest[] @relation("ParentChildren")
+
+  wikis       Wiki[]    @relation("WikiInterests")
 }
 
 model Location {
@@ -73,6 +75,8 @@ model Location {
   parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
   children    Location[] @relation("ParentChildren")
   activities  Activity[]
+  
+  wikis       Wiki[]     @relation("WikiLocations")
 }
 
 model Activity {
@@ -90,6 +94,15 @@ model Activity {
 
   @@index([profileId])
   @@index([locationId])
+}
+
+model Wiki {
+  id          String     @id @default(uuid())
+  title       String
+  content     String
+  lastUpdated DateTime   @default(now())
+  locations   Location[] @relation("WikiLocations")
+  interests   Interest[] @relation("WikiInterests")
 }
 
 enum Type {

@@ -1,5 +1,10 @@
 import prisma from '../lib/prisma';
 import { auth } from '../lib/auth';
+import files from './files/profile';
+import ipfs from './ipfs/profile';
+import sql from './sql/profile';
+
+const { STORAGE_METHOD } = process.env;
 
 export async function getProfiles(authHeader?: string) {
   try {
@@ -32,25 +37,17 @@ export async function createProfile(
   },
   authHeader?: string
 ) {
-  try {
-    const session = await auth(authHeader);
-    const user = session?.user;
-    const profile = await prisma.profile.create({
-      data: {
-        userId: user?.id,
-        type: formData.type,
-        image: formData.image || '/images/default.jpeg',
-        username: formData.username,
-        email: formData.email,
-        about: formData.about,
-      }
-    });
+  const session = await auth(authHeader);
+  const user = session?.user;
+  let result;
+  if (STORAGE_METHOD == 'files') result = await files.create(formData, user);
+  if (STORAGE_METHOD == 'ipfs') result = await ipfs.create(formData, user);
+  if (STORAGE_METHOD == 'sql') result = await sql.create(formData, user);
 
-    return { success: profile };
-  } catch(e: any) {
-    console.error(e);
-    return { error: e.message };
-  }
+  return {
+    success: result,
+    error: result
+  };
 }
 
 export async function updateProfile(

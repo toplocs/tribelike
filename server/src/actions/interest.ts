@@ -77,6 +77,8 @@ export async function getInterestById(params: {
       include: {
         parent: true,
         profiles: true,
+        //plugins
+        wikis: true,
       }
     });
 
@@ -101,7 +103,7 @@ export async function addInterest({
       },
       data: {
         interests: { connect: { id: interestId } },
-      }
+      },
     });
 
     return { success: profile };

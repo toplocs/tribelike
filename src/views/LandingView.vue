@@ -9,47 +9,10 @@
       </h1>
     </div>
 
-
-    <Container>
-      <div class="mx-auto max-w-lg w-full">
-         <Map
-          height="300"
-          :defaultLocation="[9, 51]"
-          :zoom="5"
-        />
-      </div>
-    </Container>
-
     <Container>
       <div className="mx-auto max-w-lg w-full flex flex-col gap-2">
-        <Search
-          placeholder="Search for locations"
-          name="selectedItem"
-          :findOptions="findLocations"
-          @selected="handleLocationSelection"
-        />
-        <div class="flex flex-wrap gap-2">
-          <router-link
-            v-for="location in locations"
-            :to="`/location/${location.id}`"
-          >
-            <LocationBadge
-              :key="location.id"
-              :title="location.title"
-            />
-          </router-link>
-        </div>
-      </div>
-    </Container>
+        <FindMixed />
 
-    <Container>
-      <div className="mx-auto max-w-lg w-full flex flex-col gap-2">
-        <Search
-          placeholder="Search for interests"
-          name="selectedItem"
-          :findOptions="findInterests"
-          @selected="handleInterestSelection"
-        />
         <div class="flex flex-wrap gap-2">
           <router-link
             v-for="interest in interests"
@@ -58,6 +21,15 @@
             <InterestBadge
               :key="interest.id"
               :title="interest.title"
+            />
+          </router-link>
+          <router-link
+            v-for="location in locations"
+            :to="`/location/${location.id}`"
+          >
+            <LocationBadge
+              :key="location.id"
+              :title="location.title"
             />
           </router-link>
         </div>
@@ -74,8 +46,7 @@ import Container from '@/components/common/Container.vue';
 import Title from '@/components/common/Title.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import Search from '@/components/search/Index.vue';
-import Map from '@/components/MapComponent.vue';
+import FindMixed from '@/components/search/FindMixed.vue';
 
 const router = useRouter();
 const profile = inject('profile');

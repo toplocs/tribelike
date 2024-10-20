@@ -1,16 +1,6 @@
 <template>
   <Container>
     <div class="w-full">
-      <div class="mb-8 flex flex-row justify-between">
-        <Title>
-          {{ profile?.type }} – {{ profile?.username }}
-        </Title>
-
-        <Plugins>
-
-        </Plugins>
-      </div>
-
       <div class="mb-8 flex flex-row gap-2">
         <img
           :src="profile?.image"

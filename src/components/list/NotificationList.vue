@@ -1,6 +1,6 @@
 <template>
   <span v-for="notification of notifications">
-    <div class="p-2 border-b hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer">
+    <div class="p-2 border-b hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition duration-150 ease-in-out cursor-pointer">
       <StatusBadge :title="normalize(notification?.status)" />
 
       <div class="mt-1 px-1">

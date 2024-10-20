@@ -26,6 +26,12 @@
         </Title>
       </span>
 
+      <span v-else-if="title" class="flex flex-row gap-2">
+        <Title float="left">
+          {{ title }}
+        </Title>
+      </span>
+
       <span v-else>
         <router-link to="/">
           <Title>
@@ -39,13 +45,7 @@
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
-          <Search
-            v-if="!hideSearch"
-            placeholder="Search for new interests ..."
-            name="selectedItem"
-            :findOptions="findInterests"
-            @selected="handleSelection"
-          />
+          <FindMixed v-if="!hideSearch" />
 
           <IconButton
             :icon="MagnifyingGlassIcon"
@@ -61,12 +61,20 @@
               <ul>
                 <router-link to="/interest/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Add interest
+                    Create interest
                   </li>
                 </router-link>
                 <router-link to="/location/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Add location
+                    Create location
+                  </li>
+                </router-link>
+
+                <Divider />
+
+                <router-link to="/wiki/create" @click.native="closeDropdown">
+                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Create wiki
                   </li>
                 </router-link>
               </ul>
@@ -142,15 +150,17 @@ import Title from './common/Title.vue';
 import InterestBadge from './badges/InterestBadge.vue';
 import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/Dropdown.vue';
-import Search from './search/Index.vue';
-import IconButton from '@/components/common/IconButton.vue';
-import NotificationList from '@/components/list/NotificationList.vue';
+import FindMixed from './search/FindMixed.vue';
+import IconButton from './common/IconButton.vue';
+import Divider from './common/Divider.vue';
+import NotificationList from './list/NotificationList.vue';
 
 const router = useRouter();
 const session = inject('session');
 const profile = inject('profile');
 const location = inject('location');
 const interest = inject('interest');
+const title = inject('title');
 const hideSearch = ref(true);
 const dropdown = ref(null);
 const user = computed(() => session?.value?.user);
@@ -163,12 +173,6 @@ const findInterests = async (title: string) => {
   } catch (error) {
     console.error(error);
   }
-}
-
-const handleSelection = async (result: {
-  id: string,
-}) => {
-  router.push(`/interest/${result.id}`)
 }
 
 const toggleSearch = () => {

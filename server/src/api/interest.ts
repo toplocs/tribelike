@@ -21,11 +21,12 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 }).post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createInterest(req.body);
+  console.log(success);
   if (success) {
     await createActivity({
       profileId: req.body?.profileId,
       text: `The interest ${success.title} was created!`,
-      interests: [...success],
+      interests: [success.id],
     });
   }
 

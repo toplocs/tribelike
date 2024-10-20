@@ -22,7 +22,9 @@ const props = defineProps({
 });
 
 const profile = inject('profile');
-const subscribed = computed(() => profile.value?.interests.some(x => x.id == props.interest?.id));
+const subscribed = computed(() => profile.value?.interests.some(
+  x => x.id == props.interest?.id)
+);
 
 const addInterest = async () => {
   try {
