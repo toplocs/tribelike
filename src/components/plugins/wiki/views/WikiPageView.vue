@@ -16,7 +16,7 @@
           v-for="page of wikiPages"
           :key="page.id"
           :title="page.title"
-          :href="`/interest/${interest?.id}/wiki?id=${page.id}`"
+          :href="`/wiki/${page.id}`"
         />
         <WikiListItem
           title="Create a new Page"
@@ -41,15 +41,13 @@ import WikiPlugin from '@/components/plugins/wiki/Index.vue';
 import WikiListItem from '@/components/plugins/wiki/WikiListItem.vue';
 
 const route = useRoute();
-const interest = inject('interest');
 const profile = inject('profile');
-const tab = inject('tab');
 const wiki = ref(null);
 const wikiPages = ref([]);
 
 const fetchWikiPages = async () => {
   try {
-    const response = await axios.get(`/api/plugins/wiki?interestId=${interest.value?.id}`);
+    const response = await axios.get(`/api/plugins/wiki`);
 
     return response.data;
   } catch (error) {
@@ -68,12 +66,11 @@ const fetchWikiById = async (id: String) => {
 }
 
 watchEffect(async () => {
-  wiki.value = await fetchWikiById(route.query.id);
+  wiki.value = await fetchWikiById(route.params.id);
 });
 
 onMounted(async () => {
   wikiPages.value = await fetchWikiPages();
-  wiki.value = await fetchWikiById(wikiPages.value[0].id);
-  tab.value = 'Wiki';
+  wiki.value = await fetchWikiById(route.params.id);
 });
 </script>
