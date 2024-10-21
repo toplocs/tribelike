@@ -69,10 +69,12 @@ const props = defineProps({
     required: false,
   }
 });
+const emit = defineEmits(['updateProfiles']);
 
 const onDelete = async (profile: Object) => {
   try {
     const response = await axios.delete(`/api/profile?profileId=${props.profile.id}`);
+    emit('updateProfiles');
 
     return response.data;
   } catch (error) {

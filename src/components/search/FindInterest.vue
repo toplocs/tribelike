@@ -12,7 +12,13 @@
       name="selectedItem"
       :findOptions="findInterests"
       @selected="handleSelection"
-    />
+    >
+      <router-link :to="`/interest/create`">
+        <li class="py-2 px-4 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-100">
+          Create new interest
+        </li>
+      </router-link>
+    </Search>
   </div>
   <div class="mt-4 flex flex-wrap gap-2">
     <router-link

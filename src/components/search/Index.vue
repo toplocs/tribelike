@@ -35,6 +35,8 @@
         <li v-if="filteredOptions.length === 0" class="px-4 py-2 text-gray-500">
           No search results
         </li>
+
+        <slot v-if="filteredOptions.length === 0" />
       </ul>
     </div>
   </div>

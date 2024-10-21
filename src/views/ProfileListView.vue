@@ -18,22 +18,12 @@
         />
       </ul>
 
-      <Dialog>
-        <template #trigger="{ openDialog }">
-          <button
-            @click="openDialog"
-            className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-          > Create a new profile
-          </button>
-        </template>
-
-        <template #content="{ closeDialog }">
-          <ProfileAddDialog
-            :closeDialog="closeDialog"
-            @addToList="handleAddToList"
-          />
-        </template>
-      </Dialog>
+      <router-link to="/profiles/create">
+        <button
+          className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+        > Create a new profile
+        </button>
+      </router-link>
     </Card>
   </div>
 </template>
@@ -59,13 +49,8 @@ const handleAddToList = (data: Object) => {
   profiles.value.push(data)
 }
 
-const handleUpdateProfiles = (data: Object) => {
-  const i = profiles.value.findIndex(x => x.id === data.id);
-  if (i !== -1) {
-    profiles.value[i] = data;
-  } else {
-    console.error('Item not found in the array');
-  }
+const handleUpdateProfiles = async () => {
+  profiles.value = await fetchProfiles();
 }
 
 const fetchProfiles = async () => {

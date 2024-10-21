@@ -2,7 +2,7 @@
   <SubNav
     :initialTab="tab"
     :tabs="[
-      { value: 'Activity', href: `/interest/${interest?.id}` },
+      { value: 'Info', href: `/interest/${interest?.id}` },
       
       //Plugins
       { value: 'Chat', href: `/interest/${interest?.id}/chat` },

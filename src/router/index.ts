@@ -7,6 +7,7 @@ import SettingsView from '@/views/SettingsView.vue';
 
 //Profile
 import ProfileListView from '@/views/ProfileListView.vue';
+import ProfileCreateView from '@/views/ProfileCreateView.vue';
 import ProfileDetailView from '@/views/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
@@ -15,7 +16,7 @@ import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import InterestPluginsView from '@/views/interest/PluginsView.vue';
 import InterestSettingsView from '@/views/interest/SettingsView.vue';
-import InterestActivityView from '@/views/interest/ActivityView.vue';
+import InterestInfoView from '@/views/interest/InfoView.vue';
 import InterestChatView from '@/views/interest/ChatView.vue';
 import InterestWikiView from '@/views/interest/WikiView.vue';
 import InterestEventsView from '@/views/interest/EventsView.vue';
@@ -26,7 +27,7 @@ import LocationCreateView from '@/views/LocationCreateView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
-import LocationActivityView from '@/views/location/ActivityView.vue';
+import LocationInfoView from '@/views/location/InfoView.vue';
 import LocationChatView from '@/views/location/ChatView.vue';
 import LocationWikiView from '@/views/location/WikiView.vue';
 import LocationEventsView from '@/views/location/EventsView.vue';
@@ -64,10 +65,18 @@ const router = createRouter({
       component: SettingsView,
       meta: { requiresAuth: true },
     },
+
+    //Profiles
     {
       path: '/profiles',
       name: 'profiles',
       component: ProfileListView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profiles/create',
+      name: 'profileCreate',
+      component: ProfileCreateView,
       meta: { requiresAuth: true },
     },
     {
@@ -87,9 +96,9 @@ const router = createRouter({
       ]
     },
 
-    //interests
+    //Interests
     {
-      path: '/interest/create',
+      path: '/interests/create',
       name: 'interestCreate',
       component: InterestCreateView,
       meta: { requiresAuth: true },
@@ -102,7 +111,7 @@ const router = createRouter({
         {
           path: '',
           name: 'interestActivity',
-          component: InterestActivityView,
+          component: InterestInfoView,
         },
         {
           path: 'chat',
@@ -139,9 +148,9 @@ const router = createRouter({
       ],
     },
 
-    //locations
+    //Locations
     {
-      path: '/location/create',
+      path: '/locations/create',
       name: 'locationCreate',
       component: LocationCreateView,
       meta: { requiresAuth: true },
@@ -154,7 +163,7 @@ const router = createRouter({
         {
           path: '',
           name: 'locationActivity',
-          component: LocationActivityView,
+          component: LocationInfoView,
         },
         {
           path: 'chat',
