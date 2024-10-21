@@ -23,7 +23,7 @@
 import axios from 'axios';
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import SubNav from '../components/SubNav.vue';
+import SubNav from '@/components/SubNav.vue';
 
 const route = useRoute();
 const interest = inject('interest');

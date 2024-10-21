@@ -77,6 +77,7 @@ export async function getInterestById(params: {
       include: {
         parent: true,
         profiles: true,
+        children: true,
         //plugins
         wikis: true,
       }

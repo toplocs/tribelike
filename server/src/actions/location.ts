@@ -87,6 +87,7 @@ export async function getLocationById(params: {
       include: {
         parent: true,
         profiles: true,
+        children: true,
         //plugins
         wikis: true,
       }
