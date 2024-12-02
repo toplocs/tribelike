@@ -60,7 +60,7 @@ export async function decrypt(token: string): Promise<any> {
     });
     return payload;
   } catch (e) {
-    console.error(e);
+    console.error('TEST: '+e);
     return null;
   }
 }

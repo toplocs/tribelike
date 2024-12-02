@@ -3,7 +3,7 @@
     <div class="my-4">
       <h1 class="text-center uppercase tracking-wide text-sm dark:text-white">
         <p class="text-lg font-bold">
-          Welcome {{ profile?.username || Stranger }}.
+          Welcome {{ profile?.username || 'Stranger' }}.
         </p><br />
         Communities, Activities, Interests and Locations. Worldwide!
       </h1>

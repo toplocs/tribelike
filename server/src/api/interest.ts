@@ -7,7 +7,8 @@ import {
   updateInterest,
   getInterestById,
   addInterest,
-  removeInterest
+  removeInterest,
+  addLink,
 } from '../actions/interest';
 import { createActivity } from '../actions/activity';
 
@@ -61,4 +62,10 @@ router.route('/remove').put(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
+router.route('/link').post(upload.none(), async (req: Request, res: Response) => {
+  const { success, error } = await addLink(req.body);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
 export default router;

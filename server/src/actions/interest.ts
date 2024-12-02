@@ -11,9 +11,6 @@ export async function findInterests(query: {
           mode: 'insensitive'
         }
       },
-      include: {
-        parent: true,
-      },
       take: 20,
     });
 
@@ -26,13 +23,18 @@ export async function findInterests(query: {
 
 export async function createInterest(formData: {
   title: string,
-  parentId: string,
+  access: string,
+  relations: string,
 }) {
   try {
+    const relations = JSON.parse(formData.relations);
     const interest = await prisma.interest.create({
       data: {
         title: formData.title,
-        ...(formData.parentId && { parentId: formData.parentId }),
+        access: JSON.parse(formData.access),
+        relations: {
+          create: relations,
+        }
       },
     });
 
@@ -46,16 +48,37 @@ export async function createInterest(formData: {
 export async function updateInterest(formData: {
   interestId: string,
   title: string,
-  parentId: string,
+  access: string,
+  relations: string,
 }) {
   try {
+    const relations = JSON.parse(formData.relations);
+    const check = await prisma.interest.findUnique({
+      where: {
+        id: formData.interestId,
+      },
+      include: {
+        relations: true,
+      }
+    });
+    const existingRelationIds = check?.relations.map((rel: any) => rel.id);
+    const newRelationIds = relations.map((rel: any) => rel.id);
+    const relationsToDelete = existingRelationIds?.filter((id) => !newRelationIds.includes(id));
+    await prisma.relation.deleteMany({
+      where: {
+        id: { in: relationsToDelete },
+      },
+    });
     const interest = await prisma.interest.update({
       where: {
-        id: formData?.interestId,
+        id: formData.interestId,
       },
       data: {
         title: formData.title,
-        ...(formData.parentId && { parentId: formData.parentId }),
+        access: JSON.parse(formData.access),
+        relations: {
+          create: relations.filter((x: any) => !x.id),
+        }
       },
     });
 
@@ -75,11 +98,8 @@ export async function getInterestById(params: {
         id: params?.id,
       },
       include: {
-        parent: true,
         profiles: true,
-        children: true,
-        //plugins
-        wikis: true,
+        relations: true,
       }
     });
 
@@ -132,6 +152,28 @@ export async function removeInterest({
     });
 
     return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function addLink(formData: {
+  id: string,
+  link: string,
+}) {
+  try {
+    if (formData.link.length < 3) throw new Error('Your link is too short');
+    const interest = await prisma.interest.update({
+      where: {
+        id: formData?.id,
+      },
+      data: {
+        links: { push: formData.link }
+      }
+    });
+
+    return { success: interest };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

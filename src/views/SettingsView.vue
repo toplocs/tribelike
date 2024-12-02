@@ -114,10 +114,10 @@ const onSubmit = async () => {
   }
 }
 
-const logout = async (userId: number) => {
+const logout = async () => {
   try {
     session.value = null;
-    profile.value = null;
+    //profile.value = null;
     axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('authHeader');
     router.push('/login');

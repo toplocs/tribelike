@@ -72,9 +72,21 @@
 
                 <Divider />
 
+                <router-link to="/chat/create" @click.native="closeDropdown">
+                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Create chat
+                  </li>
+                </router-link>
+
                 <router-link to="/wiki/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                     Create wiki
+                  </li>
+                </router-link>
+
+                <router-link to="/event/create" @click.native="closeDropdown">
+                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    Create event
                   </li>
                 </router-link>
               </ul>
@@ -120,13 +132,13 @@
         </Dropdown>
       </span>
 
-      <span v-else class="dark:text-white">
+      <span v-if="!session" class="inline-flex justify-center gap-1 px-4 py-2 text-sm font-medium border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-transparent rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
         <router-link
           to="/login"
           class="font-semibold hover:underline"
         > Sign In
         </router-link>
-         or 
+         <span> / </span> 
         <router-link
           to="/register"
           class="font-semibold hover:underline"

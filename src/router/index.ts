@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createRouter, createWebHistory } from 'vue-router';
+
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
@@ -14,29 +15,27 @@ import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 //Interest
 import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
+import InterestInfoView from '@/views/interest/InfoView.vue';
 import InterestPluginsView from '@/views/interest/PluginsView.vue';
 import InterestSettingsView from '@/views/interest/SettingsView.vue';
-import InterestInfoView from '@/views/interest/InfoView.vue';
-import InterestChatView from '@/views/interest/ChatView.vue';
-import InterestWikiView from '@/views/interest/WikiView.vue';
-import InterestEventsView from '@/views/interest/EventsView.vue';
+
 import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationInfoView from '@/views/location/InfoView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
-import LocationInfoView from '@/views/location/InfoView.vue';
-import LocationChatView from '@/views/location/ChatView.vue';
-import LocationWikiView from '@/views/location/WikiView.vue';
-import LocationEventsView from '@/views/location/EventsView.vue';
+
 import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 
-//Plugins
-import EventDetailView from '@/components/plugins/event/EventDetailView.vue';
-import WikiPageView from '@/components/plugins/wiki/views/WikiPageView.vue';
-import WikiCreateView from '@/components/plugins/wiki/views/WikiCreateView.vue';
+import {
+  BasePluginRoutes,
+  //ProfilePluginRoutes,
+  InterestPluginRoutes,
+  LocationPluginRoutes,
+} from './plugins.ts';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -113,27 +112,12 @@ const router = createRouter({
           name: 'interestActivity',
           component: InterestInfoView,
         },
-        {
-          path: 'chat',
-          name: 'interestChat',
-          component: InterestChatView,
-        },
-        {
-          path: 'wiki',
-          name: 'interestWiki',
-          component: InterestWikiView,
-        },
-        {
-          path: 'events',
-          name: 'interestEvents',
-          component: InterestEventsView,
-        },
+
         {
           path: 'discussion',
           name: 'interestDiscussion',
           component: InterestDiscussionView,
         },
-
         {
           path: 'plugins',
           name: 'interestPlugins',
@@ -144,7 +128,7 @@ const router = createRouter({
           name: 'interestSettings',
           component: InterestSettingsView,
         },
-        
+        ...InterestPluginRoutes,
       ],
     },
 
@@ -165,21 +149,7 @@ const router = createRouter({
           name: 'locationActivity',
           component: LocationInfoView,
         },
-        {
-          path: 'chat',
-          name: 'locationChat',
-          component: LocationChatView,
-        },
-        {
-          path: 'wiki',
-          name: 'locationWiki',
-          component: LocationWikiView,
-        },
-        {
-          path: 'events',
-          name: 'locationEvents',
-          component: LocationEventsView,
-        },
+
         {
           path: 'discussion',
           name: 'locationDiscussion',
@@ -196,28 +166,10 @@ const router = createRouter({
           name: 'locationSettings',
           component: LocationSettingsView,
         },
+        ...LocationPluginRoutes,
       ],
     },
-
-    //Plugins
-    {
-      path: '/events/:id',
-      name: 'event',
-      component: EventDetailView,
-      props: true,
-    },
-    {
-      path: '/wiki/:id',
-      name: 'wiki',
-      component: WikiPageView,
-      props: true,
-    },
-    {
-      path: '/wiki/create',
-      name: 'wikiCreate',
-      component: WikiCreateView,
-      meta: { requiresAuth: true },
-    },
+    ...BasePluginRoutes,
 
   ]
 });

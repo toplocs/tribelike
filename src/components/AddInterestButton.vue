@@ -18,13 +18,14 @@ const props = defineProps({
   interest: {
     type: Object,
     required: true,
+  },
+  subscribed: {
+    type: Boolean,
+    required: true,
   }
 });
 
 const profile = inject('profile');
-const subscribed = computed(() => profile.value?.interests.some(
-  x => x.id == props.interest?.id)
-);
 
 const addInterest = async () => {
   try {

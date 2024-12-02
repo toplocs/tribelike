@@ -25,7 +25,8 @@ const interests = computed(() => profile.value?.interests || []);
 const findInterests = async (title: string) => {
   try {
     const response = await axios.get(`/api/interest?title=${title}`);
-    response.data?.map(x => x.title = 'interest/'+x.title)
+    response.data?.map(x => x.title = 'interest/'+x.title);
+    console.log(response.data)
 
     return response.data
   } catch (error) {
@@ -37,17 +38,6 @@ const findLocations = async (title: string) => {
   try {
     const response = await axios.get(`/api/location?title=${title}`);
     response.data?.map(x => x.title = 'location/'+x.title)
-
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const findWikis = async (title: string) => {
-  try {
-    const response = await axios.get(`/api/plugins/wiki?title=${title}`);
-    response.data?.map(x => x.title = 'wiki/'+x.title)
 
     return response.data
   } catch (error) {
@@ -77,9 +67,8 @@ const findMixed = async (title: string) => {
   let result = [];
   const interests = await findInterests(title);
   const locations = await findLocations(title);
-  const wikis = await findWikis(title);
   const github = await findOnGithub(title);
-  result = [...interests, ...locations, ...wikis, ...github];
+  result = [...interests, ...locations, ...github];
 
   return result;
 }
@@ -92,8 +81,6 @@ const handleSelection = async (result: {
     return router.push(`/interest/${result.id}`);
   if (result.title?.includes('location'))
     return router.push(`/location/${result.id}`);
-  if (result.title?.includes('wiki'))
-    return router.push(`/wiki/${result.id}`);
   else {
     const values = result.title.split('/');
     router.push(`/interest/create?title=${values[1]}?parent=${values[0]}`);

@@ -12,8 +12,15 @@
         <form
           ref="form"
           @submit.prevent="onSubmit"
-          class="flex flex-col gap-4"
+          class="mt-4 flex flex-col gap-4"
         >
+
+          <input
+            type="hidden"
+            name="profileId"
+            :value="profile?.id"
+          >
+
           <div className="mb-2">
             <label
               for="title"
@@ -28,23 +35,6 @@
               autoComplete="title"
               placeholder="The title of the location"
               :modelValue="location?.title"
-            />
-          </div>
-
-          <div className="mb-2">
-            <label
-              for="parentId"
-              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Located in
-            </label>
-
-            <SelectInput
-              name="parentId"
-              placeholder="Select where this location is"
-              v-model="selectedModel"
-              :options="parents"
-              :modelValue="location?.parent?.id"
-              @update:modelValue="handleSelectParent"
             />
           </div>
 
@@ -84,16 +74,51 @@
             </div>
           </div>
 
-          <input
-            type="hidden"
-            name="profileId"
-            :value="profile?.id"
-          >
-
           <Map
             :defaultLocation="defaultLocation"
             @changeLocation="handleChangeLocation"
           />
+
+          <div className="mb-2">
+            <label
+              for="access"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Community access
+            </label>
+
+            <SelectInput
+              name="access"
+              placeholder="Manage the access"
+              :options="[
+                { label: 'All', value: '0' },
+                { label: 'Ask', value: '1' },
+                { label: 'Invitation', value: '2' }
+              ]"
+              v-model="access"
+            />
+          </div>
+
+          <Divider />
+
+          <Title>Relations:</Title>
+
+          <div class="mb-2">
+            <label
+              for="relations"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Related locations
+            </label>
+            <InterestRelations v-model="relatedInterests" />
+          </div>
+
+          <div class="mb-2">
+            <label
+              for="relations"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Related interests
+            </label>
+            <LocationRelations v-model="relatedLocations" />
+          </div>
 
           <SubmitButton className="w-full mt-4">
             Create location
@@ -130,34 +155,25 @@ import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
-import SelectInput from '@/components/common/SelectInput.vue';
 import Map from '@/components/MapComponent.vue';
+import SelectInput from '@/components/common/SelectInput.vue';
+import InterestRelations from '@/components/InterestRelations.vue';
+import LocationRelations from '@/components/LocationRelations.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
-
-import Plugins from '@/components/plugins/Plugins.vue';
-
-const defaultLocation = ref([7, 51]);
-const yCoordinate = ref('0');
-const xCoordinate = ref('0');
-const zoom = ref(10);
 
 const router = useRouter();
 const profile = inject('profile');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-const selectedModel = ref('');
-const parents = ref([]);
 const friends = ref([]);
+const access = ref('0');
+const relatedInterests = ref([]);
+const relatedLocations = ref([]);
 
-const findLocations = async () => {
-  try {
-    const response = await axios.get(`/api/location`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+const defaultLocation = ref([7, 51]);
+const yCoordinate = ref('0');
+const xCoordinate = ref('0');
+const zoom = ref(10);
 
 const findProfiles = async () => {
   try {
@@ -167,14 +183,6 @@ const findProfiles = async () => {
   } catch (error) {
     console.error(error);
   }
-}
-
-const handleSelectParent = (selectedId: string) => {
-  const selected = parents.value.find(x => x.id == selectedId);
-  defaultLocation.value = [
-    Number(selected.yCoordinate),
-    Number(selected.xCoordinate),
-  ];
 }
 
 const handleChangeLocation = ({ y, x }) => {
@@ -199,9 +207,14 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
+    const relations = [
+      ...relatedInterests.value,
+      ...relatedLocations.value
+    ];
     formData.append('yCoordinate', yCoordinate.value);
     formData.append('xCoordinate', xCoordinate.value);
     formData.append('zoom', zoom.value);
+    formData.append('relations', JSON.stringify(relations));
     const response = await axios.post(`/api/location`, formData);
     await addLocation(response.data?.id);
     profile.value.locations = [
@@ -216,8 +229,6 @@ const onSubmit = async () => {
 }
 
 onMounted(async () => {
-  const locations = await findLocations();
-  parents.value = locations.map(x => ({ ...x, label: x.title }));
   friends.value = await findProfiles();
 });
 </script>

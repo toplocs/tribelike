@@ -1,18 +1,7 @@
 <template>
   <SubNav
     :initialTab="tab"
-    :tabs="[
-      { value: 'Info', href: `/interest/${interest?.id}` },
-      
-      //Plugins
-      { value: 'Chat', href: `/interest/${interest?.id}/chat` },
-      { value: 'Wiki', href: `/interest/${interest?.id}/wiki` },
-      { value: 'Events', href: `/interest/${interest?.id}/events` },
-      { value: 'Discussion', href: `/interest/${interest?.id}/discussion` },
-
-      { value: 'Plugins', href: `/interest/${interest?.id}/plugins` },
-      { value: 'Settings', href: `/interest/${interest?.id}/settings` },
-    ]"
+    :tabs="tabs"
   />
 
   <router-view />
@@ -24,11 +13,29 @@ import axios from 'axios';
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SubNav from '@/components/SubNav.vue';
+import defaultPluginSettings from '@/assets/pluginSettings';
 
 const route = useRoute();
 const interest = inject('interest');
+const profile = inject('profile');
 const tab = ref('');
-const wikiPages = computed(() => interest.value?.wikis);
+const pluginSettings = ref([]);
+const tabs = computed(() => {
+  const routes = defaultPluginSettings.map(plugin => {
+    const settings = pluginSettings.value.find(
+      x => x.pluginId == plugin.pluginId
+    );
+    if (settings?.active == false) return null;
+    else return { value: plugin.name, href: `/interest/${interest.value?.id}/${plugin.path}` };
+  }).filter(Boolean);
+
+  return [
+    { value: 'Info', href: `/interest/${interest.value?.id}` },
+    ...routes,
+    { value: 'Plugins', href: `/interest/${interest.value?.id}/plugins` },
+    { value: 'Settings', href: `/interest/${interest.value?.id}/settings` },
+  ];
+});
 
 const fetchInterest = async (id: string) => {
   try {
@@ -40,13 +47,34 @@ const fetchInterest = async (id: string) => {
   }
 }
 
+const fetchPluginSettings = async (key: string, id: string) => {
+  try {
+    const response = await axios.get(`/api/plugin?key=${key}&profileId=${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 watch(() => route.params.id, async (newId) => {
-  if (newId) interest.value = await fetchInterest(newId);
+  interest.value = await fetchInterest(newId);
+});
+
+watch(() => profile.value, async (newId) => {
+  pluginSettings.value = await fetchPluginSettings(
+    interest.value?.id,
+    profile.value?.id
+  );
 });
 
 onMounted(async () => {
   interest.value = await fetchInterest(route.params.id);
+  pluginSettings.value = await fetchPluginSettings(
+    interest.value?.id,
+    profile.value?.id
+  );
 });
 
 onUnmounted(() => {

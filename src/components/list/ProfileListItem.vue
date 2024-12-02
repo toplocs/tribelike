@@ -13,7 +13,7 @@
       @click="onClick(profile)"
     >
       <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        {{ profile.type }} – {{ profile.username }}
+        {{ profile.username }} – {{ profile.type }}
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
         <InterestBadge

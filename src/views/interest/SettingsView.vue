@@ -16,8 +16,14 @@
         <form
           ref="form"
           @submit.prevent="onSubmit"
-          class="flex flex-col gap-4"
+          class="mt-4 flex flex-col gap-4"
         >
+          <input
+            type="hidden"
+            name="interestId"
+            :value="interest?.id"
+          >
+
           <div className="mb-2">
             <label
               for="title"
@@ -37,24 +43,44 @@
 
           <div className="mb-2">
             <label
-              for="parentId"
+              for="access"
               class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > This interest is part of
+            > Community access
             </label>
 
             <SelectInput
-              name="parentId"
-              placeholder="Select a parent interest"
-              :options="parents"
-              :modelValue="interest?.parentId"
+              name="access"
+              placeholder="Manage the access"
+              :options="[
+                { label: 'All', value: '0' },
+                { label: 'Ask', value: '1' },
+                { label: 'Invitation', value: '2' }
+              ]"
+              v-model="access"
             />
           </div>
-          
-          <input
-            type="hidden"
-            name="interestId"
-            :value="interest?.id"
-          >
+
+          <Divider />
+
+          <Title>Relations:</Title>
+
+          <div class="mb-2">
+            <label
+              for="relations"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Related locations
+            </label>
+            <InterestRelations v-model="relatedInterests" />
+          </div>
+
+          <div class="mb-2">
+            <label
+              for="relations"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Related interests
+            </label>
+            <LocationRelations v-model="relatedLocations" />
+          </div>
 
           <SubmitButton className="w-full mt-4">
             Update Settings
@@ -64,18 +90,18 @@
     </div>
       
     <Sidebar>
-      <Plugins>
-        <div className="mb-8">
-          <Title>Moderate access:</Title>
-          <div v-for="friend of friends">
-            <FriendListItem
-              :key="friend.id"
-              :profile="friend"
-              :onClick="() => {}"
-            />
-          </div>
+      <div className="mb-8">
+        <Title>Invite friends:</Title>
+        <div v-for="friend of friends" class="mb-2">
+          <FriendListItem
+            :key="friend.id"
+            :profile="friend"
+            :onClick="() => {}"
+          />
         </div>
-      </Plugins>
+
+        <ActionButton title="Send invites" />
+      </div>
     </Sidebar>
 
   </Container>
@@ -83,21 +109,21 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, computed, watch, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, inject, watchEffect, onMounted } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
+import Divider from '@/components/common/Divider.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import Callout from '@/components/common/Callout.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
+import InterestRelations from '@/components/InterestRelations.vue';
+import LocationRelations from '@/components/LocationRelations.vue';
 
-import Plugins from '@/components/plugins/Plugins.vue';
-
-const route = useRoute();
 const interest = inject('interest');
 const profile = inject('profile');
 const tab = inject('tab');
@@ -105,18 +131,10 @@ const form = ref<HTMLFormElement | null>(null);
 const selectedModel = ref('');
 const successMessage = ref('');
 const errorMessage = ref('');
-const parents = ref([]);
 const friends = ref([]);
-
-const findInterests = async () => {
-  try {
-    const response = await axios.get(`/api/interest`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+const access = ref('');
+const relatedInterests = ref([]);
+const relatedLocations = ref([]);
 
 const findProfiles = async () => {
   try {
@@ -128,12 +146,15 @@ const findProfiles = async () => {
   }
 }
 
-
 const onSubmit = async () => {
   if (!form.value) return;
-  errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
+    const relations = [
+      ...relatedInterests.value,
+      ...relatedLocations.value
+    ];
+    formData.append('relations', JSON.stringify(relations));
     const response = await axios.put(`/api/interest`, formData);
     successMessage.value = 'Your settings have been updated successfully!';
 
@@ -144,10 +165,14 @@ const onSubmit = async () => {
   }
 }
 
+watchEffect(() => {
+  access.value = String(interest.value?.access);
+  relatedInterests.value = interest.value?.relations.filter(x => x.type == 'interest');
+  relatedLocations.value = interest.value?.relations.filter(x => x.type == 'location');
+});
+
 onMounted(async () => {
-  const interests = await findInterests();
   friends.value = await findProfiles();
-  parents.value = interests.map(x => ({ ...x, label: x.title }));
   tab.value = 'Settings';
 });
 </script>

@@ -1,5 +1,6 @@
 import prisma from '../lib/prisma';
 import { auth } from '../lib/auth';
+import profiles from '../lib/profiles';
 
 export async function getUsers(query: {
   username?: string
@@ -36,6 +37,16 @@ export async function createUser(formData: {
         password: formData.password
       }
     });
+    for (let profile of profiles) {
+      await prisma.profile.create({
+        data: {
+          userId: user.id,
+          username: formData.username,
+          email: formData.email,
+          ...profile,
+        }
+      });
+    }
 
     return { success: user };
   } catch(e: any) {

@@ -3,17 +3,15 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
-import prisma from './lib/prisma';
 
 import activityRouter from './api/activity';
 import authRouter from './api/auth';
 import userRouter from './api/user';
+import pluginRouter from './api/plugin';
 import profileRouter from './api/profile';
 import interestRouter from './api/interest';
 import locationRouter from './api/location';
-
-//Plugins
-import wikiRouter from './api/plugins/wiki';
+import relationRouter from './api/relation';
 
 dotenv.config();
 
@@ -29,17 +27,17 @@ app.use(cors({
   origin: URL,
   optionsSuccessStatus: 200
 }));
-if (!DEVELOPMENT) app.use(express.static(path.join(__dirname, 'views')));
+
+if (DEVELOPMENT != 'true') app.use(express.static(path.join(__dirname, 'views')));
 
 app.use('/api/activity', activityRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/plugin', pluginRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/interest', interestRouter);
 app.use('/api/location', locationRouter);
-
-//Plugins
-app.use('/api/plugins/wiki', wikiRouter);
+app.use('/api/relation', relationRouter);
 
 if (DEVELOPMENT == 'true') {
   app.get('/', (req: Request, res: Response) => res.redirect(URL as string));

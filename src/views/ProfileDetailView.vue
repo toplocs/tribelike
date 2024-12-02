@@ -15,18 +15,10 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, watchEffect, onMounted, onUnmounted } from 'vue';
-import {
-  ChatBubbleLeftIcon,
-  PencilIcon,
-  Cog6ToothIcon,
-} from '@heroicons/vue/24/outline';
 import { useRoute } from 'vue-router';
 import Container from '../components/common/Container.vue';
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
-
-import Plugins from '@/components/plugins/Plugins.vue';
-import Chat from '@/components/plugins/chat/Index.vue';
 
 const route = useRoute();
 const profile = ref(null);
@@ -43,6 +35,10 @@ const fetchProfile = async (id: string) => {
   }
 }
 
+watchEffect(() => route.params.id, async (newId) => {
+  if (newId) profile.value = await fetchProfile(newId);
+});
+
 onMounted(async () => {
   profile.value = await fetchProfile(route.params.id);
   title.value = profile.value?.username+' – '+profile.value?.type;
@@ -50,9 +46,5 @@ onMounted(async () => {
 
 onUnmounted(() => {
   title.value = null;
-});
-
-watchEffect(() => route.params.id, async (newId) => {
-  if (newId) profile.value = await fetchProfile(newId);
 });
 </script>

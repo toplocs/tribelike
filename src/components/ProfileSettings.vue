@@ -1,6 +1,8 @@
 <template>
   <div className="mb-2">
-    <SelectAvatar :src="profile?.image" />
+    <SelectAvatar
+      :src="profile?.image || '/images/default.jpeg'"
+    />
   </div>
 
   <div className="mb-2">

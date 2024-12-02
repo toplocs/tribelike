@@ -9,7 +9,6 @@ import {
   getAllProfiles,
   getProfileById,
 } from '../actions/profile';
-//import { createActivity } from '../actions/activity';
 
 const router = express.Router();
 const upload = multer();

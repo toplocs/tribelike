@@ -1,18 +1,7 @@
 <template>
   <SubNav
     :initialTab="tab"
-    :tabs="[
-      { value: 'Info', href: `/location/${location?.id}` },
-
-      //Plugins
-      { value: 'Chat', href: `/location/${location?.id}/chat` },
-      { value: 'Wiki', href: `/location/${location?.id}/wiki` },
-      { value: 'Events', href: `/location/${location?.id}/events` },
-      { value: 'Discussion', href: `/location/${location?.id}/discussion` },
-
-      { value: 'Plugins', href: `/location/${location?.id}/plugins` },
-      { value: 'Settings', href: `/location/${location?.id}/settings` },
-    ]"
+    :tabs="tabs"
   />
 
   <router-view />
@@ -21,15 +10,34 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, provide, inject, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import SubNav from '@/components/SubNav.vue';
+import defaultPluginSettings from '@/assets/pluginSettings';
 
 const route = useRoute();
 const location = inject('location');
+const profile = inject('profile');
 const tab = ref('');
+const pluginSettings = ref([]);
+const tabs = computed(() => {
+  const routes = defaultPluginSettings.map(plugin => {
+    const settings = pluginSettings.value.find(
+      x => x.pluginId == plugin.pluginId
+    );
+    if (settings?.active == false) return null;
+    else return { value: plugin.name, href: `/location/${location.value?.id}/${plugin.path}` };
+  }).filter(Boolean);
 
-const fetchLocation = async (id: string) => {
+  return [
+    { value: 'Info', href: `/location/${location.value?.id}` },
+    ...routes,
+    { value: 'Plugins', href: `/location/${location.value?.id}/plugins` },
+    { value: 'Settings', href: `/location/${location.value?.id}/settings` },
+  ];
+});
+
+const fetchInterest = async (id: string) => {
   try {
     const response = await axios.get(`/api/location/byId/${id}`);
 
@@ -39,12 +47,34 @@ const fetchLocation = async (id: string) => {
   }
 }
 
+const fetchPluginSettings = async (key: string, id: string) => {
+  try {
+    const response = await axios.get(`/api/plugin?key=${key}&profileId=${id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 watch(() => route.params.id, async (newId) => {
-  if (newId) location.value = await fetchLocation(newId);
+  location.value = await fetchInterest(newId);
+});
+
+watch(() => profile.value, async (newId) => {
+  pluginSettings.value = await fetchPluginSettings(
+    location.value?.id,
+    profile.value?.id
+  );
 });
 
 onMounted(async () => {
-  location.value = await fetchLocation(route.params.id);
+  location.value = await fetchInterest(route.params.id);
+  pluginSettings.value = await fetchPluginSettings(
+    location.value?.id,
+    profile.value?.id
+  );
 });
 
 onUnmounted(() => {

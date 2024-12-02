@@ -54,7 +54,6 @@
     </SideBar>
 
   </Container>
-
 </template>
 
 <script setup lang="ts">

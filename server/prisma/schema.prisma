@@ -20,7 +20,7 @@ generator erd {
 
 model User {
   id       String    @id @default(uuid())
-  username String    @unique()
+  username String    @unique() //make not unique
   email    String    @unique() // As email is in Profiles, maybe not needed
   image    String?
   password String
@@ -36,17 +36,18 @@ model Settings {
 }
 
 model Profile {
-  id         String     @id @default(uuid()) // Changed to uuid
-  username   String
-  type       String
-  image      String
-  email      String // Every Profile can have an own email for notifications. Can be used for logins aswell
-  about      String?
-  userId     String? // Matches User ID type
-  User       User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  interests  Interest[] @relation("ProfileInterests")
-  locations  Location[] @relation("ProfileLocations")
-  activities Activity[]
+  id             String           @id @default(uuid()) // Changed to uuid
+  username       String
+  type           String
+  image          String
+  email          String // Every Profile can have an own email for notifications. Can be used for logins aswell
+  about          String?
+  userId         String? // Matches User ID type
+  User           User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interests      Interest[]       @relation("ProfileInterests")
+  locations      Location[]       @relation("ProfileLocations")
+  activities     Activity[]
+  PluginSettings PluginSettings[]
 }
 
 model Interest {
@@ -55,28 +56,37 @@ model Interest {
   language   String     @default("en")
   profiles   Profile[]  @relation("ProfileInterests")
   activities Activity[] @relation("ActivityInterests")
-  same       Interest[] @relation("SameInterests")
-  sameOf     Interest[] @relation("SameInterests")
-  parentId   String?
-  parent     Interest?  @relation("ParentChildren", fields: [parentId], references: [id])
-  children   Interest[] @relation("ParentChildren")
+  links      String[]
+  invites    String[]
+  access     Int        @default(0)
 
-  wikis       Wiki[]    @relation("WikiInterests")
+  relations Relation[]
 }
 
 model Location {
-  id          String     @id @default(uuid()) // Changed to uuid
+  id          String    @id @default(uuid())
   title       String
   xCoordinate String?
   yCoordinate String?
   zoom        Int?
-  profiles    Profile[]  @relation("ProfileLocations")
-  parentId    String?
-  parent      Location?  @relation("ParentChildren", fields: [parentId], references: [id])
-  children    Location[] @relation("ParentChildren")
-  activities  Activity[]
-  
-  wikis       Wiki[]     @relation("WikiLocations")
+  profiles    Profile[] @relation("ProfileLocations")
+  links       String[]
+  invites     String[]
+  access      Int       @default(0)
+
+  relations Relation[]
+  Activity  Activity[]
+}
+
+model Relation {
+  id         String    @id @default(uuid())
+  key        String
+  type       String
+  data       Json
+  Interest   Interest? @relation(fields: [interestId], references: [id])
+  interestId String?
+  Location   Location? @relation(fields: [locationId], references: [id])
+  locationId String?
 }
 
 model Activity {
@@ -96,13 +106,16 @@ model Activity {
   @@index([locationId])
 }
 
-model Wiki {
-  id          String     @id @default(uuid())
-  title       String
-  content     String
-  lastUpdated DateTime   @default(now())
-  locations   Location[] @relation("WikiLocations")
-  interests   Interest[] @relation("WikiInterests")
+model PluginSettings {
+  id        String  @id @default(uuid())
+  name      String
+  path      String
+  key       String
+  pluginId  String
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  active    Boolean @default(true)
+  settings  Json[]
 }
 
 enum Type {

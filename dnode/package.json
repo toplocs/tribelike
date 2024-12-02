@@ -1,0 +1,27 @@
+{
+  "name": "dnode",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon --no-warnings src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^14.1.0",
+    "@helia/dag-json": "^4.0.0",
+    "@orbitdb/core": "^2.2.0",
+    "@vue/cli-service": "^5.0.8",
+    "ajv": "^8.17.1",
+    "blockstore-level": "^2.0.1",
+    "express": "^4.21.1",
+    "helia": "^5.0.1"
+  }
+}

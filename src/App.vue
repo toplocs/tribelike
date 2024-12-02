@@ -13,13 +13,13 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, provide, onMounted, watch } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
-import NavBar from './components/NavBar.vue';
-import SubNav from './components/SubNav.vue';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
+const router = useRouter();
 const session = ref(null);
 const user = ref(null);
 const profile = ref(null);
@@ -63,10 +63,26 @@ const getProfile = async () => {
   }
 }
 
+const logout = async () => {
+  try {
+    session.value = null;
+    user.value = null;
+    profile.value = null;
+    axios.defaults.headers.common['Authorization'] = null;
+    localStorage.removeItem('authHeader');
+    router.push('/');
+    console.log('logged out')
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 onMounted(async () => {
   session.value = await getSession();
-  user.value = await getUser();
-  profile.value = await getProfile();
+  if (session.value) {
+    user.value = await getUser();
+    profile.value = await getProfile();
+  } else logout();
 });
 
 provide('session', session);

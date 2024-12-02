@@ -9,7 +9,7 @@
     class="flex flex-col gap-4"
   >
     <img
-      :src="selectedImage || defaultValue"
+      :src="selectedModel || defaultValue"
       alt="Avatar"
       className="w-[150px] h-[150px] rounded-full mx-auto"
     />
@@ -25,8 +25,7 @@
         name="avatar"
         placeholder="Select an image"
         :options="avatars"
-        :modelValue="selectedImage"
-        @update:modelValue="onImageSelect"
+        v-model="selectedModel"
       />
     </div>
 
@@ -37,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import Title from '@/components/common/Title.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
@@ -57,31 +56,23 @@ const props = defineProps({
 const avatars = [{
   id: 1,
   label: 'Default',
-  image: '/images/default.jpeg',
+  value: '/images/default.jpeg',
 }, {
   id: 2,
   label: 'Yannik',
-  image: '/images/yannik.jpeg',
+  value: '/images/yannik.jpeg',
 }, {
   id: 3,
   label: 'Felix',
-  image: '/images/felix.jpeg',
+  value: '/images/felix.jpeg',
 }];
 
 const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-const selectedModel = ref('');
-const selectedImage = computed(() =>
-  avatars.find(x => x.id == selectedModel.value)?.image
-);
-
-const onImageSelect = (data) => {
-  console.log(data);
-  selectedModel.value = data;
-}
+const selectedModel = ref(props.defaultValue);
 
 const onSubmit = async () => {
-  props.closeDialog(selectedImage.value);
+  props.closeDialog(selectedModel.value);
 }
 </script>

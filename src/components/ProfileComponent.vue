@@ -1,6 +1,10 @@
 <template>
   <Container>
     <div class="w-full">
+      <div class="mb-8 flex flex-row justify-between">
+
+      </div>
+
       <div class="mb-8 flex flex-row gap-2">
         <img
           :src="profile?.image"
@@ -8,11 +12,8 @@
           class="w-48 h-48 rounded-full object-cover mr-10"
         />
 
-        <Card v-if="profile?.about" class="mb-8">
-          <span class="flex flex-row items-center gap-2 mb-2">
-            <IconButton :icon="Cog6ToothIcon" />
-          </span>
-          <p v-if="profile?.about?.length">
+        <Card v-if="profile?.about?.length" class="mb-8">
+          <p v-if="profile?.about">
             {{ profile?.about }}
           </p>
         </Card>
@@ -45,12 +46,11 @@
           </router-link>
         </div>
       </div>
-
     </div>
 
-    <Sidebar>
-      <h2 class="text-lg font-semibold text-gray-900 mb-2">
-        My activities:
+    <SideBar>
+      <h2 class="text-lg font-semibold text-gray-900 mb-2 dark:text-gray-300">
+        {{ profile?.username }}'s activities:
       </h2>
       <div class="flex flex-wrap gap-2">
         <span
@@ -61,31 +61,23 @@
           <ActivityListItem :activity="activity" />
         </span>
       </div>
-    </Sidebar>
+    </SideBar>
 
   </Container>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
-import {
-  ChatBubbleLeftIcon,
-  PencilIcon,
-  Cog6ToothIcon,
-} from '@heroicons/vue/24/outline';
+import { ref, inject, onMounted, defineAsyncComponent } from 'vue';
 import Sidebar from '@/components/SideBar.vue';
 import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
-import Dialog from '@/components/dialog/DialogComponent.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
-
-import Plugins from '@/components/plugins/Plugins.vue';
 
 const props = defineProps({
   profile: {
@@ -93,7 +85,7 @@ const props = defineProps({
     required: false
   }
 });
-
+const user = inject("profile");
 const profileActivity = ref([]);
 
 const formatDate = (date) => {

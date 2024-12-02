@@ -1,7 +1,7 @@
 <template>
   <div class="px-2 w-full">
     <div
-      class="flex border-b space-x-4"
+      class="flex border-b space-x-4 overflow-y-hidden overflow-x-auto"
       role="tablist"
       aria-orientation="horizontal"
     >
@@ -42,7 +42,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 const selectedTab = ref(props.initialTab);
 
 const selectTab = (tabValue: string) => {

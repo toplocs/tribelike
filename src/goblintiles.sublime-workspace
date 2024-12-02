@@ -1,0 +1,750 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"file",
+				"fileURLToPath"
+			],
+			[
+				"re",
+				"retrievedObject"
+			],
+			[
+				"in",
+				"InterestBadge"
+			],
+			[
+				"fetchI",
+				"fetchInterestChildren"
+			],
+			[
+				"wiki",
+				"wikiPage"
+			],
+			[
+				"interes",
+				"interests"
+			],
+			[
+				"remove",
+				"removeInterest"
+			],
+			[
+				"w",
+				"WikiEdit"
+			],
+			[
+				"location",
+				"locationId"
+			],
+			[
+				"loca",
+				"locationId"
+			],
+			[
+				"findInter",
+				"findInterestById"
+			],
+			[
+				"flex",
+				"flex-col"
+			],
+			[
+				"Call",
+				"Callout"
+			],
+			[
+				"Ca",
+				"Callout"
+			],
+			[
+				"selet",
+				"selectedModel"
+			],
+			[
+				"inter",
+				"interestId"
+			],
+			[
+				"fl",
+				"flex-row"
+			],
+			[
+				"L",
+				"LocationBadge"
+			],
+			[
+				"cla",
+				"className"
+			],
+			[
+				"Profile",
+				"ProfileImage"
+			],
+			[
+				"update",
+				"updateUser"
+			],
+			[
+				"too",
+				"Tooltip"
+			],
+			[
+				"pro",
+				"ProfileImage"
+			],
+			[
+				"def",
+				"defaultLocation"
+			],
+			[
+				"ol-",
+				"ol-geolocation"
+			],
+			[
+				"create",
+				"createLocation"
+			],
+			[
+				"selecte",
+				"selectedImage"
+			],
+			[
+				"select",
+				"selectedOption"
+			],
+			[
+				"sele",
+				"selectedOption"
+			],
+			[
+				"pr",
+				"profile"
+			],
+			[
+				"crea",
+				"createProfile"
+			],
+			[
+				"Diamond",
+				"DiamondCard"
+			],
+			[
+				"find",
+				"findUnique"
+			],
+			[
+				"f",
+				"false"
+			],
+			[
+				"pri",
+				"priority"
+			],
+			[
+				"item",
+				"item_ids"
+			],
+			[
+				"Tab",
+				"TableCell"
+			],
+			[
+				"cost",
+				"cost_credits"
+			],
+			[
+				"po",
+				"points_type"
+			],
+			[
+				"ite",
+				"items-center"
+			],
+			[
+				"size",
+				"sizeStyle"
+			],
+			[
+				"convers",
+				"conversationId"
+			],
+			[
+				"user",
+				"userId2"
+			],
+			[
+				"co",
+				"conversationId"
+			],
+			[
+				"conver",
+				"conversationId"
+			],
+			[
+				"Chat",
+				"ChatMessage2"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/yannik/js/goblintiles/package.json",
+			"settings":
+			{
+				"buffer_size": 802,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					3,
+					1,
+					"insert",
+					{
+						"characters": "0"
+					},
+					"AgAAADMAAAAAAAAANAAAAAAAAAAAAAAANAAAAAAAAAA0AAAAAAAAAAMAAAAxLjE",
+					"AQAAAAAAAAABAAAAMwAAAAAAAAA2AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					6,
+					1,
+					"insert",
+					{
+						"characters": "0.1"
+					},
+					"BAAAADEAAAAAAAAAMgAAAAAAAAAAAAAAMgAAAAAAAAAyAAAAAAAAAAMAAAAxLjAyAAAAAAAAADMAAAAAAAAAAAAAADMAAAAAAAAANAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAMQAAAAAAAAA0AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					9,
+					1,
+					"left_delete",
+					null,
+					"AQAAANgAAAAAAAAA2AAAAAAAAAAEAAAAICAgIA",
+					"AQAAAAAAAAABAAAA3AAAAAAAAADcAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAANgAAAAAAAAA3AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2AAAAAAAAADYAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					15,
+					1,
+					"insert",
+					{
+						"characters": "3000"
+					},
+					"BQAAAEADAAAAAAAAQQMAAAAAAAAAAAAAQQMAAAAAAABBAwAAAAAAAAQAAAA4MDgwQQMAAAAAAABCAwAAAAAAAAAAAABCAwAAAAAAAEMDAAAAAAAAAAAAAEMDAAAAAAAARAMAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAQAMAAAAAAABEAwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					31,
+					2,
+					"left_delete",
+					null,
+					"AgAAADcBAAAAAAAANwEAAAAAAADJAQAAICAgICJhdXRob3IiOiAiUGhhc2VyIFN0dWRpbyA8c3VwcG9ydEBwaGFzZXIuaW8+IChodHRwczovL3BoYXNlci5pby8pIiwKICAgICJsaWNlbnNlIjogIk1JVCIsCiAgICAibGljZW5zZVVybCI6ICJodHRwOi8vd3d3Lm9wZW5zb3VyY2Uub3JnL2xpY2Vuc2VzL21pdC1saWNlbnNlLnBocCIsCiAgICAiYnVncyI6IHsKICAgICAgICAidXJsIjogImh0dHBzOi8vZ2l0aHViLmNvbS9waGFzZXJqcy90ZW1wbGF0ZS1uZXh0anMvaXNzdWVzIgogICAgfSwKICAgICJob21lcGFnZSI6ICJodHRwczovL2dpdGh1Yi5jb20vcGhhc2VyanMvdGVtcGxhdGUtbmV4dGpzI3JlYWRtZSIsCiAgICAia2V5d29yZHMiOiBbCiAgICAgICAgInBoYXNlciIsCiAgICAgICAgInBoYXNlcjMiLAogICAgICAgICJuZXh0IiwKICAgICAgICAibmV4dGpzIiwKICAgICAgICAidml0ZSIsCiAgICAgICAgInR5cGVzY3JpcHQiCiAgICBdLDYBAAAAAAAANgEAAAAAAAABAAAACg",
+					"AQAAAAAAAAABAAAAAAMAAAAAAAA3AQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					36,
+					1,
+					"insert",
+					{
+						"characters": "goblintiles"
+					},
+					"DAAAAA8AAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAA8AAAB0ZW1wbGF0ZS1uZXh0anMQAAAAAAAAABEAAAAAAAAAAAAAABEAAAAAAAAAEgAAAAAAAAAAAAAAEgAAAAAAAAATAAAAAAAAAAAAAAATAAAAAAAAABQAAAAAAAAAAAAAABQAAAAAAAAAFQAAAAAAAAAAAAAAFQAAAAAAAAAWAAAAAAAAAAAAAAAWAAAAAAAAABcAAAAAAAAAAAAAABcAAAAAAAAAGAAAAAAAAAAAAAAAGAAAAAAAAAAZAAAAAAAAAAAAAAAZAAAAAAAAABoAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAADwAAAAAAAAAeAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/Users/yannik/js/goblintiles/src/game/objects/Goblin.ts",
+			"settings":
+			{
+				"buffer_size": 4646,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					17,
+					2,
+					"left_delete",
+					null,
+					"AgAAAGgKAAAAAAAAaAoAAAAAAABXAAAAICAgICAgICAgICAgdGhpcy51cGRhdGVMZXZlbE1hcmtlclBvc2l0aW9uKCk7ICAvLyBVcGRhdGUgbWFya2VyIHBvc2l0aW9uIHdoaWxlIGRyYWdnaW5nZwoAAAAAAABnCgAAAAAAAAEAAAAK",
+					"AQAAAAAAAAABAAAAvwoAAAAAAABoCgAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/Users/yannik/js/goblintiles/src/game/scenes/Game.ts",
+			"settings":
+			{
+				"buffer_size": 2338,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					6,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAFwCAAAAAAAAXQIAAAAAAAAAAAAAXQIAAAAAAABhAgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXAIAAAAAAABcAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					7,
+					1,
+					"paste",
+					null,
+					"AQAAAGECAAAAAAAAgQIAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAYQIAAAAAAABhAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					3,
+					"left_delete",
+					null,
+					"AwAAAGsCAAAAAAAAawIAAAAAAAABAAAAcGoCAAAAAAAAagIAAAAAAAABAAAAYWkCAAAAAAAAaQIAAAAAAAABAAAAbQ",
+					"AQAAAAAAAAABAAAAbAIAAAAAAABsAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					11,
+					1,
+					"insert",
+					{
+						"characters": "hand"
+					},
+					"BAAAAGkCAAAAAAAAagIAAAAAAAAAAAAAagIAAAAAAABrAgAAAAAAAAAAAABrAgAAAAAAAGwCAAAAAAAAAAAAAGwCAAAAAAAAbQIAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAaQIAAAAAAABpAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "Hand"
+					},
+					"BQAAAHcCAAAAAAAAeAIAAAAAAAAAAAAAeAIAAAAAAAB4AgAAAAAAAAMAAABNYXB4AgAAAAAAAHkCAAAAAAAAAAAAAHkCAAAAAAAAegIAAAAAAAAAAAAAegIAAAAAAAB7AgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAdwIAAAAAAAB6AgAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"",
+				"Code Folding: Fold Tag Attributes"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/yannik/js/goblintiles",
+		"/Users/yannik/js/goblintiles/src",
+		"/Users/yannik/js/goblintiles/src/game",
+		"/Users/yannik/js/goblintiles/src/game/objects",
+		"/Users/yannik/js/goblintiles/src/game/scenes"
+	],
+	"file_history":
+	[
+		"/Users/yannik/js/tribelike/index.html",
+		"/Users/yannik/js/tribelike/src/utils/external-component.js",
+		"/Users/yannik/js/tribelike/vite.config.ts",
+		"/Users/yannik/js/tribelike/src/main.ts",
+		"/Users/yannik/js/tribelike/src/views/TestView.vue",
+		"/Users/yannik/js/tribelike/dnode/src/app.js",
+		"/Users/yannik/js/tribelike/server/prisma/schema.prisma",
+		"/Users/yannik/js/tribelike/src/App.vue",
+		"/Users/yannik/js/tribelike/src/router/index.ts",
+		"/Users/yannik/js/tribelike/dnode/package.json",
+		"/Users/yannik/js/tribelike/dnode/src/components/test.vue",
+		"/Users/yannik/js/tribelike/src/assets/base.css",
+		"/Users/yannik/js/tribelike/dnode/src/app_orbit.js",
+		"/Users/yannik/js/tribelike/dnode/schema/profile.json",
+		"/Users/yannik/js/tribelike/dnode/schema/user.json",
+		"/Users/yannik/js/tribelike/js/package.json",
+		"/Users/yannik/js/tribelike/js/src/app.js",
+		"/Users/yannik/js/tribelike/js/src/config/libp2p.js",
+		"/Users/yannik/js/tribelike/decentral/package.json",
+		"/Users/yannik/js/tribelike/new/tsconfig.json",
+		"/Users/yannik/js/tribelike/new/nodemon.json",
+		"/Users/yannik/js/tribelike/new/package.json",
+		"/Users/yannik/js/tribelike/new/src/app.ts",
+		"/Users/yannik/js/tribelike/server/package.json",
+		"/Users/yannik/js/tribelike/.env",
+		"/Users/yannik/js/tribelike/server/tsconfig.json",
+		"/Users/yannik/js/tribelike/server/.env.default",
+		"/Users/yannik/js/tribelike/server/tsconfig_1.json",
+		"/Users/yannik/js/tribelike/src/views/InterestDetailView.vue",
+		"/Users/yannik/js/tribelike/new/src/config/libp2p.js",
+		"/Users/yannik/js/tribelike/server/src/actions/interest.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/location.ts",
+		"/Users/yannik/js/tribelike/src/views/location/InfoView.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/InfoView.vue",
+		"/Users/yannik/js/tribelike/src/components/list/ActivityListItem.vue",
+		"/Users/yannik/js/tribelike/src/views/ProfileListView.vue",
+		"/Users/yannik/js/tribelike/src/views/ProfileCreateView.vue",
+		"/Users/yannik/js/tribelike/src/components/list/ProfileListItem.vue",
+		"/Users/yannik/js/tribelike/src/components/NavBar.vue",
+		"/Users/yannik/js/tribelike/src/components/search/Index.vue",
+		"/Users/yannik/js/tribelike/src/components/search/FindLocation.vue",
+		"/Users/yannik/js/tribelike/src/components/search/FindInterest.vue",
+		"/Users/yannik/js/tribelike/src/views/LocationDetailView.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/views/WikiPageView.vue",
+		"/Users/yannik/js/tribelike/src/views/location/WikiView.vue",
+		"/Users/yannik/js/tribelike/server/src/api/plugins/wiki.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/wiki.ts",
+		"/Users/yannik/js/tribelike/src/components/MyProfileComponent.vue",
+		"/Users/yannik/js/tribelike/src/components/common/IconButton.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Divider.vue",
+		"/Users/yannik/js/tribelike/src/components/search/FindMixed.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/WikiView.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/Index.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/WikiListItem.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/views/WikiCreateView.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/WikiEdit.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/views/WikiEditView.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/wiki/WikiCreate.vue",
+		"/Users/yannik/js/tribelike/src/components/dialog/ProfileAddDialog.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Dropdown.vue",
+		"/Users/yannik/js/tribelike/server/src/app.ts",
+		"/Users/yannik/js/tribelike/src/views/InterestCreateView.vue",
+		"/Users/yannik/js/tribelike/src/components/AddInterestButton.vue",
+		"/Users/yannik/js/tribelike/src/views/LocationCreateView.vue",
+		"/Users/yannik/js/tribelike/server/src/actions/activity.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/profile.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/sql/profile.ts",
+		"/Users/yannik/js/tribelike/server/.env",
+		"/Users/yannik/js/tribelike/server/src/api/profile.ts",
+		"/Users/yannik/js/tribelike/server/src/api/interest.ts",
+		"/Users/yannik/js/tribelike/src/views/LandingView.vue",
+		"/Users/yannik/js/tribelike/src/components/FindMixed.vue",
+		"/Users/yannik/js/tribelike/src/components/ProfileComponent.vue",
+		"/Users/yannik/js/tribelike/src/views/ProfileDetailView.vue",
+		"/Users/yannik/js/tribelike/src/components/FindInterest.vue",
+		"/Users/yannik/js/tribelike/src/views/location/ActivityView.vue",
+		"/Users/yannik/js/tribelike/server/src/actions/ipfs/profile.ts",
+		"/Users/yannik/js/tribelike/server/storage/profiles/Yannik.json",
+		"/Users/yannik/js/tribelike/server/src/actions/files/profile.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/filestorage/profile.ts",
+		"/Users/yannik/js/tribelike/server/src/actions/user.ts",
+		"/Users/yannik/js/tribelike/server/src/.env.default",
+		"/Users/yannik/js/tribelike/src/components/list/NotificationList.vue",
+		"/Users/yannik/js/tribelike/server/src/api/location.ts",
+		"/Users/yannik/js/tribelike/src/components/NotificationList.vue",
+		"/Users/yannik/js/tribelike/src/components/FindLocation.vue",
+		"/Users/yannik/js/tribelike/src/components/MapComponent.vue",
+		"/Users/yannik/js/tribelike/src/components/badges/LocationBadge.vue",
+		"/Users/yannik/js/tribelike/src/components/badges/InterestBadge.vue",
+		"/Users/yannik/js/tribelike/src/components/list/PluginListItem.vue",
+		"/Users/yannik/js/tribelike/src/components/common/BackButton.vue",
+		"/Users/yannik/js/tribelike/src/components/common/SelectInput.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/ActivityView.vue",
+		"/Users/yannik/js/tribelike/server/src/api/activity.ts",
+		"/Users/yannik/js/tribelike/src/views/location/DiscussionView.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/DiscussionView.vue",
+		"/Users/yannik/js/tribelike/src/views/location/ChatView.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/ChatView.vue",
+		"/Users/yannik/js/tribelike/src/views/SettingsView.vue",
+		"/Users/yannik/js/tribelike/server/src/api/auth.ts",
+		"/Users/yannik/js/tribelike/src/views/LoginView.vue",
+		"/Users/yannik/js/tribelike/src/views/profile/SettingsView.vue",
+		"/Users/yannik/js/tribelike/src/views/RegisterView.vue",
+		"/Users/yannik/js/tribelike/server/src/api/user.ts",
+		"/Users/yannik/js/tribelike/package.json",
+		"/Users/yannik/js/tribelike/src/views/location/EventsView.vue",
+		"/Users/yannik/js/tribelike/src/components/list/FeedListItem.vue",
+		"/Users/yannik/js/tribelike/src/components/list/FriendListItem.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Callout.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Tooltip.vue",
+		"/Users/yannik/js/tribelike/src/components/plugins/event/EventListItem.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/PluginsView.vue",
+		"/Users/yannik/js/tribelike/src/views/location/PluginsView.vue",
+		"/Users/yannik/js/tribelike/src/views/PluginListView.vue",
+		"/Users/yannik/js/tribelike/src/components/FooterComponent.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Title.vue",
+		"/Users/yannik/js/tribelike/src/components/common/Card.vue",
+		"/Users/yannik/js/tribelike/src/components/ProfileSettings.vue",
+		"/Users/yannik/js/tribelike/src/components/dialog/AvatarDialog.vue",
+		"/Users/yannik/js/tribelike/src/components/SelectAvatar.vue",
+		"/Users/yannik/js/tribelike/src/views/profile/MainView.vue",
+		"/Users/yannik/js/tribelike/src/views/interest/SettingsView.vue",
+		"/Users/yannik/js/tribelike/src/views/location/SettingsView.vue",
+		"/Users/yannik/js/tribelike/src/components/AddLocationButton.vue",
+		"/Users/yannik/js/tribelike/src/components/common/CheckBox.vue",
+		"/Users/yannik/js/tribelike/server/src/views/assets/index-CuE2PuqF.js",
+		"/Users/yannik/js/tribelike/src/components/dialog/ConfirmDialog.vue",
+		"/Users/yannik/js/tribelike/src/components/dialog/FriendsDialog.vue"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "/Users/yannik/js/goblintiles"
+		}
+	],
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/yannik/js/goblintiles/package.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 802,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								26,
+								26
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/yannik/js/goblintiles/src/game/objects/Goblin.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4646,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2663,
+								2663
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/TypeScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 178.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/yannik/js/goblintiles/src/game/scenes/Game.ts",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2338,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								635,
+								635
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/TypeScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 50.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 207.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

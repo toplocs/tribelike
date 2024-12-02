@@ -12,7 +12,7 @@
 
     <template #content="{ closeDialog }">
       <AvatarDialog
-        :defaultValue="src"
+        :defaultValue="imageSrc"
         :closeDialog="(x) => {
           handleSelection(x);
           closeDialog();
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
-import Dialog from './dialog/DialogComponent.vue';
+import Dialog from './common/Dialog.vue';
 import AvatarDialog from './dialog/AvatarDialog.vue';
 
 const props = defineProps({

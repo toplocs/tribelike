@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "_id": { "type": "string" },
+    "username": { "type": "string" },
+    "email": { "type": "string", "format": "email" },
+    "image": { "type": "string", "nullable": true },
+    "password": { "type": "string" },
+    "profiles": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "settings": { "type": ["string", "null"] }
+  },
+  "required": ["_id", "username", "email", "password"]
+}

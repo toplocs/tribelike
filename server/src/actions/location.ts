@@ -27,16 +27,21 @@ export async function createLocation(formData: {
   xCoordinate: string,
   yCoordinate: string,
   zoom: string,
-  parentId: string,
+  access: string,
+  relations: string,
 }) {
   try {
+    const relations = JSON.parse(formData.relations);
     const location = await prisma.location.create({
       data: {
         title: formData.title,
         yCoordinate: formData.yCoordinate,
         xCoordinate: formData.xCoordinate,
-        zoom: Number(formData.zoom),
-        ...(formData.parentId && { parentId: formData.parentId }),
+        zoom: JSON.parse(formData.zoom),
+        access: JSON.parse(formData.access),
+        relations: {
+          create: relations,
+        }
       },
     });
 
@@ -53,19 +58,40 @@ export async function updateLocation(formData: {
   xCoordinate: string,
   yCoordinate: string,
   zoom: string,
-  parentId: string,
+  access: string,
+  relations: string,
 }) {
   try {
+    const relations = JSON.parse(formData.relations);
+    const check = await prisma.location.findUnique({
+      where: {
+        id: formData.locationId,
+      },
+      include: {
+        relations: true,
+      }
+    });
+    const existingRelationIds = check?.relations.map((rel: any) => rel.id);
+    const newRelationIds = relations.map((rel: any) => rel.id);
+    const relationsToDelete = existingRelationIds?.filter((id) => !newRelationIds.includes(id));
+    await prisma.relation.deleteMany({
+      where: {
+        id: { in: relationsToDelete },
+      },
+    });
     const location = await prisma.location.update({
       where: {
-        id: formData?.locationId,
+        id: formData.locationId,
       },
       data: {
         title: formData.title,
         yCoordinate: formData.yCoordinate,
         xCoordinate: formData.xCoordinate,
-        zoom: Number(formData.zoom),
-        ...(formData.parentId && { parentId: formData.parentId }),
+        zoom: JSON.parse(formData.zoom),
+        access: JSON.parse(formData.access),
+        relations: {
+          create: relations.filter((x: any) => !x.id),
+        }
       },
     });
 
@@ -85,11 +111,8 @@ export async function getLocationById(params: {
         id: params?.id,
       },
       include: {
-        parent: true,
         profiles: true,
-        children: true,
-        //plugins
-        wikis: true,
+        relations: true,
       }
     });
 
