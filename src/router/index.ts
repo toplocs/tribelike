@@ -16,19 +16,17 @@ import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
 import InterestInfoView from '@/views/interest/InfoView.vue';
+import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
 import InterestPluginsView from '@/views/interest/PluginsView.vue';
 import InterestSettingsView from '@/views/interest/SettingsView.vue';
-
-import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
 import LocationInfoView from '@/views/location/InfoView.vue';
+import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
-
-import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 
 import {
   BasePluginRoutes,
@@ -114,7 +112,7 @@ const router = createRouter({
         },
 
         {
-          path: 'discussion',
+          path: 'discussions',
           name: 'interestDiscussion',
           component: InterestDiscussionView,
         },
@@ -151,7 +149,7 @@ const router = createRouter({
         },
 
         {
-          path: 'discussion',
+          path: 'discussions',
           name: 'locationDiscussion',
           component: LocationDiscussionView,
         },

@@ -1,17 +1,21 @@
 <template>
-  <SubNav
-    :initialTab="tab"
-    :tabs="tabs"
-  />
+  <component v-if="access">
+    <SubNav
+      :initialTab="tab"
+      :tabs="tabs"
+    />
 
-  <router-view />
+    <router-view />
+  </component>
 
+  <InfoView v-else />
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
+import InfoView from '@/views/location/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 
@@ -20,6 +24,9 @@ const location = inject('location');
 const profile = inject('profile');
 const tab = ref('');
 const pluginSettings = ref([]);
+const access = computed(
+  () => true//profile.value?.locations.some(x => x.id == location.value?.id)
+);
 const tabs = computed(() => {
   const routes = defaultPluginSettings.map(plugin => {
     const settings = pluginSettings.value.find(
@@ -31,6 +38,7 @@ const tabs = computed(() => {
 
   return [
     { value: 'Info', href: `/location/${location.value?.id}` },
+    { value: 'Discussions', href: `/location/${location.value?.id}/discussions` },
     ...routes,
     { value: 'Plugins', href: `/location/${location.value?.id}/plugins` },
     { value: 'Settings', href: `/location/${location.value?.id}/settings` },

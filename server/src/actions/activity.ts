@@ -15,7 +15,7 @@ export async function findActivities(query: {
       include: {
         profile: true,
         location: true,
-        interests: true,
+        interest: true,
       },
       take: 20,
       orderBy: { date: 'desc' },
@@ -35,7 +35,7 @@ export async function createActivity(props: {
   status?: any,
   type?: any,
   locationId?: string,
-  interests?: string[],
+  interestId?: string
 }) {
   try {
     const activity = await prisma.activity.create({
@@ -47,9 +47,7 @@ export async function createActivity(props: {
         type: props.type || 'NORMAL',
         date: new Date(),
         locationId: props.locationId,
-        interests: props.interests ? {
-          connect: props.interests.map((id) => ({ id })),
-        }: undefined,
+        interestId: props.interestId,
       },
     });
 

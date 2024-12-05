@@ -100,6 +100,7 @@ export async function getInterestById(params: {
       include: {
         profiles: true,
         relations: true,
+        discussions: true,
       }
     });
 
@@ -156,6 +157,31 @@ export async function removeInterest({
     console.error(e);
     return { error: e.message };
   }
+}
+
+export async function askAccess({
+  profileId,
+  interestId,
+}: {
+  profileId: string,
+  interestId: string,
+}) {
+  const interest = await prisma.interest.update({
+    where: {
+      id: interestId,
+    },
+    data: {
+      ask: { push: profileId },
+    },
+    include: {
+      profiles: true,
+    }
+  });
+
+  return {
+    title: interest.title,
+    limit: interest.profiles.length,
+  };
 }
 
 export async function addLink(formData: {

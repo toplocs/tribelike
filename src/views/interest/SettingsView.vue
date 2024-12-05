@@ -68,7 +68,7 @@
             <label
               for="relations"
               class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related locations
+            > Related interests
             </label>
             <InterestRelations v-model="relatedInterests" />
           </div>
@@ -77,7 +77,7 @@
             <label
               for="relations"
               class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related interests
+            > Related locations
             </label>
             <LocationRelations v-model="relatedLocations" />
           </div>

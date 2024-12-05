@@ -10,7 +10,7 @@
     </div>
 
     <Sidebar>
-      <div class="py-4">
+      <div class="pb-4">
         <p v-if="subscribed" class="mb-4">
           You are subscribed to {{ interest?.title }}
         </p>
@@ -27,7 +27,7 @@
       </div>
 
       
-      <div v-if="people?.length" className="pb-4">
+      <div v-if="people?.length" class="pb-4">
         <Title>Other people with this interest:</Title>
         <div className="flex flex-row gap-2">
           <div v-for="suggestion of people">
@@ -58,6 +58,11 @@
             {{ link }}
           </a>
         </div>
+
+        <p v-if="!interest?.links.length" class="mb-2">
+          No links added
+        </p> 
+
         <Dialog>
           <template #trigger="{ openDialog }">
             <ActionButton
@@ -79,36 +84,6 @@
         </Dialog>
 
         <Divider />
-      </div>
-
-      <div v-if="parent">
-        <div className="py-4">
-          <Title>This interest is part of:</Title>
-          <div className="flex flex-row gap-2">
-            <router-link :to="`/interest/${parent?.id}`">
-              <InterestBadge :title="parent?.title" />
-            </router-link>
-          </div>
-        </div>
-
-        <Divider />
-      </div>
-
-      <div v-if="children?.length">
-        <div className="py-4">
-          <Title>This interest contains:</Title>
-          <div className="flex flex-row gap-2">
-            <router-link
-              v-for="interest in children"
-              :to="`/interest/${interest.id}`"
-            >
-              <InterestBadge
-                :key="interest.id"
-                :title="interest.title"
-              />
-            </router-link>
-          </div>
-        </div>
       </div>
     </Sidebar>
 

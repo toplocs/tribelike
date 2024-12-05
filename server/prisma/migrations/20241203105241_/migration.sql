@@ -42,7 +42,9 @@ CREATE TABLE "Interest" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "language" TEXT NOT NULL DEFAULT 'en',
-    "parentId" TEXT,
+    "links" TEXT[],
+    "invites" TEXT[],
+    "access" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Interest_pkey" PRIMARY KEY ("id")
 );
@@ -54,9 +56,24 @@ CREATE TABLE "Location" (
     "xCoordinate" TEXT,
     "yCoordinate" TEXT,
     "zoom" INTEGER,
-    "parentId" TEXT,
+    "links" TEXT[],
+    "ask" TEXT[],
+    "invites" TEXT[],
+    "access" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Location_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Relation" (
+    "id" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "data" JSONB NOT NULL,
+    "interestId" TEXT,
+    "locationId" TEXT,
+
+    CONSTRAINT "Relation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -76,6 +93,10 @@ CREATE TABLE "Activity" (
 -- CreateTable
 CREATE TABLE "PluginSettings" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "pluginId" TEXT NOT NULL,
     "profileId" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "settings" JSONB[],
@@ -85,12 +106,6 @@ CREATE TABLE "PluginSettings" (
 
 -- CreateTable
 CREATE TABLE "_ProfileInterests" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_SameInterests" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -129,12 +144,6 @@ CREATE UNIQUE INDEX "_ProfileInterests_AB_unique" ON "_ProfileInterests"("A", "B
 CREATE INDEX "_ProfileInterests_B_index" ON "_ProfileInterests"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_SameInterests_AB_unique" ON "_SameInterests"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_SameInterests_B_index" ON "_SameInterests"("B");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_ProfileLocations_AB_unique" ON "_ProfileLocations"("A", "B");
 
 -- CreateIndex
@@ -153,10 +162,10 @@ ALTER TABLE "Settings" ADD CONSTRAINT "Settings_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Interest" ADD CONSTRAINT "Interest_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Interest"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Relation" ADD CONSTRAINT "Relation_interestId_fkey" FOREIGN KEY ("interestId") REFERENCES "Interest"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Location" ADD CONSTRAINT "Location_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Relation" ADD CONSTRAINT "Relation_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Activity" ADD CONSTRAINT "Activity_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -172,12 +181,6 @@ ALTER TABLE "_ProfileInterests" ADD CONSTRAINT "_ProfileInterests_A_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "_ProfileInterests" ADD CONSTRAINT "_ProfileInterests_B_fkey" FOREIGN KEY ("B") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_SameInterests" ADD CONSTRAINT "_SameInterests_A_fkey" FOREIGN KEY ("A") REFERENCES "Interest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_SameInterests" ADD CONSTRAINT "_SameInterests_B_fkey" FOREIGN KEY ("B") REFERENCES "Interest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ProfileLocations" ADD CONSTRAINT "_ProfileLocations_A_fkey" FOREIGN KEY ("A") REFERENCES "Location"("id") ON DELETE CASCADE ON UPDATE CASCADE;

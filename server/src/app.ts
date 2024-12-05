@@ -6,12 +6,13 @@ import path from 'path';
 
 import activityRouter from './api/activity';
 import authRouter from './api/auth';
-import userRouter from './api/user';
-import pluginRouter from './api/plugin';
-import profileRouter from './api/profile';
+import discussionRouter from './api/discussion';
 import interestRouter from './api/interest';
 import locationRouter from './api/location';
+import pluginRouter from './api/plugin';
+import profileRouter from './api/profile';
 import relationRouter from './api/relation';
+import userRouter from './api/user';
 
 dotenv.config();
 
@@ -32,12 +33,13 @@ if (DEVELOPMENT != 'true') app.use(express.static(path.join(__dirname, 'views'))
 
 app.use('/api/activity', activityRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter);
-app.use('/api/plugin', pluginRouter);
-app.use('/api/profile', profileRouter);
+app.use('/api/discussion', discussionRouter);
 app.use('/api/interest', interestRouter);
 app.use('/api/location', locationRouter);
+app.use('/api/plugin', pluginRouter);
+app.use('/api/profile', profileRouter);
 app.use('/api/relation', relationRouter);
+app.use('/api/user', userRouter);
 
 if (DEVELOPMENT == 'true') {
   app.get('/', (req: Request, res: Response) => res.redirect(URL as string));

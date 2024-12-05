@@ -51,16 +51,18 @@ model Profile {
 }
 
 model Interest {
-  id         String     @id @default(uuid())
-  title      String
-  language   String     @default("en")
-  profiles   Profile[]  @relation("ProfileInterests")
-  activities Activity[] @relation("ActivityInterests")
-  links      String[]
-  invites    String[]
-  access     Int        @default(0)
+  id       String    @id @default(uuid())
+  title    String
+  language String    @default("en")
+  profiles Profile[] @relation("ProfileInterests")
+  links    String[]
+  ask      String[]
+  invites  String[]
+  access   Int       @default(0)
 
-  relations Relation[]
+  relations   Relation[]
+  activities  Activity[]
+  discussions Discussion[]
 }
 
 model Location {
@@ -71,11 +73,13 @@ model Location {
   zoom        Int?
   profiles    Profile[] @relation("ProfileLocations")
   links       String[]
+  ask         String[]
   invites     String[]
   access      Int       @default(0)
 
-  relations Relation[]
-  Activity  Activity[]
+  relations   Relation[]
+  activities  Activity[]
+  discussions Discussion[]
 }
 
 model Relation {
@@ -89,18 +93,34 @@ model Relation {
   locationId String?
 }
 
+model Discussion {
+  id         String    @id @default(uuid())
+  type       String
+  text       String
+  limit      Int
+  voters     String[]
+  votes      Json
+  attachment Json
+  createdAt  DateTime  @default(now())
+  Interest   Interest? @relation(fields: [interestId], references: [id])
+  interestId String?
+  Location   Location? @relation(fields: [locationId], references: [id])
+  locationId String?
+}
+
 model Activity {
-  id         String     @id @default(uuid())
-  profileId  String
-  profile    Profile    @relation(fields: [profileId], references: [id])
+  id         String    @id @default(uuid())
   text       String
   href       String?
   status     Status
   type       Type
-  date       DateTime   @default(now())
+  date       DateTime  @default(now())
+  profileId  String
+  profile    Profile   @relation(fields: [profileId], references: [id])
   locationId String?
-  location   Location?  @relation(fields: [locationId], references: [id])
-  interests  Interest[] @relation("ActivityInterests")
+  location   Location? @relation(fields: [locationId], references: [id])
+  interestId String?
+  interest   Interest? @relation(fields: [interestId], references: [id])
 
   @@index([profileId])
   @@index([locationId])

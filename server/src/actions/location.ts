@@ -113,6 +113,7 @@ export async function getLocationById(params: {
       include: {
         profiles: true,
         relations: true,
+        discussions: true,
       }
     });
 
@@ -165,6 +166,53 @@ export async function removeLocation({
     });
 
     return { success: profile };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function askAccess({
+  profileId,
+  locationId,
+}: {
+  profileId: string,
+  locationId: string,
+}) {
+  const location = await prisma.location.update({
+    where: {
+      id: locationId,
+    },
+    data: {
+      ask: { push: profileId },
+    },
+    include: {
+      profiles: true,
+    }
+  });
+
+  return {
+    title: location.title,
+    limit: location.profiles.length,
+  };
+}
+
+export async function addLink(formData: {
+  id: string,
+  link: string,
+}) {
+  try {
+    if (formData.link.length < 3) throw new Error('Your link is too short');
+    const location = await prisma.location.update({
+      where: {
+        id: formData?.id,
+      },
+      data: {
+        links: { push: formData.link }
+      }
+    });
+
+    return { success: location };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };
