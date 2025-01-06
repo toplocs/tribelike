@@ -32,6 +32,8 @@ router.route('/login').post(upload.none(), async (req: Request, res: Response) =
     if (formData.password != user.password) return res.status(401).json('The password is not correct');
 
     const { token, expires } = await login(user);
+    console.log('Login successfull');
+    
     return res.status(200).json({ token, expires });
   } catch(e: any) {
     console.error(e);

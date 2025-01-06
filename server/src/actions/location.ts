@@ -1,3 +1,5 @@
+import { Location } from '@prisma/client';
+
 import prisma from '../lib/prisma';
 import { auth } from '../lib/auth';
 
@@ -118,6 +120,36 @@ export async function getLocationById(params: {
     });
 
     return { success: location };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function getLocationByCoords(query: {
+  lat: string,
+  lng: string,
+}) {
+  const { lat, lng } = query;
+  const latitude = parseFloat(lat);
+  const longitude = parseFloat(lng);
+  const radiusInKm = 20;
+  const radiusInDegrees = radiusInKm/111.32;
+
+  if (isNaN(latitude) || isNaN(longitude)) {
+    return { error: 'Invalid latitude or longitude' };
+  }
+  try {
+    const locations = await prisma.$queryRaw<Location[]>`
+      SELECT *
+      FROM "Location"
+      WHERE latitude BETWEEN ${latitude - radiusInDegrees} AND ${latitude + radiusInDegrees}
+      AND longitude BETWEEN ${longitude - radiusInDegrees} AND ${longitude + radiusInDegrees}
+      LIMIT 1;
+    `;
+    const result = locations.length ? locations[0]: null;
+
+    return { success: result };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

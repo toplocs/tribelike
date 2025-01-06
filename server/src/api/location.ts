@@ -7,6 +7,7 @@ import {
   createLocation,
   updateLocation,
   getLocationById,
+  getLocationByCoords,
   addLocation,
   removeLocation,
   askAccess,
@@ -45,6 +46,24 @@ router.route('/').get(async (req: Request, res: Response) => {
 
 router.route('/byId/:id').get(async (req: Request, res: Response) => {
   const { success, error } = await getLocationById(req.params);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/byCoords').get(async (req: Request, res: Response) => {
+  const { lat, lng } = req.query as { lat: string; lng: string };
+  const { success, error } = await getLocationByCoords({ lat, lng });
+
+  /*const merzig = await prisma.location.create({
+    data: {
+      title: 'Merzig',
+      latitude: parseFloat(lat),
+      longitude: parseFloat(lng),
+      zoom: 5,
+    },
+  });
+  console.log(merzig);*/
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

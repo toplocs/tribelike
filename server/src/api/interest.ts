@@ -10,6 +10,7 @@ import {
   addInterest,
   removeInterest,
   askAccess,
+  inviteFriends,
   addLink,
 } from '../actions/interest';
 import { createActivity } from '../actions/activity';
@@ -65,18 +66,36 @@ router.route('/remove').put(async (req: Request, res: Response) => {
 });
 
 router.route('/ask').put(async (req: Request, res: Response) => {
-  const { title, limit } = await askAccess(req.body);
-  const profile = await prisma.profile.findUnique({
-    where: { id: req.body.profileId },
-  });
-  await createDiscussion({
-    type: 'askAccess',
-    text: `${profile?.username} asks to join the ${title} community`,
-    limit: limit,
-    votes: { yes: 0, no: 0 },
-    attachment: profile,
-    interestId: req.body.interestId,
-  });
+  const result = await askAccess(req.body);
+  if (result) {
+    const profile = await prisma.profile.findUnique({
+      where: { id: req.body.profileId },
+    });
+    await createDiscussion({
+      type: 'askAccess',
+      text: `${profile?.username} asks to join the ${result.title} community`,
+      limit: result.limit,
+      votes: { yes: 0, no: 0 },
+      attachment: profile,
+      interestId: req.body.interestId,
+    });
+  }
+
+  return res.status(200).json(true);
+});
+
+router.route('/invite').put(async (req: Request, res: Response) => {
+  const result = await inviteFriends(req.body);
+  if (result) {
+    for (let id of result.invites) {
+      await prisma.invite.create({
+        data: {
+          profileId: id,
+          interestId: req.body.interestId,
+        }
+      });
+    }
+  }
 
   return res.status(200).json(true);
 });

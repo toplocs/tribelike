@@ -48,6 +48,7 @@ model Profile {
   locations      Location[]       @relation("ProfileLocations")
   activities     Activity[]
   PluginSettings PluginSettings[]
+  Invite         Invite[]
 }
 
 model Interest {
@@ -63,6 +64,7 @@ model Interest {
   relations   Relation[]
   activities  Activity[]
   discussions Discussion[]
+  Invite      Invite[]
 }
 
 model Location {
@@ -70,6 +72,8 @@ model Location {
   title       String
   xCoordinate String?
   yCoordinate String?
+  latitude    Float?
+  longitude   Float?
   zoom        Int?
   profiles    Profile[] @relation("ProfileLocations")
   links       String[]
@@ -80,9 +84,10 @@ model Location {
   relations   Relation[]
   activities  Activity[]
   discussions Discussion[]
+  Invite      Invite[]
 }
 
-model Relation {
+model Relation { //connection
   id         String    @id @default(uuid())
   key        String
   type       String
@@ -102,6 +107,18 @@ model Discussion {
   votes      Json
   attachment Json
   createdAt  DateTime  @default(now())
+  Interest   Interest? @relation(fields: [interestId], references: [id])
+  interestId String?
+  Location   Location? @relation(fields: [locationId], references: [id])
+  locationId String?
+  //api andpoints
+}
+
+model Invite {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  profileId  String
+  Profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   Interest   Interest? @relation(fields: [interestId], references: [id])
   interestId String?
   Location   Location? @relation(fields: [locationId], references: [id])
