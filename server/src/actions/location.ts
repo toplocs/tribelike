@@ -33,19 +33,20 @@ export async function createLocation(formData: {
   relations: string,
 }) {
   try {
-    const relations = JSON.parse(formData.relations);
     const location = await prisma.location.create({
       data: {
         title: formData.title,
         yCoordinate: formData.yCoordinate,
         xCoordinate: formData.xCoordinate,
+        latitude: parseFloat(formData.xCoordinate),
+        longitude: parseFloat(formData.yCoordinate),
         zoom: JSON.parse(formData.zoom),
         access: JSON.parse(formData.access),
-        relations: {
-          create: relations,
-        }
       },
     });
+    if (formData.relations) {
+      //create relation
+    }
 
     return { success: location };
   } catch(e: any) {
@@ -133,23 +134,79 @@ export async function getLocationByCoords(query: {
   const { lat, lng } = query;
   const latitude = parseFloat(lat);
   const longitude = parseFloat(lng);
-  const radiusInKm = 20;
+  const radiusInKm = 50;
   const radiusInDegrees = radiusInKm/111.32;
 
   if (isNaN(latitude) || isNaN(longitude)) {
     return { error: 'Invalid latitude or longitude' };
   }
   try {
+    const locations = await prisma.location.findMany({
+      where: {
+        latitude: {
+          gte: latitude - radiusInDegrees,
+          lte: latitude + radiusInDegrees,
+        },
+        longitude: {
+          gte: longitude - radiusInDegrees,
+          lte: longitude + radiusInDegrees,
+        },
+      },
+    });
+
+    return { success: locations };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function updateCurrentLocation({
+  profileId,
+  lat,
+  lng
+}: {
+  profileId: string,
+  lat: number,
+  lng: number
+}) {
+  try {
+    console.log(lat);
+    console.log(lng)
     const locations = await prisma.$queryRaw<Location[]>`
-      SELECT *
+      SELECT 
+        id, 
+        title, 
+        latitude, 
+        longitude,
+        (
+          6371 * acos(
+            cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) 
+            + sin(radians(${lat})) * sin(radians(latitude))
+          )
+        ) AS distance
       FROM "Location"
-      WHERE latitude BETWEEN ${latitude - radiusInDegrees} AND ${latitude + radiusInDegrees}
-      AND longitude BETWEEN ${longitude - radiusInDegrees} AND ${longitude + radiusInDegrees}
+      ORDER BY distance ASC
       LIMIT 1;
     `;
-    const result = locations.length ? locations[0]: null;
+    if (locations[0]) {
+      const current = await prisma.profileLocation.create({
+        data: {
+          key: 'curent',
+          profileId: profileId,
+          locationId: locations[0].id,
+        }
+      });
+      await prisma.profileLocation.updateMany({
+        where: {
+          key: 'current',
+          profileId: profileId,
+        },
+        data: { key: 'past' }
+      });
+    }
 
-    return { success: result };
+    return { success: locations[0] };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

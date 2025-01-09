@@ -8,6 +8,7 @@ import {
   updateLocation,
   getLocationById,
   getLocationByCoords,
+  updateCurrentLocation,
   addLocation,
   removeLocation,
   askAccess,
@@ -26,14 +27,13 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 }).post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createLocation(req.body);
-  console.log(req.body?.profileId);
-  if (success) {
+  /*if (success) { //als eigener endpoint
     await createActivity({
       profileId: req.body?.profileId,
       text: `The location ${success.title} was created!`,
       locationId: success.id,
     });
-  }
+  }*/
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
@@ -52,18 +52,15 @@ router.route('/byId/:id').get(async (req: Request, res: Response) => {
 });
 
 router.route('/byCoords').get(async (req: Request, res: Response) => {
-  const { lat, lng } = req.query as { lat: string; lng: string };
+  let { lat, lng } = req.query as { lat: string; lng: string };
   const { success, error } = await getLocationByCoords({ lat, lng });
 
-  /*const merzig = await prisma.location.create({
-    data: {
-      title: 'Merzig',
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lng),
-      zoom: 5,
-    },
-  });
-  console.log(merzig);*/
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
+router.route('/updateCurrent').post(upload.none(), async (req: Request, res: Response) => {
+  const { success, error } = await updateCurrentLocation(req.body);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
@@ -88,14 +85,14 @@ router.route('/ask').put(async (req: Request, res: Response) => {
   const profile = await prisma.profile.findUnique({
     where: { id: req.body.profileId },
   });
-  await createDiscussion({
+  /*await createDiscussion({ //als eigener endpoint
     type: 'askAccess',
     text: `${profile?.username} asks to join the ${title} community`,
     limit: limit,
     votes: { yes: 0, no: 0 },
     attachment: profile,
     locationId: req.body.locationId,
-  });
+  });*/
 
   return res.status(200).json(true);
 });

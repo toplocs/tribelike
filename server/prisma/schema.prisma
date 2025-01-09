@@ -49,6 +49,11 @@ model Profile {
   activities     Activity[]
   PluginSettings PluginSettings[]
   Invite         Invite[]
+
+  Profiles        ProfileProfile[]  @relation("ThisProfile")
+  OtherProfiles   ProfileProfile[]  @relation("OtherProfile")
+  ProfileLocation ProfileLocation[]
+  ProfileInterest ProfileInterest[]
 }
 
 model Interest {
@@ -65,6 +70,11 @@ model Interest {
   activities  Activity[]
   discussions Discussion[]
   Invite      Invite[]
+
+  Interests        InterestInterest[] @relation("ThisInterest")
+  OtherInterests   InterestInterest[] @relation("OtherInterest")
+  ProfileInterest  ProfileInterest[]
+  InterestLocation InterestLocation[]
 }
 
 model Location {
@@ -74,6 +84,7 @@ model Location {
   yCoordinate String?
   latitude    Float?
   longitude   Float?
+  geom        Bytes?
   zoom        Int?
   profiles    Profile[] @relation("ProfileLocations")
   links       String[]
@@ -85,9 +96,14 @@ model Location {
   activities  Activity[]
   discussions Discussion[]
   Invite      Invite[]
+
+  Locations        LocationLocation[] @relation("ThisLocation")
+  OtherLocations   LocationLocation[] @relation("OtherLocation")
+  ProfileLocation  ProfileLocation[]
+  InterestLocation InterestLocation[]
 }
 
-model Relation { //connection
+model Relation {
   id         String    @id @default(uuid())
   key        String
   type       String
@@ -153,6 +169,66 @@ model PluginSettings {
   profile   Profile @relation(fields: [profileId], references: [id])
   active    Boolean @default(true)
   settings  Json[]
+}
+
+model ProfileLocation {
+  key        String
+  profileId  String
+  Profile    Profile  @relation(fields: [profileId], references: [id])
+  locationId String
+  Location   Location @relation(fields: [locationId], references: [id])
+
+  @@id([key, profileId, locationId])
+}
+
+model ProfileInterest {
+  key        String
+  profileId  String
+  Profile    Profile  @relation(fields: [profileId], references: [id])
+  interestId String
+  Interest   Interest @relation(fields: [interestId], references: [id])
+
+  @@id([key, profileId, interestId])
+}
+
+model ProfileProfile {
+  key            String
+  profileId      String
+  Profile        Profile @relation("ThisProfile", fields: [profileId], references: [id])
+  otherProfileId String
+  OtherProfile   Profile @relation("OtherProfile", fields: [otherProfileId], references: [id])
+
+  @@id([key, profileId, otherProfileId])
+}
+
+model InterestLocation {
+  key        String
+  interestId String
+  Interest   Interest @relation(fields: [interestId], references: [id])
+  locationId String
+  Location   Location @relation(fields: [locationId], references: [id])
+
+  @@id([key, interestId, locationId])
+}
+
+model InterestInterest {
+  key             String
+  interestId      String
+  Interest        Interest @relation("ThisInterest", fields: [interestId], references: [id])
+  otherInterestId String
+  OtherInterest   Interest @relation("OtherInterest", fields: [otherInterestId], references: [id])
+
+  @@id([key, interestId, otherInterestId])
+}
+
+model LocationLocation {
+  key             String
+  locationId      String
+  Location        Location @relation("ThisLocation", fields: [locationId], references: [id])
+  otherLocationId String
+  OtherLocation   Location @relation("OtherLocation", fields: [otherLocationId], references: [id])
+
+  @@id([key, locationId, otherLocationId])
 }
 
 enum Type {
