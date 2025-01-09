@@ -166,22 +166,57 @@ export async function askAccess({
   profileId: string,
   interestId: string,
 }) {
-  const interest = await prisma.interest.update({
-    where: {
-      id: interestId,
-    },
-    data: {
-      ask: { push: profileId },
-    },
-    include: {
-      profiles: true,
-    }
-  });
+  try {
+    const interest = await prisma.interest.update({
+      where: {
+        id: interestId,
+      },
+      data: {
+        ask: { push: profileId },
+      },
+      include: {
+        profiles: true,
+      }
+    });
 
-  return {
-    title: interest.title,
-    limit: interest.profiles.length,
-  };
+    return {
+      title: interest.title,
+      limit: interest.profiles.length,
+    };
+  } catch(e: any) {
+    console.error(e);
+  }
+}
+
+export async function inviteFriends({
+  invites,
+  interestId,
+}: {
+  invites: string[],
+  interestId: string,
+}) {
+  try {
+    const interest = await prisma.interest.findUnique({
+      where: { id: interestId },
+      select: { invites: true },
+    });
+    const newInvites = invites.filter(x => !interest?.invites.includes(x));
+    await prisma.interest.update({
+      where: { id: interestId },
+      data: {
+        invites: { push: newInvites }
+      },
+      include: {
+        profiles: true,
+      }
+    });
+
+    return {
+      invites: newInvites,
+    };
+  } catch(e: any) {
+    console.error(e);
+  }
 }
 
 export async function addLink(formData: {
