@@ -143,3 +143,23 @@ export async function getProfileById(params: {
     return { error: e.message };
   }
 }
+
+export async function getProfileLocations(params: {
+  id?: string
+}) {
+  try {
+    const profileLocations = await prisma.profileLocation.findMany({
+      where: {
+        profileId: params?.id,
+      },
+      include: {
+        Location: true,
+      }
+    });
+
+    return { success: profileLocations };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}

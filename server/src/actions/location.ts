@@ -171,38 +171,34 @@ export async function updateCurrentLocation({
   lng: number
 }) {
   try {
-    console.log(lat);
-    console.log(lng)
     const locations = await prisma.$queryRaw<Location[]>`
       SELECT 
         id, 
         title, 
         latitude, 
         longitude,
-        (
-          6371 * acos(
-            cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) 
-            + sin(radians(${lat})) * sin(radians(latitude))
-          )
-        ) AS distance
+        ( 6371 * acos(
+          cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) 
+          + sin(radians(${lat})) * sin(radians(latitude))
+        )) AS distance
       FROM "Location"
       ORDER BY distance ASC
       LIMIT 1;
     `;
     if (locations[0]) {
-      const current = await prisma.profileLocation.create({
-        data: {
-          key: 'curent',
-          profileId: profileId,
-          locationId: locations[0].id,
-        }
-      });
       await prisma.profileLocation.updateMany({
         where: {
           key: 'current',
           profileId: profileId,
         },
         data: { key: 'past' }
+      });
+      const current = await prisma.profileLocation.create({
+        data: {
+          key: 'current',
+          profileId: profileId,
+          locationId: locations[0].id,
+        }
       });
     }
 
