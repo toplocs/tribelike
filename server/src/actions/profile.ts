@@ -154,7 +154,9 @@ export async function getProfileLocations(params: {
       },
       include: {
         Location: true,
-      }
+      },
+      take: 20,
+      orderBy: { createdAt: 'desc' },
     });
 
     return { success: profileLocations };
