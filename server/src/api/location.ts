@@ -61,6 +61,8 @@ router.route('/byCoords').get(async (req: Request, res: Response) => {
 
 router.route('/updateCurrent').post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await updateCurrentLocation(req.body);
+  const { lat, lng } = req.query as { lat: string; lng: string };
+  const { success, error } = await getLocationByCoords({ lat, lng });
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

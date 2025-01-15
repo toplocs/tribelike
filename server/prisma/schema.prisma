@@ -70,7 +70,7 @@ model Interest {
   activities  Activity[]
   discussions Discussion[]
   Invite      Invite[]
-
+  
   Interests        InterestInterest[] @relation("ThisInterest")
   OtherInterests   InterestInterest[] @relation("OtherInterest")
   ProfileInterest  ProfileInterest[]
@@ -103,7 +103,7 @@ model Location {
   InterestLocation InterestLocation[]
 }
 
-model Relation {
+model Relation { //connection
   id         String    @id @default(uuid())
   key        String
   type       String
