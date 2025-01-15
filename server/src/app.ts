@@ -3,6 +3,8 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import morgan from 'morgan';
+
 
 import activityRouter from './api/activity';
 import authRouter from './api/auth';
@@ -16,16 +18,18 @@ import userRouter from './api/user';
 
 dotenv.config();
 
-const { URL, PORT, DEVELOPMENT } = process.env;
-if (!URL) console.error('URL not defined!')
+const { CLIENT_URL, PORT, DEVELOPMENT } = process.env;
+if (!CLIENT_URL) console.error('CLIENT_URL not defined!')
 
 const app = express();
 const httpServer = http.createServer(app);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(morgan('dev'));
+
 app.use(cors({
-  origin: URL,
+  origin: CLIENT_URL,
   optionsSuccessStatus: 200
 }));
 
@@ -42,14 +46,27 @@ app.use('/api/relation', relationRouter);
 app.use('/api/user', userRouter);
 
 if (DEVELOPMENT == 'true') {
-  app.get('/', (req: Request, res: Response) => res.redirect(URL as string));
+  app.get('/', (req: Request, res: Response) => res.redirect(CLIENT_URL as string));
 } else {
   app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
   });
 }
 
-
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Mode: ${DEVELOPMENT == 'true' ? 'Development' : 'Production'}`);
 });
+
+
+
+// https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener
+// var privateKey = fs.readFileSync( 'privatekey.pem' );
+// var certificate = fs.readFileSync( 'certificate.pem' );
+
+// https.createServer({
+//     key: privateKey,
+//     cert: certificate
+// }, app).listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });

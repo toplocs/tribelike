@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: dev
+    image: toplocs/server:dev
+    volumes:
+      - ./server/src:/home/node/app/src
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      DEVELOPMENT: 'true'
+      CLIENT_URL: http://localhost:5173
+      PORT: 3000
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/tribelike?schema=public"
+    command: pnpm dev
+
+volumes:
+  db:
+    driver: local
