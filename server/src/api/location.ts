@@ -49,23 +49,6 @@ router.route('/byId/:id').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
-router.route('/byCoords').get(async (req: Request, res: Response) => {
-  let { lat, lng } = req.query as { lat: string; lng: string };
-  const { success, error } = await getLocationByCoords({ lat, lng });
-
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-});
-
-router.route('/updateCurrent').post(upload.none(), async (req: Request, res: Response) => {
-  const { success, error } = await updateCurrentLocation(req.body);
-  const { lat, lng } = req.query as { lat: string; lng: string };
-  const { success, error } = await getLocationByCoords({ lat, lng });
-
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-});
-
 router.route('/add').put(async (req: Request, res: Response) => {
   const { success, error } = await addLocation(req.body);
 
