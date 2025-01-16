@@ -96,11 +96,13 @@
           <FriendListItem
             :key="friend.id"
             :profile="friend"
-            :onClick="() => {}"
           />
         </div>
 
-        <ActionButton title="Send invites" />
+        <ActionButton
+          title="Send invites"
+          @useAction="inviteFriends"
+        />
       </div>
     </Sidebar>
 
@@ -139,6 +141,24 @@ const relatedLocations = ref([]);
 const findProfiles = async () => {
   try {
     const response = await axios.get(`/api/profile/all`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const inviteFriends = async () => {
+  try {
+    const invites = friends.value?.filter(x => x.selected);
+    const response = await axios.put(`/api/interest/invite`, {
+      invites: invites.map(x => x.id),
+      interestId: interest.value?.id,
+    });
+    interest.value.invites = [
+      ...interest.value?.invites,
+      invites.map(x => x.id)
+    ];
 
     return response.data;
   } catch (error) {

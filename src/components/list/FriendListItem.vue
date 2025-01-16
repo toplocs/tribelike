@@ -1,7 +1,6 @@
 <template>
   <div
     class="flex min-w-[200px] items-center p-4 w-full border-b border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-150 ease-in-out cursor-pointer"
-    @click="onClick(profile)"
   >
     <img
       :src="profile?.image"
@@ -14,7 +13,11 @@
       </div>
     </div>
 
-    <CheckBox label="Select the profile" name="selectProfile" />
+    <CheckBox
+      label="Select the profile"
+      name="selectProfile"
+      @onChecked="(state) => profile.selected = state"
+    />
   </div>
 </template>
 
@@ -27,9 +30,5 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  onClick: {
-    type: Function,
-    required: false,
-  }
 });
 </script>
