@@ -50,10 +50,10 @@ model Profile {
   PluginSettings PluginSettings[]
   Invite         Invite[]
 
-  Profiles        ProfileProfile[]  @relation("ThisProfile")
-  OtherProfiles   ProfileProfile[]  @relation("OtherProfile")
-  ProfileLocation ProfileLocation[]
-  ProfileInterest ProfileInterest[]
+  Profiles         ProfileProfile[]  @relation("ThisProfile")
+  OtherProfiles    ProfileProfile[]  @relation("OtherProfile")
+  ProfileLocations ProfileLocation[]
+  ProfileInterests ProfileInterest[]
 }
 
 model Interest {
@@ -86,7 +86,7 @@ model Location {
   longitude   Float?
   geom        Bytes?
   zoom        Int?
-  profiles    Profile[] @relation("ProfileLocations")
+  //profiles    Profile[] @relation("ProfileLocations")
   links       String[]
   ask         String[]
   invites     String[]

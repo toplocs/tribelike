@@ -20,11 +20,12 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits()
+const emit = defineEmits(['update:modelValue', 'onChecked']);
 
 // Emit the checkbox value on change
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.checked)
+  emit('onChecked', target.checked);
 }
 </script>

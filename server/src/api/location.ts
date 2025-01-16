@@ -7,8 +7,6 @@ import {
   createLocation,
   updateLocation,
   getLocationById,
-  getLocationByCoords,
-  updateCurrentLocation,
   addLocation,
   removeLocation,
   askAccess,

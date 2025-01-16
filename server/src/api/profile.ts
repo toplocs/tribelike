@@ -8,7 +8,6 @@ import {
   deleteProfile,
   getAllProfiles,
   getProfileById,
-  getProfileLocations,
 } from '../actions/profile';
 
 const router = express.Router();
@@ -52,13 +51,6 @@ router.route('/all').get(async (req: Request, res: Response) => {
 
 router.route('/byId/:id').get(async (req: Request, res: Response) => {
   const { success, error } = await getProfileById(req.params);
-
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-});
-
-router.route('/locations/:id').get(async (req: Request, res: Response) => {
-  const { success, error } = await getProfileLocations(req.params);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

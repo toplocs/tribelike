@@ -14,10 +14,12 @@ import profileRouter from './api/profile';
 import relationRouter from './api/relation';
 import userRouter from './api/user';
 
+import v2locationRouter from './api/v2/location';
+import v2profileRouter from './api/v2/profile';
+
 dotenv.config();
 
-const { URL, MOBILE_URL, PORT, DEVELOPMENT } = process.env;
-if (!URL) console.error('URL not defined!')
+const { PORT, DEVELOPMENT } = process.env;
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -26,9 +28,10 @@ const allowedOrigins = [
   'capacitor://localhost',
   'ionic://localhost',
   'http://localhost',
+  'http://localhost:5137',
   'http://localhost:8080',
   'http://localhost:8100',
-  'http://192.168.1.12:8100'
+  'http://192.168.1.12:8100',
 ];
 
 const options: cors.CorsOptions = {
@@ -45,7 +48,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-if (DEVELOPMENT != 'true') app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.use('/api/activity', activityRouter);
 app.use('/api/auth', authRouter);
@@ -57,14 +60,13 @@ app.use('/api/profile', profileRouter);
 app.use('/api/relation', relationRouter);
 app.use('/api/user', userRouter);
 
-if (DEVELOPMENT == 'true') {
-  app.get('/', (req: Request, res: Response) => res.redirect(URL as string));
-} else {
-  app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-  });
-}
+//--- v2 ---//
+app.use('/api/v2/location', v2locationRouter);
+app.use('/api/v2/profile', v2profileRouter);
 
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -303,3 +303,25 @@ export async function addLink(formData: {
     return { error: e.message };
   }
 }
+
+export async function getProfileLocations(params: {
+  id?: string
+}) {
+  try {
+    const locationProfiles = await prisma.profileLocation.findMany({
+      where: {
+        locationId: params?.id,
+      },
+      include: {
+        Profile: true,
+      },
+      take: 20,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return { success: locationProfiles };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
