@@ -86,7 +86,7 @@ model Location {
   longitude   Float?
   geom        Bytes?
   zoom        Int?
-  //profiles    Profile[] @relation("ProfileLocations")
+  profiles    Profile[] @relation("ProfileLocations")
   links       String[]
   ask         String[]
   invites     String[]
