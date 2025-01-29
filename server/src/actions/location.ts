@@ -161,6 +161,34 @@ export async function getLocationByCoords(query: {
   }
 }
 
+export async function getLocationByBounds(query: {
+  northeast: string,
+  southwest: string,
+}) {
+  try {
+    const northeast = JSON.parse(query.northeast);
+    const southwest = JSON.parse(query.southwest);
+    const locations = await prisma.location.findMany({
+      where: {
+        latitude: {
+          gte: southwest.lat,
+          lte: northeast.lat,
+        },
+        longitude: {
+          gte: southwest.lng,
+          lte: northeast.lng,
+        },
+      },
+      take: 20,
+    });
+
+    return { success: locations };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 export async function updateCurrentLocation({
   profileId,
   lat,

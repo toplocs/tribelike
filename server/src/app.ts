@@ -3,6 +3,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import morgan from 'morgan';
 
 import activityRouter from './api/activity';
 import authRouter from './api/auth';
@@ -28,16 +29,18 @@ const allowedOrigins = [
   'capacitor://localhost',
   'ionic://localhost',
   'http://localhost',
-  'http://localhost:5137',
+  'http://localhost:5173',
   'http://localhost:8080',
   'http://localhost:8100',
-  'http://192.168.1.12:8100',
+  'http://192.168.1.*',
+  'http://192.168.1.9:8100',
 ];
 
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: '*'
 };
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cors(options));
