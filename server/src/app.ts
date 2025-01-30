@@ -15,6 +15,7 @@ import profileRouter from './api/profile';
 import relationRouter from './api/relation';
 import userRouter from './api/user';
 
+import v2interestRouter from './api/v2/interest';
 import v2locationRouter from './api/v2/location';
 import v2profileRouter from './api/v2/profile';
 
@@ -64,6 +65,7 @@ app.use('/api/relation', relationRouter);
 app.use('/api/user', userRouter);
 
 //--- v2 ---//
+app.use('/api/v2/interest', v2interestRouter);
 app.use('/api/v2/location', v2locationRouter);
 app.use('/api/v2/profile', v2profileRouter);
 

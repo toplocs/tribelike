@@ -1,12 +1,40 @@
 <template>
   <Container>
     <div class="w-full">
-      <div
-        v-for="activity of interestActivity"
-        :key="activity.id"
-      >
-        <ActivityListItem :activity="activity" />
-      </div>
+      <Card v-if="interestRelations.length" class="mb-4">
+        <h3>Related interests:</h3>
+        <InterestBadge
+          v-for="relation in interestRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card v-if="locationRelations.length" class="mb-4">
+        <h3>Related locations:</h3>
+        <LocationBadge
+          v-for="relation in locationRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card v-if="profileRelations.length" class="mb-4">
+        <h3>Related profiles:</h3>
+        <LocationBadge
+          v-for="relation in profileRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card>
+        <AddInterestRelation 
+          v-model:interestRelations="interestRelations"
+          v-model:locationRelations="locationRelations"
+          v-model:profileRelations="profileRelations"
+        />
+      </Card>
     </div>
 
     <Sidebar>
@@ -99,36 +127,27 @@ import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import Divider from '@/components/common/Divider.vue';
-import ActionButton from '@/components/common/ActionButton.vue';
+import Card from '@/components/common/Card.vue';
+import AddInterestRelation from '@/components/AddInterestRelation.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
-import ActivityListItem from '@/components/list/ActivityListItem.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import AddInterestButton from '@/components/AddInterestButton.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 
 const route = useRoute();
+const interestRelations = ref([]);
+const locationRelations = ref([]);
+const profileRelations = ref([]);
 const interest = inject('interest');
 const profile = inject('profile');
 const tab = inject('tab');
-const interestActivity = ref([]);
 const subscribed = computed(() => profile.value?.interests.some(
   x => x.id == interest.value?.id)
 );
 const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
-const fetchInterestActivity = async (id: string) => {
-  try {
-    const response = await axios.get(`/api/activity`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-watchEffect(async () => {
-  interestActivity.value = /*await fetchInterestActivity(interest.value?.id)*/ [];
-});
 
 onMounted(() => {
   tab.value = 'Info';

@@ -1,20 +1,43 @@
 <template>
   <Container>
     <div class="w-full">
-      <div>
-        <div
-          v-for="activity of locationActivity"
-          :key="activity.id"
-          className="w-full"
-        >
-          <ActivityListItem :activity="activity" />
-        </div>
-      </div>
-      
+      <Card v-if="interestRelations.length" class="mb-4">
+        <h3>Related interests:</h3>
+        <InterestBadge
+          v-for="relation in interestRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card v-if="locationRelations.length" class="mb-4">
+        <h3>Related locations:</h3>
+        <LocationBadge
+          v-for="relation in locationRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card v-if="profileRelations.length" class="mb-4">
+        <h3>Related profiles:</h3>
+        <LocationBadge
+          v-for="relation in profileRelations"
+          :key="relation.id"
+          :title="relation.title"
+        />
+      </Card>
+
+      <Card>
+        <AddLocationRelation 
+          v-model:interestRelations="interestRelations"
+          v-model:locationRelations="locationRelations"
+          v-model:profileRelations="profileRelations"
+        />
+      </Card>
     </div>
 
     <Sidebar>
-
       <div class="pb-4">
         <p v-if="subscribed" class="mb-4">
           You are subscribed to {{ location?.title }}
@@ -116,11 +139,14 @@ import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';
 import Title from '@/components/common/Title.vue';
+import Card from '@/components/common/Card.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Map from '@/components/MapComponent.vue';
 import Divider from '@/components/common/Divider.vue';
+import AddLocationRelation from '@/components/AddLocationRelation.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
+import InterestBadge from '@/components/badges/InterestBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddLocationButton from '@/components/AddLocationButton.vue';
@@ -128,7 +154,9 @@ import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 
 const route = useRoute();
-const locationActivity = ref([]);
+const interestRelations = ref([]);
+const locationRelations = ref([]);
+const profileRelations = ref([]);
 const location = inject('location');
 const profile = inject('profile');
 const tab = inject('tab');
@@ -138,20 +166,6 @@ const subscribed = computed(
   () => profile.value?.locations.some(x => x.id == location.value?.id)
 );
 const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
-
-const fetchLocationActivity = async (id: string) => {
-  try {
-    const response = await axios.get(`/api/activity`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-watchEffect(async () => {
-  locationActivity.value = [] /*await fetchLocationActivity(location.value?.id);*/;
-});
 
 onMounted(() => {
   tab.value = 'Info';

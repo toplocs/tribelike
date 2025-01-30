@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" ref="selectContainer">
+  <div class="relative min-w-[200px]" ref="selectContainer">
     <input
       type="hidden"
       :name="name"

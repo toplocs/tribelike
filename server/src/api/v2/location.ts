@@ -41,5 +41,14 @@ router.route('/:id/profiles').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
+//--- Relations--- //
+router.route('/interests/:id').post(async (req: Request, res: Response) => {
+  return res.status(200).json(true);
+});
+
+router.route('/locations/:id').post(async (req: Request, res: Response) => {
+  return res.status(200).json(true);
+});
+
 
 export default router;

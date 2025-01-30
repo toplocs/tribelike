@@ -1,9 +1,13 @@
 <template>
-  <div class="flex flex-row gap-2">
-    <div class="min-w-[30%]">
-      <SelectInput
+  <h3>Add a relation</h3>
+    <FindContext
+      :context="location"
+      @searchResult="setSearchResult"
+    />
+    <div class="mb-2 py-2 flex flex-row w-full gap-4 border-b">
+     <SelectInput
         name="relationKey"
-        placeholder="Relation key"
+        placeholder="Relation"
         :options="[
           { label: 'Child of', value: 'childOf' },
           { label: 'Is a', value: 'isA' },
@@ -12,15 +16,11 @@
         ]"
         v-model="relationKey"
       />
-    </div>
-    <div class="w-full">
-      <AddLocations
-        v-model="locations"
-        @addValue="addRelation"
-        @removeValue="removeRelation"
+      <LocationBadge
+        title="Nürnberg"
+        :remove="() => {}"
       />
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
