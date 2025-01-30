@@ -150,7 +150,7 @@ const fetchLocationActivity = async (id: string) => {
 }
 
 watchEffect(async () => {
-  locationActivity.value = await fetchLocationActivity(location.value?.id);
+  locationActivity.value = [] /*await fetchLocationActivity(location.value?.id);*/;
 });
 
 onMounted(() => {

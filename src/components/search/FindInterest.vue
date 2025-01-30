@@ -1,11 +1,5 @@
 <template>
   <div className="max-w-sm flex flex-row gap-2">
-    <IconButton
-      tooltipText="Open search field"
-      :icon="MagnifyingGlassIcon"
-      @click="toggleSearch"
-    />
-
     <Search
       v-if="!hideSearch"
       placeholder="Add an interest ..."
@@ -49,7 +43,7 @@ const props = defineProps({
   },
   hideSearch: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   addInterest: {
     type: Function,

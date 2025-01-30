@@ -127,7 +127,7 @@ const fetchInterestActivity = async (id: string) => {
 }
 
 watchEffect(async () => {
-  interestActivity.value = await fetchInterestActivity(interest.value?.id);
+  interestActivity.value = /*await fetchInterestActivity(interest.value?.id)*/ [];
 });
 
 onMounted(() => {
