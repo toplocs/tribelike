@@ -173,8 +173,29 @@ const subscribed = computed(() => profile.value?.interests.some(
 );
 const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
+const findInterestRelations = async () => {
+  try {
+    const response = await axios.get(`/api/v2/interest/interests/${interest.value.id}`);
 
-onMounted(() => {
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const findLocationRelations = async () => {
+  try {
+    const response = await axios.get(`/api/v2/interest/locations/${interest.value.id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+onMounted(async () => {
   tab.value = 'Info';
+  interestRelations.value = await findInterestRelations();
+  locationRelations.value = await findLocationRelations();
 });
 </script>

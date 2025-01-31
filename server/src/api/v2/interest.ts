@@ -3,6 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import {
   findInterestRelations,
+  findLocationRelations,
   createInterestRelation,
   createLocationRelation,
 } from '../../actions/interest-relations';
@@ -12,14 +13,11 @@ const upload = multer();
 
 router.route('/interests/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log(req.query);
-  /*const { success, error } = await findInterestRelations(id, req.query);
+  const { success, error } = await findInterestRelations(id);
 
   if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);*/
-});
-
-router.route('/interests/:id').post(async (req: Request, res: Response) => {
+  else return res.status(400).json(error);
+}).post(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await createInterestRelation(id, req.body);
 
@@ -27,7 +25,13 @@ router.route('/interests/:id').post(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
-router.route('/locations/:id').post(async (req: Request, res: Response) => {
+router.route('/locations/:id').get(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { success, error } = await findLocationRelations(id);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+}).post(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await createLocationRelation(id, req.body);
 

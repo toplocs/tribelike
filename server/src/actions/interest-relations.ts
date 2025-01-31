@@ -2,18 +2,15 @@ import prisma from '../lib/prisma';
 
 export async function findInterestRelations(
   id: string,
-  query: { key: string }
 ) {
   try {
     const relations = await prisma.interestInterest.findMany({
-      where: {
-        key: query.key,
-        interestId: id,
-      },
+      where: { interestId: id },
       select: {
         key: true,
         OtherInterest: true,
       },
+      take: 50,
     });
 
     return { success: relations };
@@ -22,6 +19,27 @@ export async function findInterestRelations(
     return { error: e.message };
   }
 }
+
+export async function findLocationRelations(
+  id: string,
+) {
+  try {
+    const relations = await prisma.interestLocation.findMany({
+      where: { interestId: id },
+      select: {
+        key: true,
+        Location: true,
+      },
+      take: 50,
+    });
+
+    return { success: relations };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
 
 export async function createInterestRelation(
   id: string,
