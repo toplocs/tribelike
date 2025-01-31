@@ -59,16 +59,18 @@ const relationKey = ref('');
 const searchResult = ref(null);
 
 const addInterestRelation = async (id: String) => {
+  console.log(interest.value.id)
   try {
-    const response = await axios.post(`/api/v2/interest/interests/${interest.id}`, {
+    const response = await axios.post(`/api/v2/interest/interests/${interest.value.id}`, {
       key: relationKey.value,
       otherInterestId: id,
     }, {
       headers: { "Content-Type": "application/json" }
     });
-    emit('update:interestRelations', [...props.interestRelations, {
-      title: id,
-    }]);
+    emit('update:interestRelations', [
+      ...props.interestRelations,
+      response.data,
+    ]);
 
     return response.data;
   } catch (error) {
@@ -79,15 +81,16 @@ const addInterestRelation = async (id: String) => {
 
 const addLocationRelation = async (id: String) => {
   try {
-    const response = await axios.post(`/api/v2/interest/locations/${interest.id}`, {
+    const response = await axios.post(`/api/v2/interest/locations/${interest.value.id}`, {
       key: relationKey.value,
       locationId: id,
     }, {
       headers: { "Content-Type": "application/json" }
     });
-    emit('update:locationRelations', [...props.locationRelations, {
-      title: id,
-    }]);
+    emit('update:locationRelations', [
+      ...props.locationRelations,
+      response.data,
+    ]);
 
     return response.data;
   } catch (error) {
@@ -97,7 +100,7 @@ const addLocationRelation = async (id: String) => {
 
 const addProfileRelation = async (id: String) => {
   try {
-    const response = await axios.post(`/api/v2/interest/profiles/${interest.id}`, {
+    const response = await axios.post(`/api/v2/interest/profiles/${interest.value.id}`, {
       key: relationKey.value,
       profileId: id,
     }, {

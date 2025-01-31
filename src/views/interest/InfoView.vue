@@ -1,31 +1,49 @@
 <template>
   <Container>
-    <div class="w-full">
-      <Card v-if="interestRelations.length" class="mb-4">
-        <h3>Related interests:</h3>
-        <InterestBadge
-          v-for="relation in interestRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
+    <div class="w-full space-y-4">
+      <Card v-if="interestRelations.length">
+        <h2 class="font-bold">Related interests:</h2>
+        <div
+          v-for="key of relationKeys"
+          class="mt-2 space-x-1"
+        >
+          <h3>{{key}}:</h3>
+          <InterestBadge
+            v-for="relation in interestRelations.filter(x => x.key == key)"
+            :title="relation.OtherInterest.title"
+          />
+          <Divider />
+        </div>
       </Card>
 
-      <Card v-if="locationRelations.length" class="mb-4">
-        <h3>Related locations:</h3>
-        <LocationBadge
-          v-for="relation in locationRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
+      <Card v-if="locationRelations.length">
+        <h2 class="font-bold">Related locations:</h2>
+        <div
+          v-for="key of relationKeys"
+          class="mt-2 space-x-1"
+        >
+          <h3>{{key}}:</h3>
+          <LocationBadge
+            v-for="relation in locationRelations.filter(x => x.key == key)"
+            :title="relation.Location.title"
+          />
+          <Divider />
+        </div>
       </Card>
 
-      <Card v-if="profileRelations.length" class="mb-4">
-        <h3>Related profiles:</h3>
-        <LocationBadge
-          v-for="relation in profileRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
+      <Card v-if="profileRelations.length">
+        <h2 class="font-bold">Related profiles:</h2>
+        <div
+          v-for="key of relationKeys"
+          class="mt-2 space-x-1"
+        >
+          <h3>{{key}}:</h3>
+          <InterestBadge
+            v-for="relation in profileRelations"
+            :title="relation.Profile.username"
+          />
+          <Divider />
+        </div>
       </Card>
 
       <Card>
@@ -135,6 +153,13 @@ import ActionButton from '@/components/common/ActionButton.vue';
 import AddInterestButton from '@/components/AddInterestButton.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
+
+const relationKeys = [
+  'childOf',
+  'isA',
+  'allowsVotingTo',
+  'showsContentOf',
+];
 
 const route = useRoute();
 const interestRelations = ref([]);
