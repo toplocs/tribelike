@@ -7,6 +7,7 @@ export async function findInterestRelations(
     const relations = await prisma.interestInterest.findMany({
       where: { interestId: id },
       select: {
+        id: true,
         key: true,
         OtherInterest: true,
       },
@@ -27,6 +28,7 @@ export async function findLocationRelations(
     const relations = await prisma.interestLocation.findMany({
       where: { interestId: id },
       select: {
+        id: true,
         key: true,
         Location: true,
       },
@@ -89,6 +91,32 @@ export async function createLocationRelation(
     });
 
     return { success: relation };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function removeInterestRelation(id: string) {
+  try {
+    await prisma.interestInterest.delete({
+      where: { id: id }
+    });
+
+    return { success: true };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
+
+export async function removeLocationRelation(id: string) {
+  try {
+    await prisma.interestLocation.delete({
+      where: { id: id }
+    });
+
+    return { success: true };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

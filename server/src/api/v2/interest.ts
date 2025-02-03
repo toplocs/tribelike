@@ -6,6 +6,8 @@ import {
   findLocationRelations,
   createInterestRelation,
   createLocationRelation,
+  removeInterestRelation,
+  removeLocationRelation
 } from '../../actions/interest-relations';
 
 const router = express.Router();
@@ -23,6 +25,12 @@ router.route('/interests/:id').get(async (req: Request, res: Response) => {
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
+}).delete(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { success, error } = await removeInterestRelation(id);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
 });
 
 router.route('/locations/:id').get(async (req: Request, res: Response) => {
@@ -34,6 +42,12 @@ router.route('/locations/:id').get(async (req: Request, res: Response) => {
 }).post(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await createLocationRelation(id, req.body);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+}).delete(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { success, error } = await removeLocationRelation(id);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
