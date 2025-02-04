@@ -1,7 +1,7 @@
 <template>
   <Search
     placeholder="Search for anything ..."
-    name="selectedItem"
+    name="mixed"
     :findOptions="findMixed"
     @selected="handleSelection"
   />

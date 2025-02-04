@@ -1,7 +1,7 @@
 <template>
   <Search
     placeholder="Search for anything ..."
-    name="selectedItem"
+    name="mixed"
     :findOptions="findMixed"
     @selected="handleSelection"
   />
@@ -17,6 +17,13 @@ import InterestBadge from '@/components/badges/InterestBadge.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Search from '@/components/search/Index.vue';
 
+const props = defineProps({
+  context: { //Find profiles in this context only
+    type: Object,
+    required: false,
+  }
+});
+const emit = defineEmits(['searchResult'])
 const router = useRouter();
 const profile = inject('profile');
 const hideSearch = ref(true);
@@ -25,8 +32,6 @@ const interests = computed(() => profile.value?.interests || []);
 const findInterests = async (title: string) => {
   try {
     const response = await axios.get(`/api/interest?title=${title}`);
-    response.data?.map(x => x.title = 'interest/'+x.title);
-    console.log(response.data)
 
     return response.data
   } catch (error) {
@@ -37,7 +42,6 @@ const findInterests = async (title: string) => {
 const findLocations = async (title: string) => {
   try {
     const response = await axios.get(`/api/location?title=${title}`);
-    response.data?.map(x => x.title = 'location/'+x.title)
 
     return response.data
   } catch (error) {
@@ -45,30 +49,10 @@ const findLocations = async (title: string) => {
   }
 }
 
-const findOnGithub = async (title: string) => {
-  try {
-    const response = await axios.get(`https://api.github.com/search/repositories?q=${title}`);
-    const result = [];
-    if (response.data?.items) response.data.items.length = 20;
-    for (let item of response.data?.items) {
-      result.push({
-        title: 'github/'+item.full_name,
-      });
-    }
-
-    return result;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
-
 const findMixed = async (title: string) => {
-  let result = [];
-  const interests = await findInterests(title);
-  const locations = await findLocations(title);
-  const github = await findOnGithub(title);
-  result = [...interests, ...locations, ...github];
+  let result = {};
+  result.Interests = await findInterests(title);
+  result.Locations = await findLocations(title);
 
   return result;
 }
@@ -77,13 +61,9 @@ const handleSelection = async (result: {
   id: string,
   title: string,
 }) => {
-  if (result.title?.includes('interest'))
-    return router.push(`/interest/${result.id}`);
-  if (result.title?.includes('location'))
-    return router.push(`/location/${result.id}`);
-  else {
-    const values = result.title.split('/');
-    router.push(`/interest/create?title=${values[1]}?parent=${values[0]}`);
-  }
+  if (result.key == 'Interests')
+    return router.push(`/interest/${result.option?.id}`);
+  if (result.key == 'Locations')
+    return router.push(`/location/${result.option?.id}`);
 }
 </script>

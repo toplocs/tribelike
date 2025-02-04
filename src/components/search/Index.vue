@@ -11,49 +11,54 @@
     />
 
     <div
-      v-if="isOpen"
+      v-if="isOpen && hasEntries"
+      class="absolute z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
       <ul>
         <li
           v-for="[key, value] of Object.entries(filteredOptions)"
           :key="key"
-          class="pt-4"
+          class="p-2"
         >
-          <span class="py-2">
-            {{ key }}:
-          </span>
-
-          <div class="pb-4 flex flex-row flex-wrap gap-2">
-            <span
-              v-for="item of value"
-              :key="item.id"
-              @click="selectOption(key, item)"
-            >
-              <LocationBadge
-                v-if="key == 'Locations'"
-                :title="item.title"
-              />
-              <InterestBadge
-                v-if="key == 'Interests'"
-                :title="item.title"
-              />
+          <div v-if="value.length">
+            <span class="mt-1">
+              {{ key }}:
             </span>
+
+            <div class="my-2 flex flex-row flex-wrap gap-2">
+              <span
+                v-for="item of value"
+                :key="item.id"
+                @click="selectOption(key, item)"
+              >
+                <LocationBadge
+                  v-if="key == 'Locations'"
+                  :title="item.title"
+                />
+                <InterestBadge
+                  v-if="key == 'Interests'"
+                  :title="item.title"
+                />
+              </span>
+            </div>
+            <Divider />
           </div>
         </li>
         <li v-if="filteredOptions.length === 0" class="px-4 py-2 text-gray-500">
           No search results
         </li>
 
-        <slot v-if="filteredOptions.length === 0" />
+        <slot />
       </ul>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
+import Divider from '@/components/common/Divider.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 
@@ -76,19 +81,22 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['selected', 'update:modelValue'])
+
 const inputValue = ref('');
 const selectedOption = ref(null);
 const isOpen = ref(false);
 const filteredOptions = ref({});
 const selectContainer = ref<HTMLElement | null>(null);
-const emit = defineEmits<{
-  (event: 'update:modelValue', value: { id: number; title: string } | string): void;
-  (event: 'selected', { value: object }): void;
-}>();
+const hasEntries = computed(() => 
+  props.name !== 'mixed' || (
+    (filteredOptions.value?.Interests?.length || 0) + 
+    (filteredOptions.value?.Locations?.length || 0) > 0
+  )
+);
 
 const fetchFilteredOptions = async () => {
   if (inputValue.value.length < 3) return filteredOptions.value = {};
-  
   filteredOptions.value = await props.findOptions(inputValue.value);
 };
 

@@ -32,9 +32,7 @@ const allowedOrigins = [
   'http://localhost',
   'http://localhost:5173',
   'http://localhost:8080',
-  'http://localhost:8100',
-  'http://192.168.1.*',
-  'http://192.168.1.9:8100',
+  'http://localhost:8100'
 ];
 
 const options: cors.CorsOptions = {

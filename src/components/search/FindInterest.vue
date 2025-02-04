@@ -1,9 +1,8 @@
 <template>
   <div className="max-w-sm flex flex-row gap-2">
     <Search
-      v-if="!hideSearch"
       placeholder="Add an interest ..."
-      name="selectedItem"
+      name="interests"
       :findOptions="findInterests"
       @selected="handleSelection"
     >
@@ -54,14 +53,16 @@ const props = defineProps({
     required: true,
   }
 });
-
+const profile = inject('profile');
 const hideSearch = ref(props.hideSearch);
 
 const findInterests = async (title: string) => {
   try {
     const response = await axios.get(`/api/interest?title=${title}`);
 
-    return response.data
+    return {
+      Interests: response.data,
+    }
   } catch (error) {
     console.error(error);
   }
@@ -71,11 +72,9 @@ const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
 
-const handleSelection = async (result: {
-  id: string,
-  title: string
-}) => {
-  if (props.defaultInterests.some(x => x.id === result.id)) return;
-  props.addInterest(result);
+const handleSelection = async ({ option }) => {
+  if (props.defaultInterests.some(x => x.id === option.id)) return;
+  profile.value.interests.push(option);
+  props.addInterest(option);
 };
 </script>
