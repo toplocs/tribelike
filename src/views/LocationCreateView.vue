@@ -98,28 +98,6 @@
             />
           </div>
 
-          <Divider />
-
-          <Title>Relations:</Title>
-
-          <div class="mb-2">
-            <label
-              for="relations"
-              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related interests
-            </label>
-            <InterestRelations v-model="relatedInterests" />
-          </div>
-
-          <div class="mb-2">
-            <label
-              for="relations"
-              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related locations
-            </label>
-            <LocationRelations v-model="relatedLocations" />
-          </div>
-
           <SubmitButton className="w-full mt-4">
             Create location
           </SubmitButton>
@@ -157,8 +135,6 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Map from '@/components/MapComponent.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
-import InterestRelations from '@/components/InterestRelations.vue';
-import LocationRelations from '@/components/LocationRelations.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
 
 const router = useRouter();
@@ -229,6 +205,6 @@ const onSubmit = async () => {
 }
 
 onMounted(async () => {
-  friends.value = await findProfiles();
+  //friends.value = await findProfiles();
 });
 </script>

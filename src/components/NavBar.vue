@@ -59,12 +59,12 @@
 
             <template #default="{ closeDropdown }">
               <ul>
-                <router-link to="/interests/create" @click.native="closeDropdown">
+                <router-link to="/interest/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                     Create interest
                   </li>
                 </router-link>
-                <router-link to="/locations/create" @click.native="closeDropdown">
+                <router-link to="/location/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                     Create location
                   </li>

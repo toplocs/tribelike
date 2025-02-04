@@ -15,12 +15,7 @@
     <SelectInput
       name="relationKey"
       placeholder="Select a relation"
-      :options="[
-        { label: 'Child of', value: 'childOf' },
-        { label: 'Is a', value: 'isA' },
-        { label: 'Allows voting to', value: 'allowsVotingTo' },
-        { label: 'Shows content of', value: 'showsContentOf' },
-      ]"
+      :options="relationKeys"
       v-model="relationKey"
     />
     <LocationBadge
@@ -43,6 +38,7 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
+import relationKeys from '@/assets/relationKeys';
 
 const props = defineProps({
   interestRelations: Array,
@@ -59,7 +55,6 @@ const relationKey = ref('');
 const searchResult = ref(null);
 
 const addInterestRelation = async (id: String) => {
-  console.log(interest.value.id)
   try {
     const response = await axios.post(`/api/v2/interest/interests/${interest.value.id}`, {
       key: relationKey.value,

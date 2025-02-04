@@ -15,12 +15,7 @@
     <SelectInput
       name="relationKey"
       placeholder="Select a relation"
-      :options="[
-        { label: 'Child of', value: 'childOf' },
-        { label: 'Is a', value: 'isA' },
-        { label: 'Allows voting to', value: 'allowsVotingTo' },
-        { label: 'Shows content of', value: 'showsContentOf' },
-      ]"
+      :options="relationKeys"
       v-model="relationKey"
     />
     <LocationBadge
@@ -43,6 +38,7 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
+import relationKeys from '@/assets/relationKeys';
 
 const props = defineProps({
   interestRelations: Array,
@@ -60,15 +56,16 @@ const searchResult = ref(null);
 
 const addInterestRelation = async (id: String) => {
   try {
-    const response = await axios.post(`/api/v2/location/interests/${location.id}`, {
+    const response = await axios.post(`/api/v2/location/interests/${location.value.id}`, {
       key: relationKey.value,
       interestId: id,
     }, {
       headers: { "Content-Type": "application/json" }
     });
-    emit('update:interestRelations', [...props.interestRelations, {
-      title: id,
-    }]);
+    emit('update:interestRelations', [
+      ...props.interestRelations,
+      response.data,
+    ]);
 
     return response.data;
   } catch (error) {
@@ -79,15 +76,16 @@ const addInterestRelation = async (id: String) => {
 
 const addLocationRelation = async (id: String) => {
   try {
-    const response = await axios.post(`/api/v2/location/locations/${location.id}`, {
+    const response = await axios.post(`/api/v2/location/locations/${location.value.id}`, {
       key: relationKey.value,
       otherLocationId: id,
     }, {
       headers: { "Content-Type": "application/json" }
     });
-    emit('update:interestRelations', [...props.locationRelations, {
-      title: id,
-    }]);
+    emit('update:locationRelations', [
+      ...props.locationRelations,
+      response.data,
+    ]);
 
     return response.data;
   } catch (error) {
@@ -97,13 +95,13 @@ const addLocationRelation = async (id: String) => {
 
 const addProfileRelation = async (id: String) => {
   try {
-    const response = await axios.post(`/api/v2/location/profiles/${location.id}`, {
+    const response = await axios.post(`/api/v2/location/profiles/${location.value.id}`, {
       key: relationKey.value,
       profileId: id,
     }, {
       headers: { "Content-Type": "application/json" }
     });
-    emit('update:interestRelations', [...props.profileRelations, {
+    emit('update:profileRelations', [...props.profileRelations, {
       title: id,
     }]);
 

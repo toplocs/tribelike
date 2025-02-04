@@ -1,39 +1,71 @@
 <template>
   <Container>
-    <div class="w-full">
-      <Card v-if="interestRelations.length" class="mb-4">
-        <h3>Related interests:</h3>
-        <InterestBadge
-          v-for="relation in interestRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
-      </Card>
-
-      <Card v-if="locationRelations.length" class="mb-4">
-        <h3>Related locations:</h3>
-        <LocationBadge
-          v-for="relation in locationRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
-      </Card>
-
-      <Card v-if="profileRelations.length" class="mb-4">
-        <h3>Related profiles:</h3>
-        <LocationBadge
-          v-for="relation in profileRelations"
-          :key="relation.id"
-          :title="relation.title"
-        />
-      </Card>
-
+    <div class="w-full space-y-4">
       <Card>
         <AddLocationRelation 
           v-model:interestRelations="interestRelations"
           v-model:locationRelations="locationRelations"
           v-model:profileRelations="profileRelations"
         />
+      </Card>
+
+      <Card v-if="interestRelations?.length">
+        <h2 class="font-bold">Related interests:</h2>
+        <div
+          v-for="data of relationKeys"
+          class="mt-2 space-x-1 space-y-4"
+        >
+          <h3 className="mb-2">{{data.label}}:</h3>
+          <RelationListItem
+            v-for="relation in interestRelations.filter(x => x.key == data.value)"
+            is="location"
+            path="interest"
+            :relation="relation"
+            :relationId="relation.Interest.id"
+            :relationTitle="relation.Interest.title"
+            @removeRelation="(id) => {
+              interestRelations = interestRelations.filter(x => x.id != id);
+            }"
+          />
+          <Divider />
+        </div>
+      </Card>
+
+      <Card v-if="locationRelations?.length">
+        <h2 class="font-bold">Related locations:</h2>
+        <div
+          v-for="data of relationKeys"
+          class="mt-2 space-x-1 space-y-2"
+        >
+          <h3 className="mb-2">{{data.label}}:</h3>
+          <RelationListItem
+            v-for="relation in locationRelations.filter(x => x.key == data.value)"
+            is="location"
+            path="location"
+            :relation="relation"
+            :relationId="relation.OtherLocation.id"
+            :relationTitle="relation.OtherLocation.title"
+            @removeRelation="(id) => {
+              locationRelations = locationRelations.filter(x => x.id != id);
+            }"
+          />
+          <Divider />
+        </div>
+      </Card>
+
+      <Card v-if="profileRelations?.length">
+        <h2 class="font-bold">Related profiles:</h2>
+        <div
+          v-for="data of relationKeys"
+          class="mt-2 space-x-1 space-y-2"
+        >
+          <h3 className="mb-2">{{data.label}}:</h3>
+          <InterestBadge
+            v-for="relation in profileRelations.filter(x => x.key == data.value)"
+            :title="relation.Profile.username"
+          />
+          <Divider />
+        </div>
       </Card>
     </div>
 
@@ -50,6 +82,7 @@
         </p>
 
         <AddLocationButton
+          v-if="location"
           :location="location"
           :subscribed="subscribed"
         />
@@ -135,7 +168,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, computed, watchEffect, onMounted } from 'vue';
+import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';
 import Title from '@/components/common/Title.vue';
@@ -152,6 +185,8 @@ import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddLocationButton from '@/components/AddLocationButton.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
+import RelationListItem from '@/components/list/RelationListItem.vue';
+import relationKeys from '@/assets/relationKeys';
 
 const route = useRoute();
 const interestRelations = ref([]);
@@ -167,7 +202,34 @@ const subscribed = computed(
 );
 const people = computed(() => location.value?.profiles.filter(x => x.id !== profile.value?.id));
 
-onMounted(() => {
+const findInterestRelations = async () => {
+  try {
+    const response = await axios.get(`/api/v2/location/interests/${location.value?.id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const findLocationRelations = async () => {
+  try {
+    const response = await axios.get(`/api/v2/location/locations/${location.value?.id}`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+watch(() => location.value, async () => {
+  interestRelations.value = await findInterestRelations();
+  locationRelations.value = await findLocationRelations();
+});
+
+onMounted(async () => {
   tab.value = 'Info';
+  interestRelations.value = await findInterestRelations();
+  locationRelations.value = await findLocationRelations();
 });
 </script>

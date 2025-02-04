@@ -82,6 +82,7 @@ onMounted(async () => {
   if (session.value) {
     user.value = await getUser();
     profile.value = await getProfile();
+    if (!profile.value) logout();
   } else logout();
 });
 

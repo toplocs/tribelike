@@ -13,6 +13,7 @@ import {
 const router = express.Router();
 const upload = multer();
 
+//--- Relations--- //
 router.route('/interests/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await findInterestRelations(id);

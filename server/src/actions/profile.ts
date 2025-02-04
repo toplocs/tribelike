@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import prisma from '../lib/prisma';
 import { auth } from '../lib/auth';
 
@@ -35,11 +36,14 @@ export async function createProfile(
   const session = await auth(authHeader);
   const user = session?.user;
   try {
+    const email = formData.email.trim().toLowerCase();
+    const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+    const image = `https://gravatar.com/avatar/${hash}`;
     const profile = await prisma.profile.create({
       data: {
         userId: user?.id,
         type: formData.type,
-        image: formData.image || '/images/default.jpeg',
+        image: image,
         username: formData.username,
         email: formData.email,
         about: formData.about,
@@ -65,6 +69,9 @@ export async function updateProfile(
   authHeader?: string,
 ) {
   try {
+    const email = formData.email.trim().toLowerCase();
+    const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+    const image = `https://gravatar.com/avatar/${hash}`;
     const session = await auth(authHeader);
     const user = session?.user;
     const profile = await prisma.profile.update({
@@ -73,7 +80,7 @@ export async function updateProfile(
       },
       data: {
         type: formData.type,
-        image: formData.image || '/images/default.jpeg',
+        image: image,
         username: formData.username,
         email: formData.email,
         about: formData.about,
