@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import prisma from '../lib/prisma';
 import { auth } from '../lib/auth';
 import profiles from '../lib/profiles';
@@ -30,6 +31,9 @@ export async function createUser(formData: {
     if (formData.username.length < 3) throw new Error('Your username is too short');
     if (formData.email.length < 3) throw new Error('Your email is too short');
     if (formData.password != formData.password2) throw new Error('The password confirmation failed');
+    const email = formData.email.trim().toLowerCase();
+    const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+    const image = `https://gravatar.com/avatar/${hash}`;
     const user = await prisma.user.create({
       data: {
         username: formData.username,
@@ -43,6 +47,7 @@ export async function createUser(formData: {
           userId: user.id,
           username: formData.username,
           email: formData.email,
+          image: image,
           ...profile,
         }
       });
