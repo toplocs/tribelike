@@ -15,6 +15,7 @@ import profileRouter from './api/profile';
 import relationRouter from './api/relation';
 import userRouter from './api/user';
 
+import v2interestRouter from './api/v2/interest';
 import v2locationRouter from './api/v2/location';
 import v2profileRouter from './api/v2/profile';
 
@@ -31,9 +32,7 @@ const allowedOrigins = [
   'http://localhost',
   'http://localhost:5173',
   'http://localhost:8080',
-  'http://localhost:8100',
-  'http://192.168.1.*',
-  'http://192.168.1.9:8100',
+  'http://localhost:8100'
 ];
 
 const options: cors.CorsOptions = {
@@ -45,9 +44,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cors(options));
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
@@ -64,6 +63,7 @@ app.use('/api/relation', relationRouter);
 app.use('/api/user', userRouter);
 
 //--- v2 ---//
+app.use('/api/v2/interest', v2interestRouter);
 app.use('/api/v2/location', v2locationRouter);
 app.use('/api/v2/profile', v2profileRouter);
 

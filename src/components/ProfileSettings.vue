@@ -1,7 +1,7 @@
 <template>
   <div className="mb-2">
     <SelectAvatar
-      :src="profile?.image || '/images/default.jpeg'"
+      :src="profile?.image || gravatarImage"
     />
   </div>
 
@@ -75,6 +75,8 @@
 </template>
 
 <script setup lang="ts">
+import CryptoJS from 'crypto-js';
+import { computed } from 'vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import TextArea from '@/components/common/TextArea.vue';
@@ -85,5 +87,12 @@ const props = defineProps({
     type: Object,
     required: false,
   },
+});
+const gravatarImage = computed(() => {
+  if (!props.profile?.email) return '';
+  const email = props.profile.email.trim().toLowerCase();
+  const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+  
+  return `https://gravatar.com/avatar/${hash}`;
 });
 </script>

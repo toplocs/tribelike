@@ -14,6 +14,7 @@
   "dependencies": {
     "@heroicons/vue": "^2.1.5",
     "axios": "^1.7.7",
+    "crypto-js": "^4.2.0",
     "ol": "^10.1.0",
     "ol-contextmenu": "^5.5.0",
     "ol-ext": "^4.0.23",

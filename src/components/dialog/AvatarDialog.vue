@@ -57,14 +57,6 @@ const avatars = [{
   id: 1,
   label: 'Default',
   value: '/images/default.jpeg',
-}, {
-  id: 2,
-  label: 'Yannik',
-  value: '/images/yannik.jpeg',
-}, {
-  id: 3,
-  label: 'Felix',
-  value: '/images/felix.jpeg',
 }];
 
 const router = useRouter();

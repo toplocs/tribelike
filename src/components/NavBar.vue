@@ -5,33 +5,20 @@
     <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
 
       <span v-if="interest" class="flex flex-row gap-2">
-        <span v-if="interest?.parent">
-          <router-link :to="`/interest/${interest.parent?.id}`">
-            <InterestBadge :title="interest.parent?.title" />
-          </router-link>
-        </span>
         <Title>
           {{ interest?.title }}
         </Title>
       </span>
-
       <span v-else-if="location" class="flex flex-row gap-2">
-        <span v-if="location?.parent">
-          <router-link :to="`/location/${location.parent?.id}`">
-            <LocationBadge :title="location.parent?.title" />
-          </router-link>
-        </span>
         <Title float="left">
           {{ location?.title }}
         </Title>
       </span>
-
       <span v-else-if="title" class="flex flex-row gap-2">
         <Title float="left">
           {{ title }}
         </Title>
       </span>
-
       <span v-else>
         <router-link to="/">
           <Title>
@@ -59,12 +46,12 @@
 
             <template #default="{ closeDropdown }">
               <ul>
-                <router-link to="/interests/create" @click.native="closeDropdown">
+                <router-link to="/interest/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                     Create interest
                   </li>
                 </router-link>
-                <router-link to="/locations/create" @click.native="closeDropdown">
+                <router-link to="/location/create" @click.native="closeDropdown">
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                     Create location
                   </li>

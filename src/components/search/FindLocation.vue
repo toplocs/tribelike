@@ -1,15 +1,8 @@
 <template>
   <div className="max-w-sm flex flex-row gap-2">
-    <IconButton
-      tooltipText="Open search field"
-      :icon="MagnifyingGlassIcon"
-      @click="toggleSearch"
-    />
-
     <Search
-      v-if="!hideSearch"
-      placeholder="Add a location ..."
-      name="selectedItem"
+      placeholder="Add an location ..."
+      name="locations"
       :findOptions="findLocations"
       @selected="handleSelection"
     >
@@ -49,7 +42,7 @@ const props = defineProps({
   },
   hideSearch: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   addLocation: {
     type: Function,
@@ -60,14 +53,16 @@ const props = defineProps({
     required: true,
   }
 });
-
+const profile = inject('profile');
 const hideSearch = ref(props.hideSearch);
 
 const findLocations = async (title: string) => {
   try {
     const response = await axios.get(`/api/location?title=${title}`);
 
-    return response.data
+    return {
+      Locations: response.data,
+    }
   } catch (error) {
     console.error(error);
   }
@@ -77,11 +72,9 @@ const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
 
-const handleSelection = async (result: {
-  id: string,
-  title: string
-}) => {
-  if (props.defaultLocations.some(x => x.id === result.id)) return;
-  props.addLocation(result);
+const handleSelection = async ({ option }) => {
+  if (props.defaultLocations.some(x => x.id === option.id)) return;
+  profile.value.locations.push(option);
+  props.addLocation(option);
 };
 </script>

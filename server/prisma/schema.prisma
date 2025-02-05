@@ -70,7 +70,7 @@ model Interest {
   activities  Activity[]
   discussions Discussion[]
   Invite      Invite[]
-  
+
   Interests        InterestInterest[] @relation("ThisInterest")
   OtherInterests   InterestInterest[] @relation("OtherInterest")
   ProfileInterest  ProfileInterest[]
@@ -103,7 +103,7 @@ model Location {
   InterestLocation InterestLocation[]
 }
 
-model Relation { //connection
+model Relation {
   id         String    @id @default(uuid())
   key        String
   type       String
@@ -171,70 +171,66 @@ model PluginSettings {
   settings  Json[]
 }
 
+//--- Realtions ---//
+
 model ProfileInterest {
+  id         String   @id @default(uuid())
   key        String
   profileId  String
   Profile    Profile  @relation(fields: [profileId], references: [id])
   interestId String
   Interest   Interest @relation(fields: [interestId], references: [id])
   createdAt  DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 model ProfileLocation {
+  id         String   @id @default(uuid())
   key        String
   profileId  String
   Profile    Profile  @relation(fields: [profileId], references: [id])
   locationId String
   Location   Location @relation(fields: [locationId], references: [id])
   createdAt  DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 model ProfileProfile {
+  id             String   @id @default(uuid())
   key            String
   profileId      String
-  Profile        Profile @relation("ThisProfile", fields: [profileId], references: [id])
+  Profile        Profile  @relation("ThisProfile", fields: [profileId], references: [id])
   otherProfileId String
-  OtherProfile   Profile @relation("OtherProfile", fields: [otherProfileId], references: [id])
+  OtherProfile   Profile  @relation("OtherProfile", fields: [otherProfileId], references: [id])
   createdAt      DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 model InterestLocation {
+  id         String   @id @default(uuid())
   key        String
   interestId String
   Interest   Interest @relation(fields: [interestId], references: [id])
   locationId String
   Location   Location @relation(fields: [locationId], references: [id])
   createdAt  DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 model InterestInterest {
+  id              String   @id @default(uuid())
   key             String
   interestId      String
   Interest        Interest @relation("ThisInterest", fields: [interestId], references: [id])
   otherInterestId String
   OtherInterest   Interest @relation("OtherInterest", fields: [otherInterestId], references: [id])
   createdAt       DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 model LocationLocation {
+  id              String   @id @default(uuid())
   key             String
   locationId      String
   Location        Location @relation("ThisLocation", fields: [locationId], references: [id])
   otherLocationId String
   OtherLocation   Location @relation("OtherLocation", fields: [otherLocationId], references: [id])
   createdAt       DateTime @default(now())
-
-  @@id([key, createdAt])
 }
 
 enum Type {

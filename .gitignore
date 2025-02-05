@@ -28,3 +28,10 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+*.zip
+*.sublime-project
+*.sublime-workspace
+
+new
+dnode

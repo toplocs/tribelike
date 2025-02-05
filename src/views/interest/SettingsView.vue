@@ -60,28 +60,6 @@
             />
           </div>
 
-          <Divider />
-
-          <Title>Relations:</Title>
-
-          <div class="mb-2">
-            <label
-              for="relations"
-              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related interests
-            </label>
-            <InterestRelations v-model="relatedInterests" />
-          </div>
-
-          <div class="mb-2">
-            <label
-              for="relations"
-              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-            > Related locations
-            </label>
-            <LocationRelations v-model="relatedLocations" />
-          </div>
-
           <SubmitButton className="w-full mt-4">
             Update Settings
           </SubmitButton>
@@ -123,8 +101,6 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Callout from '@/components/common/Callout.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
-import InterestRelations from '@/components/InterestRelations.vue';
-import LocationRelations from '@/components/LocationRelations.vue';
 
 const interest = inject('interest');
 const profile = inject('profile');

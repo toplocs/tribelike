@@ -1,12 +1,12 @@
 <template>
-  <component v-if="access">
+  <div v-if="access">
     <SubNav
       :initialTab="tab"
       :tabs="tabs"
     />
 
     <router-view />
-  </component>
+  </div>
 
   <InfoView v-else />
 </template>

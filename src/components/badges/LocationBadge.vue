@@ -7,6 +7,7 @@
       class="w-4 h-4 text-orange-900 dark:text-orange-400"
     />
     <span>{{ title }}</span>
+
     <XMarkIcon
       v-if="remove"
       @click.prevent="remove"
@@ -22,6 +23,10 @@ const props = defineProps({
   title: {
     type: String,
     required: true,
+  },
+  relation: {
+    type: String,
+    required: false,
   },
   remove: {
     type: Function,

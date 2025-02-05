@@ -95,7 +95,7 @@ const router = createRouter({
 
     //Interests
     {
-      path: '/interests/create',
+      path: '/interest/create',
       name: 'interestCreate',
       component: InterestCreateView,
       meta: { requiresAuth: true },
@@ -132,7 +132,7 @@ const router = createRouter({
 
     //Locations
     {
-      path: '/locations/create',
+      path: '/location/create',
       name: 'locationCreate',
       component: LocationCreateView,
       meta: { requiresAuth: true },

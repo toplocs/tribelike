@@ -1,7 +1,5 @@
 <template>
   <div class="p-2 border-b hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition duration-150 ease-in-out cursor-pointer">
-    <StatusBadge :title="normalize(activity?.status)" />
-
     <div class="min-h-[100px] flex flex-col justify-between gap-2">
       <div v-if="activity.interests || activity.location" class="text-gray-700">
         <div class="mb-2 flex items-center">

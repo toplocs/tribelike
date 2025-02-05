@@ -42,12 +42,12 @@ router.route('/').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
-router.route('/all').get(async (req: Request, res: Response) => {
+/*router.route('/all').get(async (req: Request, res: Response) => {
   const { success, error } = await getAllProfiles();
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
-})
+});*/
 
 router.route('/byId/:id').get(async (req: Request, res: Response) => {
   const { success, error } = await getProfileById(req.params);

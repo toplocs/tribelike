@@ -57,13 +57,7 @@ const findMixed = async (title: string) => {
   return result;
 }
 
-const handleSelection = async (result: {
-  id: string,
-  title: string,
-}) => {
-  if (result.key == 'Interests')
-    return router.push(`/interest/${result.option?.id}`);
-  if (result.key == 'Locations')
-    return router.push(`/location/${result.option?.id}`);
+const handleSelection = async (result: object) => {
+  emit('searchResult', result);
 }
 </script>
