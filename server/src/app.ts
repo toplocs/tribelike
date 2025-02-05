@@ -3,6 +3,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import morgan from 'morgan';
 
 import activityRouter from './api/activity';
 import authRouter from './api/auth';
@@ -16,8 +17,7 @@ import userRouter from './api/user';
 
 dotenv.config();
 
-const { URL, MOBILE_URL, PORT, DEVELOPMENT } = process.env;
-if (!URL) console.error('URL not defined!')
+const { WEB_URL, PORT, DEVELOPMENT } = process.env;
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -35,8 +35,6 @@ const options: cors.CorsOptions = {
   origin: allowedOrigins
 };
 
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
 app.use(cors(options));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -45,7 +43,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-if (DEVELOPMENT != 'true') app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+app.use(morgan('dev'));
 
 app.use('/api/activity', activityRouter);
 app.use('/api/auth', authRouter);
@@ -58,14 +58,15 @@ app.use('/api/relation', relationRouter);
 app.use('/api/user', userRouter);
 
 if (DEVELOPMENT == 'true') {
-  app.get('/', (req: Request, res: Response) => res.redirect(URL as string));
+  app.use(express.static(path.join(__dirname, 'views')));
+  app.get('/', (req: Request, res: Response) => res.redirect(WEB_URL as string));
 } else {
   app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
   });
 }
 
-
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Mode: ${DEVELOPMENT == 'true' ? 'Development' : 'Production'}`);
 });

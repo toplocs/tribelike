@@ -19,15 +19,17 @@ import { createDiscussion } from '../actions/discussion';
 const router = express.Router();
 const upload = multer();
 
-router.route('/').get(async (req: Request, res: Response) => {
+router.route('/')
+.get(async (req: Request, res: Response) => {
   const { success, error } = await findLocations(req.query);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
-}).post(upload.none(), async (req: Request, res: Response) => {
+})
+.post(upload.none(), async (req: Request, res: Response) => {
   const { success, error } = await createLocation(req.body);
   console.log(req.body?.profileId);
-  if (success) {
+  if (success && req.body?.profileId) {
     await createActivity({
       profileId: req.body?.profileId,
       text: `The location ${success.title} was created!`,

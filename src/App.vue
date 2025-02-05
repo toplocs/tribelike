@@ -94,4 +94,5 @@ provide('title', title);
 
 axios.defaults.baseURL = serverURL;
 axios.defaults.headers.common['Authorization'] = authHeader;
+console.log('Server URL:', serverURL);
 </script>

@@ -4,13 +4,24 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node src/app.js",
-    "dev": "DEVELOPMENT=true nodemon src/app.ts"
+    "dev": "DEVELOPMENT=true nodemon src/app.ts",
+    "build": "pnpm --package=typescript dlx tsc",
+    "start": "NODE_PATH=./build node build/app.js",
+    "db:migrate": "pnpm prisma migrate dev",
+    "db:deploy": "pnpm prisma migrate deploy",
+    "data:import": "ts-node src/import.ts" 
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [],
+    "watch": ["src/**/*.ts"],
+    "execMap": {
+      "ts": "node --inspect=0.0.0.0:9229 --nolazy -r ts-node/register"
+    }
+  },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.9.1",
     "@types/cors": "^2.8.17",
@@ -27,11 +38,12 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@helia/dag-json": "^4.0.0",
     "@prisma/client": "^5.17.0",
+    "@types/morgan": "^1.9.9",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "helia": "^5.0.0",
-    "tsconfig-paths": "^4.2.0"
+    "morgan": "^1.10.0",
+    "tsconfig-paths": "^4.2.0",
+    "@opendatasoft/api-client": "^21.6.0"
   }
 }

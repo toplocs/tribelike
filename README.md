@@ -17,23 +17,25 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
+pnpm install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## Develop using docker
+
+Start the server and database
 
 ```sh
-npm run build
+docker compose up -d
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
+Run a DB Migration / Create Database initially
 ```sh
-npm run lint
+docker compose exec server pnpm db:deploy
 ```
+

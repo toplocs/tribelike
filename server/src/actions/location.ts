@@ -33,6 +33,7 @@ export async function createLocation(formData: {
   relations: string,
 }) {
   try {
+    console.log("Data:", formData);
     const relations = JSON.parse(formData.relations);
     const location = await prisma.location.create({
       data: {
