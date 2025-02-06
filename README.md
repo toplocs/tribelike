@@ -1,39 +1,49 @@
-# tribelike
+# TopLocs TribeLike
 
-This template should help get you started developing with Vue 3 in Vite.
+TopLocs stands for topic- and location-based interests. TribeLike builds a community platform where you can meet likeminded people.
 
-## Recommended IDE Setup
+Interactions can be added with plugins, like chat, wiki, events ...
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech-Stack
 
-## Type Support for `.vue` Imports in TS
+- Typescript server and vuejs web frontend.
+- Plugins can be written in any language.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
+Install `node` and `pnpm`.
+
+### Server
+In `server/` create `.env` file based on `.env.default`
+
+#### Using docker
+Start the server and database
 
 ```sh
-npm install
+docker compose up
 ```
 
-### Compile and Hot-Reload for Development
+Run a DB Migration / Create Database initially
+```sh
+docker compose exec server pnpm db:deploy
+```
+
+#### Run it yourself
+In `server/` run
 
 ```sh
-npm run dev
+pnpm install
+pnpm run dev
+pnpm db:deploy  # when needed
 ```
 
-### Type-Check, Compile and Minify for Production
+### Web Frontend
+Create `.env` file based on `.env.default`
 
 ```sh
-npm run build
+pnpm install
+pnpm run dev
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Open Source
+MIT License. Feedback and contributions are welcome.
