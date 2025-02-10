@@ -58,26 +58,21 @@ export async function createProfile(
 }
 
 export async function updateProfile(
+  id: string,
   formData: {
-    profileId: string,
     type: string,
     image: string,
     username: string,
     email: string,
     about: string,
   },
-  authHeader?: string,
 ) {
   try {
     const email = formData.email.trim().toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     const image = `https://gravatar.com/avatar/${hash}`;
-    const session = await auth(authHeader);
-    const user = session?.user;
     const profile = await prisma.profile.update({
-      where: {
-        id: formData.profileId,
-      },
+      where: { id: id },
       data: {
         type: formData.type,
         image: image,
@@ -145,28 +140,6 @@ export async function getProfileById(params: {
     });
 
     return { success: profile };
-  } catch(e: any) {
-    console.error(e);
-    return { error: e.message };
-  }
-}
-
-export async function getProfileLocations(params: {
-  id?: string
-}) {
-  try {
-    const profileLocations = await prisma.profileLocation.findMany({
-      where: {
-        profileId: params?.id,
-      },
-      include: {
-        Location: true,
-      },
-      take: 20,
-      orderBy: { createdAt: 'desc' },
-    });
-
-    return { success: profileLocations };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

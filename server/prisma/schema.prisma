@@ -103,6 +103,8 @@ model Location {
   InterestLocation InterestLocation[]
 }
 
+//--- Remove Relations ---//
+
 model Relation {
   id         String    @id @default(uuid())
   key        String

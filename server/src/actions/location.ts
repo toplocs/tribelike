@@ -189,15 +189,13 @@ export async function getLocationByBounds(query: {
   }
 }
 
-export async function updateCurrentLocation({
-  profileId,
-  lat,
-  lng
-}: {
-  profileId: string,
-  lat: number,
-  lng: number
-}) {
+export async function updateCurrentLocation(
+  id: string,
+  body: {
+    lat: number,
+    lng: number,
+  }
+) {
   try {
     const locations = await prisma.$queryRaw<Location[]>`
       SELECT 
@@ -206,31 +204,47 @@ export async function updateCurrentLocation({
         latitude, 
         longitude,
         ( 6371 * acos(
-          cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) 
-          + sin(radians(${lat})) * sin(radians(latitude))
+          cos(radians(${body.lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${body.lng})) 
+          + sin(radians(${body.lat})) * sin(radians(latitude))
         )) AS distance
       FROM "Location"
       ORDER BY distance ASC
       LIMIT 1;
     `;
-    if (locations[0]) {
-      await prisma.profileLocation.updateMany({
-        where: {
-          key: 'current',
-          profileId: profileId,
-        },
-        data: { key: 'past' }
+    const latest = await prisma.profileLocation.findFirst({
+      where: {
+        key: 'current',
+        profileId: id,
+      },
+      select: {
+        id: true,
+        key: true,
+        locationId: true,
+        Location: true,
+      }
+    });
+    if (latest && (latest.locationId !== locations[0].id)) {
+      await prisma.profileLocation.update({
+        where: { id: latest.id },
+        data: { key: 'past' },
       });
       const current = await prisma.profileLocation.create({
         data: {
           key: 'current',
-          profileId: profileId,
+          profileId: id,
           locationId: locations[0].id,
+        },
+        select: {
+          id: true,
+          key: true,
+          Location: true,
         }
       });
+
+      return { success: current };
     }
 
-    return { success: locations[0] };
+    return { success: latest };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

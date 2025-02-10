@@ -10,6 +10,7 @@ import {
 import {
   findInterestRelations,
   findLocationRelations,
+  findProfileRelations,
   createInterestRelation,
   createLocationRelation,
   removeInterestRelation,
@@ -35,8 +36,9 @@ router.route('/byBounds').get(async (req: Request, res: Response) => {
   else return res.status(400).json(error);
 });
 
-router.route('/updateCurrent').post(upload.none(), async (req: Request, res: Response) => {
-  const { success, error } = await updateCurrentLocation(req.body);
+router.route('/update/:id').post(upload.none(), async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { success, error } = await updateCurrentLocation(id, req.body);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
@@ -89,5 +91,14 @@ router.route('/locations/:id').get(async (req: Request, res: Response) => {
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);
 });
+
+router.route('/profiles/:id').get(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { success, error } = await findProfileRelations(id);
+
+  if (success) return res.status(200).json(success);
+  else return res.status(400).json(error);
+});
+
 
 export default router;
