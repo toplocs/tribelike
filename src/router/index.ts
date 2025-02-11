@@ -7,9 +7,9 @@ import RegisterView from '@/views/RegisterView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 
 //Profile
-import ProfileListView from '@/views/ProfileListView.vue';
-import ProfileCreateView from '@/views/ProfileCreateView.vue';
-import ProfileDetailView from '@/views/ProfileDetailView.vue';
+import ProfileListView from '@/views/profile/ProfileListView.vue';
+import ProfileCreateView from '@/views/profile/ProfileCreateView.vue';
+import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
 //Interest

@@ -21,21 +21,6 @@
         </form>
       </Card>
     </div>
-      
-    <Sidebar>
-      <Plugins>
-        <div className="mb-8">
-          <Title>Invite your friends:</Title>
-          <div v-for="friend of friends">
-            <FriendListItem
-              :key="friend.id"
-              :profile="friend"
-              :onClick="() => {}"
-            />
-          </div>
-        </div>
-      </Plugins>
-    </Sidebar>
 
   </Container>
 </template>
@@ -61,7 +46,8 @@ async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     const response = await axios.post(`/api/profile`, formData);
-    router.push('/profiles');
+    console.log(response.data);
+    router.push(`/profile/${response.data.id}`);
 
     return response.data;
   } catch (error) {
