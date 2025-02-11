@@ -211,6 +211,7 @@ export async function updateCurrentLocation(
       ORDER BY distance ASC
       LIMIT 1;
     `;
+    const nearestLocation = locations[0];
     const latest = await prisma.profileLocation.findFirst({
       where: {
         key: 'current',
@@ -220,36 +221,40 @@ export async function updateCurrentLocation(
         id: true,
         key: true,
         locationId: true,
-        Location: true,
-      }
+      },
     });
-    if (latest && (latest.locationId !== locations[0].id)) {
-      await prisma.profileLocation.update({
-        where: { id: latest.id },
-        data: { key: 'past' },
-      });
+
+    if (!latest || latest.locationId !== nearestLocation.id) {
+      if (latest) {
+        await prisma.profileLocation.update({
+          where: { id: latest.id },
+          data: { key: 'past' },
+        });
+      }
+
       const current = await prisma.profileLocation.create({
         data: {
           key: 'current',
           profileId: id,
-          locationId: locations[0].id,
+          locationId: nearestLocation.id,
         },
         select: {
           id: true,
           key: true,
           Location: true,
-        }
+        },
       });
 
       return { success: current };
     }
 
     return { success: latest };
-  } catch(e: any) {
+  } catch (e: any) {
     console.error(e);
     return { error: e.message };
   }
 }
+
 
 export async function addLocation({
   profileId,
