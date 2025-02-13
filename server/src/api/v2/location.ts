@@ -74,7 +74,8 @@ router.route('/interests/:id').get(async (req: Request, res: Response) => {
 
 router.route('/locations/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { success, error } = await findLocationRelations(id);
+  const { key } = req.query;
+  const { success, error } = await findLocationRelations(id, key as string);
 
   if (success) return res.status(200).json(success);
   else return res.status(400).json(error);

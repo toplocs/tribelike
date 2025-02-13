@@ -23,13 +23,18 @@ export async function findInterestRelations(
 
 export async function findLocationRelations(
   id: string,
+  key?: string,
 ) {
   try {
     const relations = await prisma.locationLocation.findMany({
-      where: { locationId: id },
+      where: {
+        locationId: id,
+        key: key,
+      },
       select: {
         id: true,
         key: true,
+        otherLocationId: true,
         OtherLocation: true,
       },
       take: 50,

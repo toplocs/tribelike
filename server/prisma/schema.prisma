@@ -116,6 +116,8 @@ model Relation {
   locationId String?
 }
 
+// ----------------------- //
+
 model Discussion {
   id         String    @id @default(uuid())
   type       String
