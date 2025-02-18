@@ -70,8 +70,6 @@ const logout = async () => {
     profile.value = null;
     axios.defaults.headers.common['Authorization'] = null;
     localStorage.removeItem('authHeader');
-    router.push('/');
-    console.log('logged out')
   } catch (error) {
     console.error(error);
   }
