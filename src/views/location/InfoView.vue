@@ -93,7 +93,7 @@
       <div className="py-4">
         <Map
           height="200"
-          :zoom="7"
+          :defaultZoom="Number(zoom)"
           :locked="true"
           :defaultLocation="[
             Number(yCoordinate),
@@ -197,6 +197,8 @@ const profile = inject('profile');
 const tab = inject('tab');
 const yCoordinate = computed(() => location.value?.yCoordinate || '0');
 const xCoordinate = computed(() => location.value?.xCoordinate || '0');
+const zoom = computed(() => location.value?.zoom || '10');
+
 const subscribed = computed(
   () => profile.value?.locations.some(x => x.id == location.value?.id)
 );
