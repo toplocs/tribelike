@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import federation from '@originjs/vite-plugin-federation'
 
-const url = 'toplocs.com';
+const url = 'https://toplocs.com';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,9 +15,9 @@ export default defineConfig({
     federation({
         name: 'tribelike',
         remotes: {
-            chat_plugin: `//${url}:3001/assets/plugin.js`,
-            wiki_plugin: `//${url}:3002/assets/plugin.js`,
-            event_plugin: `//${url}:3003/assets/plugin.js`,
+            chat_plugin: `${url}:3001/assets/plugin.js`,
+            wiki_plugin: `${url}:3002/assets/plugin.js`,
+            event_plugin: `${url}:3003/assets/plugin.js`,
         },
         shared: ['vue']
     })
