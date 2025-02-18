@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-screen flex justify-center">
+  <div className="flex justify-center">
     <Card className="mt-10 max-w-md">
       <Title float="center">
          Account settings:
@@ -16,10 +16,6 @@
         <Callout v-if="errorMessage" color="red">
           {{ errorMessage }}
         </Callout>
-
-        <div className="mb-2">
-          <SelectAvatar :src="account?.image" />
-        </div>
 
         <div className="mb-2">
           <label
@@ -107,7 +103,7 @@ const onSubmit = async () => {
     account.value = response.data;
     successMessage.value = 'Your account was updated successfully!';
 
-    return;
+    router.push(`/profile/${profile?.value.id}`);
   } catch (error) {
     errorMessage.value = error.response.data;
     console.error(error);

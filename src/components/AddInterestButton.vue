@@ -18,7 +18,7 @@
       subscribed ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
     ]"
   >
-    {{ subscribed ? 'Remove' : 'Add' }}
+    {{ subscribed ? 'Leave' : 'Join' }}
   </button>
 </template>
 

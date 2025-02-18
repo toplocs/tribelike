@@ -1,52 +1,33 @@
 <template>
-  <div
-    class="flex items-center p-4 w-full border-b border-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out cursor-pointer"
-  >
-    <img
-      :src="profile.image"
-      alt="Avatar"
-      class="w-12 h-12 rounded-full object-cover mr-4"
-      @click="onClick(profile)"
-    />
-    <div
-      class="flex-1"
+  <div class="border-b border-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+    <div 
+      class="flex flex-row w-full p-4 cursor-pointer"
       @click="onClick(profile)"
     >
-      <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        {{ profile.username }} – {{ profile.type }}
+      <img
+        :src="profile.image"
+        alt="Avatar"
+        class="w-12 h-12 rounded-full object-cover mr-4"
+      />
+      <div class="flex flex-grow">
+        <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          {{ profile.username }} – {{ profile.type }}
+        </div>
       </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <InterestBadge
+    </div>
+    <div class="flex flex-row mb-4">
+      <div class="flex flex-wrap gap-2">
+        <router-link
           v-for="interest in profile.interests"
           :key="interest.id"
-          :title="interest.title"
-        />
+          :to="`/interest/${interest.id}`"
+        >
+          <InterestBadge
+            :key="interest.id"
+            :title="interest.title"
+          />
+        </router-link>
       </div>
-    </div>
-    <div class="flex-2 h-full p-4">
-      <router-link :to="`/profile/${profile.id}/settings`">
-        <Cog6ToothIcon class="w-6 h-6 text-gray-200 hover:text-gray-400" />
-      </router-link>
-    </div>
-    <div class="flex-3 h-full p-4">
-      <Dialog>
-        <template #trigger="{ openDialog }">
-          <TrashIcon
-            class="w-6 h-6 text-red-200 hover:text-red-400"
-            @click.stop="openDialog"
-          />
-        </template>
-
-        <template #content="{ closeDialog }">
-          <ConfirmDialog
-            text="Do you want to delete the profile?"
-            :closeDialog="(x) => {
-              if (x == true) onDelete();
-              closeDialog();
-            }"
-          />
-        </template>
-      </Dialog>
     </div>
   </div>
 </template>

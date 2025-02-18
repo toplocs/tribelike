@@ -77,7 +77,6 @@
 <script setup lang="ts">
 import CryptoJS from 'crypto-js';
 import { computed } from 'vue';
-import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import TextArea from '@/components/common/TextArea.vue';
 import SelectAvatar from '@/components/SelectAvatar.vue';

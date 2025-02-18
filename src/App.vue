@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-white dark:bg-black">
     <NavBar />
 
-    <div class="mx-auto max-w-4xl">
+    <div class="mx-auto max-w-5xl">
       <RouterView />
     </div>
     
@@ -21,8 +21,8 @@ const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
 const router = useRouter();
 const session = ref(null);
-const user = ref(null);
-const profile = ref(null);
+const user = ref(null);         // User Account, which is logged in
+const profile = ref(null);      // User Profile, which is selected (logged in only)
 const location = ref(null);
 const interest = ref(null);
 const title = ref(null);

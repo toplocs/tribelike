@@ -1,47 +1,44 @@
 <template>
-  <Container>
-    <div class="w-full">
-      <div class="mb-8 flex flex-row justify-between">
-        <router-link :to="`/profile/${profile?.id}/settings`">
-          <IconButton :icon="Cog6ToothIcon" />
-        </router-link>
-      </div>
+  <div class="w-full">
+    <div class="mb-8 flex flex-row gap-2">
+      <img
+        :src="profile?.image"
+        alt="Avatar"
+        class="w-48 h-48 rounded-full object-cover mr-10"
+      />
 
-      <div class="mb-8 flex flex-row gap-2">
-        <img
-          :src="profile?.image"
-          alt="Avatar"
-          class="w-48 h-48 rounded-full object-cover mr-10"
-        />
+      <div class="flex-grow"></div>
 
-        <Card v-if="profile?.about?.length" class="mb-8">
-          <p v-if="profile?.about">
-            {{ profile?.about }}
-          </p>
-        </Card>
-      </div>
-
-      <div class="mb-8">
-        <FindInterest
-          :defaultInterests="profile?.interests"
-          :addInterest="addInterest"
-          :removeInterest="removeInterest"
-        />
-      </div>
-
-      <div class="mb-8">
-        <FindLocation
-          :defaultLocations="profile?.locations"
-          :addLocation="addLocation"
-          :removeLocation="removeLocation"
-        />
-      </div>
+      <router-link :to="`/profile/${profile?.id}/settings`">
+        <IconButton :icon="Cog6ToothIcon" class="mb-8"/>
+      </router-link>
     </div>
 
-    <SideBar>
-      <h2 class="text-lg font-semibold text-gray-900 mb-2 dark:text-gray-300">
-        My activities:
-      </h2>
+    <div>
+      <Card v-if="profile?.about?.length" class="mb-8">
+        <p v-if="profile?.about">
+          {{ profile?.about }}
+        </p>
+      </Card>
+    </div>
+
+    <div class="mb-8">
+      <FindInterest
+        :defaultInterests="profile?.interests"
+        :addInterest="addInterest"
+        :removeInterest="removeInterest"
+      />
+    </div>
+
+    <div class="mb-8">
+      <FindLocation
+        :defaultLocations="profile?.locations"
+        :addLocation="addLocation"
+        :removeLocation="removeLocation"
+      />
+    </div>
+
+    <div class="mb-8">
       <div class="flex flex-wrap gap-2">
         <span
           v-for="activity of profileActivity"
@@ -51,44 +48,33 @@
           <ActivityListItem :activity="activity" />
         </span>
       </div>
-    </SideBar>
-
-  </Container>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
-import {
-  ChatBubbleLeftIcon,
-  PencilIcon,
-  Cog6ToothIcon,
-} from '@heroicons/vue/24/outline';
-import SideBar from '@/components/SideBar.vue';
+import { useRouter } from 'vue-router';
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
+
 import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
-import Title from '@/components/common/Title.vue';
-import BackButton from '@/components/common/BackButton.vue';
-import ActivityListItem from '@/components/list/ActivityListItem.vue';
-import Dialog from '@/components/dialog/DialogComponent.vue';
-import ProfileSettingsDialog from '@/components/dialog/ProfileSettingsDialog.vue';
 import IconButton from '@/components/common/IconButton.vue';
+import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import FindInterest from '@/components/search/FindInterest.vue';
 import FindLocation from '@/components/search/FindLocation.vue';
 
-import Plugins from '@/components/plugins/Plugins.vue';
-
-const profile = inject('profile');
+const router = useRouter();
+const profiles = ref([]);
 const profileActivity = ref([]);
 
-const formatDate = (date) => {
-  return new Intl.DateTimeFormat('de', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date);
-}
-
+const props = defineProps({
+  profile: {
+    type: Object,
+    required: true
+  }
+});
 
 const fetchProfileActivity = async (id: string) => {
   try {
@@ -103,7 +89,7 @@ const fetchProfileActivity = async (id: string) => {
 const addInterest = async (interest: Object) => {
   try {
     const response = await axios.put(`/api/interest/add`, {
-      profileId: profile.value?.id,
+      profileId: props.profile.id,
       interestId: interest.id,
     });
 
@@ -116,11 +102,11 @@ const addInterest = async (interest: Object) => {
 const removeInterest = async (interest: Object) => {
   try {
     const response = await axios.put(`/api/interest/remove`, {
-      profileId: profile.value?.id,
+      profileId: props.profile.id,
       interestId: interest.id,
     });
-    if (profile.value) {
-      profile.value.interests = profile.value.interests.filter(
+    if (props.profile) {
+      props.profile.interests = props.profile.interests.filter(
         x => x.id !== interest.id
       );
     }
@@ -134,7 +120,7 @@ const removeInterest = async (interest: Object) => {
 const addLocation = async (location: Object) => {
   try {
     const response = await axios.put(`/api/location/add`, {
-      profileId: profile.value?.id,
+      profileId: props.profile.id,
       locationId: location.id,
     });
 
@@ -147,11 +133,11 @@ const addLocation = async (location: Object) => {
 const removeLocation = async (location: Object) => {
   try {
     const response = await axios.put(`/api/location/remove`, {
-      profileId: profile.value?.id,
+      profileId: props.profile.id,
       locationId: location.id,
     });
-    if (profile.value) {
-      profile.value.locations = profile.value.locations.filter(
+    if (props.profile) {
+      props.profile.locations = props.profile.locations.filter(
         x => x.id !== location.id,
       );
     }
@@ -164,6 +150,6 @@ const removeLocation = async (location: Object) => {
 
 
 onMounted(async () => {
-  profileActivity.value = await fetchProfileActivity(profile.value?.id);
+  profileActivity.value = await fetchProfileActivity(props.profile?.id);
 });
 </script>

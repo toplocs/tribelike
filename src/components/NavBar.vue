@@ -2,8 +2,7 @@
   <div
     class="sticky top-0 w-full bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
   >
-    <div class="py-2 px-4 max-w-4xl mx-auto flex flex-row justify-between items-center gap-4">
-
+    <div class="py-2 px-4 max-w-5xl mx-auto flex flex-row justify-between items-center gap-4">
       <span v-if="interest" class="flex flex-row gap-2">
         <Title>
           {{ interest?.title }}
@@ -80,7 +79,7 @@
             </template>
           </Dropdown>
 
-          <Dropdown name="dropdown2" className="min-w-40">
+          <!-- <Dropdown name="dropdown2" className="min-w-40">
             <template #trigger>
               <IconButton :icon="BellIcon" :counter="100" />
             </template>
@@ -88,35 +87,18 @@
             <template #default="{ closeDropdown }">
               <NotificationList />
             </template>
-          </Dropdown>
+          </Dropdown> -->
         </div>
 
-        <Dropdown name="dropdown3" className="min-w-40">
-          <template #trigger>
-            <img
-              :src="profile.image"
-              alt="logo"
-              width="30"
-              height="30"
-              class="ml-4 size-10 rounded-full"
-            />
-          </template>
-
-          <template #default="{ closeDropdown }">
-            <ul>
-              <router-link to="/profiles" @click.native="closeDropdown">
-                <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                  Profiles
-                </li>
-              </router-link>
-              <router-link to="/settings" @click.native="closeDropdown">
-                <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                  Settings
-                </li>
-              </router-link>
-            </ul>
-          </template>
-        </Dropdown>
+        <router-link :to="`/profile/${profile.id}`">
+          <img
+            :src="profile.image"
+            alt="logo"
+            width="30"
+            height="30"
+            class="ml-4 size-10 rounded-full"
+          />
+        </router-link>
       </span>
 
       <span v-if="!session" class="inline-flex justify-center gap-1 px-4 py-2 text-sm font-medium border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-transparent rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
