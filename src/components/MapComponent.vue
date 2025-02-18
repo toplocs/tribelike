@@ -9,9 +9,10 @@
     <ol-view
       ref="view"
       :center="center"
-      :zoom="zoom"
+      :zoom="defaultZoom"
       :projection="projection"
       @change:center="handleMoveEvent"
+      @change:resolution="handleZoomEvent"
     />
 
     <ol-tile-layer>
@@ -37,8 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import type Pointer from 'ol/interaction/Pointer';
-import { UserIcon } from '@heroicons/vue/24/outline';
 import { ref, watchEffect } from 'vue';
 import type { View } from 'ol';
 import type { ObjectEvent } from 'ol/Object';
@@ -52,7 +51,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  zoom: {
+  defaultZoom: {
     type: Number,
     default: 10,
   },
@@ -62,10 +61,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['changeLocation']);
+
+const emit = defineEmits(['changeLocation', 'changeZoom']);
 const center = ref(null);
 const projection = ref('EPSG:4326');
-const zoom = ref(props.zoom);
+const zoom = ref(props.defaultZoom);
 const view = ref<View>();
 const map = ref(null);
 const position = ref(null);
@@ -73,6 +73,7 @@ const position = ref(null);
 const geoLocChange = (e: ObjectEvent) => {
   position.value = e.target.getPosition();
   view.value?.setCenter(e.target?.getPosition());
+
   emit('changeLocation', {
     y: position.value[0],
     x: position.value[1],
@@ -85,7 +86,17 @@ const handleMoveEvent = (e: ObjectEvent) => {
     y: values[0],
     x: values[1],
   });
-}
+};
+
+const handleZoomEvent = (e: ObjectEvent) => {
+  const newZoom = Math.round(view.value?.getZoom());
+  if (zoom.value && newZoom && Math.abs(zoom.value - newZoom) >= 1) {
+    zoom.value = newZoom;
+    emit('changeZoom', {
+      zoom: zoom.value,
+    });
+  }
+};
 
 watchEffect(() => {
   center.value = props.defaultLocation;

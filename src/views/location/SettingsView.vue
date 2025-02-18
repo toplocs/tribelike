@@ -75,11 +75,30 @@
                 :modelValue="yCoordinate"
               />
             </div>
+
+            <div className="mb-2">
+              <label
+                for="zoom"
+                class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+              > Zoom
+              </label>
+
+              <TextInput
+                id="zoom"
+                name="zoom"
+                autoComplete="zoom"
+                placeholder="10"
+                :disabled="true"
+                :modelValue="zoom"
+              />
+            </div>
           </div>
 
           <Map
             :defaultLocation="defaultLocation"
+            :defaultZoom="zoom"
             @changeLocation="handleChangeLocation"
+            @changeZoom="handleChangeZoom"
           />
 
           <div className="mb-2">
@@ -160,12 +179,14 @@ const defaultLocation = computed(() => [
   Number(location.value?.yCoordinate),
   Number(location.value?.xCoordinate)
 ]);
-const zoom = ref(10);
+const zoom = ref("10");
 
-const handleChangeLocation = ({ y, x }) => {
-  yCoordinate.value = String(y);
-  xCoordinate.value = String(x);
-  zoom.value = Number(10);
+const handleChangeLocation = (data) => {
+  yCoordinate.value = String(data.y);
+  xCoordinate.value = String(data.x);
+}
+const handleChangeZoom = (data) => {
+  zoom.value = String(data.zoom);
 }
 
 const findProfiles = async () => {
@@ -202,6 +223,7 @@ const onSubmit = async () => {
 watchEffect(() => {
   yCoordinate.value = location.value?.yCoordinate;
   xCoordinate.value = location.value?.xCoordinate;
+  zoom.value = location.value?.zoom;
   access.value = String(location.value?.access);
   relatedInterests.value = location.value?.relations.filter(x => x.type == 'interest');
   relatedLocations.value = location.value?.relations.filter(x => x.type == 'location');
