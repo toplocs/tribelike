@@ -13,13 +13,13 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, provide, onMounted, watch } from 'vue';
-import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { useRoute, RouterView } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
-const router = useRouter();
+const route = useRoute();
 const session = ref(null);
 const user = ref(null);         // User Account, which is logged in
 const profile = ref(null);      // User Profile, which is selected (logged in only)
@@ -74,6 +74,9 @@ const logout = async () => {
     console.error(error);
   }
 }
+watch(() => route.meta.title, (newTitle) => {
+  title.value = newTitle;
+});
 
 onMounted(async () => {
   session.value = await getSession();
