@@ -14,6 +14,27 @@ const router = express.Router();
 const upload = multer();
 
 //--- Relations--- //
+router.route('/:id/relations').get(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const [interestRelations, locationRelations] = await Promise.all([
+    findInterestRelations(id),
+    findLocationRelations(id)
+  ]);
+
+  if (interestRelations.success && locationRelations.success) {
+    return res.status(200).json({
+      children: [],
+      members: [],
+      interests: interestRelations.success,
+      locations: locationRelations.success
+    });
+  } else {
+    return res.status(400).json({
+      error: interestRelations.error || locationRelations.error
+    });
+  }
+});
+
 router.route('/interests/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await findInterestRelations(id);

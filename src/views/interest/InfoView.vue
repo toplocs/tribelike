@@ -10,7 +10,7 @@
       </Card>
 
       <Card v-if="interestRelations?.length">
-        <h2 class="font-bold">Related interests:</h2>
+        <h2 class="font-bold">Relations:</h2>
         <div
           v-for="data of relationKeys"
           :key="data.value"
@@ -162,6 +162,7 @@ import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
 import relationKeys from '@/assets/relationKeys';
+import { interestToInterest } from '@/assets/defaultRelationKeys';
 
 const interestRelations = ref([]);
 const locationRelations = ref([]);
