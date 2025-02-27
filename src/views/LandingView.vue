@@ -43,7 +43,6 @@ import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Container from '@/components/common/Container.vue';
-import Title from '@/components/common/Title.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import FindMixed from '@/components/search/FindMixed.vue';

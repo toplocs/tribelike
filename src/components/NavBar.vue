@@ -3,27 +3,26 @@
     class="sticky top-0 w-full bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
   >
     <div class="py-2 px-4 max-w-5xl mx-auto flex flex-row justify-between items-center gap-4">
-      <span v-if="interest" class="flex flex-row gap-2">
-        <Title>
-          {{ interest?.title }}
-        </Title>
-      </span>
-      <span v-else-if="location" class="flex flex-row gap-2">
-        <Title float="left">
-          {{ location?.title }}
-        </Title>
-      </span>
-      <span v-else-if="title" class="flex flex-row gap-2">
-        <Title float="left">
-          {{ title }}
-        </Title>
-      </span>
-      <span v-else>
+      <span class="flex gap-2">
         <router-link to="/">
-          <Title>
-            TOPLOCS
-          </Title>
+          <IconButton :icon="HomeIcon" />
         </router-link>
+      
+        <span v-if="interest" class="flex flex-row gap-2">
+          <Title>
+            {{ interest?.title }}
+          </Title>
+        </span>
+        <span v-else-if="location" class="flex flex-row gap-2">
+          <Title float="left">
+            {{ location?.title }}
+          </Title>
+        </span>
+        <span v-else-if="title" class="flex flex-row gap-2">
+          <Title float="left">
+            {{ title }}
+          </Title>
+        </span>
       </span>
 
       <span
@@ -120,9 +119,10 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, provide, computed } from 'vue';
+import { ref, inject, provide, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import {
+  HomeIcon,
   MagnifyingGlassIcon,
   PlusIcon,
   BellIcon
@@ -145,16 +145,6 @@ const title = inject('title');
 const hideSearch = ref(true);
 const dropdown = ref(null);
 const user = computed(() => session?.value?.user);
-
-const findInterests = async (title: string) => {
-  try {
-    const response = await axios.get(`/api/interest?title=${title}`);
-
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
