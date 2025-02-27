@@ -33,12 +33,12 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, watch } from 'vue';
+import { ref, inject, watch, computed } from 'vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
-import relationKeys from '@/assets/relationKeys';
+import defaultRelationKeys from '@/assets/defaultRelationKeys';
 
 const props = defineProps({
   interestRelations: Array,
@@ -53,6 +53,19 @@ const emit = defineEmits([
 const interest = inject('interest');
 const relationKey = ref('');
 const searchResult = ref(null);
+
+const relationKeys = computed(() => {
+  console.log(searchResult.value);
+  console.log(defaultRelationKeys.interestToInterest);
+  if (searchResult.value) {
+    if (searchResult.value.key == 'Interests') {
+      return defaultRelationKeys.interestToInterest;
+    } else if (searchResult.value.key == 'Locations') {
+      return defaultRelationKeys.locationToInterest;
+    }
+  }
+  return [];
+});
 
 const addInterestRelation = async (id: String) => {
   try {
