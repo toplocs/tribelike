@@ -1,7 +1,6 @@
-import { Location } from '@prisma/client';
-
+import { ProfileLocation } from '@tribelike/types/Relation';
+import { Location } from '@tribelike/types/Location';
 import prisma from '../lib/prisma';
-import { auth } from '../lib/auth';
 
 export async function findLocations(query: {
   title?: string
@@ -213,7 +212,8 @@ export async function updateCurrentLocation({
       ORDER BY distance ASC
       LIMIT 1;
     `;
-    if (locations[0]) {
+    const location: Location = locations[0];
+    if (location) {
       await prisma.profileLocation.updateMany({
         where: {
           key: 'current',
@@ -225,7 +225,7 @@ export async function updateCurrentLocation({
         data: {
           key: 'current',
           profileId: profileId,
-          locationId: locations[0].id,
+          locationId: location.id,
         }
       });
     }
@@ -347,7 +347,27 @@ export async function getProfileLocations(params: {
       orderBy: { createdAt: 'desc' },
     });
 
-    return { success: locationProfiles };
+    console.log({ locationProfiles: locationProfiles.map((x: { Profile: any; }) => x.Profile) });
+    
+    // TODO Merge better
+    const userIds = locationProfiles.map(
+      (profileLocation: { Profile: { userId: string | null } }) => {
+        return profileLocation.Profile.userId;
+      }
+    );
+    const uniqueUserIds = Array.from(new Set(userIds));
+
+    const mergedProfiles = uniqueUserIds.map(
+      (userId) => {
+        return locationProfiles.find((profileLocation: { Profile: { userId: string | null } }) => profileLocation.Profile.userId === userId);
+      }
+    );
+
+    const filteredProfiles = mergedProfiles.filter((profile) => profile !== undefined);
+
+    console.log({ mergedProfiles });
+
+    return { success: mergedProfiles };
   } catch(e: any) {
     console.error(e);
     return { error: e.message };

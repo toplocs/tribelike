@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@tribelike/server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.9.1",
     "@types/cors": "^2.8.17",
@@ -24,13 +24,14 @@
     "cors": "^2.8.5",
     "jose": "^5.6.3",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.1.4",
+    "nodemon": "^3.1.9",
     "prisma": "^5.17.0",
     "prisma-erd-generator": "^1.11.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@tribelike/types": "workspace:*",
     "@helia/dag-json": "^4.0.0",
     "@prisma/client": "^5.17.0",
     "crypto-js": "^4.2.0",

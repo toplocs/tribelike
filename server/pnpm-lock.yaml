@@ -64,7 +64,7 @@ importers:
         specifier: ^1.4.5-lts.1
         version: 1.4.5-lts.1
       nodemon:
-        specifier: ^3.1.4
+        specifier: ^3.1.9
         version: 3.1.9
       prisma:
         specifier: ^5.17.0

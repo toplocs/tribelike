@@ -74,6 +74,7 @@ const logout = async () => {
     console.error(error);
   }
 }
+
 watch(() => route.meta.title, (newTitle) => {
   title.value = newTitle;
 });

@@ -42,6 +42,33 @@ export async function findLocationRelations(
   }
 }
 
+export async function createProfileRelation(
+  id: string,
+  body: {
+    key: string,
+    profileId: string,
+  }
+) {
+  try {
+    const relation = await prisma.profileLocation.create({
+      data: {
+        key: body.key,
+        locationId: id,
+        profileId: body.profileId,
+      },
+      select: {
+        key: true,
+        Profile: true,
+        Location: true,
+      },
+    });
+
+    return { success: relation };
+  } catch(e: any) {
+    console.error(e);
+    return { error: e.message };
+  }
+}
 
 export async function createInterestRelation(
   id: string,

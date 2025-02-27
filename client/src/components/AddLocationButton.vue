@@ -62,6 +62,13 @@ const addLocation = async () => {
       profileId: profile.value?.id,
       locationId: props.location?.id,
     });
+    const responseV2 = await axios.post(`/api/v2/location/${props.location?.id}/profiles`, {
+      profileId: profile.value?.id,
+      locationId: props.location?.id,
+      key: 'favorite',
+    });
+    console.log(responseV2.data);
+    
     profile.value.locations = [
       ...profile.value.locations, props.location
     ];
