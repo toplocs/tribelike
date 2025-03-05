@@ -35,6 +35,14 @@ router.route('/:id/relations').get(async (req: Request, res: Response) => {
   }
 });
 
+// router.route('/:id/profiles').get(async (req: Request, res: Response) => {
+//   const { success, error } = await getProfileInterests(req.params);
+
+//   if (success) return res.status(200).json(success);
+//   else return res.status(400).json(error);
+// });
+
+
 router.route('/interests/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await findInterestRelations(id);
