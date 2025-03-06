@@ -25,7 +25,7 @@ Object.entries(routers).forEach(([version, versionedRouter]) => {
 });
 
 // Default to latest version
-router.use(`/`, routers.v1);
+router.use(`/`, routers.v2);
 
 // Fallback to previous version if a route is not available in the current version
 function fallback(req: Request): keyof typeof routers | "" {

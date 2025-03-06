@@ -10,13 +10,15 @@ const testObject: TestObject = { id: '1', name: 'Test Object' };
 
 beforeAll(() => {
     process.env.STORE_TYPE = 'file';
+    process.env.DATA_FOLDER = 'data/test';
 });
 
 describe('Store', () => {
-    let store: IStore<TestObject>;
+    Store.getInstance().setStoreType('memory');
+    let store: IStore<TestObject> = Store.getInstance().getStore<TestObject>('Store.test');
 
-    beforeEach(() => {
-        store = Store.getInstance().getStore<TestObject>('test_objects');
+    beforeEach(async () => {
+        await store.clear();
     });
 
     test('should add a new object', async () => {

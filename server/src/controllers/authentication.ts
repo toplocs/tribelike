@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { generateAuthenticationOptions, verifyAuthenticationResponse } from '@simplewebauthn/server';
 import { PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
-import { credentials, Credential } from '../models/Credential';
+import { Credential } from '../models/Credential';
 import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
-import { users } from '../models/User';
+import { users, credentials } from '../models';
 
 // TODO: token: 'valid-token' is a placeholder. Implement proper token generation.
 

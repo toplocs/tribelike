@@ -1,4 +1,5 @@
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { IStore, Store } from './Store';
 
 interface ModelOptions {
@@ -24,14 +25,19 @@ export default class Model<T extends GenericObject> {
         this.options = options;
     }
 
+    async clear(): Promise<void> {
+        await this.store.clear();
+    }
+
     async getAll(limit?: number): Promise<T[]> {
         if (!this.options.getAll) throw new Error('Method not available');
         return await this.store.getAll(limit);
     }
 
-    async create(item: T): Promise<T | null> {
+    async create(item: Partial<T>): Promise<T | null> {
         if (!this.options.create) throw new Error('Method not available');
-        return await this.store.add(item);
+        item.id = item.id || uuidv4() as Uuid;
+        return await this.store.add(item as T);
     }
 
     async getById(id: Uuid): Promise<T | null> {
@@ -39,7 +45,7 @@ export default class Model<T extends GenericObject> {
         return await this.store.getById(id);
     }
 
-    async update(id: Uuid, updatedItem: T): Promise<T | null> {
+    async update(id: Uuid, updatedItem: Partial<T>): Promise<T | null> {
         if (!this.options.update) throw new Error('Method not available');
         return await this.store.update(id, updatedItem);
     }

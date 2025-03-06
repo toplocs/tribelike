@@ -1,23 +1,19 @@
 import UserModel from '../../src/models/User';
 import { Store } from '../../src/lib/Store';
+import { User } from '@tribelike/types/User';
 
-interface User {
-    id: string;
-    name: string;
-    email: string;
-}
-
-const testUser: User = { id: '1', name: 'Test User', email: 'test@example.com' };
-
-beforeAll(() => {
-    process.env.STORE_TYPE = 'file';
-});
+const testUser: User = {
+    id: '1', username: 'Test User', email: 'test@example.com',
+    profiles: [], 
+    settings: []
+};
 
 describe('UserModel', () => {
-    let userModel: UserModel;
+    Store.getInstance().setStoreType('memory');
+    let userModel: UserModel = new UserModel("UserModel.test");
 
-    beforeEach(() => {
-        userModel = new UserModel();
+    beforeEach(async () => {
+        await userModel.clear();
     });
 
     test('should create a new user', async () => {
@@ -39,8 +35,8 @@ describe('UserModel', () => {
 
     test('should update a user by id', async () => {
         await userModel.create(testUser);
-        const updatedUser = await userModel.update('1', { name: 'Updated User' });
-        expect(updatedUser).toEqual({ ...testUser, name: 'Updated User' });
+        const updatedUser = await userModel.update('1', { username: 'Updated User' });
+        expect(updatedUser).toEqual({ ...testUser, username: 'Updated User' });
     });
 
     test('should delete a user by id', async () => {

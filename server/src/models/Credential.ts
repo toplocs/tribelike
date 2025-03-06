@@ -47,5 +47,3 @@ export default class CredentialModel extends Model<Credential> {
         return this.store.update(id, { counter: counter });
     }
 }
-
-export const credentials = new CredentialModel('credentials');

@@ -44,13 +44,10 @@ if (enable_https) {
   try {
     certificate.key = fs.readFileSync(certificatesKey, 'utf8');
     certificate.cert = fs.readFileSync(certificatesCert, 'utf8');
-    console.log('Certificate files loaded successfully.');
   } catch (error) {
     console.error('Certificate files are not found. Please create them to enable HTTPS');
     process.exit(1);
   }
-} else {
-  console.log('HTTPS is disabled.');
 }
 export { certificate };
 
