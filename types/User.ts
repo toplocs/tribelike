@@ -7,10 +7,10 @@ export interface User {
     image?: string;
     password: string;
     profiles: Profile[];
-    settings?: Settings;
+    settings?: ProfileSettings;
 }
   
-export interface Settings {
+export interface ProfileSettings {
     id: string;
     userId: string;
     language: string;
