@@ -5,11 +5,13 @@ import { dataFolder } from '../config';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
 export class FileStore<T extends GenericObject> implements IStore<T> {
+    public name: string;
     private dataPath: string;
     private list: T[] = [];
 
     constructor(filename: string) {
-        this.dataPath = path.join(dataFolder, `${filename}.json`);;
+        this.name = filename;
+        this.dataPath = path.join(dataFolder, `${filename}.json`);
         this.initializeStore();
     }
 
@@ -20,6 +22,11 @@ export class FileStore<T extends GenericObject> implements IStore<T> {
             await fs.writeFile(this.dataPath, JSON.stringify([]), 'utf8');
         }
         this.list = await this.load();
+    }
+
+    async clear(): Promise<void> {
+        this.list = [];
+        await this.save(this.list);
     }
 
     async getAll(limit?: number): Promise<T[]> {

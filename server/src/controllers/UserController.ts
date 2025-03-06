@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 import { Request, Response } from 'express';
-import { users } from '../models/User';
+import { users } from '../models';
 import { auth } from '../lib/auth';
 import profiles from '../lib/profiles';
 import { login } from '../lib/auth';
@@ -13,40 +13,7 @@ export class UserController {
   static async getUsers(req: Request, res: Response) {
     try {
       const usersList = await users.getAll();
-      res.status(200).json({ success: usersList });
-    } catch(e: any) {
-      console.error(e);
-      res.status(500).json({ error: e.message });
-    }
-  }
-
-  static async createUser(req: Request, res: Response) {
-    const formData = req.body;
-    try {
-      if (formData.username.length < 3) throw new Error('Your username is too short');
-      if (formData.email.length < 3) throw new Error('Your email is too short');
-      if (formData.password != formData.password2) throw new Error('The password confirmation failed');
-      const email = formData.email.trim().toLowerCase();
-      const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
-      const image = `https://gravatar.com/avatar/${hash}`;
-      const user = await users.create({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      });
-      for (let profile of profiles) {
-        await prisma.profile.create({
-          data: {
-            userId: user.id,
-            username: formData.username,
-            email: formData.email,
-            image: image,
-            ...profile,
-          }
-        });
-      }
-      const { token, expires } = await login(user);
-      res.status(200).json({ token, expires });
+      res.status(200).json(usersList);
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -57,7 +24,8 @@ export class UserController {
     const { id } = req.params;
     try {
       const user = await users.getById(id);
-      res.status(200).json({ success: user });
+      if (user) return res.status(200).json(user);
+      else return res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -75,7 +43,8 @@ export class UserController {
         username: formData.username,
         email: formData.email,
       });
-      res.status(200).json({ success: result });
+      if (result) return res.status(200).json(result);
+      else return res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -87,7 +56,8 @@ export class UserController {
     const { id } = req.params;
     try {
       const result = await users.delete(id);
-      res.status(200).json({ success: result });
+      if (result) return res.status(200).json({ success: 'User deleted' });
+      else return res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });

@@ -10,8 +10,8 @@ router.use('/user', userRouter);
 
 export default router;
 
+// TODO: authenticated middleware
 usersRouter.get('/', UserController.getUsers);
-usersRouter.post('/', UserController.createUser);
 userRouter.put('/:id', UserController.updateUser);
 userRouter.get('/:id', UserController.getUserById);
 userRouter.delete('/:id', UserController.deleteUser);

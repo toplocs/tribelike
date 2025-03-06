@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { generateRegistrationOptions, verifyRegistrationResponse, WebAuthnCredential } from '@simplewebauthn/server';
 import { RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
 import { rpName, rpID, origin } from '../config';
-import { credentials, Credential } from '../models/Credential';
-import { users } from '../models/User';
+import { Credential } from '../models/Credential';
+import { users, credentials } from '../models';
 import { CustomError } from '../middleware/error';
 
 // See https://simplewebauthn.dev/docs/packages/server
@@ -80,7 +80,7 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
                 credentialBackedUp,
             } = registrationInfo;
 
-            const user = await users.add({
+            const user = await users.create({
                 id: req.session.loggedInUser.id,
                 username: req.session.loggedInUser.name,
                 email: req.session.loggedInUser.name + "@toplocs.com"
@@ -99,7 +99,7 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
                 transports: credential.transports,
                 backedUp: credentialBackedUp,
             });
-            const passkey = await credentials.add(newPasskey);
+            const passkey = await credentials.create(newPasskey);
 
             if (!passkey) {
                 return next(new CustomError('Credential Create failed', 400));

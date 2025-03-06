@@ -6,12 +6,15 @@
 // - Models are decoupled from storage implementation
 // - Easy to add new store types in the future
 
+import { MemoryStore } from './MemoryStore';
 import { FileStore } from './FileStore';
 import { PrismaStore } from './PrismaStore';
 import { storeType } from '../config';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
 export interface IStore<T extends GenericObject> {
+    name: string;
+    clear(): Promise<void>;
     getAll(limit?: number): Promise<T[]>;
     add(newData: T): Promise<T | null>;
     getById(id: Uuid): Promise<T | null>;
@@ -19,14 +22,14 @@ export interface IStore<T extends GenericObject> {
     delete(id: Uuid): Promise<boolean>;
 }
 
-export type StoreType = 'file' | 'prisma';
+export type StoreType = 'memory' | 'file' | 'prisma';
 
 export class Store {
     private static instance: Store;
     private storeType: StoreType;
 
     private constructor() {
-        this.storeType = storeType;
+        this.storeType = storeType as StoreType;
     }
 
     public static getInstance(): Store {
@@ -36,8 +39,14 @@ export class Store {
         return Store.instance;
     }
 
+    public setStoreType(type: StoreType): void {
+        this.storeType = type;
+    }
+
     public getStore<T extends GenericObject>(name: string): IStore<T> {
         switch (this.storeType) {
+            case 'memory':
+                return new MemoryStore<T>(name) as IStore<T>;
             case 'prisma':
                 return new PrismaStore<T>(name) as IStore<T>;
             case 'file':
