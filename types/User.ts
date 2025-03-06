@@ -1,17 +1,17 @@
+import { Uuid } from './Uuid';
 import { Profile } from './Profile';
 
 export interface User {
-    id: string;
+    id: Uuid;
     username: string;
     email: string;
-    image?: string;
-    password: string;
     profiles: Profile[];
-    settings?: ProfileSettings;
+    settings: UserSetting[];
+    image?: string;
 }
   
-export interface ProfileSettings {
-    id: string;
-    userId: string;
-    language: string;
+export interface UserSetting {
+    id: Uuid;
+    userId: Uuid;
+    settings: Record<string, any>;
 }

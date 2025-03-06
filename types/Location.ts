@@ -1,36 +1,45 @@
-import { Profile } from './Profile';
-import { 
-    Relation, 
-    ProfileLocation, 
-    InterestLocation, 
-    LocationLocation 
+import { GroupedProfiles } from './Profile';
+import { GroupedInterests } from './Interest';
+import type {
+    LocationInterestKeyType,
+    ProfileLocationKeyType,
+    LocationLocationKeyType
 } from './Relation';
-import { 
-    Activity, 
-    Discussion,
-    Invite 
-} from './index';
+import { Activity } from './Activity';
+import { Discussion } from './Discussion';
+
+export type GroupedLocations = {
+    [key in LocationLocationKeyType |ProfileLocationKeyType | LocationInterestKeyType]: Location[];
+};
+
+export interface Coordinates {
+    lat: number;
+    long: number;
+}
+
+export interface Polygon {
+    coordinates: Coordinates[];
+}
+
+export interface Link {
+    url: string;
+    title: string;
+}
 
 export interface Location {
     id: string;
     title: string;
-    xCoordinate?: string;
-    yCoordinate?: string;
-    latitude?: number;
-    longitude?: number;
-    geom?: Uint8Array;
+    position?: Coordinates;
+    area?: Polygon;
     zoom?: number;
-    profiles: Profile[];
-    links: string[];
+    geom?: Uint8Array;
+    links: Link[];
     ask: string[];
     invites: string[];
     access: number;
-    relations: Relation[];
     activities: Activity[];
     discussions: Discussion[];
-    Invite: Invite[];
-    Locations: LocationLocation[];
-    OtherLocations: LocationLocation[];
-    ProfileLocation: ProfileLocation[];
-    InterestLocation: InterestLocation[];
+    profiles?: GroupedProfiles;
+    interests?: GroupedInterests;
+    locations?: GroupedLocations;
 }

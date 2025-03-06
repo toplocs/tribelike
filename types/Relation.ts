@@ -1,6 +1,4 @@
-import { Interest } from './Topic';
-import { Location } from './Location';
-import { Profile } from './Profile';
+import { Uuid, GenericObject } from './Uuid';
 
 export let ProfileInterestKeys = [
     'favorite', 'doing', 
@@ -47,53 +45,54 @@ export type LocationInterestKeyType = typeof LocationInterestKeys[number];
 export type InterestInterestKeyType = typeof InterestInterestKeys[number];
 export type LocationLocationKeyType = typeof LocationLocationKeys[number];
 
-
-export interface ProfileInterest {
-    id: string;
+export interface ProfileInterest extends GenericObject {
+    id: Uuid;
     key: ProfileInterestKeyType;
-    profileId: string;
-    interestId: string;
+    profileId: Uuid;
+    interestId: Uuid;
+    userId?: Uuid;
     createdAt: Date;
 }
 
-export interface ProfileLocation {
-    id: string;
+export interface ProfileLocation extends GenericObject {
+    id: Uuid;
     key: ProfileLocationKeyType;
-    profileId: string;
-    Profile?: Profile;
-    locationId: string;
-    Location?: Location;
+    profileId: Uuid;
+    locationId: Uuid;
+    userId?: Uuid;
     createdAt: Date;
 }
 
-export interface ProfileProfile {
-    id: string;
+export interface ProfileProfile extends GenericObject {
+    id: Uuid;
     key: ProfileProfileKeyType;
-    profileId: string;
-    otherProfileId: string;
+    profileId: Uuid;
+    otherProfileId: Uuid;
+    userId?: Uuid;
+    otherUserId?: Uuid;
     createdAt: Date;
 }
   
-export interface LocationInterest {
-    id: string;
+export interface LocationInterest extends GenericObject {
+    id: Uuid;
     key: LocationInterestKeyType;
-    interestId: string;
-    locationId: string;
+    interestId: Uuid;
+    locationId: Uuid;
     createdAt: Date;
 }
   
-export interface InterestInterest {
-    id: string;
+export interface InterestInterest extends GenericObject {
+    id: Uuid;
     key: InterestInterestKeyType;
-    interestId: string;
-    otherInterestId: string;
+    interestId: Uuid;
+    otherInterestId: Uuid;
     createdAt: Date;
 }
   
-export interface LocationLocation {
-    id: string;
+export interface LocationLocation extends GenericObject {
+    id: Uuid;
     key: LocationLocationKeyType;
-    locationId: string;
-    otherLocationId: string;
+    locationId: Uuid;
+    otherLocationId: Uuid;
     createdAt: Date;
 }
