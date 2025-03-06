@@ -11,8 +11,10 @@ export class PrismaStore<T extends GenericObject> implements IStore<T> {
         this.model = model;
     }
 
-    async getAll(): Promise<T[]> {
-        return await (this.prisma[this.model as keyof PrismaClient] as any).findMany();
+    async getAll(limit?: number): Promise<T[]> {
+        return await (this.prisma[this.model as keyof PrismaClient] as any).findMany({
+            take: limit
+        });
     }
 
     async add(newData: T): Promise<T | null> {

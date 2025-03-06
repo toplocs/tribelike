@@ -12,7 +12,7 @@ import { storeType } from '../config';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
 export interface IStore<T extends GenericObject> {
-    getAll(): Promise<T[]>;
+    getAll(limit?: number): Promise<T[]>;
     add(newData: T): Promise<T | null>;
     getById(id: Uuid): Promise<T | null>;
     update(id: Uuid, newData: Partial<T>): Promise<T | null>;

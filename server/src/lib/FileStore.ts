@@ -22,8 +22,9 @@ export class FileStore<T extends GenericObject> implements IStore<T> {
         this.list = await this.load();
     }
 
-    async getAll(): Promise<T[]> {
-        return this.list;
+    async getAll(limit?: number): Promise<T[]> {
+        if (!limit) return this.list;
+        return this.list.slice(0, limit);
     }
 
     async add(newData: T): Promise<T | null> {
