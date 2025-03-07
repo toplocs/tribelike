@@ -9,7 +9,8 @@
     "build": "pnpm --package=typescript dlx tsc",
     "start": "NODE_PATH=./build node build/app.js",
     "db:migrate": "pnpm prisma migrate dev",
-    "db:deploy": "pnpm prisma migrate deploy"
+    "db:deploy": "pnpm prisma migrate deploy",
+    "generate:openapi": "pnpm exec ts-node ./src/swagger.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.17.10",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/jest": "^29.5.14",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.11",
@@ -41,16 +43,18 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@tribelike/types": "workspace:*",
     "@helia/dag-json": "^4.0.0",
     "@prisma/client": "^5.17.0",
     "@simplewebauthn/server": "^13.1.1",
-    "@tribelike/types": "workspace:*",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.17.2",
     "helia": "^5.0.0",
     "morgan": "^1.10.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^9.0.1"
   }

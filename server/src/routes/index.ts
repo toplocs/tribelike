@@ -20,12 +20,12 @@ const routers = {
 // Versioned routes 
 const router = Router();
 
-Object.entries(routers).forEach(([version, versionedRouter]) => {
-    router.use(`/${version}`, versionedRouter);
-});
-
 // Default to latest version
-router.use(`/`, routers.v2);
+router.use(`/api`, routerV2);
+
+// Add versioned routes
+router.use(`/api/v2`, routerV2);
+router.use(`/api/v1`, routerV1);
 
 // Fallback to previous version if a route is not available in the current version
 function fallback(req: Request): keyof typeof routers | "" {

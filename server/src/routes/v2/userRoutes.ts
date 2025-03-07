@@ -1,21 +1,18 @@
 import { Router, Handler } from 'express';
 import { UserController } from '../../controllers/UserController';
 
-const userRouter = Router();
-const usersRouter = Router();
 const router = Router();
 
-router.use('/users', usersRouter);
-router.use('/user', userRouter);
+// TODO: authenticated middleware
+
+router.get('/users', UserController.getUsers);
+router.put('/user/:id', UserController.updateUser);
+router.get('/user/:id', UserController.getUserById);
+router.delete('/user/:id', UserController.deleteUser);
+
+// TODO: Implement routes for user activities, discussions, and profiles
+// router.get('/user/:id/activities', UserController.getActivitiesByUserId);
+// router.get('/user/:id/discussions', UserController.getDiscussionsByUserId);
+// router.get('/user/:id/profiles', UserController.getProfilesByUserId);
 
 export default router;
-
-// TODO: authenticated middleware
-usersRouter.get('/', UserController.getUsers);
-userRouter.put('/:id', UserController.updateUser);
-userRouter.get('/:id', UserController.getUserById);
-userRouter.delete('/:id', UserController.deleteUser);
-
-// userRouter.get('/:id/activities', UserController.getActivitiesByUserId);
-// userRouter.get('/:id/discussions', UserController.getDiscussionsByUserId);
-// userRouter.get('/:id/profiles', UserController.getProfilesByUserId);

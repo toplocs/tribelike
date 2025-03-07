@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from '@jest/globals';
 import UserModel from '../../src/models/User';
 import { Store } from '../../src/lib/Store';
 import { User } from '@tribelike/types/User';
@@ -16,30 +17,30 @@ describe('UserModel', () => {
         await userModel.clear();
     });
 
-    test('should create a new user', async () => {
+    it('should create a new user', async () => {
         const createdUser = await userModel.create(testUser);
         expect(createdUser).toEqual(testUser);
     });
 
-    test('should get all users', async () => {
+    it('should get all users', async () => {
         await userModel.create(testUser);
         const users = await userModel.getAll();
         expect(users).toContainEqual(testUser);
     });
 
-    test('should get a user by id', async () => {
+    it('should get a user by id', async () => {
         await userModel.create(testUser);
         const user = await userModel.getById('1');
         expect(user).toEqual(testUser);
     });
 
-    test('should update a user by id', async () => {
+    it('should update a user by id', async () => {
         await userModel.create(testUser);
         const updatedUser = await userModel.update('1', { username: 'Updated User' });
         expect(updatedUser).toEqual({ ...testUser, username: 'Updated User' });
     });
 
-    test('should delete a user by id', async () => {
+    it('should delete a user by id', async () => {
         await userModel.create(testUser);
         const deleted = await userModel.delete('1');
         expect(deleted).toBe(true);

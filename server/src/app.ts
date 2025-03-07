@@ -10,6 +10,9 @@ import http from "http";
 import { handleError } from './middleware/error';
 import routes from './routes';
 
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger_output.json";
+
 import { 
   sessionSecret, corsOptions, cookieOptions, 
   rpID, port, enable_https, certificate } from './config';
@@ -39,7 +42,9 @@ app.use(express.urlencoded({extended: false}));
 app.use(handleError);
 
 // Routes
-app.use('/api', routes);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+app.use('/', routes);
+
 
 // STATIC SERVER OLD: Why views?
 // app.use(express.static(path.join(__dirname, 'views')));  
