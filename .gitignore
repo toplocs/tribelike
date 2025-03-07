@@ -1,4 +1,5 @@
 .env
+server/data/*
 
 # Logs
 logs
