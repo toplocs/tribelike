@@ -1,4 +1,6 @@
 .env
+server/data/*
+server/data/tests/*
 
 # Logs
 logs
