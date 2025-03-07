@@ -11,7 +11,7 @@ const testUser: User = {
 
 describe('UserModel', () => {
     Store.getInstance().setStoreType('memory');
-    let userModel: UserModel = new UserModel("UserModel.test");
+    let userModel: UserModel = new UserModel("User.test");
 
     beforeEach(async () => {
         await userModel.clear();

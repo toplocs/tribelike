@@ -19,7 +19,7 @@ export class MemoryStore<T extends GenericObject> implements IStore<T> {
         return this.list.slice(0, limit);
     }
 
-    async add(newData: T): Promise<T | null> {
+    async create(newData: T): Promise<T | null> {
         this.list.push(newData);
         return newData;
     }

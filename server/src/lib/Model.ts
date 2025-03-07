@@ -37,7 +37,7 @@ export default class Model<T extends GenericObject> {
     async create(item: Partial<T>): Promise<T | null> {
         if (!this.options.create) throw new Error('Method not available');
         item.id = item.id || uuidv4() as Uuid;
-        return await this.store.add(item as T);
+        return await this.store.create(item as T);
     }
 
     async getById(id: Uuid): Promise<T | null> {

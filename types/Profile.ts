@@ -23,8 +23,8 @@ export interface Profile {
     interests?: GroupedInterests;
     locations?: GroupedLocations;
     profiles?: GroupedProfiles;
-    activities: Activity[];
-    settings: ProfileSettings[];
+    activities?: Activity[];
+    settings?: ProfileSettings[];
 }
 
 export interface ProfileSettings {

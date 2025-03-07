@@ -12,17 +12,28 @@ import { PrismaStore } from './PrismaStore';
 import { storeType } from '../config';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
+export type StoreType = 'memory' | 'file' | 'prisma';
+
 export interface IStore<T extends GenericObject> {
     name: string;
     clear(): Promise<void>;
     getAll(limit?: number): Promise<T[]>;
-    add(newData: T): Promise<T | null>;
+    create(newData: T): Promise<T | null>;
     getById(id: Uuid): Promise<T | null>;
+    getBy?(key: keyof T, value: string): Promise<T | null>;
     update(id: Uuid, newData: Partial<T>): Promise<T | null>;
     delete(id: Uuid): Promise<boolean>;
 }
 
-export type StoreType = 'memory' | 'file' | 'prisma';
+export interface FileStoreOptions<T extends GenericObject> {
+    indexKeys?: (keyof T)[];
+    constructor?: new (...args: any[]) => T;
+}
+
+export type PrismaStoreOptions<T> = {
+};
+
+export type StoreOptions<T extends GenericObject> = FileStoreOptions<T> | PrismaStoreOptions<T>;
 
 export class Store {
     private static instance: Store;
@@ -43,7 +54,7 @@ export class Store {
         this.storeType = type;
     }
 
-    public getStore<T extends GenericObject>(name: string): IStore<T> {
+    public getStore<T extends GenericObject>(name: string, options?: StoreOptions<T>): IStore<T> {
         switch (this.storeType) {
             case 'memory':
                 return new MemoryStore<T>(name) as IStore<T>;
@@ -51,7 +62,7 @@ export class Store {
                 return new PrismaStore<T>(name) as IStore<T>;
             case 'file':
             default:
-                return new FileStore<T>(name) as IStore<T>;
+                return new FileStore<T>(name, options as FileStoreOptions<T>) as IStore<T>;
         }
     }
 }

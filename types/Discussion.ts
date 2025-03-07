@@ -1,6 +1,4 @@
 import { Uuid } from './Uuid';
-import { Interest } from './Interest';
-import { Location } from './Location';
 
 export interface Discussion {
     id: Uuid;

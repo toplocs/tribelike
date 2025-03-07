@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import passkeyRoutes from './passkeyRoutes';
 import activityRouter from '../../api/activity';
 import authRouter from '../../api/auth';
 import discussionRouter from '../../api/discussion';
@@ -11,7 +10,6 @@ import relationRouter from '../../api/relation';
 import userRouter from '../../api/user';
 
 const router = Router();
-router.use('/', passkeyRoutes);
 router.use('/activity', activityRouter);
 router.use('/auth', authRouter);
 router.use('/discussion', discussionRouter);

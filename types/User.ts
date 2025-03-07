@@ -5,8 +5,8 @@ export interface User {
     id: Uuid;
     username: string;
     email: string;
-    profiles: Profile[];
-    settings: UserSetting[];
+    profiles?: Profile[];
+    settings?: UserSetting[];
     image?: string;
 }
   

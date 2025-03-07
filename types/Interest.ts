@@ -5,7 +5,8 @@ import type {
     LocationInterestKeyType,
     InterestInterestKeyType
 } from './Relation';
-import { Activity, Discussion } from './Invite';
+import { Activity } from './Activity';
+import { Discussion } from './Discussion';
 import { GroupedLocations } from './Location';
 
 export type GroupedInterests = {
