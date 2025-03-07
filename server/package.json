@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
   "scripts": {
     "dev": "DEVELOPMENT=true nodemon src/app.ts",
     "build": "pnpm --package=typescript dlx tsc",
     "start": "NODE_PATH=./build node build/app.js",
     "db:migrate": "pnpm prisma migrate dev",
-    "db:deploy": "pnpm prisma migrate deploy"
+    "db:deploy": "pnpm prisma migrate deploy",
+    "generate": "prisma generate"
   },
   "keywords": [],
   "author": "",
