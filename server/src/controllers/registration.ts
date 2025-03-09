@@ -3,7 +3,7 @@ import { generateRegistrationOptions, verifyRegistrationResponse, WebAuthnCreden
 import { RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
 import { rpName, rpID, origin } from '../config';
 import { Credential } from '../models/Credential';
-import { users, credentials } from '../models';
+import { users, credentials, profiles } from '../models';
 import { CustomError } from '../middleware/error';
 
 // See https://simplewebauthn.dev/docs/packages/server
@@ -104,7 +104,8 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
             if (!passkey) {
                 return next(new CustomError('Credential Create failed', 400));
             }
-
+            
+            await profiles.createDefaultProfiles(user.id, user.username, user.email);
             res.send({verified: true});
         } else {
             next(new CustomError('Verification failed', 400));

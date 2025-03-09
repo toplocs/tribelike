@@ -1,14 +1,13 @@
-import { Router, Handler } from 'express';
-import { UserController } from '../../controllers/UserController';
+import { Router } from 'express';
+import UserController from '../../controllers/UserController';
+import { authenticate } from '../../middleware/authenticate';
 
 const router = Router();
 
-// TODO: authenticated middleware
-
-router.get('/users', UserController.getUsers);
-router.put('/user/:id', UserController.updateUser);
-router.get('/user/:id', UserController.getUserById);
-router.delete('/user/:id', UserController.deleteUser);
+router.get('/users', authenticate, UserController.GetUsers);
+router.put('/user/:id', authenticate, UserController.UpdateUser);
+router.get('/user/:id', authenticate, UserController.GetUserById);
+router.delete('/user/:id', authenticate, UserController.DeleteUser);
 
 // TODO: Implement routes for user activities, discussions, and profiles
 // router.get('/user/:id/activities', UserController.getActivitiesByUserId);

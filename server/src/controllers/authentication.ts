@@ -4,9 +4,7 @@ import { PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescrip
 import { Credential } from '../models/Credential';
 import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
-import { users, credentials } from '../models';
-
-// TODO: token: 'valid-token' is a placeholder. Implement proper token generation.
+import { session, users, credentials } from '../models';
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.body;
@@ -85,7 +83,8 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
                 userPasskey.id,
                 authenticationInfo.newCounter
             );
-            res.send({verified: true, userId: user.id, token: 'valid-token'});
+            const authToken = await session.createToken(user.id);
+            res.send({verified: true, user: user, token: authToken.token});
         } else {
             next(new CustomError('Verification failed', 400));
         }

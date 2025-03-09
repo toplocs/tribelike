@@ -125,6 +125,9 @@ importers:
       helia:
         specifier: ^5.0.0
         version: 5.2.1(react-native@0.78.0(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(react@19.0.0))
+      jsonl-parse-stringify:
+        specifier: ^1.0.3
+        version: 1.0.3
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -3805,6 +3808,9 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
+
+  jsonl-parse-stringify@1.0.3:
+    resolution: {integrity: sha512-EdOSqaMIRhkF0p8So65MU8biuDYRr5XUV9XxJhTEKQ3v2eY6WT3F99Cp5hdHtJo6wLjoPvWQq38szYKpM/GYpQ==}
 
   jspdf@2.5.2:
     resolution: {integrity: sha512-myeX9c+p7znDWPk0eTrujCzNjT+CXdXyk7YmJq5nD5V7uLLKmSXnlQ/Jn/kuo3X09Op70Apm0rQSnFWyGK8uEQ==}
@@ -10481,6 +10487,8 @@ snapshots:
   json-stable-stringify-without-jsonify@1.0.1: {}
 
   json5@2.2.3: {}
+
+  jsonl-parse-stringify@1.0.3: {}
 
   jspdf@2.5.2:
     dependencies:

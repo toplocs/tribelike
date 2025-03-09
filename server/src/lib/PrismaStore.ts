@@ -23,7 +23,7 @@ export class PrismaStore<T extends GenericObject> implements IStore<T> {
         });
     }
 
-    async add(newData: T): Promise<T | null> {
+    async create(newData: T): Promise<T | null> {
         return await (this.prisma[this.model as keyof PrismaClient] as any).create({ data: newData });
     }
 
