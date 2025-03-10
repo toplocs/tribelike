@@ -96,7 +96,7 @@
 import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
+import { startRegistration } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
@@ -163,7 +163,7 @@ async function onSubmit() {
 
     return router.push({
       path: '/login',
-      query: { verified: 'true' }
+      query: result
     });
   } catch (error) {
     console.error(error);

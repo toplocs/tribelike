@@ -39,6 +39,11 @@ export default class CredentialModel extends Model<Credential> {
         super(name, { getAll: false, update: false, create: true });
     }
 
+    async getById(id: string): Promise<Credential | null> {
+        const credentials = await this.store.getAll();
+        return credentials.find(x => x.id === id) || null;
+    }
+
     async getAllByUserId(userId: string): Promise<Credential[]> {
         const credentials = await this.store.getAll();
         return credentials.filter(item => item.userId === userId);
