@@ -13,6 +13,9 @@ importers:
       '@heroicons/vue':
         specifier: ^2.1.5
         version: 2.2.0(vue@3.5.13(typescript@5.4.5))
+      '@simplewebauthn/browser':
+        specifier: ^13.1.0
+        version: 13.1.0
       axios:
         specifier: ^1.7.7
         version: 1.8.1(debug@4.4.0)
@@ -1655,6 +1658,9 @@ packages:
 
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
+
+  '@simplewebauthn/browser@13.1.0':
+    resolution: {integrity: sha512-WuHZ/PYvyPJ9nxSzgHtOEjogBhwJfC8xzYkPC+rR/+8chl/ft4ngjiK8kSU5HtRJfczupyOh33b25TjYbvwAcg==}
 
   '@simplewebauthn/server@13.1.1':
     resolution: {integrity: sha512-1hsLpRHfSuMB9ee2aAdh0Htza/X3f4djhYISrggqGe3xopNjOcePiSDkDDoPzDYaaMCrbqGP1H2TYU7bgL9PmA==}
@@ -7805,6 +7811,8 @@ snapshots:
   '@rushstack/eslint-patch@1.10.5': {}
 
   '@scarf/scarf@1.4.0': {}
+
+  '@simplewebauthn/browser@13.1.0': {}
 
   '@simplewebauthn/server@13.1.1':
     dependencies:

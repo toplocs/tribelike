@@ -20,7 +20,7 @@
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Username
+            Email
           </label>
 
           <TextInput
@@ -28,10 +28,11 @@
             id="username"
             name="username"
             autoComplete="username"
-            placeholder="Enter your username"
+            placeholder="Enter your email address"
           />
         </div>
 
+        <!--
         <div className="mb-2">
           <label
             for="password"
@@ -40,6 +41,7 @@
             Password
           </label>
 
+          
           <TextInput
             type="password"
             id="password"
@@ -48,6 +50,7 @@
             placeholder="••••••••••"
           />
         </div>
+        -->
 
         <SubmitButton className="w-full mt-4">
           Sign In

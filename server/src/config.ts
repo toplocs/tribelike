@@ -31,10 +31,10 @@ export const corsOptions: CorsOptions = {
 
 export const cookieOptions: CookieOptions = {
   maxAge: 86400000,
-  httpOnly: false,
-  sameSite: enable_https ? 'none' : 'lax',
-  secure: enable_https ? true : undefined,
-};
+  httpOnly: true,
+  sameSite: 'lax', // Works well in development
+  secure: false,   // Allow cookies over HTTP for localhost
+}
 
 const certificatesKey = `${__dirname}/../../localhost-key.pem`;
 const certificatesCert = `${__dirname}/../../localhost.pem`;

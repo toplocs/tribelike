@@ -48,6 +48,7 @@
           />
         </div>
 
+        <!--
         <div className="mb-2">
           <label
             for="password"
@@ -81,6 +82,7 @@
             placeholder="••••••••••"
           />
         </div>
+        -->
 
         <SubmitButton className="w-full mt-4">
           Submit
@@ -94,6 +96,7 @@
 import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
@@ -122,19 +125,46 @@ const getSession = async (authHeader: string) => {
   }
 }
 
+const registerStart = async (formData: FormData) => {
+  try {
+    const response = await axios.post(
+      `/api/passkey/registerStart`, formData
+    );
+
+    return response.data;
+  } catch(e) {
+    console.error(error);
+    errorMessage.value = error.response.data;
+  }
+}
+
+const registerFinish = async (attestation: Object) => {
+  try {
+    const response = await axios.post(
+      `/api/passkey/registerFinish`,
+      attestation
+    );
+
+    return response.data;
+  } catch(e) {
+    console.error(error);
+    errorMessage.value = error.response.data;
+  }
+}
+
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const response = await axios.post(`/api/user`, formData);
-    const authHeader = response.data;
+    const options = await registerStart(formData);
+    const attestationResponse = await startRegistration({
+      optionsJSON: options
+    });
+    const result = await registerFinish(attestationResponse);
 
-    if (authHeader) {
-      axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
-      localStorage.setItem('authHeader', JSON.stringify(authHeader));
-      session.value = await getSession(JSON.stringify(authHeader));
-      
-      return router.push(`/profiles`);
-    }
+    return router.push({
+      path: '/login',
+      query: { verified: 'true' }
+    });
   } catch (error) {
     console.error(error);
     errorMessage.value = error.response.data;

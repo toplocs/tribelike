@@ -33,9 +33,10 @@ export class Credential implements Passkey {
     }
 }
 
+
 export default class CredentialModel extends Model<Credential> {
     constructor(name: string) {
-        super(name, { getAll: false, update: false });
+        super(name, { getAll: false, update: false, create: true });
     }
 
     async getAllByUserId(userId: string): Promise<Credential[]> {
