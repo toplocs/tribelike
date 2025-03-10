@@ -48,42 +48,6 @@
           />
         </div>
 
-        <!--
-        <div className="mb-2">
-          <label
-            for="password"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Password
-          </label>
-
-          <TextInput
-            type="password"
-            id="password"
-            name="password"
-            autoComplete="password"
-            placeholder="••••••••••"
-          />
-        </div>
-
-        <div className="mb-2">
-          <label
-            for="password2"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Confirm the password
-          </label>
-
-          <TextInput
-            type="password"
-            id="password2"
-            name="password2"
-            autoComplete="password2"
-            placeholder="••••••••••"
-          />
-        </div>
-        -->
-
         <SubmitButton className="w-full mt-4">
           Submit
         </SubmitButton>
@@ -94,36 +58,18 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { startRegistration } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
-import SelectInput from '@/components/common/SelectInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
 
 const router = useRouter();
-const session = inject('session');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-
-const getSession = async (authHeader: string) => {
-  try {
-    const response = await axios.get(`/api/auth`, {
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = response.data;
-
-    return session;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 const registerStart = async (formData: FormData) => {
   try {
@@ -132,7 +78,7 @@ const registerStart = async (formData: FormData) => {
     );
 
     return response.data;
-  } catch(e) {
+  } catch(error: any) {
     console.error(error);
     errorMessage.value = error.response.data;
   }
@@ -146,7 +92,7 @@ const registerFinish = async (attestation: Object) => {
     );
 
     return response.data;
-  } catch(e) {
+  } catch(error: any) {
     console.error(error);
     errorMessage.value = error.response.data;
   }
@@ -165,7 +111,7 @@ async function onSubmit() {
       path: '/login',
       query: result
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     errorMessage.value = error.response.data;
   }

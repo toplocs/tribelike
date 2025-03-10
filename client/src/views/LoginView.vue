@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { startAuthentication } from '@simplewebauthn/browser';
@@ -88,8 +88,8 @@ const getSession = async (authHeader: string) => {
     const { session } = response.data;
 
     return session;
-  } catch (e) {
-    console.error(e);
+  } catch (error: any) {
+    console.error(error);
   }
 }
 
@@ -101,9 +101,9 @@ const loginStart = async (formData: FormData) => {
     );
 
     return response.data;
-  } catch(e) {
+  } catch(error: any) {
     console.error(error);
-    errorMessage.value = error.response.data;
+    errorMessage.value = error.response?.data;
   }
 }
 
@@ -115,7 +115,7 @@ const loginFinish = async (attestation: Object) => {
     );
 
     return response.data;
-  } catch(e) {
+  } catch(error: any) {
     console.error(error);
     errorMessage.value = error.response.data;
   }
