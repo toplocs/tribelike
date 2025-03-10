@@ -8,10 +8,13 @@ import { CustomError } from '../middleware/error';
 
 // See https://simplewebauthn.dev/docs/packages/server
 export const handleRegisterStart = async (req: Request, res: Response, next: NextFunction) => {
-    const {username} = req.body;
+    const {email, username} = req.body;
 
     if (!username) {
         return next(new CustomError('Username empty', 400));
+    }
+    if (!email) {
+        return next(new CustomError('Email empty', 400));
     }
 
     let user = await users.getByUsername(username);
@@ -42,6 +45,7 @@ export const handleRegisterStart = async (req: Request, res: Response, next: Nex
 
         req.session.loggedInUser = options.user;
         req.session.currentChallengeOptions = options;
+
         res.send(options);
     } catch (error) {
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
@@ -49,8 +53,8 @@ export const handleRegisterStart = async (req: Request, res: Response, next: Nex
 };
 
 export const handleRegisterFinish = async (req: Request, res: Response, next: NextFunction) => {
-    const {body} = req;
-    
+    const { body } = req;
+
     if (!req.session.currentChallengeOptions) {
         return next(new CustomError('Current challenge is missing', 400));
     }
@@ -91,7 +95,7 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
 
             const newPasskey = new Credential({
                 id: credential.id,
-                publicKey: Credential.uint8ArrayToBase64(credential.publicKey),
+                publicKey: Buffer.from(credential.publicKey).toString('base64'),
                 userId: user.id,
                 webauthnUserID: currentChallengeOptions.user.id,
                 counter: credential.counter,
@@ -111,6 +115,7 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
             next(new CustomError('Verification failed', 400));
         }
     } catch (error) {
+        console.error(error)
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
     } finally {
         req.session.loggedInUser = null;

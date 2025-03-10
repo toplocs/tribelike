@@ -20,7 +20,7 @@
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Username
+            Email
           </label>
 
           <TextInput
@@ -28,10 +28,11 @@
             id="username"
             name="username"
             autoComplete="username"
-            placeholder="Enter your username"
+            placeholder="Enter your email address"
           />
         </div>
 
+        <!--
         <div className="mb-2">
           <label
             for="password"
@@ -40,6 +41,7 @@
             Password
           </label>
 
+          
           <TextInput
             type="password"
             id="password"
@@ -48,6 +50,7 @@
             placeholder="••••••••••"
           />
         </div>
+        -->
 
         <SubmitButton className="w-full mt-4">
           Sign In
@@ -61,6 +64,7 @@
 import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import { startAuthentication } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
@@ -89,15 +93,31 @@ const getSession = async (authHeader: string) => {
   }
 }
 
-const sendLogin = async () => {
+const loginStart = async (formData: FormData) => {
   try {
-    const formData = new FormData(form.value ?? undefined);
-    const response = await axios.post(`/api/auth/login`, formData);
+    const response = await axios.post(
+      `/api/passkey/loginStart`,
+      formData,
+    );
 
     return response.data;
-  } catch (error) {
-    errorMessage.value = error.response.data;
+  } catch(e) {
     console.error(error);
+    errorMessage.value = error.response.data;
+  }
+}
+
+const loginFinish = async (attestation: Object) => {
+  try {
+    const response = await axios.post(
+      `/api/passkey/loginFinish`,
+      attestation
+    );
+
+    return response.data;
+  } catch(e) {
+    console.error(error);
+    errorMessage.value = error.response.data;
   }
 }
 
@@ -105,15 +125,22 @@ const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
-    const authHeader = await sendLogin();
-    if (authHeader) {
-      axios.defaults.headers.common['Authorization'] = JSON.stringify(authHeader);
-      localStorage.setItem('authHeader', JSON.stringify(authHeader));
-      session.value = await getSession(JSON.stringify(authHeader));
-      if (profile.value) return router.push(`/profile/${profile.value.id}`);
-      
-      return router.push(`/profiles`);
+    const formData = new FormData(form.value ?? undefined);
+    const options = await loginStart(formData);
+    const attestationResponse = await startAuthentication({
+      optionsJSON: options
+    });
+    const result = await loginFinish(attestationResponse);
+    if (!result.verified) throw new Error('Login not successfull');
+    console.log(result);
+    errorMessage.value = 'Login successfull';
+    user.value = result.user;
+    //set profiles
+
+    if (profile.value) {
+      return router.push(`/profile/${profile.value.id}`);
     }
+    return router.push(`/profiles`);
   } catch (error) {
     errorMessage.value = error.response.data;
     console.error(error);

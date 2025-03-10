@@ -96,5 +96,6 @@ provide('interest', interest);
 provide('title', title);
 
 axios.defaults.baseURL = serverURL;
+axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Authorization'] = authHeader;
 </script>

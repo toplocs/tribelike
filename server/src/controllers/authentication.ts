@@ -7,7 +7,8 @@ import { rpID, origin } from '../config';
 import { session, users, credentials } from '../models';
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
-    const { username } = req.body;
+    const { username, email } = req.body;
+
     try {
         const user = await users.getByUsername(username);
         if (!user) {
@@ -32,6 +33,7 @@ export const handleLoginStart = async (req: Request, res: Response, next: NextFu
 
         req.session.loggedInUser = { id: user.id, name: user.username };
         req.session.currentChallengeOptions = options;
+
         res.send(options);
     } catch (error) {
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
@@ -83,8 +85,11 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
                 userPasskey.id,
                 authenticationInfo.newCounter
             );
-            const authToken = await session.createToken(user.id);
-            res.send({verified: true, user: user, token: authToken.token});
+            //const authToken = await session.createToken(user.id);
+            //set express session to loggedin = true
+            console.log(req.session)
+
+            res.send({verified: true, user: user});
         } else {
             next(new CustomError('Verification failed', 400));
         }
