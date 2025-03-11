@@ -30,7 +30,7 @@ export const corsOptions: CorsOptions = {
 };
 
 export const cookieOptions: CookieOptions = {
-  maxAge: 86400000,
+  maxAge: 7*24*60*60*1000, //86400000,
   httpOnly: true,
   sameSite: 'lax', // Works well in development
   secure: false,   // Allow cookies over HTTP for localhost

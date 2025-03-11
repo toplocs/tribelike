@@ -1,6 +1,6 @@
 import { ProfileLocation } from '@tribelike/types/Relation';
 import { Location } from '@tribelike/types/Location';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 
 export async function findLocations(query: {
   title?: string

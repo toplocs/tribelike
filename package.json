@@ -1,14 +1,14 @@
 {
   "name": "@tribelike/root",
   "version": "1.0.0",
-  "description": "Playground for concepts",
+  "description": "Topics and locations",
   "scripts": {
     "dev": "pnpm -F server dev & pnpm -F client dev",
     "dev:https": "pnpm -F server dev:https & pnpm -F client dev:https",
     "test": "pnpm -F server test",
     "check": "pnpm -F !root check",
     "lint": "pnpm -F !root lint",
-    "build": "pnpm -F !root build",
+    "build": "pnpm -F !root build-only",
     "generate:openapi": "pnpm -F server generate:openapi",
     "start": "pnpm -F server start",
     "certs": "mkcert 'localhost'",

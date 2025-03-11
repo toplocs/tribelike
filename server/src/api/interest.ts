@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import express from 'express';
 import multer from 'multer';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 import {
   findInterests,
   createInterest,

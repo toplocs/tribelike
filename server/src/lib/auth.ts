@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client';
 import { SignJWT, jwtVerify } from 'jose';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 
 const secretKey = 'secret12345';
 const key = new TextEncoder().encode(secretKey);

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import express from 'express';
 import multer from 'multer';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 import { auth, login, logout } from '../lib/auth';
 
 const router = express.Router();

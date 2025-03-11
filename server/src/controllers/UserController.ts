@@ -20,12 +20,11 @@ export default class UserController {
   static async GetUserById(req: Request, res: Response) {
     const { id } = req.params;
     try {
-      const loggedInUser = (req as AuthenticatedRequest).user;
-      if (id !== loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
+      const loggedInUser = (req as AuthenticatedRequest).session.loggedInUser;
+      if (!loggedInUser) return res.status(404).json({ error: 'User not found' });
 
-      let user = await users.getById(id);
+      const user = await users.getById(loggedInUser.id);
       if (user) {
-        user.profiles = await profiles.getAllByUserId(id);
         return res.status(200).json(user);
       } 
       else return res.status(404).json({ error: 'User not found' });

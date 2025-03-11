@@ -28,6 +28,12 @@ model User {
   settings Settings?
 }
 
+model Session {
+  sid       String  @id
+  sess      Json    @db.Json
+  expire    DateTime
+}
+
 model Settings {
   id       String @id @default(uuid())
   userId   String @unique()

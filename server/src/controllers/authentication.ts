@@ -87,7 +87,7 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
             );
             //const authToken = await session.createToken(user.id);
             //set express session to loggedin = true
-            console.log(req.session)
+            console.log(req.session.id)
 
             res.send({verified: true, user: user});
         } else {

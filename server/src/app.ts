@@ -1,6 +1,6 @@
 import express from 'express';
 import session from 'express-session';
-
+import PgSession from 'connect-pg-simple';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
@@ -9,15 +9,23 @@ import https from "https";
 import http from "http";
 import { handleError } from './middleware/error';
 import routes from './routes';
+import { pgPool } from './lib/prisma';
 
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 
 import { 
-  sessionSecret, corsOptions, cookieOptions, 
-  rpID, port, enable_https, certificate } from './config';
+  sessionSecret,
+  corsOptions,
+  cookieOptions, 
+  rpID,
+  port,
+  enable_https,
+  certificate
+} from './config';
 
 const app = express();
+const pgSession = PgSession(session);
 
 declare module 'express-session' {
   interface SessionData {
@@ -31,6 +39,10 @@ app.use(
     secret: sessionSecret,
     saveUninitialized: true,
     resave: false,
+    store: new pgSession({
+      pool: pgPool,
+      tableName: 'Session',
+    }),
     cookie: cookieOptions,
   }),
 );

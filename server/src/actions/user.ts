@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 import { auth } from '../lib/auth';
 import profiles from '../lib/profiles';
 
