@@ -20,7 +20,7 @@
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Email
+            Username
           </label>
 
           <TextInput
@@ -28,29 +28,9 @@
             id="username"
             name="username"
             autoComplete="username"
-            placeholder="Enter your email address"
+            placeholder="Enter your username"
           />
         </div>
-
-        <!--
-        <div className="mb-2">
-          <label
-            for="password"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Password
-          </label>
-
-          
-          <TextInput
-            type="password"
-            id="password"
-            name="password"
-            autoComplete="password"
-            placeholder="••••••••••"
-          />
-        </div>
-        -->
 
         <SubmitButton className="w-full mt-4">
           Sign In
@@ -61,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { startAuthentication } from '@simplewebauthn/browser';
@@ -72,26 +52,10 @@ import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
 
 const router = useRouter();
-const session = inject('session');
+const user = inject('user');
 const profile = inject('profile');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-
-const getSession = async (authHeader: string) => {
-  try {
-    const response = await axios.get(`/api/auth`, {
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = response.data;
-
-    return session;
-  } catch (error: any) {
-    console.error(error);
-  }
-}
 
 const loginStart = async (formData: FormData) => {
   try {

@@ -1,11 +1,12 @@
 import { User as IUser} from '@tribelike/types/User';
 import Model from '../lib/Model';
+import { Profile } from '@tribelike/types/Profile';
 
 export class User implements IUser {
     id!: string;
     username: string = 'EmptyUsername'
     email!: string;
-    profiles?: any[] = [];
+    profiles?: Profile[] = [];
     settings?: any[] = [];
     image?: string;
 
@@ -22,6 +23,12 @@ export default class UserModel extends Model<User> {
     async getByUsername(username: string): Promise<User | null> {
         const allUsers = await this.store.getAll();
         const user = allUsers.find(item => item.username === username);
+        return user || null;
+    }
+
+    async getByEmail(email: string): Promise<User | null> {
+        const allUsers = await this.store.getAll();
+        const user = allUsers.find(item => item.email === email);
         return user || null;
     }
 }

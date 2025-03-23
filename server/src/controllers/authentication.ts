@@ -7,7 +7,8 @@ import { rpID, origin } from '../config';
 import { session, users, credentials } from '../models';
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
-    const { username, email } = req.body;
+    const { username } = req.body;
+    console.log('Login Start:', username);
 
     try {
         const user = await users.getByUsername(username);

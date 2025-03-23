@@ -19,6 +19,7 @@ import {
 
 const app = express();
 
+// In Memory Session Store for Login and Register
 declare module 'express-session' {
   interface SessionData {
     currentChallengeOptions?: PublicKeyCredentialCreationOptionsJSON | PublicKeyCredentialRequestOptionsJSON;

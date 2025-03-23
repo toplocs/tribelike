@@ -42,7 +42,8 @@ export default class Model<T extends GenericObject> {
 
     async getById(id: Uuid): Promise<T | null> {
         if (!this.options.getById) throw new Error('Method not available');
-        return await this.store.getById(id);
+        const item = await this.store.getById(id);
+        return item;
     }
 
     async update(id: Uuid, updatedItem: Partial<T>): Promise<T | null> {
