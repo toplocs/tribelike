@@ -56,4 +56,5 @@ export const storeType: StoreType = process.env.STORE_TYPE as StoreType || 'file
 
 // FileStore
 // Folder for json files
-export const dataFolder = path.join(__dirname, 'data');
+export const dataFolder = path.join(__dirname, '../data');
+console.log('Data folder:', dataFolder);
