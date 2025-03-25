@@ -28,9 +28,8 @@ export default class ProfileModel extends Model<Profile> {
     }
 
     async getAllByUserId(userId: Uuid): Promise<Profile[]> {
-        const allProfiles = await this.store.getAll();
-        const profiles = allProfiles.filter(item => item.userId === userId);
-        return profiles;
+        const allProfiles = await this.store.getAll({userId: userId});
+        return allProfiles;
     }
 
     async createDefaultProfiles(userId: Uuid, username: string, email: string): Promise<Profile[]> {
@@ -43,6 +42,5 @@ export default class ProfileModel extends Model<Profile> {
         await Promise.all(defaultProfiles.map(profile => this.store.create(profile)));
         return defaultProfiles;
     }
-
 }
 

@@ -54,6 +54,10 @@ export class Store {
         this.storeType = type;
     }
 
+    public getStoreType(): StoreType {
+        return this.storeType;
+    }
+
     public getStore<T extends GenericObject>(name: string, options?: StoreOptions<T>): IStore<T> {
         switch (this.storeType) {
             case 'memory':

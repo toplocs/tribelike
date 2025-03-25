@@ -20,6 +20,7 @@ import {
 const app = express();
 
 // In Memory Session Store for Login and Register
+// TODO: We want to use JWT only - no session store
 declare module 'express-session' {
   interface SessionData {
     currentChallengeOptions?: PublicKeyCredentialCreationOptionsJSON | PublicKeyCredentialRequestOptionsJSON;
