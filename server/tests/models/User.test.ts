@@ -47,4 +47,10 @@ describe('UserModel', () => {
         const user = await userModel.getById('1');
         expect(user).toBeNull();
     });
+
+    it('should get a user by username', async () => {
+        await userModel.create(testUser);
+        const user = await userModel.getByUsername('Test User');
+        expect(user).toEqual(testUser);
+    });
 });

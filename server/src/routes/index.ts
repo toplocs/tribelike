@@ -50,7 +50,7 @@ router.use((req, res, next) => {
                 const version = path[1];
                 fallbackUrl = fallbackUrl.replace(`/${version}/`, `/${nextVersion}/`);
             }
-            res.redirect(fallbackUrl);
+            res.redirect(fallbackUrl); // Can we omit the redirect?
             return;
         }
     }

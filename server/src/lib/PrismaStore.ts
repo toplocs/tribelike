@@ -17,9 +17,10 @@ export class PrismaStore<T extends GenericObject> implements IStore<T> {
         await (this.prisma[this.model as keyof PrismaClient] as any).deleteMany({});
     }
     
-    async getAll(limit?: number): Promise<T[]> {
+    async getAll(filter: any = {}, limit?: number): Promise<T[]> {
         return await (this.prisma[this.model as keyof PrismaClient] as any).findMany({
-            take: limit
+            take: limit,
+            where: filter
         });
     }
 

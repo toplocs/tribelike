@@ -14,9 +14,11 @@ export class MemoryStore<T extends GenericObject> implements IStore<T> {
         this.list = [];
     }
 
-    async getAll(limit?: number): Promise<T[]> {
-        if (!limit) return this.list;
-        return this.list.slice(0, limit);
+    async getAll(filter: any = {}, limit?: number): Promise<T[]> {
+        const filteredItems = this.list.filter(item => {
+            return Object.keys(filter).every(key => item[key as keyof T] === filter[key]);
+        });
+        return limit ? filteredItems.slice(0, limit) : filteredItems;
     }
 
     async create(newData: T): Promise<T | null> {

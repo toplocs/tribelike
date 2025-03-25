@@ -25,7 +25,7 @@ const user = ref(null);         // User Account, which is logged in
 const profile = ref(null);      // User Profile, which is selected (logged in only)
 const location = ref(null);
 const interest = ref(null);
-const title = ref(null);
+const title = ref<string>("");
 
 const getSession = async () => {
   try {
@@ -76,7 +76,7 @@ const logout = async () => {
 }
 
 watch(() => route.meta.title, (newTitle) => {
-  title.value = newTitle;
+  title.value = typeof newTitle === 'string' ? newTitle : '';
 });
 
 onMounted(async () => {

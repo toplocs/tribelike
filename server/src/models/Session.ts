@@ -24,7 +24,7 @@ export interface TokenPayload extends JWTPayload{
 }
 
 export default class Session {
-  // Login: Generate a token
+  // Login: Generate a JWToken
   async createToken(userId: Uuid): Promise<AuthToken> {
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 1 week expiration
     const token = await this.encrypt({ userId, expires });

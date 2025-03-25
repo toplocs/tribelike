@@ -31,6 +31,7 @@
     "vue3-openlayers": "^11.2.0"
   },
   "devDependencies": {
+    "@tribelike/types": "workspace:*",
     "@originjs/vite-plugin-federation": "^1.3.6",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",

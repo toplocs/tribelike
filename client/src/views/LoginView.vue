@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject } from 'vue';
+import { ref, inject, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { startAuthentication } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
@@ -50,11 +50,13 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
+import type { User } from '@tribelike/types/User';
+import type { Profile } from '@tribelike/types/Profile';
 
 const router = useRouter();
-const user = inject('user');
-const profile = inject('profile');
-const errorMessage = ref('');
+const user = inject<Ref<User | null>>('user');
+const profile = inject<Ref<Profile | null>>('profile');
+const errorMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
 const loginStart = async (formData: FormData) => {
@@ -98,14 +100,16 @@ const onSubmit = async () => {
     if (!result.verified) throw new Error('Login not successfull');
     console.log(result);
     errorMessage.value = 'Login successfull';
-    user.value = result.user;
-    //set profiles
+    
+    if (user) {
+      user.value = result.user;
+    }
 
-    if (profile.value) {
+    if (profile?.value) {
       return router.push(`/profile/${profile.value.id}`);
     }
     return router.push(`/profiles`);
-  } catch (error) {
+  } catch (error: any) {
     errorMessage.value = error.response.data;
     console.error(error);
   }

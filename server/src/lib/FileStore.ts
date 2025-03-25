@@ -40,9 +40,12 @@ export class FileStore<T extends GenericObject> implements IStore<T> {
         this.initializeIndexes();
     }
 
-    async getAll(limit?: number): Promise<T[]> {
+    async getAll(filter: any = {}, limit?: number): Promise<T[]> {
         const items = Array.from<T>(this.items.values() as MapIterator<T>);
-        const result = limit ? items.slice(0, limit) : items;
+        const filteredItems = items.filter(item => {
+            return Object.keys(filter).every(key => item[key as keyof T] === filter[key]);
+        });
+        const result = limit ? filteredItems.slice(0, limit) : filteredItems;
         return result.map(item => this.instantiate(item));
     }
 

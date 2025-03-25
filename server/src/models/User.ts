@@ -21,15 +21,13 @@ export default class UserModel extends Model<User> {
     }
 
     async getByUsername(username: string): Promise<User | null> {
-        const allUsers = await this.store.getAll();
-        const user = allUsers.find(item => item.username === username);
-        return user || null;
+        const allUsers = await this.store.getAll({username: username});
+        return allUsers.length > 0 ? allUsers[0] : null;
     }
 
     async getByEmail(email: string): Promise<User | null> {
-        const allUsers = await this.store.getAll();
-        const user = allUsers.find(item => item.email === email);
-        return user || null;
+        const allUsers = await this.store.getAll({email: email});
+        return allUsers.length > 0 ? allUsers[0] : null;
     }
 }
 

@@ -17,7 +17,7 @@ export type StoreType = 'memory' | 'file' | 'prisma';
 export interface IStore<T extends GenericObject> {
     name: string;
     clear(): Promise<void>;
-    getAll(limit?: number): Promise<T[]>;
+    getAll(filter?: any, limit?: number): Promise<T[]>;
     create(newData: T): Promise<T | null>;
     getById(id: Uuid): Promise<T | null>;
     getBy?(key: keyof T, value: string): Promise<T | null>;
