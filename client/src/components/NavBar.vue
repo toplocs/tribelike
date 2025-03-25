@@ -119,7 +119,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, provide, computed, onMounted } from 'vue';
+import { ref, inject, provide, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   HomeIcon,
@@ -135,20 +135,28 @@ import FindMixed from './search/FindMixed.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
+import { useUser } from '@/composables/user';
+import { useProfile } from '@/composables/profile';
 
 const router = useRouter();
-const session = inject('session');
-const profile = inject('profile');
+const { user } = await useUser();
+const { profile, getProfile } = useProfile();
 const location = inject('location');
 const interest = inject('interest');
 const title = inject('title');
 const hideSearch = ref(true);
 const dropdown = ref(null);
-const user = computed(() => session?.value?.user);
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
+
+watch(() => user.value, async () => {
+  if (!profile.value) {
+    const profileId = user.value.profiles[0].id;
+    profile.value = await getProfile(profileId);
+  }
+});
 
 provide('dropdown', dropdown);
 </script>

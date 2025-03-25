@@ -12,61 +12,21 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, provide, onMounted, watch } from 'vue';
+import { ref, provide, watch, nextTick, onMounted } from 'vue';
 import { useRoute, RouterView } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
+import { userProvider } from '@/composables/user';
+import { profileProvider } from '@/composables/profile';
+//import { locationProvider } from '@/composables/location';
+
+userProvider();
+profileProvider();
+//locationProvider();
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');
-const route = useRoute();
-const session = ref(null);
-const user = ref(null);         // User Account, which is logged in
-const profile = ref(null);      // User Profile, which is selected (logged in only)
-const location = ref(null);
-const interest = ref(null);
-const title = ref(null);
-
-const getUser = async () => {
-  try {
-    const response = await axios.get(`/api/v2/user`);
-
-    return response.data;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-const getProfile = async () => {
-  try {
-    const profileId = localStorage.getItem('profile');
-    if (!profileId) return null;
-    const response = await axios.get(`/api/v2/profile/${profileId}`);
-
-    return response.data;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-watch(() => route.meta.title, (newTitle) => {
-  title.value = newTitle;
-});
-
-onMounted(async () => {
-  user.value = await getUser();
-  console.log(user.value);
-  //profile.value = await getProfile();
-});
-
-provide('session', session);
-provide('user', user);
-provide('profile', profile);
-provide('location', location);
-provide('interest', interest);
-provide('title', title);
 
 axios.defaults.baseURL = serverURL;
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Authorization'] = authHeader;
 </script>

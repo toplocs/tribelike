@@ -4,6 +4,26 @@ import { AuthenticatedRequest } from '../middleware/authenticate';
 
 export default class UserController {
 
+  static async GetUser(req: Request, res: Response) {
+    try {
+      const loggedInUser = (req as AuthenticatedRequest).session.loggedInUser;
+      if (!loggedInUser) return res.status(404).json({ error: 'User not found' });
+
+      const user = await users.getById(loggedInUser.id);
+      if (user) {
+        user.profiles = await profiles.getAll({
+          userId: loggedInUser.id,
+        });
+
+        return res.status(200).json(user);
+      } 
+      else return res.status(404).json({ error: 'User not found' });
+    } catch(e: any) {
+      console.error(e);
+      res.status(500).json({ error: e.message });
+    }
+  }
+  
   static async GetUsers(req: Request, res: Response) {
     try {
       const loggedInUser = (req as AuthenticatedRequest).user;

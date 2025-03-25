@@ -70,56 +70,12 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
+import { useUser } from '@/composables/user';
 
 const router = useRouter();
-const session = inject('session');
-const profile = inject('profile');
+const { loginStart, loginFinish } = useUser();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-
-const getSession = async (authHeader: string) => {
-  try {
-    const response = await axios.get(`/api/auth`, {
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = response.data;
-
-    return session;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-const loginStart = async (formData: FormData) => {
-  try {
-    const response = await axios.post(
-      `/api/passkey/loginStart`,
-      formData,
-    );
-
-    return response.data;
-  } catch(e) {
-    console.error(error);
-    errorMessage.value = error.response.data;
-  }
-}
-
-const loginFinish = async (attestation: Object) => {
-  try {
-    const response = await axios.post(
-      `/api/passkey/loginFinish`,
-      attestation
-    );
-
-    return response.data;
-  } catch(e) {
-    console.error(error);
-    errorMessage.value = error.response.data;
-  }
-}
 
 const onSubmit = async () => {
   if (!form.value) return;
@@ -132,10 +88,6 @@ const onSubmit = async () => {
     });
     const result = await loginFinish(attestationResponse);
     if (!result.verified) throw new Error('Login not successfull');
-    console.log(result);
-    errorMessage.value = 'Login successfull';
-    user.value = result.user;
-    //set profiles
 
     if (profile.value) {
       return router.push(`/profile/${profile.value.id}`);

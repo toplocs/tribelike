@@ -68,7 +68,7 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
             response: body,
             expectedChallenge: currentChallenge,
             expectedOrigin: origin,
-            expectedRPID: [rpID, "localhost"],
+            expectedRPID: [rpID, 'localhost'],
             credential: {
                 id: userPasskey.id,
                 publicKey: Credential.base64ToUint8Array(userPasskey.publicKey),

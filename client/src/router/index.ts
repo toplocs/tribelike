@@ -34,7 +34,6 @@ import {
   InterestPluginRoutes,
   LocationPluginRoutes,
 } from './plugins.ts';
-import { inject } from 'vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -174,29 +173,21 @@ const router = createRouter({
   ]
 });
 
-const getSession = async () => {
+const getUser = async () => {
   try {
-    const authHeader = localStorage.getItem('authHeader');
-    const response = await axios.get(`/api/auth`, {
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = response.data;
-
-    return session;
+    const { data } = await axios.get(`/api/v2/user`);
+ 
+    return data;
   } catch (e) {
     console.error(e);
   }
 }
 
-router.beforeEach(async (to, from, next) => {
-  const session = await getSession();
-  const isAuthenticated = session?.user ? true : false;
 
+router.beforeEach(async (to, from, next) => {
+  const user = await getUser();
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
+    if (!user) {
       next({ name: 'login' });
     } else {
       next();

@@ -5,7 +5,7 @@ import { authenticate } from '../../middleware/authenticate';
 const router = Router();
 
 router.get('/users', authenticate, UserController.GetUsers);
-router.get('/user', authenticate, UserController.GetUserById);
+router.get('/user', authenticate, UserController.GetUser);
 router.get('/user/:id', authenticate, UserController.GetUserById);
 router.put('/user/:id', authenticate, UserController.UpdateUser);
 router.delete('/user/:id', authenticate, UserController.DeleteUser);

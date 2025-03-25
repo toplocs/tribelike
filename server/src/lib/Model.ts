@@ -29,7 +29,7 @@ export default class Model<T extends GenericObject> {
         await this.store.clear();
     }
 
-    async getAll(limit?: number): Promise<T[]> {
+    async getAll(query?: Object, limit?: number): Promise<T[]> {
         if (!this.options.getAll) throw new Error('Method not available');
         return await this.store.getAll(limit);
     }

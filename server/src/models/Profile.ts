@@ -27,6 +27,7 @@ export default class ProfileModel extends Model<Profile> {
         super(name);
     }
 
+    //not scaleable
     async getAllByUserId(userId: Uuid): Promise<Profile[]> {
         const allProfiles = await this.store.getAll();
         const profiles = allProfiles.filter(item => item.userId === userId);
