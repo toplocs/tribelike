@@ -94,12 +94,11 @@ const onSubmit = async () => {
     });
     const result = await loginFinish(attestationResponse);
     if (!result.verified) throw new Error('Login not successfull');
-    console.log(result);
     errorMessage.value = 'Login successfull';
     
     localStorage.setItem('authHeader', result.token);
     axios.defaults.headers.common['Authorization'] = result.token;
-    
+ 
     return router.push(`/profiles`);
   } catch (error: any) {
     errorMessage.value = error.response.data;

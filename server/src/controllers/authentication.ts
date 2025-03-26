@@ -11,6 +11,7 @@ export const handleLoginStart = async (req: Request, res: Response, next: NextFu
 
     try {
         const user = await users.getByEmail(email);
+
         if (!user) {
             return next(new CustomError('User not found', 404));
         }
@@ -68,7 +69,6 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
     const loggedInUser = session.data.loggedInUser;
     const currentChallengeOptions = session.data.currentChallengeOptions as PublicKeyCredentialCreationOptionsJSON;
     const currentChallenge = currentChallengeOptions.challenge;
-
     const user = await users.getById(loggedInUser.id);
     if (!user) {
         return next(new CustomError('User not found', 404));

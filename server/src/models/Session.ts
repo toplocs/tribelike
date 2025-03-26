@@ -44,6 +44,7 @@ export class Session {
     if (!authHeader) return null;
     const token = JSON.parse(authHeader)?.token;
     if (!token) return null;
+    
     return await this.validateToken(token);
   }
   
