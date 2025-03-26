@@ -38,18 +38,21 @@ function fallback(req: Request): keyof typeof routers | "" {
 }
 
 router.use((req, res, next) => {
-    if (!res.pageFound) {
+    if (!res.pageFound && req.path.startsWith('/api/')) {
         const nextVersion = fallback(req);
+        console.log("Fallback to version:", nextVersion);
         res.pageFound = undefined;
         if (nextVersion !== "") {
             let fallbackUrl = req.originalUrl;
-            if (!req.path.startsWith('/v')) {
-                fallbackUrl = fallbackUrl.replace('api', `api/${nextVersion}`);
+            console.log("Fallback URL:", fallbackUrl);
+            if (!req.path.startsWith('/api/v')) {
+                fallbackUrl = fallbackUrl.replace('/api', `/api/${nextVersion}`);
             } else {
                 const path = req.path.split('/');
-                const version = path[1];
-                fallbackUrl = fallbackUrl.replace(`/${version}/`, `/${nextVersion}/`);
+                const version = path[2];
+                fallbackUrl = fallbackUrl.replace(`/api/${version}/`, `/api/${nextVersion}/`);
             }
+            console.log("Fallback URL:", fallbackUrl);
             res.redirect(fallbackUrl); // Can we omit the redirect?
             return;
         }
