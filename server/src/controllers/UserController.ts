@@ -6,11 +6,7 @@ export default class UserController {
 
   static async GetUsers(req: Request, res: Response) {
     try {
-      const loggedInUser = (req as AuthenticatedRequest).user;
-      if (loggedInUser.username !== 'admin') return res.status(403).json({ error: 'Forbidden' });
-
-      const usersList = await users.getAll();
-      res.status(200).json(usersList);
+      return res.status(403).json({ error: 'Forbidden' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -19,12 +15,10 @@ export default class UserController {
 
   static async GetUser(req: Request, res: Response) {
     try {
-      const loggedInUser = (req as AuthenticatedRequest).user;
-      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
-
-      let user = await users.getById(loggedInUser.id);
+      const userId = (req as AuthenticatedRequest).userId;
+      let user = await users.getById(userId);
       if (user) {
-        user.profiles = await profiles.getAllByUserId(loggedInUser.id);
+        user.profiles = await profiles.getAllByUserId(userId);
         return res.status(200).json(user);
       } 
       else return res.status(404).json({ error: 'User not found' });
@@ -37,10 +31,8 @@ export default class UserController {
   static async UpdateUser(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const loggedInUser = (req as AuthenticatedRequest).user;
-      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
-
-      const result = await users.update(loggedInUser.id, {
+      const userId = (req as AuthenticatedRequest).userId;
+      const result = await users.update(userId, {
         image: formData.image || '/images/default.jpeg',
         username: formData.username,
         email: formData.email,
@@ -57,10 +49,8 @@ export default class UserController {
   // TODO: Cascading delete   
   static async DeleteUser(req: Request, res: Response) {
     try {
-      const loggedInUser = (req as AuthenticatedRequest).user;
-      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
-
-      const result = await users.delete(loggedInUser.id);
+      const userId = (req as AuthenticatedRequest).userId;
+      const result = await users.delete(userId);
       if (result) return res.status(200).json({ success: 'User deleted' });
       else return res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
