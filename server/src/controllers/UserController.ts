@@ -17,15 +17,14 @@ export default class UserController {
     }
   }
 
-  static async GetUserById(req: Request, res: Response) {
-    const { id } = req.params;
+  static async GetUser(req: Request, res: Response) {
     try {
       const loggedInUser = (req as AuthenticatedRequest).user;
-      if (id !== loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
+      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
 
-      let user = await users.getById(id);
+      let user = await users.getById(loggedInUser.id);
       if (user) {
-        user.profiles = await profiles.getAllByUserId(id);
+        user.profiles = await profiles.getAllByUserId(loggedInUser.id);
         return res.status(200).json(user);
       } 
       else return res.status(404).json({ error: 'User not found' });
@@ -36,13 +35,12 @@ export default class UserController {
   }
 
   static async UpdateUser(req: Request, res: Response) {
-    const { id } = req.params;
     const formData = req.body;
     try {
       const loggedInUser = (req as AuthenticatedRequest).user;
-      if (id !== loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
+      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
 
-      const result = await users.update(id, {
+      const result = await users.update(loggedInUser.id, {
         image: formData.image || '/images/default.jpeg',
         username: formData.username,
         email: formData.email,
@@ -58,12 +56,11 @@ export default class UserController {
 
   // TODO: Cascading delete   
   static async DeleteUser(req: Request, res: Response) {
-    const { id } = req.params;
     try {
       const loggedInUser = (req as AuthenticatedRequest).user;
-      if (id !== loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
+      if (!loggedInUser.id) return res.status(403).json({ error: 'Forbidden' });
 
-      const result = await users.delete(id);
+      const result = await users.delete(loggedInUser.id);
       if (result) return res.status(200).json({ success: 'User deleted' });
       else return res.status(404).json({ error: 'User not found' });
     } catch(e: any) {

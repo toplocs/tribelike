@@ -5,9 +5,9 @@ import { authenticate } from '../../middleware/authenticate';
 const router = Router();
 
 router.get('/users', authenticate, UserController.GetUsers);
-router.put('/user/:id', authenticate, UserController.UpdateUser);
-router.get('/user/:id', authenticate, UserController.GetUserById);
-router.delete('/user/:id', authenticate, UserController.DeleteUser);
+router.get('/user', authenticate, UserController.GetUser);
+router.put('/user', authenticate, UserController.UpdateUser);
+router.delete('/user', authenticate, UserController.DeleteUser);
 
 // TODO: Implement routes for user activities, discussions, and profiles
 // router.get('/user/:id/activities', UserController.getActivitiesByUserId);
