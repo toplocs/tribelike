@@ -58,7 +58,7 @@ const form = ref<HTMLFormElement | null>(null);
 const loginStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
-      `/api/passkey/loginStart`,
+      `/api/auth/passkey/loginStart`,
       formData,
     );
 
@@ -72,7 +72,7 @@ const loginStart = async (formData: FormData) => {
 const loginFinish = async (attestation: Object) => {
   try {
     const response = await axios.post(
-      `/api/passkey/loginFinish`,
+      `/api/auth/passkey/loginFinish`,
       attestation
     );
 

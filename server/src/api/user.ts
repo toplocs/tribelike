@@ -1,44 +1,44 @@
-import type { Request, Response } from 'express';
-import express from 'express';
-import multer from 'multer';
-import {
-  getUsers,
-  createUser,
-  updateUser,
-  getUserById,
-} from '../actions/user';
-import { login } from '../lib/auth';
+// import type { Request, Response } from 'express';
+// import express from 'express';
+// import multer from 'multer';
+// import {
+//   getUsers,
+//   createUser,
+//   updateUser,
+//   getUserById,
+// } from '../actions/user';
+// import { login } from '../lib/auth';
 
-const router = express.Router();
-const upload = multer();
+// const router = express.Router();
+// const upload = multer();
 
-router.route('/').get(async (req: Request, res: Response) => {
-  const { success, error } = await getUsers(req.query);
+// router.route('/').get(async (req: Request, res: Response) => {
+//   const { success, error } = await getUsers(req.query);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-})
-.post(upload.none(), async (req: Request, res: Response) => {
-  const { success, error } = await createUser(req.body);
+//   if (success) return res.status(200).json(success);
+//   else return res.status(400).json(error);
+// })
+// .post(upload.none(), async (req: Request, res: Response) => {
+//   const { success, error } = await createUser(req.body);
     
-	if (success) {
-    const { token, expires } = await login(success);
-    return res.status(200).json({ token, expires });
-  } else return res.status(400).json(error);
-})
-.put(upload.none(), async (req: Request, res: Response) => {
-  const authHeader = req.get('Authorization');
-  const { success, error } = await updateUser(req.body, authHeader);
+// 	if (success) {
+//     const { token, expires } = await login(success);
+//     return res.status(200).json({ token, expires });
+//   } else return res.status(400).json(error);
+// })
+// .put(upload.none(), async (req: Request, res: Response) => {
+//   const authHeader = req.get('Authorization');
+//   const { success, error } = await updateUser(req.body, authHeader);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-})
+//   if (success) return res.status(200).json(success);
+//   else return res.status(400).json(error);
+// })
 
-router.route('/byId/:id').get(async (req: Request, res: Response) => {
- const { success, error } = await getUserById(req.params);
+// router.route('/byId/:id').get(async (req: Request, res: Response) => {
+//  const { success, error } = await getUserById(req.params);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
-})
+//   if (success) return res.status(200).json(success);
+//   else return res.status(400).json(error);
+// })
 
-export default router;
+// export default router;

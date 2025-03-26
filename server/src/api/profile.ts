@@ -9,6 +9,7 @@ import {
   getAllProfiles,
   getProfileById,
 } from '../actions/profile';
+import { authenticate } from '@/middleware/authenticate';
 
 const router = express.Router();
 const upload = multer();

@@ -24,7 +24,13 @@ export class Profile implements IProfile {
 
 export default class ProfileModel extends Model<Profile> {
     constructor(name: string) {
-        super(name);
+        super(name, { 
+            getAll: true,
+            create: true,
+            getById: true,
+            update: true,
+            delete: true
+        });
     }
 
     async getAllByUserId(userId: Uuid): Promise<Profile[]> {

@@ -19,7 +19,7 @@ export interface Profile {
     image?: string;
     email?: string;
     about?: string;
-    userId?: Uuid;
+    userId: Uuid;
     interests?: GroupedInterests;
     locations?: GroupedLocations;
     profiles?: GroupedProfiles;

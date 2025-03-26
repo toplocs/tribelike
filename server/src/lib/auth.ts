@@ -12,7 +12,9 @@ export async function auth(authHeader?: string) {
   const token = authHeader;
   if (!token) return null;
 
-  return await decrypt(token);
+  const sessionData = await decrypt(token);
+  console.log('Session Data: ', sessionData);
+  return sessionData;
 }
 
 // Function to regenerate a token

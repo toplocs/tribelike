@@ -12,7 +12,8 @@
     "generate:openapi": "pnpm -F server generate:openapi",
     "start": "pnpm -F server start",
     "certs": "mkcert 'localhost'",
-    "clear": "rm -rf server/data/sessions/*"
+    "clear": "rm -rf server/data/sessions/*",
+    "db:migrate": "pnpm -F server db:migrate"
   },
   "keywords": [],
   "author": "",

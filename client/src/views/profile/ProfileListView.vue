@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, provide, inject, computed, onMounted } from 'vue';
+import { ref, provide, inject, computed, onMounted, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '@/components/common/BackButton.vue';
 import Card from '@/components/common/Card.vue';
@@ -38,12 +38,12 @@ import Title from '@/components/common/Title.vue';
 import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ProfileAddDialog from '@/components/dialog/ProfileAddDialog.vue';
+import { type User } from '@tribelike/types/user';
 
 const router = useRouter();
-const profiles = ref([]);
-const session = inject('session');
+const user = inject<Ref<User | undefined>>('user');
+const profiles = ref(user?.value?.profiles || []);
 const profile = inject('profile');
-const user = computed(() => session.value?.user);
 
 const handleAddToList = (data: Object) => {
   profiles.value.push(data)

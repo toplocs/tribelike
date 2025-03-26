@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import { User as IUser} from '@tribelike/types/User';
 import Model from '../lib/Model';
 import { Profile } from '@tribelike/types/Profile';
@@ -17,7 +18,23 @@ export class User implements IUser {
 
 export default class UserModel extends Model<User> {
     constructor(name: string) {
-        super(name);
+        super(name, { 
+            getAll: true,
+            create: true,
+            getById: true,
+            update: true,
+            delete: true
+        });
+    }
+
+    async create(item: Partial<User>): Promise<User | null> {
+        if (item.email) {
+            const email = item.email.toLowerCase();
+            const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+            // TODO: Validate Gravatar Image exists
+            item.image = `https://gravatar.com/avatar/${hash}`;
+        }
+        return await super.create(item);
     }
 
     async getByUsername(username: string): Promise<User | null> {

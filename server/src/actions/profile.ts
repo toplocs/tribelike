@@ -5,10 +5,10 @@ import { auth } from '../lib/auth';
 export async function getProfiles(authHeader?: string) {
   try {
     const session = await auth(authHeader);
-    const user = session?.user;
+    const userId = session?.userId;
     const profiles = await prisma.profile.findMany({
       where: {
-        userId: user.id,
+        userId: userId,
       },
       include: {
         interests: true,
@@ -34,14 +34,14 @@ export async function createProfile(
   authHeader?: string
 ) {
   const session = await auth(authHeader);
-  const user = session?.user;
+  const userId = session?.userId;
   try {
     const email = formData.email.trim().toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     const image = `https://gravatar.com/avatar/${hash}`;
     const profile = await prisma.profile.create({
       data: {
-        userId: user?.id,
+        userId: userId,
         type: formData.type,
         image: image,
         username: formData.username,
@@ -73,7 +73,7 @@ export async function updateProfile(
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     const image = `https://gravatar.com/avatar/${hash}`;
     const session = await auth(authHeader);
-    const user = session?.user;
+    const userId = session?.userId;
     const profile = await prisma.profile.update({
       where: {
         id: formData.profileId,
@@ -103,7 +103,7 @@ export async function deleteProfile(
 ) {
   try {
     const session = await auth(authHeader);
-    const user = session?.user;
+    const userId = session?.userId;
     await prisma.profile.delete({
       where: {
         id: query.profileId,

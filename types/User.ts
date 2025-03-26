@@ -9,9 +9,16 @@ export interface User {
     settings?: UserSetting[];
     image?: string;
 }
-  
+
 export interface UserSetting {
     id: Uuid;
     userId: Uuid;
     settings: Record<string, any>;
+}
+
+export interface MagicLink {
+    id: Uuid;
+    token: string;
+    userId: Uuid;
+    expires: Date;
 }

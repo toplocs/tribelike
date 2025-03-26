@@ -8,7 +8,7 @@ import { StoreType } from './lib/Store';
 
 dotenv.config();
 
-export const sessionSecret: string = process.env.SESSION_SECRET || 'default_sesison_secret';
+export const sessionSecret: string = process.env.SESSION_SECRET || 'default_session_secret';
 export const jwtSecret: string = process.env.JWT_SECRET || 'default_jwt_secret';
 export const enable_https: boolean = process.env.HTTPS === 'true';
 export const port: number =  process.env.PORT ? parseInt(process.env.PORT) : 3000;

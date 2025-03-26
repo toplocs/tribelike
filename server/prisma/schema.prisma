@@ -20,12 +20,30 @@ generator erd {
 
 model User {
   id       String    @id @default(uuid())
-  username String    @unique() //make not unique
+  username String
   email    String    @unique() // As email is in Profiles, maybe not needed
   image    String?
-  password String
   profiles Profile[]
   settings Settings?
+}
+
+model Credential {
+  id             String   @id @default(uuid())
+  publicKey      String
+  userId         String
+  webauthnUserID String
+  counter        Int      @default(0)
+  deviceType     String
+  backedUp       Boolean  @default(false)
+  transports     String[]
+  createdAt      DateTime @default(now())
+}
+
+model MagicLink {
+  id      String   @id @default(uuid())
+  token   String   @unique()
+  userId  String
+  expires DateTime
 }
 
 model Settings {
@@ -39,11 +57,11 @@ model Profile {
   id             String           @id @default(uuid()) // Changed to uuid
   username       String
   type           String
-  image          String
+  image          String?
   email          String // Every Profile can have an own email for notifications. Can be used for logins aswell
   about          String?
-  userId         String? // Matches User ID type
-  User           User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String // Matches User ID type
+  User           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   interests      Interest[]       @relation("ProfileInterests")
   locations      Location[]       @relation("ProfileLocations")
   activities     Activity[]

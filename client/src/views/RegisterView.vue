@@ -74,7 +74,7 @@ const form = ref<HTMLFormElement | null>(null);
 const registerStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
-      `/api/passkey/registerStart`, formData
+      `/api/auth/passkey/registerStart`, formData
     );
 
     return response.data;
@@ -87,7 +87,7 @@ const registerStart = async (formData: FormData) => {
 const registerFinish = async (attestation: Object) => {
   try {
     const response = await axios.post(
-      `/api/passkey/registerFinish`,
+      `/api/auth/passkey/registerFinish`,
       attestation
     );
 

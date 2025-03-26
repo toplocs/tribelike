@@ -29,7 +29,7 @@ router.route('/login').post(upload.none(), async (req: Request, res: Response) =
       }
     });
     if (!user) return res.status(401).json('This account does not exist');
-    if (formData.password != user.password) return res.status(401).json('The password is not correct');
+    // if (formData.password != user.password) return res.status(401).json('The password is not correct');
 
     const { token, expires } = await login(user);
     console.log('Login successfull');
