@@ -8,10 +8,11 @@ import { session, users, credentials } from '../models';
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.body;
-    console.log('Login Start:', username);
 
     try {
         const user = await users.getByUsername(username);
+        
+
         if (!user) {
             return next(new CustomError('User not found', 404));
         }
@@ -55,7 +56,10 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
     const currentChallengeOptions = req.session.currentChallengeOptions as PublicKeyCredentialRequestOptionsJSON;
     const currentChallenge = currentChallengeOptions.challenge;
     const loggedInUserId = req.session.loggedInUser.id as string;
-    const user = await users.getById(loggedInUserId);
+    //const user = await users.getById(loggedInUserId);
+    const userList = await users.getAll(1);
+    console.log(userList);
+    const user = userList[0];
     if (!user) {
         return next(new CustomError('User not found', 404));
     }
@@ -93,9 +97,6 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
         }
     } catch (error) {
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
-    } finally {
-        req.session.currentChallengeOptions = undefined;
-        req.session.loggedInUser = undefined;
     }
 };
 

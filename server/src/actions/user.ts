@@ -89,16 +89,6 @@
 //   }
 // }
 
-// export async function getUserById(params: {
-//   id?: string
-// }) {
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: {
-//         id: params?.id,
-//       },
-//     });
-
 //     return { success: user };
 //   } catch(e: any) {
 //     console.error(e);
