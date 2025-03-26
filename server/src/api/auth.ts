@@ -3,6 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import prisma from '../lib/prisma';
 import { auth, login, logout } from '../lib/auth';
+import { session } from '../models'
 
 const router = express.Router();
 const upload = multer();
@@ -53,6 +54,26 @@ router.route('/refresh').post(upload.none(), async (req: Request, res: Response)
   return res.status(400).json({ error: 'Failed to refresh token' });
 });
 
+
+router.route('/session').get(async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.get('Authorization');
+    let authToken = authHeader as string;
+    if (!authToken) {
+      const { token } = await session.createToken('');
+      authToken = token;
+    }
+    const userId = await session.validateToken(authToken);
+
+    return res.status(200).json({ 
+      userId: userId,
+      token: authToken,
+    });
+  } catch(e: any) {
+    console.error(e);
+    return res.status(400).json(e.error);
+  }
+});
 
 
 export default router;

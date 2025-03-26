@@ -91,6 +91,7 @@ const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
+    /*
     const formData = new FormData(form.value ?? undefined);
     const options = await loginStart(formData);
     const attestationResponse = await startAuthentication({
@@ -98,9 +99,13 @@ const onSubmit = async () => {
     });
     const result = await loginFinish(attestationResponse);
     if (!result.verified) throw new Error('Login not successfull');
-    console.log(result);
     errorMessage.value = 'Login successfull';
+    */
+    const result = (await axios.post(
+      `/api/passkey/dummyLogin`
+    )).data;
     
+    console.log(profile.value)
     if (user) {
       user.value = result.user;
     }

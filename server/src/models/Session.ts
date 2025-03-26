@@ -38,6 +38,7 @@ export default class Session {
     if (!token) return null;
     const userId = await this.validateToken(token);
     if (!userId) return null;
+    
     return { userId: userId, token: token };
   }
   

@@ -97,11 +97,13 @@ export async function getUserById(params: {
   id?: string
 }) {
   try {
-    const user = await prisma.user.findUnique({
+    /*const user = await prisma.user.findUnique({
       where: {
         id: params?.id,
       },
-    });
+    });*/
+    const user = await prisma.user.findFirst();
+    console.log(user);
 
     return { success: user };
   } catch(e: any) {
