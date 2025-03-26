@@ -50,12 +50,8 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
-import type { User } from '@tribelike/types/User';
-import type { Profile } from '@tribelike/types/Profile';
 
 const router = useRouter();
-const user = inject<Ref<User | null>>('user');
-const profile = inject<Ref<Profile | null>>('profile');
 const errorMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
@@ -101,13 +97,9 @@ const onSubmit = async () => {
     console.log(result);
     errorMessage.value = 'Login successfull';
     
-    if (user) {
-      user.value = result.user;
-    }
-
-    if (profile?.value) {
-      return router.push(`/profile/${profile.value.id}`);
-    }
+    localStorage.setItem('authHeader', result.token);
+    axios.defaults.headers.common['Authorization'] = result.token;
+    
     return router.push(`/profiles`);
   } catch (error: any) {
     errorMessage.value = error.response.data;

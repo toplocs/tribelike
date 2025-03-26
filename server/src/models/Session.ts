@@ -9,7 +9,7 @@ import { TextEncoder } from 'util';
 const key = new TextEncoder().encode(jwtSecret);
 
 export interface SessionData {
-    userId: Uuid, 
+    userId: Uuid,
     token: string
 }
 

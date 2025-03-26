@@ -1,14 +1,15 @@
 import type { User } from '@prisma/client';
 import { SignJWT, jwtVerify } from 'jose';
 import prisma from '../lib/prisma';
+import { jwtSecret } from "../config"
 
-const secretKey = 'secret12345';
+const secretKey = jwtSecret;
 const key = new TextEncoder().encode(secretKey);
 
 // Function to authenticate the token from the Authorization header
 export async function auth(authHeader?: string) {
   if (!authHeader) return null;
-  const token = JSON.parse(authHeader)?.token;
+  const token = authHeader;
   if (!token) return null;
 
   return await decrypt(token);

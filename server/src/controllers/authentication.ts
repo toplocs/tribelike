@@ -86,11 +86,8 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
                 userPasskey.id,
                 authenticationInfo.newCounter
             );
-            //const authToken = await session.createToken(user.id);
-            //set express session to loggedin = true
-            console.log(req.session)
-
-            res.send({verified: true, user: user});
+            const { token }  = await session.createToken(user.id);
+            res.send({ verified: true, user: user, token: token });
         } else {
             next(new CustomError('Verification failed', 400));
         }

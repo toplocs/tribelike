@@ -8,15 +8,13 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.get('Authorization');
-    if (!authHeader) return res.status(401).json({ error: 'Unauthorized. Authorization Header not found' });
+    const token = req.get('Authorization');    
+    if (!token) return res.status(401).json({ error: 'Unauthorized. Authorization Header not found' });
 
-    const sessionData = await session.validateHeader(authHeader);
-    if (!sessionData) return res.status(401).json({ error: 'Unauthorized. Session not valid' });
-    if (!sessionData.token) return res.status(401).json({ error: 'Unauthorized. Token not valid' });
-    if (!sessionData.userId) return res.status(401).json({ error: 'Unauthorized. User not found' });
+    const userId = await session.validateToken(token);
+    if (!userId) return res.status(401).json({ error: 'Unauthorized. Session not valid' });
 
-    (req as AuthenticatedRequest).userId = sessionData.userId;
-    (req as AuthenticatedRequest).token = sessionData.token;
+    (req as AuthenticatedRequest).userId = userId;
+    (req as AuthenticatedRequest).token = token;
     next();
 };

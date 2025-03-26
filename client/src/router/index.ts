@@ -174,36 +174,8 @@ const router = createRouter({
   ]
 });
 
-const getSession = async () => {
-  try {
-    const authHeader = localStorage.getItem('authHeader');
-    const response = await axios.get(`/api/auth`, {
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/json'
-      }
-    });
-    const { session } = response.data;
-
-    return session;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 router.beforeEach(async (to, from, next) => {
-  const session = await getSession();
-  const isAuthenticated = session?.user ? true : false;
-
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({ name: 'login' });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
+  next();
 });
 
 export default router
