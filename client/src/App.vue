@@ -15,9 +15,9 @@ import axios from 'axios';
 import { RouterView } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
-import { sessionProvider } from '@/composables/session';
-import { userProvider } from '@/composables/user';
-import { profileProvider } from '@/composables/profile';
+import { sessionProvider } from '@/composables/sessionProvider';
+import { userProvider } from '@/composables/userProvider';
+import { profileProvider } from '@/composables/profileProvider';
 //import { locationProvider } from '@/composables/location';
 
 sessionProvider();
