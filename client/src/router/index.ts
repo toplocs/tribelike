@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
+import EmailLoginView from '@/views/EmailLoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 
@@ -50,7 +51,18 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      children: [
+        {
+          path: '',
+          name: 'passkey',
+          component: LoginView,
+        },
+        {
+          path: 'email',
+          name: 'emailLogin',
+          component: EmailLoginView,
+        },
+      ]
     },
     {
       path: '/register',
