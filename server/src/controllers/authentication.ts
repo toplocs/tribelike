@@ -6,6 +6,10 @@ import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
 import { session, users, credentials } from '../models';
 
+export const handleMagicLinkLogin = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.body;
 

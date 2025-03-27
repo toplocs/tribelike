@@ -26,35 +26,6 @@ export function userProvider() {
     }
   }
 
-  const loginStart = async (formData: FormData) => {
-    try {
-      const response = await axios.post(
-        `/api/passkey/loginStart`,
-        formData,
-      );
-
-      return response.data;
-    } catch(e) {
-      console.error(error);
-      errorMessage.value = error.response.data;
-    }
-  }
-
-  const loginFinish = async (attestation: Object) => {
-    try {
-      const response = await axios.post(
-        `/api/passkey/loginFinish`,
-        attestation
-      );
-      user.value = response.data;
-
-      return response.data;
-    } catch(e) {
-      console.error(error);
-      errorMessage.value = error.response.data;
-    }
-  }
-
   const logout = async () => {
     await localStorage.removeItem('user');
     user.value = null;
@@ -72,8 +43,6 @@ export function userProvider() {
     userProfiles,
     isAuthenticated,
     getUser,
-    loginStart,
-    loginFinish,
     logout
   });
 }

@@ -72,7 +72,7 @@ const form = ref<HTMLFormElement | null>(null);
 const loginStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
-      `/api/auth/email`,
+      `/auth/magicLink`,
       formData,
     );
 
