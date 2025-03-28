@@ -8,19 +8,7 @@ import { CustomError } from '../middleware/error';
 import { EmailTemplate } from '../lib/email';
 
 const url = process.env.URL;
-
-const sendMail = async () => { //split in two
-
-}
-
-export const resendMagicLink = async (req: Request, res: Response, next: NextFunction) => {
-  const { to, subject, name } = await req.body;
-
-  if (!to || !subject || !name) {
-    throw new Error('Missing required fields');
-  }
-  const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
-  const htmlTemplate = EmailTemplate(`
+const template = `
     <div>
       <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
       <p>
@@ -32,7 +20,11 @@ export const resendMagicLink = async (req: Request, res: Response, next: NextFun
       > Open Magic Link
       </a>
     </div>
-  `);
+`;
+
+const sendMail = async (to: string, subject: string) => {
+  const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
+  const htmlTemplate = EmailTemplate(template);
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -44,6 +36,20 @@ export const resendMagicLink = async (req: Request, res: Response, next: NextFun
   try {
     await transporter.sendMail(mailOptions);
     console.log('🚀 Email sent successfully!');
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const resendMagicLink = async (req: Request, res: Response, next: NextFunction) => {
+  const { to, subject, name } = await req.body;
+
+  if (!to || !subject || !name) {
+    throw new Error('Missing required fields');
+  }
+
+  try {
+    await sendMail(to, subject);
 
     res.send({ verfied: true });
   } catch (error) {
@@ -101,6 +107,7 @@ export const handleRegisterStart = async (req: Request, res: Response, next: Nex
 
 export const handleRegisterFinish = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
+    const { username } = body;
 
     const token = req.get('Authorization');    
     if (!token) return next(new CustomError('Unauthorized. Authorization Header not found', 401));
@@ -166,7 +173,9 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
                 return next(new CustomError('Credential Create failed', 400));
             }
             
-            await profiles.createDefaultProfiles(user.id, user.email);
+            await profiles.createDefaultProfiles(user.id, username, user.email);
+            await sendMail(user.email, 'Finish your registration');
+
             res.send({verified: true});
         } else {
             next(new CustomError('Verification failed', 400));
