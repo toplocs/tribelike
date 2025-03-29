@@ -34,7 +34,6 @@ export default class UserController {
       const userId = (req as AuthenticatedRequest).userId;
       const result = await users.update(userId, {
         image: formData.image || '/images/default.jpeg',
-        username: formData.username,
         email: formData.email,
       });
 

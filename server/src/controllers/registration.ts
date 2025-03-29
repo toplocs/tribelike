@@ -1,23 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import { generateRegistrationOptions, verifyRegistrationResponse, WebAuthnCredential } from '@simplewebauthn/server';
+import { generateRegistrationOptions, verifyRegistrationResponse } from '@simplewebauthn/server';
 import { RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
 import { rpName, rpID, origin } from '../config';
-import { Credential } from '../models/Credential';
-import { users, credentials, profiles } from '../models';
+import { users, credentials, profiles, sessions, Credential } from '../models';
 import { CustomError } from '../middleware/error';
 
 // See https://simplewebauthn.dev/docs/packages/server
 export const handleRegisterStart = async (req: Request, res: Response, next: NextFunction) => {
-    const {email, username} = req.body;
+    const {email} = req.body;
 
-    if (!username) {
-        return next(new CustomError('Username empty', 400));
-    }
     if (!email) {
         return next(new CustomError('Email empty', 400));
     }
 
-    let user = await users.getByUsername(username);
+    let user = await users.getByEmail(email);
     let existingUserPasskeys: Credential[] = [];
     if (user) {
         existingUserPasskeys = await credentials.getAllByUserId(user.id);
@@ -27,7 +23,7 @@ export const handleRegisterStart = async (req: Request, res: Response, next: Nex
         const options: PublicKeyCredentialCreationOptionsJSON = await generateRegistrationOptions({
             rpName,
             rpID,
-            userName: username,
+            userName: email,
             timeout: 60000,
             attestationType: 'direct',
             // attestationType: 'none',
@@ -43,27 +39,43 @@ export const handleRegisterStart = async (req: Request, res: Response, next: Nex
             supportedAlgorithmIDs: [-7, -257],
         });
 
-        req.session.loggedInUser = options.user;
-        req.session.currentChallengeOptions = options;
+        const session = await sessions.createToken(
+            {
+            currentChallengeOptions: options,
+            loggedInUser: {id: options.user.id, email: email},
+            },
+            5 // 5 minutes expiration
+        ); 
 
-        res.send(options);
+        res.send({ registrationOptions: options, token: session.token });
     } catch (error) {
-        next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
+        next(error instanceof CustomError ? error : new CustomError('Internal Server Error: ' + error, 500));
     }
 };
 
 export const handleRegisterFinish = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
 
-    if (!req.session.currentChallengeOptions) {
+    const token = req.get('Authorization');    
+    if (!token) return next(new CustomError('Unauthorized. Authorization Header not found', 401));
+
+    const session = await sessions.validateToken(token);
+    if (!session) return next(new CustomError('Unauthorized. Session not valid', 401));
+    
+    if (!('currentChallengeOptions' in session.data) || !('loggedInUser' in session.data)) {
+        return next(new CustomError('Unauthorized. Session not valid', 401));
+    }
+
+    if (!session.data.currentChallengeOptions) {
         return next(new CustomError('Current challenge is missing', 400));
     }
 
-    if (!req.session.loggedInUser) {
+    if (!session.data.loggedInUser) {
         return next(new CustomError('User ID is missing', 400));
     }
 
-    const currentChallengeOptions = req.session.currentChallengeOptions as PublicKeyCredentialCreationOptionsJSON;
+    const loggedInUser = session.data.loggedInUser;
+    const currentChallengeOptions = session.data.currentChallengeOptions as PublicKeyCredentialCreationOptionsJSON;
     const currentChallenge = currentChallengeOptions.challenge;
 
     try {
@@ -85,9 +97,8 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
             } = registrationInfo;
 
             const user = await users.create({
-                id: req.session.loggedInUser.id,
-                username: req.session.loggedInUser.name,
-                email: req.session.loggedInUser.name + "@toplocs.com"
+                id: loggedInUser.id,
+                email: loggedInUser.email
             });
             if (!user) {
                 return next(new CustomError('User Create failed', 400));
@@ -109,7 +120,7 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
                 return next(new CustomError('Credential Create failed', 400));
             }
             
-            await profiles.createDefaultProfiles(user.id, user.username, user.email);
+            await profiles.createDefaultProfiles(user.id, user.email);
             res.send({verified: true});
         } else {
             next(new CustomError('Verification failed', 400));
@@ -117,8 +128,5 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
     } catch (error) {
         console.error(error)
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
-    } finally {
-        req.session.loggedInUser = null;
-        req.session.currentChallengeOptions = undefined;
     }
 };

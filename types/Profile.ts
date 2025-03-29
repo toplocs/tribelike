@@ -1,12 +1,12 @@
-import { Uuid } from "./Uuid";
+import type { Uuid } from "./Uuid";
 import type { 
     ProfileProfileKeyType, 
     ProfileInterestKeyType, 
     ProfileLocationKeyType 
 } from "./Relation";
-import { GroupedInterests } from "./Interest";
-import { GroupedLocations } from "./Location";
-import { Activity } from "./Activity";
+import type { GroupedInterests } from "./Interest";
+import type { GroupedLocations } from "./Location";
+import type { Activity } from "./Activity";
 
 export type GroupedProfiles = {
     [key in ProfileProfileKeyType | ProfileLocationKeyType | ProfileInterestKeyType]: Profile[];
@@ -14,12 +14,12 @@ export type GroupedProfiles = {
 
 export interface Profile {
     id: Uuid;
+    userId: Uuid;
     username: string;
     type: string;
     image?: string;
     email?: string;
     about?: string;
-    userId: Uuid;
     interests?: GroupedInterests;
     locations?: GroupedLocations;
     profiles?: GroupedProfiles;

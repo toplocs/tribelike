@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { FileStore } from '../../src/lib/FileStore';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
-import { FileStoreOptions } from '../../src/lib/Store';
+import { StoreOptions } from '../../src/lib/Store';
 
 interface iTestData extends GenericObject {
     id: Uuid;
@@ -26,18 +26,20 @@ const mockData: TestData[] = [
 ];
 
 describe('FileStore', () => {
-    const fileStoreOptions: FileStoreOptions<TestData> = { 
-        indexKeys: ['name'],
+    const fileStoreOptions: StoreOptions<TestData> = { 
         constructor: TestData 
     };
+    
     let fileStore: FileStore<TestData> = new FileStore<TestData>(
         'FileStore.test', fileStoreOptions
     );
+    fileStore.index('name');
 
     beforeEach(async () => {
         await fileStore.clear();
         await fileStore.create(mockData[0]);
         await fileStore.create(mockData[1]);
+        // await fileStore.debug();
     });
 
     it('should get all data', async () => {
@@ -63,7 +65,7 @@ describe('FileStore', () => {
         expect(data).toBeInstanceOf(TestData);
     });
 
-    it('should get data by name', async () => {
+    it('should get data via getBy for name', async () => {
         const data = await fileStore.getBy('name', 'Alice');
         expect(data).toEqual(mockData[0]);
         expect(data?.getName()).toEqual(mockData[0].name);

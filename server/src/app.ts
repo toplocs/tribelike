@@ -1,5 +1,4 @@
 import express from 'express';
-import session from 'express-session';
 
 import cors from 'cors';
 import morgan from 'morgan';
@@ -14,28 +13,10 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 
 import { 
-  sessionSecret, corsOptions, cookieOptions, 
+  corsOptions, 
   rpID, port, enable_https, certificate } from './config';
 
 const app = express();
-
-// In Memory Session Store for Login and Register
-// TODO: We want to use JWT only - no session store
-declare module 'express-session' {
-  interface SessionData {
-    currentChallengeOptions?: PublicKeyCredentialCreationOptionsJSON | PublicKeyCredentialRequestOptionsJSON;
-    loggedInUser: {id: string, name: string} | null;
-  }
-}
-
-app.use(
-  session({
-    secret: sessionSecret,
-    saveUninitialized: true,
-    resave: false,
-    cookie: cookieOptions,
-  }),
-);
 
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
@@ -65,13 +46,21 @@ if (fs.existsSync(clientBuildPath)) {
   });
 }
 
-if (enable_https) {
-  const server = https.createServer(certificate, app);
-  server.listen(port, rpID, () => {
-    console.log(`🚀 HTTPS Server ready at https://${rpID}:${port}`);
-  });
-} else {
-  http.createServer(app).listen(port, rpID, () => {
-    console.log(`🚀 HTTP Server ready at http://${rpID}:${port}`);
-  });
+function startServer() {
+  if (enable_https) {
+    console.log(`starting https server on ${port}...`);
+    const server = https.createServer(certificate, app);
+    server.listen(port, rpID, () => {
+      console.log(`🚀 HTTPS Server ready at https://${rpID}:${port}`);
+    });
+  } else {
+    console.log(`Starting http server on ${port}...`);
+    http.createServer(app).listen(port, rpID, () => {
+      console.log(`🚀 HTTP Server ready at http://${rpID}:${port}`);
+    });
+  }
+}
+
+if (require.main === module) {
+  startServer();
 }

@@ -1,22 +1,21 @@
-import { Uuid } from './Uuid';
+import { GenericObject, Uuid } from './Uuid';
 import { Profile } from './Profile';
 
-export interface User {
+export interface User extends GenericObject {
     id: Uuid;
-    username: string;
     email: string;
     profiles?: Profile[];
     settings?: UserSetting[];
     image?: string;
 }
 
-export interface UserSetting {
+export interface UserSetting extends GenericObject {
     id: Uuid;
     userId: Uuid;
     settings: Record<string, any>;
 }
 
-export interface MagicLink {
+export interface MagicLink extends GenericObject {
     id: Uuid;
     token: string;
     userId: Uuid;

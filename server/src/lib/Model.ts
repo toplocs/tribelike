@@ -1,4 +1,4 @@
-import { Uuid, GenericObject } from '@tribelike/types/Uuid';
+import { Uuid, GenericObject as IGenericObject } from '@tribelike/types/Uuid';
 import { v4 as uuidv4 } from 'uuid';
 import { IStore, Store } from './Store';
 
@@ -10,31 +10,38 @@ interface ModelOptions {
     delete?: boolean;
 }
 
-export default class Model<T extends GenericObject> {
+export class GenericObject implements IGenericObject {
+    id: Uuid;
+    constructor(id: Uuid) {
+        this.id = id;
+    }
+}
+
+export class Model<T extends GenericObject> {
     public store: IStore<T>;
     private options: ModelOptions;
 
-    constructor(storeName: string, options: ModelOptions = {
+    constructor(store: IStore<T>, options: ModelOptions = {
         getAll: true,
         create: true,
         getById: true,
         update: true,
         delete: true
     }) {
-        this.store = Store.getInstance().getStore<T>(storeName);
+        this.store = store;
         this.options = options;
     }
 
-    async clear(): Promise<void> {
+    public async clear(): Promise<void> {
         await this.store.clear();
     }
 
-    async getAll(limit?: number): Promise<T[]> {
+    public async getAll(filter: any = {}, limit?: number): Promise<T[]> {
         if (!this.options.getAll) throw new Error('Method not available');
-        return await this.store.getAll(limit);
+        return await this.store.getAll(filter, limit);
     }
 
-    async create(item: Partial<T>): Promise<T | null> {
+    public async create(item: Partial<T>): Promise<T | null> {
         if (!this.options.create) throw new Error('Method not available');
         item.id = item.id || uuidv4() as Uuid;
         try {
@@ -45,18 +52,18 @@ export default class Model<T extends GenericObject> {
         }
     }
 
-    async getById(id: Uuid): Promise<T | null> {
+    public async getById(id: Uuid, include: any = {}): Promise<T | null> {
         if (!this.options.getById) throw new Error('Method not available');
-        const item = await this.store.getById(id);
+        const item = await this.store.getById(id, include);
         return item;
     }
 
-    async update(id: Uuid, updatedItem: Partial<T>): Promise<T | null> {
+    public async update(id: Uuid, updatedItem: Partial<T>): Promise<T | null> {
         if (!this.options.update) throw new Error('Method not available');
         return await this.store.update(id, updatedItem);
     }
 
-    async delete(id: Uuid): Promise<boolean> {
+    public async delete(id: Uuid): Promise<boolean> {
         if (!this.options.delete) throw new Error('Method not available');
         return await this.store.delete(id);
     }

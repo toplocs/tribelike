@@ -1,17 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { generateAuthenticationOptions, verifyAuthenticationResponse } from '@simplewebauthn/server';
 import { PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
-import { Credential } from '../models/Credential';
 import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
-import { session, users, credentials } from '../models';
+import { users, credentials, sessions, Credential, AuthSessionData } from '../models';
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
-    const { username } = req.body;
-    console.log('Login Start:', username);
+    const { email } = req.body;
+    console.log('Login Start:', email);
 
     try {
-        const user = await users.getByUsername(username);
+        const user = await users.getByEmail(email);
         if (!user) {
             return next(new CustomError('User not found', 404));
         }
@@ -32,10 +31,15 @@ export const handleLoginStart = async (req: Request, res: Response, next: NextFu
             userVerification: 'preferred',
         });
 
-        req.session.loggedInUser = { id: user.id, name: user.username };
-        req.session.currentChallengeOptions = options;
+        const session = await sessions.createToken(
+            {
+            currentChallengeOptions: options,
+            loggedInUser: {id: user.id, email: user.email},
+            },
+            5 // 5 minutes expiration
+        ); 
 
-        res.send(options);
+        res.send({ loginOptions: options, token: session.token });
     } catch (error) {
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
     }
@@ -43,19 +47,29 @@ export const handleLoginStart = async (req: Request, res: Response, next: NextFu
 
 export const handleLoginFinish = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
+    const token = req.get('Authorization');    
+    if (!token) return next(new CustomError('Unauthorized. Authorization Header not found', 401));
 
-    if (!req.session.currentChallengeOptions) {
+    const session = await sessions.validateToken(token);
+    if (!session) return next(new CustomError('Unauthorized. Session not valid', 401));
+    
+    if (!('currentChallengeOptions' in session.data) || !('loggedInUser' in session.data)) {
+        return next(new CustomError('Unauthorized. Session not valid', 401));
+    }
+
+    if (!session.data.currentChallengeOptions) {
         return next(new CustomError('Current challenge is missing', 400));
     }
 
-    if (!req.session.loggedInUser) {
-        return next(new CustomError('User is missing', 400));
+    if (!session.data.loggedInUser) {
+        return next(new CustomError('User ID is missing', 400));
     }
 
-    const currentChallengeOptions = req.session.currentChallengeOptions as PublicKeyCredentialRequestOptionsJSON;
+    const loggedInUser = session.data.loggedInUser;
+    const currentChallengeOptions = session.data.currentChallengeOptions as PublicKeyCredentialCreationOptionsJSON;
     const currentChallenge = currentChallengeOptions.challenge;
-    const loggedInUserId = req.session.loggedInUser.id as string;
-    const user = await users.getById(loggedInUserId);
+
+    const user = await users.getById(loggedInUser.id);
     if (!user) {
         return next(new CustomError('User not found', 404));
     }
@@ -86,28 +100,22 @@ export const handleLoginFinish = async (req: Request, res: Response, next: NextF
                 userPasskey.id,
                 authenticationInfo.newCounter
             );
-            const { token }  = await session.createToken(user.id);
+            const sessionData: AuthSessionData = {
+                userId: user.id,
+            }
+            const { token }  = await sessions.createToken(sessionData);
             res.send({ verified: true, user: user, token: token });
         } else {
             next(new CustomError('Verification failed', 400));
         }
     } catch (error) {
         next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
-    } finally {
-        req.session.currentChallengeOptions = undefined;
-        req.session.loggedInUser = undefined;
     }
 };
 
 export const handleLogout = async (req: Request, res: Response) => {
   try {
-    req.session.loggedInUser = undefined;
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(500).send({ message: 'Logout failed', error: err });
-      }
-      res.status(200).send({ message: 'Logout successful' });
-    });
+    // Todo: Invalidate the session token
   } catch (error) {
     res.status(500).send({ message: 'Logout failed', error });
   }

@@ -6,34 +6,30 @@
 // - Models are decoupled from storage implementation
 // - Easy to add new store types in the future
 
+import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 import { MemoryStore } from './MemoryStore';
 import { FileStore } from './FileStore';
 import { PrismaStore } from './PrismaStore';
 import { storeType } from '../config';
-import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
 export type StoreType = 'memory' | 'file' | 'prisma';
 
 export interface IStore<T extends GenericObject> {
     name: string;
+    setRelatedStore(key: string, store: IStore<any>): void;
     clear(): Promise<void>;
-    getAll(filter?: any, limit?: number): Promise<T[]>;
+    getAll(filter?: any, include?: any, limit?: number): Promise<T[]>;
     create(newData: T): Promise<T | null>;
-    getById(id: Uuid): Promise<T | null>;
-    getBy?(key: keyof T, value: string): Promise<T | null>;
+    getById(id: Uuid, include?: any): Promise<T | null>;
     update(id: Uuid, newData: Partial<T>): Promise<T | null>;
     delete(id: Uuid): Promise<boolean>;
+    index(key: keyof T): Promise<boolean>;
+    getBy(key: keyof T, value: string): Promise<T | null>;
 }
 
-export interface FileStoreOptions<T extends GenericObject> {
-    indexKeys?: (keyof T)[];
+export interface StoreOptions<T extends GenericObject> {
     constructor?: new (...args: any[]) => T;
 }
-
-export type PrismaStoreOptions<T> = {
-};
-
-export type StoreOptions<T extends GenericObject> = FileStoreOptions<T> | PrismaStoreOptions<T>;
 
 export class Store {
     private static instance: Store;
@@ -61,12 +57,12 @@ export class Store {
     public getStore<T extends GenericObject>(name: string, options?: StoreOptions<T>): IStore<T> {
         switch (this.storeType) {
             case 'memory':
-                return new MemoryStore<T>(name) as IStore<T>;
+                return new MemoryStore<T>(name, options) as IStore<T>;
             case 'prisma':
-                return new PrismaStore<T>(name) as IStore<T>;
+                return new PrismaStore<T>(name, options) as IStore<T>;
             case 'file':
             default:
-                return new FileStore<T>(name, options as FileStoreOptions<T>) as IStore<T>;
+                return new FileStore<T>(name, options) as IStore<T>;
         }
     }
 }

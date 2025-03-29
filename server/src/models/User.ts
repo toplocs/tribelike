@@ -1,50 +1,51 @@
 import CryptoJS from 'crypto-js';
-import { User as IUser} from '@tribelike/types/User';
-import Model from '../lib/Model';
-import { Profile } from '@tribelike/types/Profile';
+import {
+    Uuid,
+    User as IUser,
+    Profile as IProfile
+} from '@tribelike/types';
+import { IStore, GenericObject, Model } from '../lib';
 
-export class User implements IUser {
-    id!: string;
-    username: string = 'EmptyUsername'
+export class User extends GenericObject implements IUser {
+    id!: Uuid;
     email!: string;
-    profiles?: Profile[] = [];
+    profiles?: IProfile[] = [];
     settings?: any[] = [];
     image?: string;
 
     constructor(user: IUser) {
+        super(user.id);
         Object.assign(this, user);
     }
 }
 
-export default class UserModel extends Model<User> {
-    constructor(name: string) {
-        super(name, { 
+export class UserModel extends Model<User> {
+    constructor(store: IStore<User>) {
+        super(store, { 
             getAll: true,
             create: true,
             getById: true,
             update: true,
             delete: true
         });
+        store.index('email');
     }
 
     async create(item: Partial<User>): Promise<User | null> {
-        if (item.email) {
-            const email = item.email.toLowerCase();
-            const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
-            // TODO: Validate Gravatar Image exists
-            item.image = `https://gravatar.com/avatar/${hash}`;
-        }
+        if (!item.email) return null;
+        const existingUser = await this.getByEmail(item.email);
+        if (existingUser) return null;
+
+        const email = item.email.toLowerCase();
+        const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+        // TODO: Validate Gravatar Image exists
+        item.image = `https://gravatar.com/avatar/${hash}`;
+    
         return await super.create(item);
     }
 
-    async getByUsername(username: string): Promise<User | null> {
-        const allUsers = await this.store.getAll({username: username});
-        return allUsers.length > 0 ? allUsers[0] : null;
-    }
-
     async getByEmail(email: string): Promise<User | null> {
-        const allUsers = await this.store.getAll({email: email});
-        return allUsers.length > 0 ? allUsers[0] : null;
+        return await this.store.getBy('email', email);
     }
 }
 

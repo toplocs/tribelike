@@ -1,5 +1,5 @@
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
-import { Uuid } from '@tribelike/types/Uuid';
+import { Uuid } from '@tribelike/types';
 import { jwtSecret } from "../config"
 import { TextEncoder } from 'util';
 
@@ -8,45 +8,54 @@ import { TextEncoder } from 'util';
 
 const key = new TextEncoder().encode(jwtSecret);
 
-export interface SessionData {
-    userId: Uuid,
-    token: string
+export interface AuthSessionData {
+  userId: Uuid;
 }
 
-export interface AuthToken {
-    token: string;
-    expires: Date;
+export interface PasskeySessionData {
+  currentChallengeOptions: PublicKeyCredentialCreationOptionsJSON | PublicKeyCredentialRequestOptionsJSON;
+  loggedInUser: {id: Uuid, email: string};
 }
 
-export interface TokenPayload extends JWTPayload{
-    userId: Uuid;
-    expires: Date;
+export type SessionData = AuthSessionData | PasskeySessionData;
+
+export type TokenPayload = {
+  data: SessionData;
+  expires: Date;
 }
 
-export default class Session {
-  // Login: Generate a JWToken
-  async createToken(userId: Uuid): Promise<AuthToken> {
-    const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 1 week expiration
-    const token = await this.encrypt({ userId, expires });
-    return { token, expires };
+export interface ISession {
+  data: SessionData;
+  expires: Date;
+  token: string;
+}
+
+export class Session {
+  // Generate a JWToken, valid default 7 days
+  async createToken(data: SessionData, valid: number = 7 * 24 * 60): Promise<ISession> {
+    const expires = new Date(Date.now() + valid * 60 * 1000);
+    const session: TokenPayload = { data, expires };
+    const token = await this.encrypt(session);
+    return { data, token, expires };
   }
 
-  // Authenticate: Validate the token from the Authorization header
-  async validateHeader(authHeader?: string): Promise<SessionData | null> {
+  // Validate the token from the Authorization header
+  async validateHeader(authHeader?: string): Promise<ISession | null> {
     if (!authHeader) return null;
     const token = JSON.parse(authHeader)?.token;
     if (!token) return null;
-    const userId = await this.validateToken(token);
-    if (!userId) return null;
-    return { userId: userId, token: token };
+    return await this.validateToken(token);
   }
   
-  // Authenticate: Validate the token 
-  async validateToken(token: string): Promise<Uuid | null> {
-    const decryptedToken = await this.decrypt(token);
-    if (!decryptedToken) return null;
-    const { userId } = decryptedToken;
-    return userId;
+  // Validate the token 
+  async validateToken(token: string): Promise<ISession | null> {
+    const payload = await this.decrypt(token);
+    if (!payload) return null;
+    // Check if token is expired
+    if (new Date() > new Date(payload.expires)) {
+      return null;
+    }
+    return { data: payload.data, expires: payload.expires, token };
   }
 
   // Encrypt data into a JWT

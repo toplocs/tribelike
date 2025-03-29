@@ -1,9 +1,31 @@
-import CredentialModel from './Credential';
-import Session from './Session';
-import UserModel from './User';
-import ProfileModel from './Profile';
+import { Store } from '../lib';
+import { Session } from './Session';
+import { Credential, CredentialModel } from './Credential';
+import { User, UserModel } from './User';
+import { Profile, ProfileModel } from './Profile';
 
-export const session = new Session();
-export const credentials = new CredentialModel('credential');
-export const users = new UserModel('user');
-export const profiles = new ProfileModel('profile');
+// Create stores for all models
+const credentialStore = Store.getInstance().getStore<Credential>('Credential');
+const userStore = Store.getInstance().getStore<User>('User');
+const profileStore = Store.getInstance().getStore<Profile>('Profile');
+userStore.setRelatedStore('profiles', profileStore);
+
+// Create models
+const sessions = new Session();
+const credentials = new CredentialModel(credentialStore);
+const users = new UserModel(userStore);
+const profiles = new ProfileModel(profileStore);
+
+export * from './Session';
+export * from './Credential';
+export * from './User';
+export * from './Profile';
+export {
+  credentialStore,
+  userStore,
+  profileStore,
+  sessions,
+  credentials,
+  users,
+  profiles,
+}
