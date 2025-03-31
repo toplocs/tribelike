@@ -11,7 +11,7 @@ export function sessionProvider() {
 
   const initSession = async () => {
     try {
-      const { data } = await axios.get('/api/v1/auth/session');
+      const { data } = await axios.get('/api/session');
 
       return data;
     } catch (e) {
@@ -44,7 +44,7 @@ export function sessionProvider() {
 
   onMounted(async () => {
     session.value = await initSession();
-    console.log(session.value);
+    axios.defaults.headers.common['Authorization'] = session.value?.token;
   });
 
   provide('session', {

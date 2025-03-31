@@ -9,7 +9,7 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.get('Authorization');    
+    const token = req.get('Authorization'); 
     if (!token) return res.status(401).json({ error: 'Unauthorized. Authorization Header not found' });
 
     const session = await sessions.validateToken(token);
@@ -26,4 +26,5 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     (req as AuthenticatedRequest).userId = session.data.userId;
     (req as AuthenticatedRequest).expires = session.expires;
     next();
+    //todo: put it in the session!
 };
