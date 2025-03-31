@@ -3,11 +3,18 @@
     <Card className="pb-10 max-w-sm">
       <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
-        Create an account
+        Passkey setup
       </h3>
       <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
       </Callout>
+      <Callout v-if="successMessage" color="green">
+        {{ errorMessage }}
+      </Callout>
+
+      <p>
+        Your registrationw as successfull! Please, check your emails in order to proceed and finish the registration process.
+      </p>
 
       <form
         ref="form"
@@ -15,47 +22,15 @@
         class="flex flex-col gap-4"
       >
         <div className="mb-2">
-          <label
-            for="username"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Username
-          </label>
-
-          <TextInput
-            type="text"
-            id="username"
-            name="username"
-            autoComplete="username"
-            placeholder="Enter your username"
-          />
-        </div>
-
-        <div className="mb-2">
-          <label
-            for="email"
-            class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Email Address
-          </label>
-
-          <TextInput
-            type="text"
-            id="email"
-            name="email"
-            autoComplete="email"
-            placeholder="Enter your email address"
-          />
-
           <p
             class="mt-4 text-blue-500 text-bold cursor-pointer"
             @click="resendMagicLink"
-          > Resend magic link
+          > Resend verification Email
           </p>
         </div>
 
         <SubmitButton className="w-full mt-4">
-          Submit
+          Activate Passkeys
         </SubmitButton>
       </form>
     </Card>
@@ -121,31 +96,17 @@ const registerFinish = async (attestation: Object) => {
   }
 }
 
-const createAccount = async (formData: FormData) => {
-  try {
-    const response = await axios.post(
-      `/api/user`,
-      formData
-    );
-
-    return response.data;
-  } catch(error: any) {
-    console.error(error);
-    errorMessage.value = error.response.data;
-  }
-}
 
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const result = await createAccount(formData);
-    console.log(result);
-    if (!result) throw new Error('Registration unsuccessfull');
-
-    return router.push({
-      path: '/passkey',
-      query: { register: true }
+    const options = await registerStart(formData);
+    const attestationResponse = await startRegistration({
+      optionsJSON: options
     });
+    const result = await registerFinish(attestationResponse);
+
+    return alert('Passkey setup successfull!');
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error.response.data;

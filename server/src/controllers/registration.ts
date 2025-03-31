@@ -7,23 +7,11 @@ import { Credential } from '../models/Credential';
 import { users, credentials, profiles } from '../models';
 import { CustomError } from '../middleware/error';
 import { EmailTemplate } from '../lib/email';
+import { AuthenticatedRequest } from '../middleware/authenticate';
 
 const url = process.env.URL;
-const template = `
-    <div>
-      <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
-      <p>
-        Please, click on the button to verify your email address and to login automatically.
-      </p>
-      <a
-        href="${url}/auth/magicLink/"
-        class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-      > Open Magic Link
-      </a>
-    </div>
-`;
 
-const sendMail = async (to: string, subject: string) => {
+const sendMail = async (to: string, subject: string, template: string) => {
   const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
   const htmlTemplate = EmailTemplate(template);
 
@@ -44,18 +32,80 @@ const sendMail = async (to: string, subject: string) => {
 
 export const resendMagicLink = async (req: Request, res: Response, next: NextFunction) => {
   const { to, subject, name } = await req.body;
+  const template = `
+    <div>
+      <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
+      <p>
+        Please, click on the button to verify your email address and to login automatically.
+      </p>
+      <a
+        href="${url}/auth/magicLink/"
+        class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+      > Open Magic Link
+      </a>
+    </div>
+  `;
 
   if (!to || !subject || !name) {
     throw new Error('Missing required fields');
   }
 
   try {
-    await sendMail(to, subject);
+    await sendMail(to, subject, template);
 
     res.send({ verfied: true });
   } catch (error) {
     console.error(error)
     next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
+  }
+}
+
+export const handleAccountCreate = async (req: Request, res: Response, next: NextFunction) => {
+  const {email, username} = req.body;
+
+  if (!username) {
+      return next(new CustomError('Username empty', 400));
+  }
+  if (!email) {
+      return next(new CustomError('Email empty', 400));
+  }
+
+  try {
+    let user = await users.getByUsername(username);
+    if (user) {
+      return next(new CustomError('User already exists', 400));
+    }
+
+    user = await users.create({
+      username: username,
+      email: email
+    });
+
+    if (!user) {
+        return next(new CustomError('User Create failed', 400));
+    }
+    (req as AuthenticatedRequest).userId = user.id;
+    console.log((req as AuthenticatedRequest).userId)
+
+    const magicLink = '';//new MagicLink(user.id);
+    const template = `
+      <div>
+        <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
+        <p>
+          Please, click on the button to verify your email address and to login automatically.
+        </p>
+        <a
+          href="${magicLink}"
+          class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+        > Open Magic Link
+        </a>
+      </div>
+    `;
+    //await sendMail(user.email, 'Register complete!', template);
+
+    res.send(user);
+  } catch(error) {
+    next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
   }
 }
 
@@ -162,7 +212,6 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
             }
             
             await profiles.createDefaultProfiles(user.id, user.username, user.email);
-            await sendMail(user.email, 'Finish your registration');
 
             res.send({verified: true});
         } else {

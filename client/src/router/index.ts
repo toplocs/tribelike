@@ -6,6 +6,7 @@ import LoginView from '@/views/LoginView.vue';
 import EmailLoginView from '@/views/EmailLoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import SettingsView from '@/views/SettingsView.vue';
+import PasskeyView from '@/views/PasskeyView.vue';
 
 //Profile
 import ProfileListView from '@/views/profile/ProfileListView.vue';
@@ -74,6 +75,11 @@ const router = createRouter({
       name: 'settings',
       component: SettingsView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/passkey',
+      name: 'passkey',
+      component: PasskeyView
     },
 
     //Profiles

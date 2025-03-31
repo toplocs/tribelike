@@ -7,9 +7,11 @@ import magicLinkRouter from './magicLinkRouter';
 import passkeyRouter from './passkeyRouter';
 import userRouter from './userRouter';
 import profileRouter from './profileRouter';
+import sessionRouter from './sessionRouter';
 
 const router = Router();
 router.use('/',
+  sessionRouter,
   magicLinkRouter,
   passkeyRouter, 
   userRouter, 
