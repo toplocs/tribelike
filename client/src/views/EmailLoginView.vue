@@ -3,10 +3,14 @@
     <Card className="pb-10 max-w-sm">
       <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
-        Login
+        Email Login
       </h3>
+
       <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
+      </Callout>
+      <Callout v-if="successMessage" color="green">
+        {{ successMessage }}
       </Callout>
 
       <form
@@ -19,21 +23,20 @@
           <label
             for="username"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-          >
-            Username
+          > Email
           </label>
 
           <TextInput
             type="text"
-            id="username"
-            name="username"
-            autoComplete="username"
-            placeholder="Enter your username"
+            id="email"
+            name="email"
+            autoComplete="email"
+            placeholder="Enter your email"
           />
 
           <p class="mt-4 text-blue-500">
-            <router-link to="/login/email">
-              or with email
+            <router-link to="/login">
+              or with passkeys
             </router-link>
           </p>
         </div>
@@ -56,15 +59,20 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
+import type { User } from '@tribelike/types/User';
+import type { Profile } from '@tribelike/types/Profile';
 
 const router = useRouter();
+const user = inject<Ref<User | null>>('user');
+const profile = inject<Ref<Profile | null>>('profile');
 const errorMessage = ref<string>('');
+const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
 const loginStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
-      `/api/auth/passkey/loginStart`,
+      `/auth/magicLink`,
       formData,
     );
 
@@ -75,36 +83,15 @@ const loginStart = async (formData: FormData) => {
   }
 }
 
-const loginFinish = async (attestation: Object) => {
-  try {
-    const response = await axios.post(
-      `/api/auth/passkey/loginFinish`,
-      attestation
-    );
-
-    return response.data;
-  } catch(error: any) {
-    console.error(error);
-    errorMessage.value = error.response.data;
-  }
-}
-
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value ?? undefined);
-    const options = await loginStart(formData);
-    const attestationResponse = await startAuthentication({
-      optionsJSON: options
-    });
-    const result = await loginFinish(attestationResponse);
-    if (!result.verified) throw new Error('Login not successfull');
-    errorMessage.value = 'Login successfull';
-    
-    localStorage.setItem('authHeader', result.token);
-    axios.defaults.headers.common['Authorization'] = result.token;
-    return router.push(`/profiles`);
+    const result = await loginStart(formData);
+    successMessage.value = 'Email has been sent!';
+    console.log(result)
+
   } catch (error: any) {
     errorMessage.value = error.response.data;
     console.error(error);

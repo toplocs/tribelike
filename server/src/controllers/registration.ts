@@ -1,3 +1,4 @@
+import nodemailer from 'nodemailer';
 import { Request, Response, NextFunction } from 'express';
 import { generateRegistrationOptions, verifyRegistrationResponse, WebAuthnCredential } from '@simplewebauthn/server';
 import { RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
@@ -5,8 +6,59 @@ import { rpName, rpID, origin } from '../config';
 import { Credential } from '../models/Credential';
 import { users, credentials, profiles } from '../models';
 import { CustomError } from '../middleware/error';
+import { EmailTemplate } from '../lib/email';
 
-// See https://simplewebauthn.dev/docs/packages/server
+const url = process.env.URL;
+const template = `
+    <div>
+      <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
+      <p>
+        Please, click on the button to verify your email address and to login automatically.
+      </p>
+      <a
+        href="${url}/auth/magicLink/"
+        class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+      > Open Magic Link
+      </a>
+    </div>
+`;
+
+const sendMail = async (to: string, subject: string) => {
+  const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
+  const htmlTemplate = EmailTemplate(template);
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html: htmlTemplate,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('🚀 Email sent successfully!');
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const resendMagicLink = async (req: Request, res: Response, next: NextFunction) => {
+  const { to, subject, name } = await req.body;
+
+  if (!to || !subject || !name) {
+    throw new Error('Missing required fields');
+  }
+
+  try {
+    await sendMail(to, subject);
+
+    res.send({ verfied: true });
+  } catch (error) {
+    console.error(error)
+    next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
+  }
+}
+
 export const handleRegisterStart = async (req: Request, res: Response, next: NextFunction) => {
     const {email, username} = req.body;
 
@@ -110,6 +162,8 @@ export const handleRegisterFinish = async (req: Request, res: Response, next: Ne
             }
             
             await profiles.createDefaultProfiles(user.id, user.username, user.email);
+            await sendMail(user.email, 'Finish your registration');
+
             res.send({verified: true});
         } else {
             next(new CustomError('Verification failed', 400));
