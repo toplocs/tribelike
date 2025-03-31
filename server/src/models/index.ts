@@ -27,6 +27,8 @@ export * from './Session';
 export * from './Credential';
 export * from './User';
 export * from './Profile';
+export * from './MagicLink';
+export * from './UserSetting';
 export {
   credentialStore,
   userStore,

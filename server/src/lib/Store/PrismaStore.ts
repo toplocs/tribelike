@@ -45,9 +45,10 @@ export class PrismaStore<T extends GenericObject> implements IStore<T> {
         });
     }
 
-    async getBy(key: keyof T, value: string): Promise<T | null> {
-        return await (this.prisma[this.model as keyof PrismaClient] as any).findFirst({
-            where: { [key]: value }
+    async getBy(key: keyof T, value: string, include: any = {}): Promise<T | null> {
+        return await (this.prisma[this.model as keyof PrismaClient] as any).findUnique({
+            where: { [key]: value },
+            include: include
         });
     }
 

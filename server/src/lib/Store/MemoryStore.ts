@@ -104,10 +104,7 @@ export class MemoryStore<T extends GenericObject> implements IStore<T> {
             if (!item) return null;
             return this.instantiate(item);
         } else {
-            console.log("Warning: Using getBy without index for key:", key, this.name);
-            const items = Array.from(this.items.values());
-            const filteredItems = items.filter(item => item[key as keyof T] === value);
-            return filteredItems.length > 0 ? this.instantiate(filteredItems[0]) : null;
+            throw new Error(`Index for key "${String(key)}" not found in store "${this.name}".`);
         }
     }
 
