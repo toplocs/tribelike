@@ -10,7 +10,7 @@ import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 import { MemoryStore } from './MemoryStore';
 import { FileStore } from './FileStore';
 import { PrismaStore } from './PrismaStore';
-import { storeType } from '../config';
+import { storeType } from '../../config';
 
 export type StoreType = 'memory' | 'file' | 'prisma';
 

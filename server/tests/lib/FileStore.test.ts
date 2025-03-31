@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-import { FileStore } from '../../src/lib/FileStore';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
-import { StoreOptions } from '../../src/lib/Store';
+import { StoreOptions, FileStore } from '../../src/lib/Store';
 
 interface iTestData extends GenericObject {
     id: Uuid;

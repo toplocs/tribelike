@@ -4,7 +4,7 @@ import JSONL from "jsonl-parse-stringify";
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 import { StoreOptions, IStore } from './Store';
 import { MemoryStore } from './MemoryStore';
-import { dataFolder } from '../config';
+import { dataFolder } from '../../config';
 
 export class FileStore<T extends GenericObject> extends MemoryStore<T> implements IStore<T> {
     private dataPath: string;
