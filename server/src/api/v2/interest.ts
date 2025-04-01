@@ -22,14 +22,14 @@ router.route('/:id/relations').get(async (req: Request, res: Response) => {
   ]);
 
   if (interestRelations.success && locationRelations.success) {
-    return res.status(200).json({
+    res.status(200).json({
       children: [],
       members: [],
       interests: interestRelations.success,
       locations: locationRelations.success
     });
   } else {
-    return res.status(400).json({
+    res.status(400).json({
       error: interestRelations.error || locationRelations.error
     });
   }
@@ -47,40 +47,52 @@ router.route('/interests/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await findInterestRelations(id);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success)
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 }).post(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await createInterestRelation(id, req.body);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) 
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 }).delete(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await removeInterestRelation(id);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) 
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 });
 
 router.route('/locations/:id').get(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await findLocationRelations(id);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) 
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 }).post(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await createLocationRelation(id, req.body);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) 
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 }).delete(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { success, error } = await removeLocationRelation(id);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) 
+    res.status(200).json(success);
+  else 
+    res.status(400).json(error);
 });
 
 

@@ -13,32 +13,38 @@ router.route('/').get(async (req: Request, res: Response) => {
     const authHeader = req.get('Authorization');
     const session = await auth(authHeader);
 
-    return res.status(200).json({ session });
+    res.status(200).json({ session });
   } catch(e: any) {
     console.error(e);
-    return res.status(400).json(e.error);
+    res.status(400).json(e.error);
   }
 });
 
 router.route('/login').post(upload.none(), async (req: Request, res: Response) => {
   try {
     const formData = req.body;
-    if (formData.email.length < 3) return res.status(401).json('This account does not exist');
+    if (formData.email.length < 3) {
+      res.status(401).json('This account does not exist');
+      return;
+    } 
     const user = await prisma.user.findUnique({
       where: {
         email: formData.email,
       }
     });
-    if (!user) return res.status(401).json('This account does not exist');
+    if (!user) {
+      res.status(401).json('This account does not exist');
+      return;
+    }
     // if (formData.password != user.password) return res.status(401).json('The password is not correct');
 
     const { token, expires } = await login(user);
     console.log('Login successfull');
     
-    return res.status(200).json({ token, expires });
+    res.status(200).json({ token, expires });
   } catch(e: any) {
     console.error(e);
-    return res.status(400).json(e.error);
+    res.status(400).json(e.error);
   }
 });
 
@@ -47,11 +53,11 @@ router.route('/logout').get(async (req: Request, res: Response) => {
   const session = await auth(authHeader);
   await logout();
 
-  return res.status(200).json({ session });
+  res.status(200).json({ session });
 });
 
 router.route('/refresh').post(upload.none(), async (req: Request, res: Response) => {
-  return res.status(400).json({ error: 'Failed to refresh token' });
+  res.status(400).json({ error: 'Failed to refresh token' });
 });
 
 
@@ -65,13 +71,13 @@ router.route('/session').get(async (req: Request, res: Response) => {
     }
     const userId = await sessions.validateToken(authToken);
 
-    return res.status(200).json({ 
+    res.status(200).json({ 
       userId: userId,
       token: authToken,
     });
   } catch(e: any) {
     console.error(e);
-    return res.status(400).json(e.error);
+    res.status(400).json(e.error);
   }
 });
 

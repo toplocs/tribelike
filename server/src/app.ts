@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
-import { session, handleError } from './middleware';
+import { sessionMiddleware, handleError } from './middleware';
 import routes from './routes';
 
 import swaggerUi from "swagger-ui-express";
@@ -16,6 +16,18 @@ import {
   corsOptions, 
   rpID, port, enable_https, certificate } from './config';
 
+declare global {
+  namespace Express {
+    interface Request {
+      session: {
+        userId: string;
+        loggedIn: boolean;
+        token: string;
+        expires: Date;
+      }
+    }
+  }
+}
 const app = express();
 
 app.use(cors(corsOptions));
@@ -23,6 +35,9 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(handleError);
+
+// Serve docs 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 // Serve static client
 const clientBuildPath = path.join(__dirname, '../../client/dist');
@@ -35,11 +50,9 @@ if (fs.existsSync(clientBuildPath)) {
   });
 }
 
-// Serve docs 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+// Read Authentication Token from Header and add session to request
+app.use(sessionMiddleware);
 
-// Read Authentication Token from Header and add auth session to request
-app.use(session);
 app.use('/', routes);
 
 function startServer() {

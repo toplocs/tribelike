@@ -6,7 +6,7 @@ export default class UserController {
 
   static async GetUsers(req: Request, res: Response) {
     try {
-      return res.status(403).json({ error: 'Forbidden' });
+      res.status(403).json({ error: 'Forbidden' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -15,13 +15,13 @@ export default class UserController {
 
   static async GetUser(req: Request, res: Response) {
     try {
-      const { userId } = (req as RequestWithSession).auth;
+      const { userId } = req.session;
 
       let user = await users.getById(userId, { include: { profiles: true } });
-      if (user) {
-        return res.status(200).json(user);
-      } 
-      else return res.status(404).json({ error: 'User not found' });
+      if (user)
+        res.status(200).json(user);
+      else 
+        res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -31,15 +31,17 @@ export default class UserController {
   static async UpdateUser(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const { userId } = (req as RequestWithSession).auth;
+      const { userId } = req.session;
 
       const result = await users.update(userId, {
         image: formData.image || '/images/default.jpeg',
         emailVerified: formData.emailVerified,
       });
 
-      if (result) return res.status(200).json(result);
-      else return res.status(404).json({ error: 'User not found' });
+      if (result)
+        res.status(200).json(result);
+      else 
+        res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });
@@ -49,11 +51,13 @@ export default class UserController {
   // TODO: Cascading delete   
   static async DeleteUser(req: Request, res: Response) {
     try {
-      const { userId } = (req as RequestWithSession).auth;
+      const { userId } = req.session;
 
       const result = await users.delete(userId);
-      if (result) return res.status(200).json({ success: 'User deleted' });
-      else return res.status(404).json({ error: 'User not found' });
+      if (result) 
+        res.status(200).json({ success: 'User deleted' });
+      else 
+        res.status(404).json({ error: 'User not found' });
     } catch(e: any) {
       console.error(e);
       res.status(500).json({ error: e.message });

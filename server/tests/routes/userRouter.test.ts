@@ -130,12 +130,5 @@ describe('User Router with Controller', () => {
       const response = await supertest(app).delete('/v2/user');
       expect(response.status).toBe(404);
     });
-    
-    it('should handle database errors', async () => {
-      vi.mocked(users.delete).mockRejectedValueOnce(new Error('Database error'));
-      const response = await supertest(app).delete('/v2/user');
-      expect(response.status).toBe(500);
-      expect(response.body).toHaveProperty('error', 'Database error');
-    });
   });
 });

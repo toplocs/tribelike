@@ -8,8 +8,10 @@ const upload = multer();
 /*router.route('/locations/:id').get(async (req: Request, res: Response) => {
   const { success, error } = await getProfileLocations(req.params);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success)  
+    res.status(200).json(success);
+  else  
+    res.status(400).json(error);
 });
 */
 
