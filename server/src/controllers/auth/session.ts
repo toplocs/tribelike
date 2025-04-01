@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomError } from '../middleware/error';
-import { sessions } from '../models';
+import { sessions } from '../../models';
 
 export const handleGetSession = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -23,3 +22,11 @@ export const handleGetSession = async (req: Request, res: Response, next: NextFu
     return res.status(400).json(e.error);
   }
 }
+
+export const handleLogout = async (req: Request, res: Response) => {
+  try {
+    // Todo: Invalidate the session token
+  } catch (error) {
+    res.status(500).send({ message: 'Logout failed', error });
+  }
+};

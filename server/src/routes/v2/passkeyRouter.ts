@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import PasskeyController from '../../controllers/passkeyController';
+import PasskeyController from '../../controllers/auth/passkeyController';
 
 const router = Router();
 const upload = multer();

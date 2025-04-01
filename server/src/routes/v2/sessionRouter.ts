@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import multer from 'multer';
-import { handleGetSession } from '../../controllers/session';
-import { handleLogout } from '../../controllers/authentication';
+import { handleGetSession, handleLogout } from '../../controllers/auth/session';
 
 const router = Router();
-const upload = multer();
 
-router.get('/session', handleGetSession);
-router.post('/session/logout', handleLogout);
+router.get('/auth/session', handleGetSession);
+router.post('/auth/logout', handleLogout);
+
 export default router;

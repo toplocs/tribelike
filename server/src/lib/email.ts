@@ -1,3 +1,24 @@
+import nodemailer from 'nodemailer';
+
+export const sendMail = async (to: string, subject: string, template: string) => {
+  const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
+  const htmlTemplate = EmailTemplate(template);
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html: htmlTemplate,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('🚀 Email sent successfully!');
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export const EmailTemplate = (children: string) => `
   <body class="reset-styles w-full text-center font-sans bg-gray-100">
     <table class="mx-auto max-w-lg bg-white rounded-lg shadow-md border border-gray-200">

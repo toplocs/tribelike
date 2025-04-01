@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } from '@simplewebauthn/server';
 import { RegistrationResponseJSON, PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
-import { rpName, rpID, origin } from '../config';
-import { users, credentials, sessions, Credential, AuthSessionData } from '../models';
-import { CustomError } from '../middleware/error';
+import { rpName, rpID, origin } from '../../config';
+import { users, credentials, sessions, Credential, AuthSessionData } from '../../models';
+import { CustomError } from '../../middleware/error';
 
 export default class PasskeyController {
 
