@@ -9,13 +9,14 @@ export default class MagicLinkController {
 
   static async handleMagicLinkLogin(req: Request, res: Response, next: NextFunction){
     const { token } = req.params;
-    const userId = await magicLinks.isValid(token);
+    const userId = await magicLinks.consumeToken(token);
     if (userId) {
       const user = await users.getById(userId);
       console.log(user);
     }
   }
   
+  // move to userController.Create
   static async handleAccountCreate(req: Request, res: Response, next: NextFunction) {
     const {email, username} = req.body;
   

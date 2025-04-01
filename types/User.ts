@@ -4,10 +4,10 @@ import { Profile } from './Profile';
 export interface User extends GenericObject {
     id: Uuid;
     email: string;
-    emailVerified: boolean;
+    emailVerified?: boolean;
+    image?: string;
     profiles?: Profile[];
     settings?: UserSetting[];
-    image?: string;
 }
 
 export interface UserSetting extends GenericObject {

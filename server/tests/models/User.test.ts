@@ -3,7 +3,9 @@ import { User, UserModel } from '../../src/models';
 import { Store } from '../../src/lib/Store';
 
 const testUser: User = {
-    id: '1', email: 'test@example.com',
+    id: '1', 
+    email: 'test@example.com',
+    emailVerified: true,
     profiles: [], 
     settings: []
 };
@@ -21,6 +23,11 @@ describe('UserModel', () => {
     it('should create a new user', async () => {
         const createdUser = await userModel.create(testUser);
         expect(createdUser).toEqual(testUser);
+    });
+
+    it('should create a new user using only an email', async () => {
+        const createdUser = await userModel.create({ email: testUser.email });
+        expect(createdUser!.email).toEqual(testUser.email);
     });
 
     it('should get all users', async () => {

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } from '@simplewebauthn/server';
 import { RegistrationResponseJSON, PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
 import { rpName, rpID, origin } from '../../config';
-import { users, credentials, sessions, Credential, AuthSessionData } from '../../models';
+import { users, passkeys, sessions, PasskeyCredential, AuthSessionData } from '../../models';
 import { CustomError } from '../../middleware/error';
 
 export default class PasskeyController {
@@ -15,9 +15,9 @@ export default class PasskeyController {
     }
 
     let user = await users.getByEmail(email);
-    let existingUserPasskeys: Credential[] = [];
+    let existingUserPasskeys: PasskeyCredential[] = [];
     if (user) {
-      existingUserPasskeys = await credentials.getAllByUserId(user.id);
+      existingUserPasskeys = await passkeys.getAllByUserId(user.id);
     }
 
     try {
@@ -99,7 +99,7 @@ export default class PasskeyController {
       }
       
       const { credential, credentialDeviceType, credentialBackedUp } = registrationInfo;
-      const newPasskey = new Credential({
+      const newPasskey = new PasskeyCredential({
         id: credential.id,
         publicKey: Buffer.from(credential.publicKey).toString('base64'),
         userId: user.id,
@@ -109,7 +109,7 @@ export default class PasskeyController {
         transports: credential.transports,
         backedUp: credentialBackedUp,
       });
-      const passkey = await credentials.create(newPasskey);
+      const passkey = await passkeys.create(newPasskey);
 
       if (!passkey) {
           return next(new CustomError('Credential Create failed', 400));
@@ -133,7 +133,7 @@ export default class PasskeyController {
             return next(new CustomError('User not found', 404));
         }
 
-        const userPasskeys: Credential[] = await credentials.getAllByUserId(user.id);
+        const userPasskeys: PasskeyCredential[] = await passkeys.getAllByUserId(user.id);
         if (userPasskeys.length === 0) {
             return next(new CustomError('No passkeys registered', 404));
         }
@@ -190,7 +190,7 @@ export default class PasskeyController {
     if (!user) {
         return next(new CustomError('User not found', 404));
     }
-    const userPasskey = await credentials.getById(body.id);
+    const userPasskey = await passkeys.getById(body.id);
     if (!userPasskey || userPasskey.userId !== user.id) {
         return next(new CustomError('Passkey not registered with this site', 404));
     }
@@ -203,7 +203,7 @@ export default class PasskeyController {
             expectedRPID: [rpID, "localhost"],
             credential: {
                 id: userPasskey.id,
-                publicKey: Credential.base64ToUint8Array(userPasskey.publicKey),
+                publicKey: PasskeyCredential.base64ToUint8Array(userPasskey.publicKey),
                 counter: userPasskey.counter,
                 transports: userPasskey.transports,
             },
@@ -213,7 +213,7 @@ export default class PasskeyController {
         const { verified, authenticationInfo } = verification;
 
         if (verified) {
-            await credentials.updateCounter(
+            await passkeys.updateCounter(
                 userPasskey.id,
                 authenticationInfo.newCounter
             );

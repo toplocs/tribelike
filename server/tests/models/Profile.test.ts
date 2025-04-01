@@ -15,9 +15,9 @@ describe('ProfileModel', () => {
     await profileModel.store.clear();
     
     // Add test data
-    await profileModel.store.create(new Profile('1', 'test1@example.com', 'family', userId, 'testUser1'));
-    await profileModel.store.create(new Profile('2', 'test2@example.com', 'friends', userId, 'testUser2'));
-    await profileModel.store.create(new Profile('3', 'test3@example.com', 'work', anotherUserId, 'testUser3'));
+    await profileModel.store.create(new Profile({id: '1', email: 'test1@example.com', type: 'family', userId: userId, username: 'testUser1'}));
+    await profileModel.store.create(new Profile({id: '2', email: 'test2@example.com', type: 'friends', userId: userId, username: 'testUser2'}));
+    await profileModel.store.create(new Profile({id: '3', email: 'test3@example.com', type: 'work', userId: anotherUserId, username: 'testUser3'}));
   });
 
   it('should get all profiles by userId', async () => {
@@ -39,7 +39,7 @@ describe('ProfileModel', () => {
     const newUserId: Uuid = 'new-user-456';
     const email = 'newtest@example.com';
     
-    const createdProfiles = await profileModel.createDefaultProfiles(newUserId, email);
+    const createdProfiles = await profileModel.createDefaultProfiles(newUserId, "username", email);
     
     expect(createdProfiles).toHaveLength(3);
     expect(createdProfiles.map(p => p.type)).toEqual(expect.arrayContaining(['family', 'friends', 'work']));

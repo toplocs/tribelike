@@ -4,7 +4,7 @@ import {
     MagicLink as IMagicLink
 } from '@tribelike/types';
 import { v4 as uuidv4 } from 'uuid';
-import { IStore, GenericObject, Model } from '../lib';
+import { IStore, GenericObject, Model } from '../../lib';
 
 export class MagicLink extends GenericObject implements IMagicLink {
     id!: Uuid;
@@ -28,7 +28,6 @@ export class MagicLinkModel extends Model<MagicLink> {
             delete: true
         });
         store.index('token');
-        store.index('userId');
     }
 
     async create(item: Partial<MagicLink>): Promise<MagicLink | null> {
@@ -47,15 +46,26 @@ export class MagicLinkModel extends Model<MagicLink> {
         return await this.store.getBy('token', token);
     }
 
-    async getByUserId(userId: Uuid): Promise<MagicLink[]> {
-        return await this.store.getAll({'userId': userId});
-    }
-
-    async isValid(token: string): Promise<Uuid | null> {
+    async consumeToken(token: string): Promise<Uuid | null> {
         const magicLink = await this.getByToken(token);
         if (!magicLink) return null;
-        
+        await this.delete(magicLink.id);
+
         const now = new Date();
-        return (now < magicLink.expires) ? magicLink.userId: null;
+        if (now < magicLink.expires) {
+            return magicLink.userId;
+        }
+        return null;
+    }
+    
+    async cleanExpiredLinks(): Promise<number> {
+        const now = new Date();
+        const allLinks = await this.getAll();
+        const expiredLinks = allLinks.filter(link => link.expires < now);
+        for (const link of expiredLinks) {
+            await this.delete(link.id);
+        }
+        
+        return expiredLinks.length;
     }
 }

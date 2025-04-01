@@ -2,14 +2,15 @@ import { Router } from 'express';
 import multer from 'multer';
 import UserController from '../../controllers/userController';
 import { authenticate } from '../../middleware/authenticate';
-import { handleAccountCreate } from '../../controllers/registration';
+// TODO: put that in UserController
+import MagicLinkController from '../../controllers/auth/magicLinkController';
 
 const router = Router();
 const upload = multer();
 
 router.get('/users', authenticate, UserController.GetUsers);
 router.get('/user', authenticate, UserController.GetUser);
-router.post('/user', upload.none(), handleAccountCreate); //put that in UserController
+router.post('/user', upload.none(), MagicLinkController.handleAccountCreate);
 router.put('/user', authenticate, UserController.UpdateUser);
 router.delete('/user', authenticate, UserController.DeleteUser);
 

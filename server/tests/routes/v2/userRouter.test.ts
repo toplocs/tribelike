@@ -24,7 +24,9 @@ jest.mock('../../../src/models/User');
 jest.mock('../../../src/models/Profile');
 jest.mock("../../../src/middleware/authenticate", () => ({
   authenticate: (req: any, __: any, next: () => any) => {
-    req.userId = mockUser.id;
+    req.auth.userId = mockUser.id;
+    req.auth.token = 'mockToken';
+    req.auth.expires = new Date();
     next()
   }
 }));
@@ -37,9 +39,8 @@ describe('User Routes V2', () => {
   it('should get all users', async () => {
     const mockUsers: User[] = [mockUser];
     (users.getAll as MockedGetUsers).mockResolvedValue(mockUsers);
-
+  
     const response = await request(app).get('/v2/users');
-
     expect(response.status).toBe(403);
   });
 

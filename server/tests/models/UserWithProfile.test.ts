@@ -31,8 +31,8 @@ describe('UserWithProfile', () => {
         const user = await users.create(testUser);
         const other = await users.create(otherUser);
         if (!user || !other) throw new Error('User create failed');
-        await profiles.createDefaultProfiles(user.id, user.email);
-        await profiles.createDefaultProfiles(other.id, other.email);
+        await profiles.createDefaultProfiles(user.id, "username", user.email);
+        await profiles.createDefaultProfiles(other.id, "username", other.email);
         
         const userWithProfiles = await users.getById('1', { profiles: true });
         expect(userWithProfiles).toBeInstanceOf(User);

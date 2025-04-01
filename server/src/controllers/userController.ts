@@ -5,6 +5,7 @@ import { AuthenticatedRequest } from '../middleware/authenticate';
 export default class UserController {
 
   static async GetUsers(req: Request, res: Response) {
+    console.log('GetUsers');
     try {
       return res.status(403).json({ error: 'Forbidden' });
     } catch(e: any) {
