@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RequestWithSession } from '.';
+import { RequestWithSession } from './types/RequestWithSession';
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     const request = req as unknown as RequestWithSession;

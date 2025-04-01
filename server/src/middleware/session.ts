@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RequestWithSession } from '.';
+import { RequestWithSession } from './types/RequestWithSession';
 import { sessions } from '../models';
 
 export const session = async (req: Request, res: Response, next: NextFunction) => {
