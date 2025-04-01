@@ -143,8 +143,7 @@ async function onSubmit() {
     axios.defaults.headers.common['Authorization'] = result.token;
 
     return router.push({
-      path: '/passkey',
-      query: { register: true }
+      path: '/register/finish'
     });
   } catch (error: any) {
     console.error(error);

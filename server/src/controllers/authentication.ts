@@ -5,13 +5,25 @@ import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
 import { users, credentials, sessions, Credential, AuthSessionData, magicLinks } from '../models';
 
+const url = process.env.URL;
+
 export const handleMagicLinkLogin = async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req.params;
-    const userId = await magicLinks.isValid(token);
-    if (userId) {
-        const user = await users.getById(userId);
-        console.log(user);
+  const { token } = req.params;
+  const userId = await magicLinks.isValid(token);
+  if (userId) {
+    await users.update(userId, {
+        emailVerified: true,
+    });
+    const user = await users.getById(userId);
+    const sessionData: AuthSessionData = {
+      userId: userId,
     }
+    const session  = await sessions.createToken(sessionData);
+    
+    return res.redirect(`${url}/passkeys`);
+  }
+
+  return res.redirect(`${url}/register/expired`);
 }
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {
