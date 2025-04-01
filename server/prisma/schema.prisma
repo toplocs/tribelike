@@ -22,6 +22,7 @@ model User {
   id       String    @id @default(uuid())
   username String
   email    String    @unique() // As email is in Profiles, maybe not needed
+  emailVerified Boolean   @default(false)
   image    String?
   profiles Profile[]
   settings Settings?
@@ -44,6 +45,8 @@ model MagicLink {
   token   String   @unique()
   userId  String
   expires DateTime
+
+  @@index([token])
 }
 
 model Settings {

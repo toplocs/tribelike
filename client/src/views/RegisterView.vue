@@ -139,8 +139,8 @@ async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await createAccount(formData);
-    console.log(result);
     if (!result) throw new Error('Registration unsuccessfull');
+    axios.defaults.headers.common['Authorization'] = result.token;
 
     return router.push({
       path: '/passkey',

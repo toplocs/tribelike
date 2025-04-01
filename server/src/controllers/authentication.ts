@@ -3,10 +3,15 @@ import { generateAuthenticationOptions, verifyAuthenticationResponse } from '@si
 import { PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
 import { CustomError } from '../middleware/error';
 import { rpID, origin } from '../config';
-import { users, credentials, sessions, Credential, AuthSessionData } from '../models';
+import { users, credentials, sessions, Credential, AuthSessionData, magicLinks } from '../models';
 
 export const handleMagicLinkLogin = async (req: Request, res: Response, next: NextFunction) => {
-
+    const { token } = req.params;
+    const userId = await magicLinks.isValid(token);
+    if (userId) {
+        const user = await users.getById(userId);
+        console.log(user);
+    }
 }
 
 export const handleLoginStart = async (req: Request, res: Response, next: NextFunction) => {

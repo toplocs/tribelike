@@ -3,9 +3,11 @@ import { Uuid } from '@tribelike/types/Uuid';
 import { sessions } from '../models';
 
 export interface AuthenticatedRequest extends Request {
-    userId: Uuid;
-    token: string;
-    expires: Date;
+    auth: {
+        userId: Uuid;
+        token: string;
+        expires: Date;
+    }
 }
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,9 +24,11 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     
     if (!session.data.userId) return res.status(401).json({ error: 'Unauthorized. User not found' });
 
-    (req as AuthenticatedRequest).token = token;
-    (req as AuthenticatedRequest).userId = session.data.userId;
-    (req as AuthenticatedRequest).expires = session.expires;
+    (req as unknown as AuthenticatedRequest).auth = {
+        token: token,
+        userId: session.data.userId,
+        expires: session.expires
+    }
     next();
     //todo: put it in the session!
 };

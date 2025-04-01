@@ -6,7 +6,7 @@ import { handleMagicLinkLogin } from '../../controllers/authentication';
 const router = Router();
 const upload = multer();
 
-router.get('/auth/magicLink/:id', handleMagicLinkLogin);
+router.get('/auth/magicLink/:token', handleMagicLinkLogin);
 router.post('/auth/magicLink', resendMagicLink);
 
 export default router;

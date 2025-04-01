@@ -15,7 +15,9 @@ export default class UserController {
 
   static async GetUser(req: Request, res: Response) {
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       let user = await users.getById(userId);
       if (user) {
         user.profiles = await profiles.getAllByUserId(userId);
@@ -31,7 +33,9 @@ export default class UserController {
   static async UpdateUser(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       const result = await users.update(userId, {
         image: formData.image || '/images/default.jpeg',
         email: formData.email,
@@ -48,7 +52,9 @@ export default class UserController {
   // TODO: Cascading delete   
   static async DeleteUser(req: Request, res: Response) {
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       const result = await users.delete(userId);
       if (result) return res.status(200).json({ success: 'User deleted' });
       else return res.status(404).json({ error: 'User not found' });
