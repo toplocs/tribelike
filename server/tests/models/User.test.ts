@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { User, UserModel } from '../../src/models';
 import { Store } from '../../src/lib/Store';
 

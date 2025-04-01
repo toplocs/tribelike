@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { Store } from '../../src/lib/Store';
 import { Profile, ProfileModel } from '../../src/models';
 import { Uuid } from '@tribelike/types/Uuid';

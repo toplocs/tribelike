@@ -5,7 +5,6 @@ import { AuthenticatedRequest } from '../middleware/authenticate';
 export default class UserController {
 
   static async GetUsers(req: Request, res: Response) {
-    console.log('GetUsers');
     try {
       return res.status(403).json({ error: 'Forbidden' });
     } catch(e: any) {
@@ -19,9 +18,9 @@ export default class UserController {
       const authReq = req as unknown as AuthenticatedRequest;
       const { userId } = authReq.auth;
 
-      let user = await users.getById(userId);
+      let user = await users.getById(userId, { include: { profiles: true } });
       if (user) {
-        user.profiles = await profiles.getAllByUserId(userId);
+        // user.profiles = await profiles.getAllByUserId(userId);
         return res.status(200).json(user);
       } 
       else return res.status(404).json({ error: 'User not found' });
@@ -39,7 +38,7 @@ export default class UserController {
 
       const result = await users.update(userId, {
         image: formData.image || '/images/default.jpeg',
-        email: formData.email,
+        emailVerified: formData.emailVerified,
       });
 
       if (result) return res.status(200).json(result);

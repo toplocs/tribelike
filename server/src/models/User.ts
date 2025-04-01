@@ -40,6 +40,7 @@ export class UserModel extends Model<User> {
         const email = item.email.toLowerCase();
         const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
         // TODO: Validate Gravatar Image exists
+        // TODO: image only in Profile
         item.image = `https://gravatar.com/avatar/${hash}`;
     
         return await super.create(item);
