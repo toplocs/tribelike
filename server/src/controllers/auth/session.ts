@@ -11,11 +11,18 @@ export const handleGetSession = async (req: Request, res: Response, next: NextFu
       });
       authToken = token;
     }
-    const userId = await sessions.validateToken(authToken);
+    const session = await sessions.validateToken(authToken);
 
+    if (!session) return res.status(401).json({ error: 'Unauthorized. Session not valid' });
+    if (!('userId' in session.data)) {
+        return res.status(401).json({ error: 'Unauthorized. User not Found' });
+    }
+    const loggedIn = session.data.userId != '';
     return res.status(200).json({ 
-      userId: userId,
+      userId: session!.data.userId,
       token: authToken,
+      expires: session!.expires,
+      loggedIn: loggedIn,
     });
   } catch(e: any) {
     console.error(e);

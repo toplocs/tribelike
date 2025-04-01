@@ -10,10 +10,18 @@ export default class MagicLinkController {
   static async handleMagicLinkLogin(req: Request, res: Response, next: NextFunction){
     const { token } = req.params;
     const userId = await magicLinks.consumeToken(token);
-    if (userId) {
-      const user = await users.getById(userId);
-      console.log(user);
+    if (!userId) {
+      return next(new CustomError('Invalid magic link', 400));
     }
+    const user = await users.getById(userId);
+    if (!user) {
+      return next(new CustomError('User not found', 400));
+    }
+    user.emailVerified = true;
+    await users.update(userId, user);
+    
+    console.log(user);
+    res.send({ success: user });
   }
   
   // move to userController.Create

@@ -3,6 +3,10 @@ import { RequestWithSession } from './types/RequestWithSession';
 import { sessions } from '../models';
 
 export const session = async (req: Request, res: Response, next: NextFunction) => {
+    if (req.path === '/api/auth/session') return next();
+    if (req.path === '/api/session') return next();
+    if (req.path.startsWith('/api/auth/magicLink')) return next();
+
     const token = req.get('Authorization');
     if (!token) return res.status(401).json({ error: 'Unauthorized. Authorization Header not found' });
 

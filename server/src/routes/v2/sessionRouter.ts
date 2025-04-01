@@ -6,4 +6,7 @@ const router = Router();
 router.get('/auth/session', handleGetSession);
 router.post('/auth/logout', handleLogout);
 
+// deprecated
+router.get('/session', handleGetSession);
+router.post('/logout', handleLogout);
 export default router;
