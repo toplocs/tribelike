@@ -57,7 +57,7 @@ export class ProfileModel extends Model<Profile> {
         return allProfiles;
     }
 
-    async createDefaultProfiles(userId: Uuid, email: string): Promise<Profile[]> { 
+    async createDefaultProfiles(userId: Uuid, username: string, email: string): Promise<Profile[]> { 
         const defaultProfiles = [
             new Profile(uuidv4(), email, 'family', userId),
             new Profile(uuidv4(), email, 'friends', userId),

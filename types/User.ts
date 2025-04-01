@@ -4,6 +4,7 @@ import { Profile } from './Profile';
 export interface User extends GenericObject {
     id: Uuid;
     email: string;
+    emailVerified: boolean;
     profiles?: Profile[];
     settings?: UserSetting[];
     image?: string;

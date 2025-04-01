@@ -16,7 +16,9 @@ export default class ProfileController {
 
   static async GetAllProfilesForUser(req: Request, res: Response) {
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       const userProfiles = await profiles.getAllByUserId(userId);
       return res.status(200).json(userProfiles);
     } catch(e: any) {
@@ -42,7 +44,9 @@ export default class ProfileController {
   static async CreateProfile(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       const result = await profiles.create({
         ...formData,
         userId
@@ -59,7 +63,9 @@ export default class ProfileController {
   static async UpdateProfile(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+
       // TODO: Ensure the profile belongs to the authenticated user
       const userProfiles = await profiles.getAllByUserId(userId);
       const profileBelongsToUser = userProfiles.some(profile => profile.id === formData.id);
@@ -80,7 +86,9 @@ export default class ProfileController {
 
   static async DeleteProfile(req: Request, res: Response) {
     try {
-      const userId = (req as AuthenticatedRequest).userId;
+      const authReq = req as unknown as AuthenticatedRequest;
+      const { userId } = authReq.auth;
+      
       const profileId = req.query.id as string;
       
       if (!profileId) {

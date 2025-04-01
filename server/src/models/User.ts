@@ -9,6 +9,7 @@ import { IStore, GenericObject, Model } from '../lib';
 export class User extends GenericObject implements IUser {
     id!: Uuid;
     email!: string;
+    emailVerified: boolean = false;
     profiles?: IProfile[] = [];
     settings?: any[] = [];
     image?: string;
