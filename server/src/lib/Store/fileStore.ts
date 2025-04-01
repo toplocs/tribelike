@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import JSONL from "jsonl-parse-stringify";
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
-import { StoreOptions, IStore } from './Store';
-import { MemoryStore } from './MemoryStore';
+import { StoreOptions, IStore } from './types/Store';
+import { MemoryStore } from './memoryStore';
 import { dataFolder } from '../../config';
 
 export class FileStore<T extends GenericObject> extends MemoryStore<T> implements IStore<T> {

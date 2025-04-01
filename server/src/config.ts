@@ -4,7 +4,7 @@ import path from 'path';
 import { CorsOptions } from 'cors';
 import { CookieOptions } from 'express';
 import { SecureContextOptions } from 'tls';
-import { StoreType } from './lib/Store';
+import { StoreType } from './lib/Store/types/Store'; // Avoid Circular Dependencies
 
 dotenv.config();
 

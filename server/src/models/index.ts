@@ -5,13 +5,17 @@ import { User, UserModel } from './User';
 import { MagicLink, MagicLinkModel } from './auth/MagicLink';
 import { UserSetting, UserSettingModel } from './UserSetting';
 import { Profile, ProfileModel } from './Profile';
+import { storeType } from '../config';
 
 // Create stores for all models
-const credentialStore = Store.getInstance().getStore<PasskeyCredential>('Credential');
-const userStore = Store.getInstance().getStore<User>('User');
-const magicLinkStore = Store.getInstance().getStore<MagicLink>('MagicLink');
-const userSettingStore = Store.getInstance().getStore<UserSetting>('UserSetting');
-const profileStore = Store.getInstance().getStore<Profile>('Profile');
+const store = Store.getInstance();
+store.setStoreType(storeType);
+
+const credentialStore = store.getStore<PasskeyCredential>('Credential');
+const userStore = store.getStore<User>('User');
+const magicLinkStore = store.getStore<MagicLink>('MagicLink');
+const userSettingStore = store.getStore<UserSetting>('UserSetting');
+const profileStore = store.getStore<Profile>('Profile');
 userStore.setRelatedStore('profiles', profileStore);
 userStore.setRelatedStore('settings', userSettingStore);
 

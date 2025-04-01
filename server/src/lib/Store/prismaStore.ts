@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Uuid, GenericObject } from '@tribelike/types';
-import { StoreOptions, IStore } from './Store';
+import { StoreOptions, IStore } from './types/Store';
 
 export class PrismaStore<T extends GenericObject> implements IStore<T> {
     public name: string;

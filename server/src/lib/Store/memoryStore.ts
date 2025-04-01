@@ -1,5 +1,5 @@
 import { console } from 'inspector';
-import { StoreOptions, IStore } from './Store';
+import { StoreOptions, IStore } from './types/Store';
 import { Uuid, GenericObject } from '@tribelike/types/Uuid';
 
 export class MemoryStore<T extends GenericObject> implements IStore<T> {
