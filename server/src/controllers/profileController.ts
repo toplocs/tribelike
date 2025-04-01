@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { profiles } from '../models';
-import { AuthenticatedRequest } from '../middleware/authenticate';
+import { RequestWithSession } from '../middleware';
 
 export default class ProfileController {
 
@@ -16,8 +16,7 @@ export default class ProfileController {
 
   static async GetAllProfilesForUser(req: Request, res: Response) {
     try {
-      const authReq = req as unknown as AuthenticatedRequest;
-      const { userId } = authReq.auth;
+      const { userId } = (req as RequestWithSession).auth;
 
       const userProfiles = await profiles.getAllByUserId(userId);
       return res.status(200).json(userProfiles);
@@ -40,12 +39,10 @@ export default class ProfileController {
     }
   }
 
-
   static async CreateProfile(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const authReq = req as unknown as AuthenticatedRequest;
-      const { userId } = authReq.auth;
+      const { userId } = (req as RequestWithSession).auth;
 
       const result = await profiles.create({
         ...formData,
@@ -63,8 +60,7 @@ export default class ProfileController {
   static async UpdateProfile(req: Request, res: Response) {
     const formData = req.body;
     try {
-      const authReq = req as unknown as AuthenticatedRequest;
-      const { userId } = authReq.auth;
+      const { userId } = (req as RequestWithSession).auth;
 
       // TODO: Ensure the profile belongs to the authenticated user
       const userProfiles = await profiles.getAllByUserId(userId);
@@ -86,8 +82,7 @@ export default class ProfileController {
 
   static async DeleteProfile(req: Request, res: Response) {
     try {
-      const authReq = req as unknown as AuthenticatedRequest;
-      const { userId } = authReq.auth;
+      const { userId } = (req as RequestWithSession).auth;
       
       const profileId = req.query.id as string;
       
