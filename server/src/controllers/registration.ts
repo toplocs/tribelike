@@ -32,11 +32,11 @@ const sendMail = async (to: string, subject: string, template: string) => {
 export const resendMagicLink = async (req: Request, res: Response, next: NextFunction) => {
   const { to, subject, name } = await req.body;
   const userId = 'test';
+  console.log('RESEND')
   const magicLink = await magicLinks.create({
     userId: userId
   });
   if (!magicLink) next(new CustomError('No magic link', 400));
-  console.log(magicLink)
   const template = `
     <div>
       <h2 class="font-bold">Thank you for registering on Toplocs!</h2>
@@ -111,7 +111,7 @@ export const handleAccountCreate = async (req: Request, res: Response, next: Nex
         </a>
       </div>
     `;
-    //await sendMail(user.email, 'Register complete!', template);
+    await sendMail(user.email, 'Register complete!', template);
 
     res.send({ token: token });
   } catch(error) {

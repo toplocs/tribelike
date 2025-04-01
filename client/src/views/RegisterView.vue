@@ -77,22 +77,6 @@ const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-const resendMagicLink = async (formData: FormData) => {
-  try {
-    const response = await axios.post(
-      `/api/auth/magicLink`, {
-      to: 'yannik@yx3m1.com',
-      subject: 'Resend link',
-      name: 'Yannik',
-    });
-
-    return response.data;
-  } catch(error: any) {
-    console.error(error);
-    errorMessage.value = error.response.data;
-  }
-}
-
 const registerStart = async (formData: FormData) => {
   try {
     const response = await axios.post(

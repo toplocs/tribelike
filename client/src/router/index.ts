@@ -94,8 +94,8 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/passkey',
-      name: 'passkey',
+      path: '/passkeys',
+      name: 'passkeys',
       component: PasskeyView
     },
 
