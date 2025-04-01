@@ -3,7 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import prisma from '../lib/prisma';
 import { auth, login, logout } from '../lib/auth';
-import { session } from '../models'
+import { sessions } from '../models'
 
 const router = express.Router();
 const upload = multer();
@@ -23,10 +23,10 @@ router.route('/').get(async (req: Request, res: Response) => {
 router.route('/login').post(upload.none(), async (req: Request, res: Response) => {
   try {
     const formData = req.body;
-    if (formData.username.length < 3) return res.status(401).json('This account does not exist');
+    if (formData.email.length < 3) return res.status(401).json('This account does not exist');
     const user = await prisma.user.findUnique({
       where: {
-        username: formData.username,
+        email: formData.email,
       }
     });
     if (!user) return res.status(401).json('This account does not exist');
@@ -60,10 +60,10 @@ router.route('/session').get(async (req: Request, res: Response) => {
     const authHeader = req.get('Authorization');
     let authToken = authHeader as string;
     if (!authToken) {
-      const { token } = await session.createToken('');
+      const { token } = await sessions.createToken({userId: ''});
       authToken = token;
     }
-    const userId = await session.validateToken(authToken);
+    const userId = await sessions.validateToken(authToken);
 
     return res.status(200).json({ 
       userId: userId,
