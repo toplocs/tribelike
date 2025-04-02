@@ -1,21 +1,8 @@
-import { Uuid, GenericObject as IGenericObject } from '@tribelike/types/Uuid';
+import { Uuid } from '@tribelike/types/Uuid';
 import { v4 as uuidv4 } from 'uuid';
-import { IStore, Store } from './Store';
-
-interface ModelOptions {
-    getAll?: boolean;
-    create?: boolean;
-    getById?: boolean;
-    update?: boolean;
-    delete?: boolean;
-}
-
-export class GenericObject implements IGenericObject {
-    id: Uuid;
-    constructor(id: Uuid) {
-        this.id = id;
-    }
-}
+import { IStore } from '../Store';
+import { ModelOptions } from './types/ModelOptions';
+import { GenericObject } from './genericObject';
 
 export class Model<T extends GenericObject> {
     public store: IStore<T>;

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+<<<<<<< HEAD
 import { Uuid } from '@tribelike/types/Uuid';
 import { sessions } from '../models';
 
@@ -29,6 +30,15 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         userId: session.data.userId,
         expires: session.expires
     }
+=======
+import { RequestWithSession } from './types/RequestWithSession';
+
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+    const request = req as unknown as RequestWithSession;
+    if (!request.auth.loggedIn) {
+        return res.status(401).json({ error: 'Unauthorized. User not logged in' });
+    }
+>>>>>>> 0f74f05daf917f8b935ff614e1352d500237d7b2
     next();
     //todo: put it in the session!
 };

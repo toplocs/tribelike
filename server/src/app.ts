@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
-import { handleError } from './middleware/error';
+import { session, handleError } from './middleware';
 import routes from './routes';
 
 import swaggerUi from "swagger-ui-express";
@@ -24,17 +24,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(handleError);
 
-// Routes
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
-app.use('/', routes);
-
-
-// STATIC SERVER OLD: Why views?
-// app.use(express.static(path.join(__dirname, 'views')));  
-// app.get('*', (req: Request, res: Response) => {
-//   res.sendFile(path.join(__dirname, 'views', 'index.html'));
-// });
-
 // Serve static client
 const clientBuildPath = path.join(__dirname, '../../client/dist');
 console.log("Client folder:", clientBuildPath);
@@ -45,6 +34,13 @@ if (fs.existsSync(clientBuildPath)) {
     res.send(`Client build folder does not exist. Not serving client`);
   });
 }
+
+// Serve docs 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+// Read Authentication Token from Header and add auth session to request
+app.use(session);
+app.use('/', routes);
 
 function startServer() {
   if (enable_https) {

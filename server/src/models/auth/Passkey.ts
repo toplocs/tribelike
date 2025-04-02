@@ -1,13 +1,13 @@
-import { Uuid, Passkey } from '@tribelike/types';
+import { Uuid, Passkey as IPasskey } from '@tribelike/types';
 import { 
     AuthenticatorTransportFuture,
     CredentialDeviceType, 
     Base64URLString
 } from '@simplewebauthn/server';
-import { IStore, GenericObject, Model } from '../lib';
+import { IStore, GenericObject, Model } from '../../lib';
 
 
-export class Credential extends GenericObject implements Passkey {
+export class PasskeyCredential extends GenericObject implements IPasskey {
     id!: Base64URLString;
     publicKey!: Base64URLString;
     userId!: Uuid;
@@ -17,7 +17,7 @@ export class Credential extends GenericObject implements Passkey {
     backedUp!: boolean;
     transports?: AuthenticatorTransportFuture[];
 
-    constructor(credential: Passkey) {
+    constructor(credential: IPasskey) {
         super(credential.id);
         Object.assign(this, credential);
     }
@@ -29,13 +29,13 @@ export class Credential extends GenericObject implements Passkey {
         new Uint8Array(Buffer.from(base64, 'base64'));
     
     publicKeyUint8(): Uint8Array {
-        return Credential.base64ToUint8Array(this.publicKey);
+        return PasskeyCredential.base64ToUint8Array(this.publicKey);
     }
 }
 
 
-export class CredentialModel extends Model<Credential> {
-    constructor(store: IStore<Credential>) {
+export class PasskeyModel extends Model<PasskeyCredential> {
+    constructor(store: IStore<PasskeyCredential>) {
         super(store, { 
             getAll: false,
             create: true,
@@ -46,12 +46,12 @@ export class CredentialModel extends Model<Credential> {
         store.index('userId');
     }
 
-    async getAllByUserId(userId: Uuid): Promise<Credential[]> {
+    async getAllByUserId(userId: Uuid): Promise<PasskeyCredential[]> {
         const credentials = await this.store.getAll();
         return credentials.filter(item => item.userId === userId);
     }
 
-    async updateCounter(id: Uuid, counter: number): Promise<Credential | null> {
+    async updateCounter(id: Uuid, counter: number): Promise<PasskeyCredential | null> {
         return this.store.update(id, { counter: counter });
     }
 }

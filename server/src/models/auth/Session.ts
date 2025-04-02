@@ -1,6 +1,6 @@
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { Uuid } from '@tribelike/types';
-import { jwtSecret } from "../config"
+import { jwtSecret } from "../../config"
 import { TextEncoder } from 'util';
 
 // In-memory token store?

@@ -4,10 +4,11 @@ import path from 'path';
 import { CorsOptions } from 'cors';
 import { CookieOptions } from 'express';
 import { SecureContextOptions } from 'tls';
-import { StoreType } from './lib/Store';
+import { StoreType } from './lib/Store/types/Store'; // Avoid Circular Dependencies
 
 dotenv.config();
 
+export const url: string = process.env.URL || 'http://localhost:3000';
 export const sessionSecret: string = process.env.SESSION_SECRET || 'default_session_secret';
 export const jwtSecret: string = process.env.JWT_SECRET || 'default_jwt_secret';
 export const enable_https: boolean = process.env.HTTPS === 'true';

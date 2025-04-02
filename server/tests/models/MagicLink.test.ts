@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { Store } from '../../src/lib/Store';
 import { MagicLink, MagicLinkModel } from '../../src/models';
 import { Uuid } from '@tribelike/types';
@@ -52,31 +52,52 @@ describe('MagicLinkModel', () => {
     expect(magicLink).toBeNull();
   });
 
-  it('should get all magic links by userId', async () => {
-    const magicLinks = await magicLinkModel.getByUserId(userId1);
-    expect(magicLinks).toHaveLength(2);
-    expect(magicLinks.map(ml => ml.token)).toContain('valid-token-1');
-    expect(magicLinks.map(ml => ml.token)).toContain('valid-token-2');
-  });
-
-  it('should return empty array when no magic links found for userId', async () => {
-    const nonExistentUserId: Uuid = 'non-existent-user';
-    const magicLinks = await magicLinkModel.getByUserId(nonExistentUserId);
-    expect(magicLinks).toHaveLength(0);
-  });
-
   it('should validate a valid token', async () => {
-    const isValid = await magicLinkModel.isValid('valid-token-1');
-    expect(isValid).toBe(true);
+    const userId = await magicLinkModel.consumeToken('valid-token-1');
+    expect(userId).toBe(userId1);
+
+    const consumedToken = await magicLinkModel.getByToken('valid-token-1');
+    expect(consumedToken).toBeNull();
   });
 
   it('should invalidate an expired token', async () => {
-    const isValid = await magicLinkModel.isValid('expired-token');
-    expect(isValid).toBe(false);
+    const userId = await magicLinkModel.consumeToken('expired-token');
+    expect(userId).toBeNull();
+
+    const consumedToken = await magicLinkModel.getByToken('expired-token');
+    expect(consumedToken).toBeNull();
   });
 
   it('should invalidate a non-existent token', async () => {
-    const isValid = await magicLinkModel.isValid('non-existent-token');
-    expect(isValid).toBe(false);
+    const userId = await magicLinkModel.consumeToken('non-existent-token');
+    expect(userId).toBeNull();
+  });
+
+  it('should create a new magic link', async () => {
+    const newUserId: Uuid = 'new-user';
+    const newMagicLink = await magicLinkModel.create({ userId: newUserId });
+    expect(newMagicLink).not.toBeNull();
+    expect(newMagicLink!.userId).toBe(newUserId);
+    expect(newMagicLink!.token).toBeDefined();
+    expect(newMagicLink!.expires).toBeInstanceOf(Date);
+    expect(newMagicLink!.expires.getTime()).toBeGreaterThan(Date.now());
+  });
+
+  it('should delete expired links', async () => {
+    // Verify we have an expired link before cleaning up
+    const beforeCleanup = await magicLinkModel.getByToken('expired-token');
+    expect(beforeCleanup).not.toBeNull();
+    
+    // Delete expired links
+    const deletedCount = await magicLinkModel.cleanExpiredLinks();
+    expect(deletedCount).toBe(1);
+    
+    // Verify the expired link was deleted
+    const afterCleanup = await magicLinkModel.getByToken('expired-token');
+    expect(afterCleanup).toBeNull();
+    
+    // Verify valid links remain
+    const validLink = await magicLinkModel.getByToken('valid-token-1');
+    expect(validLink).not.toBeNull();
   });
 });

@@ -11,32 +11,22 @@ export class Profile extends GenericObject implements IProfile {
     id: Uuid;
     userId: Uuid;
     username: string;
-    email: string;
     type: string;
+    email?: string;
+    image?: string;
+    about?: string;
     activities?: IActivity[];
     settings?: IProfileSettings[];
     
-    constructor(id: Uuid, email: string, type: string, userId: Uuid, username?: string) {
-        super(id);
-        this.id = id;
-        this.userId = userId;
-        this.username = username || this.random_username(10);
-        this.email = email;
-        this.type = type;
-    }
-
-    private random_username(length: number): string {
-        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        const charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return  "user_" + result;
-    }
-
-    setRandomUsername() {
-        this.username = this.random_username(10);
+    constructor(profile: IProfile) {
+        super(profile.id);
+        this.id = profile.id;
+        this.userId = profile.userId;
+        this.username = profile.username;
+        this.type = profile.type;
+        this.email = profile.email || '';
+        this.image = profile.image || '';
+        this.about = profile.about || '';
     }
 }
 
@@ -59,9 +49,9 @@ export class ProfileModel extends Model<Profile> {
 
     async createDefaultProfiles(userId: Uuid, username: string, email: string): Promise<Profile[]> { 
         const defaultProfiles = [
-            new Profile(uuidv4(), email, 'family', userId),
-            new Profile(uuidv4(), email, 'friends', userId),
-            new Profile(uuidv4(), email, 'work', userId)
+            new Profile({id: uuidv4(), userId: userId, username: username, email: email, type: 'family'}),
+            new Profile({id: uuidv4(), userId: userId, username: username, email: email, type: 'friends'}),
+            new Profile({id: uuidv4(), userId: userId, username: username, email: email, type: 'work'})
         ];
 
         await Promise.all(defaultProfiles.map(profile => {

@@ -21,6 +21,16 @@
         @submit.prevent="onSubmit"
         class="flex flex-col gap-4"
       >
+<<<<<<< HEAD
+=======
+        <div className="mb-2">
+          <p
+            class="mt-4 text-blue-500 text-bold cursor-pointer"
+            @click="resendMagicLink"
+          > Resend verification Email
+          </p>
+        </div>
+>>>>>>> 0f74f05daf917f8b935ff614e1352d500237d7b2
 
         <SubmitButton className="w-full mt-4">
           Activate Passkeys
@@ -45,6 +55,25 @@ const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
+<<<<<<< HEAD
+=======
+const resendMagicLink = async (formData: FormData) => {
+  try {
+    const response = await axios.post(
+      `/api/auth/magicLink`, {
+      to: 'yannik@yx3m1.com',
+      subject: 'Resend link',
+      name: 'Yannik',
+    });
+
+    return response.data;
+  } catch(error: any) {
+    console.error(error);
+    errorMessage.value = error.response.data;
+  }
+}
+
+>>>>>>> 0f74f05daf917f8b935ff614e1352d500237d7b2
 const registerStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
