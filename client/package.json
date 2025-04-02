@@ -32,9 +32,9 @@
     "vue3-openlayers": "^11.5.0"
   },
   "devDependencies": {
+    "@tribelike/types": "workspace:*",
     "@originjs/vite-plugin-federation": "^1.4.0",
     "@rushstack/eslint-patch": "^1.11.0",
-    "@tribelike/types": "workspace:*",
     "@tsconfig/node20": "^20.1.5",
     "@types/node": "^22.13.17",
     "@vitejs/plugin-vue": "^5.2.3",
