@@ -7,8 +7,11 @@ const router = express.Router();
 router.route('/').get(async (req: Request, res: Response) => {
   const { success, error } = await findActivities(req.query);
 
-  if (success) return res.status(200).json(success);
-  else return res.status(400).json(error);
+  if (success) {
+    res.status(200).json(success);
+  } else {
+    res.status(400).json(error);
+  }
 })
 
 export default router;

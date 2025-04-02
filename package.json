@@ -2,10 +2,19 @@
   "name": "@tribelike/root",
   "version": "1.0.0",
   "description": "Playground for concepts",
+  "workspaces": [
+    "client",
+    "server",
+    "types"
+  ],
+  "engines": {
+      "node": ">=20",
+      "pnpm": ">=3"
+  },
   "scripts": {
     "dev": "pnpm -F server dev & pnpm -F client dev",
     "dev:https": "pnpm -F server dev:https & pnpm -F client dev:https",
-    "test": "pnpm -F server test",
+    "test": "pnpm vitest",
     "check": "pnpm -F !root check",
     "lint": "pnpm -F !root lint",
     "build": "pnpm -F !root build",
@@ -17,5 +26,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@vitest/ui": "^3.1.1",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "~5.8.2",
+    "vitest": "^3.1.1"
+  }
 }
