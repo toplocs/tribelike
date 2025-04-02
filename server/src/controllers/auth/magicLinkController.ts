@@ -6,7 +6,6 @@ import { url } from '../../config';
 
 
 export default class MagicLinkController {
-
   static async handleMagicLinkLogin(req: Request, res: Response, next: NextFunction){
     const { token } = req.params;
     const userId = await magicLinks.consumeToken(token);
@@ -71,7 +70,7 @@ export default class MagicLinkController {
           </a>
         </div>
       `;
-      //await sendMail(user.email, 'Register complete!', template);
+      await sendMail(user.email, 'Register complete!', template);
   
       res.send({ token: token });
     } catch(error) {

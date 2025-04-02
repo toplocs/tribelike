@@ -5,6 +5,8 @@ import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import EmailLoginView from '@/views/EmailLoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
+import RegisterFinishView from '@/views/RegisterFinishView.vue';
+import RegisterExpiredView from '@/views/RegisterExpiredView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import PasskeyView from '@/views/PasskeyView.vue';
 
@@ -67,8 +69,23 @@ const router = createRouter({
     },
     {
       path: '/register',
-      name: 'register',
-      component: RegisterView
+      children: [
+        {
+          path: '',
+          name: 'register',
+          component: RegisterView,
+        },
+        {
+          path: 'finish',
+          name: 'registerFinish',
+          component: RegisterFinishView,
+        },
+        {
+          path: 'expired',
+          name: 'registerExpired',
+          component: RegisterExpiredView,
+        },
+      ]
     },
     {
       path: '/settings',
@@ -77,8 +94,8 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/passkey',
-      name: 'passkey',
+      path: '/passkeys',
+      name: 'passkeys',
       component: PasskeyView
     },
 
