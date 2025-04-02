@@ -20,7 +20,7 @@ const user2 = { id: 'user2', email: 'user2@example.com', emailVerified: true };
 // Mock authentication middleware
 vi.mock('../../src/middleware/authenticate', () => ({
   authenticate: vi.fn((req: Request, res: Response, next: NextFunction) => {
-    (req as any).auth = { userId: user1.id };
+    (req as any).session = { userId: user1.id };
     next();
   })
 }));
