@@ -10,17 +10,17 @@ export default class MagicLinkController {
     const { token } = req.params;
     const userId = await magicLinks.consumeToken(token);
     if (!userId) {
-      return next(new CustomError('Invalid magic link', 400));
+      return res.redirect(`${url}/register/expired`);;
     }
     const user = await users.getById(userId);
     if (!user) {
-      return next(new CustomError('User not found', 400));
+      return res.redirect(`${url}/register/expired`);
     }
     user.emailVerified = true;
     await users.update(userId, user);
     
     console.log(user);
-    res.send({ success: user });
+    return res.redirect(`${url}/passkeys`);
   }
   
   // move to userController.Create
