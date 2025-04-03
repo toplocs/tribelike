@@ -89,7 +89,7 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await loginStart(formData);
-    successMessage.value = 'Email has been sent!';
+    //successMessage.value = 'Email has been sent!';
     console.log(result)
 
   } catch (error: any) {

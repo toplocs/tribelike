@@ -1,6 +1,6 @@
 <template>
   <div
-    class="sticky top-0 w-full bg-opacity-80 bg-slate-50 border-b dark:bg-neutral-900 dark:bg-opacity-80 z-10"
+    class="sticky top-0 w-full bg-slate-50 border-b border-neutral-200 dark:bg-neutral-900 dark:border-neutral-700 z-10"
   >
     <div class="py-2 px-4 max-w-5xl mx-auto flex flex-row justify-between items-center gap-4">
       <span class="flex gap-2">
@@ -26,7 +26,7 @@
       </span>
 
       <span
-        v-if="session && profile"
+        v-if="user && profile"
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
@@ -100,7 +100,7 @@
         </router-link>
       </span>
 
-      <span v-if="!session" class="inline-flex justify-center gap-1 px-4 py-2 text-sm font-medium border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-transparent rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+      <span v-else class="inline-flex justify-center gap-1 px-4 py-2 text-sm font-medium border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-transparent rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
         <router-link
           to="/login"
           class="font-semibold hover:underline"
@@ -135,16 +135,16 @@ import FindMixed from './search/FindMixed.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
+import { useSession } from '../composables/sessionProvider';
 
 const router = useRouter();
-const session = inject('session');
-const profile = inject('profile');
-const location = inject('location');
-const interest = inject('interest');
+const { session } = useSession();
 const title = inject('title');
 const hideSearch = ref(true);
 const dropdown = ref(null);
-const user = computed(() => session?.value?.user);
+const user = computed(() => session?.value?.user || null);
+
+console.log(session.value);
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ref, inject, provide, watch, onMounted } from 'vue';
 
 type Session = {
+  user: Partial<User>;
   token: string;
   expires: Date;
 }
@@ -12,7 +13,6 @@ export function sessionProvider() {
   const initSession = async () => {
     try {
       const { data } = await axios.get('/api/session');
-      console.log(data);
 
       return data;
     } catch (e) {
