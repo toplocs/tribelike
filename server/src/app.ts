@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
-import { sessionMiddleware, handleError } from './middleware';
+import { sessionMiddleware } from './middleware';
 import routes from './routes';
 
 import swaggerUi from "swagger-ui-express";
@@ -34,7 +34,6 @@ app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(handleError);
 
 // Serve docs 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));

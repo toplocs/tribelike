@@ -24,7 +24,7 @@ export default class MagicLinkController {
         userId: user.id,
       });
 
-      return res.send({
+      res.send({
         userId: user.id, 
         token: session.token, 
         expires: session.expires, 
