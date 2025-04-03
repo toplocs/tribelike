@@ -7,20 +7,24 @@ import { url } from '../../config';
 
 export default class MagicLinkController {
   static async handleMagicLinkLogin(req: Request, res: Response, next: NextFunction){
-    const { token } = req.params;
-    const userId = await magicLinks.consumeToken(token);
-    if (!userId) {
-      return res.redirect(`${url}/register/expired`);;
+    try {
+      const { token } = req.params;
+      const userId = await magicLinks.consumeToken(token);
+      if (!userId) {
+        throw new CustomError('Magic link is expired', 400);
+      }
+      const user = await users.getById(userId);
+      if (!user) {
+        throw new CustomError('Magic link is expired', 400);
+      }
+      user.emailVerified = true;
+      await users.update(userId, user);
+      
+      console.log(user);
+      return res.send(`${url}/passkeys`);
+    } catch(error: any) {
+      handleError(error, res);
     }
-    const user = await users.getById(userId);
-    if (!user) {
-      return res.redirect(`${url}/register/expired`);
-    }
-    user.emailVerified = true;
-    await users.update(userId, user);
-    
-    console.log(user);
-    return res.redirect(`${url}/passkeys`);
   }
   
   // move to userController.Create
@@ -75,6 +79,43 @@ export default class MagicLinkController {
       res.send({ token: token });
     } catch(error) {
       next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
+    }
+  }
+
+  static async sendMagicLink(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { to } = await req.body;
+      const user = await users.getByEmail(to);
+      if (!user) throw new CustomError('User does not exist', 400);
+      const magicLink = await magicLinks.create({
+        userId: user.id,
+      });
+      if (!magicLink) throw new CustomError('No magic link', 400);
+      const subject = 'Login successfull!';
+      const template = `
+        <div>
+          <h2 class="font-bold">Thank you for using Toplocs!</h2>
+          <p>
+            Please, click on the button to login automatically.
+          </p>
+          <a
+            href="${url}/magicLink/${magicLink?.token}"
+            class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+          > Open Magic Link
+          </a>
+        </div>
+      `;
+    
+      if (!to || !subject) {
+        throw new Error('Missing required fields');
+      }
+  
+      await sendMail(to, subject, template);
+  
+      res.send({ verfied: true });
+    } catch (error: any) {
+      console.error(error)
+      res.status(400).send(error.message);
     }
   }
   

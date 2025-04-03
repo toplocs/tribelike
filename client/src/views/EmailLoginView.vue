@@ -21,7 +21,7 @@
 
         <div className="mb-2">
           <label
-            for="username"
+            for="email"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           > Email
           </label>
@@ -29,7 +29,7 @@
           <TextInput
             type="text"
             id="email"
-            name="email"
+            name="to"
             autoComplete="email"
             placeholder="Enter your email"
           />
@@ -72,7 +72,7 @@ const form = ref<HTMLFormElement | null>(null);
 const loginStart = async (formData: FormData) => {
   try {
     const response = await axios.post(
-      `/auth/magicLink`,
+      `/api/auth/magicLink`,
       formData,
     );
 
@@ -86,15 +86,9 @@ const loginStart = async (formData: FormData) => {
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
-  try {
-    const formData = new FormData(form.value ?? undefined);
-    const result = await loginStart(formData);
-    //successMessage.value = 'Email has been sent!';
-    console.log(result)
-
-  } catch (error: any) {
-    errorMessage.value = error.response.data;
-    console.error(error);
-  }
+  const formData = new FormData(form.value ?? undefined);
+  const result = await loginStart(formData);
+  if (result.error) throw new Error(result);
+  console.log(result)
 }
 </script>

@@ -9,6 +9,7 @@ import RegisterFinishView from '@/views/RegisterFinishView.vue';
 import RegisterExpiredView from '@/views/RegisterExpiredView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import PasskeyView from '@/views/PasskeyView.vue';
+import MagicLinkView from '@/views/MagicLinkView.vue';
 
 //Profile
 import ProfileListView from '@/views/profile/ProfileListView.vue';
@@ -97,6 +98,11 @@ const router = createRouter({
       path: '/passkeys',
       name: 'passkeys',
       component: PasskeyView
+    },
+    {
+      path: '/magicLink/:token',
+      name: 'magicLink',
+      component: MagicLinkView
     },
 
     //Profiles

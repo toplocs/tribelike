@@ -3,7 +3,7 @@
     <Card className="pb-10 max-w-sm">
       <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
-        Login
+        Passkey Login
       </h3>
       <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
@@ -17,18 +17,18 @@
 
         <div className="mb-2">
           <label
-            for="username"
+            for="email"
             class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
           >
-            Username
+            Email
           </label>
 
           <TextInput
             type="text"
-            id="username"
-            name="username"
-            autoComplete="username"
-            placeholder="Enter your username"
+            id="email"
+            name="email"
+            autoComplete="email"
+            placeholder="Enter your email"
           />
 
           <p class="mt-4 text-blue-500">
@@ -100,7 +100,6 @@ const onSubmit = async () => {
     });
     const result = await loginFinish(attestationResponse);
     if (!result.verified) throw new Error('Login not successfull');
-    errorMessage.value = 'Login successfull';
     
     localStorage.setItem('authHeader', result.token);
     axios.defaults.headers.common['Authorization'] = result.token;
