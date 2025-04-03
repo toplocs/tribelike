@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { users, sessions, magicLinks } from '../../models';
-import { CustomError } from '../../middleware/error';
+import { CustomError, handleError } from '../../lib/error';
 import { sendMail } from '../../lib/email';
 import { url } from '../../config';
 
@@ -11,17 +11,25 @@ export default class MagicLinkController {
       const { token } = req.params;
       const userId = await magicLinks.consumeToken(token);
       if (!userId) {
-        throw new CustomError('Magic link is expired', 400);
+        throw new CustomError('Magic link is not valid', 400);
       }
       const user = await users.getById(userId);
       if (!user) {
-        throw new CustomError('Magic link is expired', 400);
+        throw new CustomError('Magic link is not valid', 400);
       }
       user.emailVerified = true;
       await users.update(userId, user);
       
-      console.log(user);
-      return res.send(`${url}/passkeys`);
+      const session = await sessions.createToken({
+        userId: user.id,
+      });
+
+      return res.send({
+        userId: user.id, 
+        token: session.token, 
+        expires: session.expires, 
+        loggedIn: true
+      });
     } catch(error: any) {
       handleError(error, res);
     }
@@ -77,8 +85,8 @@ export default class MagicLinkController {
       await sendMail(user.email, 'Register complete!', template);
   
       res.send({ token: token });
-    } catch(error) {
-      next(error instanceof CustomError ? error : new CustomError('Internal Server Error' + error, 500));
+    } catch(error: any) {
+      handleError(error, res);
     }
   }
 
@@ -114,8 +122,7 @@ export default class MagicLinkController {
   
       res.send({ verfied: true });
     } catch (error: any) {
-      console.error(error)
-      res.status(400).send(error.message);
+      handleError(error, res);
     }
   }
   
@@ -149,9 +156,8 @@ export default class MagicLinkController {
       await sendMail(to, subject, template);
   
       res.send({ verfied: true });
-    } catch (error) {
-      console.error(error)
-      next(error instanceof CustomError ? error : new CustomError('Internal Server Error', 500));
+    } catch (error: any) {
+      handleError(error, res);
     }
   }
 }

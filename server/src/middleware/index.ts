@@ -1,4 +1,4 @@
 export * from './types/RequestWithSession';
-export * from './error';
+export * from '../lib/error';
 export * from './session';
 export * from './authenticate';

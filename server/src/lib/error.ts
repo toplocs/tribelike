@@ -14,10 +14,10 @@ export class CustomError extends Error {
     }
 }
 
-export const handleError = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
+export const handleError = (err: CustomError, res: Response) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
     console.log(message)
-    res.status(statusCode).send({ error: message });
+    res.status(statusCode).send(message);
 };
 

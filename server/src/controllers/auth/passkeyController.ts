@@ -3,7 +3,7 @@ import { generateRegistrationOptions, verifyRegistrationResponse, generateAuthen
 import { RegistrationResponseJSON, PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
 import { rpName, rpID, origin } from '../../config';
 import { users, passkeys, sessions, PasskeyCredential, AuthSessionData } from '../../models';
-import { CustomError } from '../../middleware/error';
+import { CustomError } from '../../lib/error';
 
 export default class PasskeyController {
 
