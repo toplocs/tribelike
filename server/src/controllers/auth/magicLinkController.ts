@@ -120,7 +120,7 @@ export default class MagicLinkController {
   
       await sendMail(to, subject, template);
   
-      res.send({ verfied: true });
+      res.send({ verified: true });
     } catch (error: any) {
       handleError(error, res);
     }

@@ -88,7 +88,9 @@ const onSubmit = async () => {
   errorMessage.value = '';
   const formData = new FormData(form.value ?? undefined);
   const result = await loginStart(formData);
-  if (result.error) throw new Error(result);
-  console.log(result)
+  console.log(result);
+  if (result.verified) {
+    successMessage.value = 'The email has been sent to you!';
+  }
 }
 </script>
