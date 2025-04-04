@@ -41,12 +41,11 @@ export function sessionProvider() {
     } else {
       localStorage.removeItem('session');
     }
+    axios.defaults.headers.common['Authorization'] = session.value?.token;
   });
 
   onMounted(async () => {
     session.value = await initSession();
-    console.log(session.value)
-    axios.defaults.headers.common['Authorization'] = session.value?.token;
   });
 
   provide('session', {

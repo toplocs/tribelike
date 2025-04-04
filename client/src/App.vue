@@ -30,4 +30,5 @@ const authHeader = localStorage.getItem('authHeader');
 
 axios.defaults.baseURL = serverURL;
 axios.defaults.withCredentials = true;
+axios.defaults.headers.common['Authorization'] = authHeader;
 </script>

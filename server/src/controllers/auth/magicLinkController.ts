@@ -20,6 +20,7 @@ export default class MagicLinkController {
       user.emailVerified = true;
       await users.update(userId, user);
       
+      console.log(user);
       const session = await sessions.createToken({
         userId: user.id,
       });

@@ -61,7 +61,6 @@ onMounted(async () => {
     localStorage.setItem('authHeader', result.token);
     axios.defaults.headers.common['Authorization'] = result.token;
     
-
     setTimeout(() => {
       //if (result) router.push('/profiles');
     }, 6000)

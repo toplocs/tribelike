@@ -22,12 +22,7 @@ export const handleGetSession = async (req: Request, res: Response, next: NextFu
         return;
     }
     const loggedIn = session.data.userId != '';
-    res.status(200).json({ 
-      userId: session!.data.userId,
-      token: authToken,
-      expires: session!.expires,
-      loggedIn: loggedIn,
-    });
+    res.status(200).json(session);
   } catch(e: any) {
     console.error(e);
     res.status(400).json(e.error);
