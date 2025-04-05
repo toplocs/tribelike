@@ -7,10 +7,10 @@ const upload = multer();
 const router = Router();
 router.use(authenticate);
 
-router.get('/user/profiles', ProfileController.GetAllProfilesForUser);
+router.get('/user/profiles', authenticate, ProfileController.GetAllProfilesForUser);
 
 router.get('/profiles', ProfileController.GetAllProfiles);
-router.post('/profiles', upload.none(), ProfileController.CreateProfile)
+router.post('/profiles', authenticate, upload.none(), ProfileController.CreateProfile)
 
 router.get('/profile/:id', ProfileController.GetProfileById);
 router.put('/profile/:id', upload.none(), ProfileController.UpdateProfile);

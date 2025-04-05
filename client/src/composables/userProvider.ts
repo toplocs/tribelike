@@ -18,7 +18,7 @@ export function userProvider() {
 
   const getUserProfiles = async (userId: string) => {
     try {
-      const { data } = await axios.get(`/api/user/profiles`);
+      const { data } = await axios.get(`/api/v2/user/profiles`);
    
       return data;
     } catch (e) {
@@ -35,6 +35,7 @@ export function userProvider() {
     if (!user.value) {
       user.value = await getUser();
       userProfiles.value = await getUserProfiles();
+      console.log(userProfiles.value);
     }
   });
 

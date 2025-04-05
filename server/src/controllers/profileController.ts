@@ -50,6 +50,7 @@ export default class ProfileController {
         ...formData,
         userId
       });
+      console.log(result);
       
       if (result) 
         res.status(200).json(result);

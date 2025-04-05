@@ -57,13 +57,12 @@ onMounted(async () => {
   const result = await sendToken(token);
   success.value = result ? true : false;
   if (result) {
-    console.log(result);
     localStorage.setItem('authHeader', result.token);
     axios.defaults.headers.common['Authorization'] = result.token;
     
     setTimeout(() => {
-      //if (result) router.push('/profiles');
-    }, 6000)
+      if (result) router.push('/profiles');
+    }, 600)
   }
 });
 </script>

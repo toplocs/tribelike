@@ -45,8 +45,7 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const response = await axios.post(`/api/profile`, formData);
-    console.log(response.data);
+    const response = await axios.post(`/api/profiles`, formData);
     router.push(`/profile/${response.data.id}`);
 
     return response.data;
