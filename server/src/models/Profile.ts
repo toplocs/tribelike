@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 import { 
     Uuid,
@@ -40,6 +41,15 @@ export class ProfileModel extends Model<Profile> {
             delete: true
         });
         store.index('userId');
+    }
+
+    async create(item: Partial<Profile>): Promise<Profile | null> {
+        if (!item.email) return null;
+        const email = item.email.toLowerCase();
+        const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+        item.image = `https://gravatar.com/avatar/${hash}`;
+    
+        return await super.create(item);
     }
 
     async getAllByUserId(userId: Uuid): Promise<Profile[]> {

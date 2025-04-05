@@ -13,8 +13,8 @@ router.get('/profiles', ProfileController.GetAllProfiles);
 router.post('/profiles', authenticate, upload.none(), ProfileController.CreateProfile)
 
 router.get('/profile/:id', authenticate, ProfileController.GetProfileById);
-router.put('/profile/:id', upload.none(), ProfileController.UpdateProfile);
-router.delete('/profile/:id', ProfileController.DeleteProfile);
+router.put('/profile/:id', authenticate, upload.none(), ProfileController.UpdateProfile);
+router.delete('/profile/:id', authenticate, ProfileController.DeleteProfile);
 
 export default router;
 

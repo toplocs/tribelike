@@ -119,7 +119,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, inject, provide, computed, onMounted } from 'vue';
+import { ref, inject, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   HomeIcon,
@@ -150,14 +150,6 @@ const dropdown = ref(null);
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
-
-onMounted(async () => {
-  setTimeout(() => {
-      console.log(user.value);
-      console.log(profile.value);
-  }, 500)
-  
-});
 
 provide('dropdown', dropdown);
 </script>
