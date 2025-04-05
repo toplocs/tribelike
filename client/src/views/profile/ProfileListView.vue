@@ -39,11 +39,11 @@ import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ProfileAddDialog from '@/components/dialog/ProfileAddDialog.vue';
 import { type User } from '@tribelike/types/user';
+import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const user = inject<Ref<User | undefined>>('user');
-const profiles = ref(user?.value?.profiles || []);
-const profile = inject('profile');
+const { profile, setProfile } = useProfile();
+const profiles = ref([]);
 
 const handleAddToList = (data: Object) => {
   profiles.value.push(data)
@@ -55,7 +55,7 @@ const handleUpdateProfiles = async () => {
 
 const fetchProfiles = async () => {
   try {
-    const response = await axios.get(`/api/profile`);
+    const response = await axios.get(`/api/profiles`);
 
     return response.data;
   } catch (error) {
@@ -63,9 +63,9 @@ const fetchProfiles = async () => {
   }
 }
 
-async function selectProfile(selected: Object) {
-  profile.value = selected;
-  localStorage.setItem('profile', selected.id);
+async function selectProfile(selected: Profile) {
+  console.log(selected)
+  setProfile(selected);
   router.push(`/profile/${selected.id}`);
 }
 

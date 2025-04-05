@@ -26,7 +26,7 @@
       </span>
 
       <span
-        v-if="user && profile"
+        v-if="user"
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
@@ -135,20 +135,29 @@ import FindMixed from './search/FindMixed.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
-import { useSession } from '../composables/sessionProvider';
+import { useSession } from '@/composables/sessionProvider';
+import { useUser } from '@/composables/userProvider';
+import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
 const { session } = useSession();
+const { user } = useUser();
+const { profile } = useProfile();
 const title = inject('title');
 const hideSearch = ref(true);
 const dropdown = ref(null);
-const user = computed(() => session?.value?.user || null);
-
-console.log(session.value);
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;
 }
+
+onMounted(async () => {
+  setTimeout(() => {
+      console.log(user.value);
+      console.log(profile.value);
+  }, 500)
+  
+});
 
 provide('dropdown', dropdown);
 </script>

@@ -1,14 +1,13 @@
 import axios from 'axios';
-import { ref, inject, provide, watch } from 'vue';
+import { ref, inject, provide, onMounted } from 'vue';
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
 
   const getProfile = async (profileId?: string) => {
     try {
-      const id = localStorage.getItem('profile') ?? profileId;
-      if (!id) throw new Error('Profile ID not found');
-      const { data } = await axios.get(`/api/v2/profile/${id}`);
+      if (!profileId) throw new Error('Profile ID not found');
+      const { data } = await axios.get(`/api/profile/${profileId}`);
 
       return data;
     } catch (e) {
@@ -20,6 +19,11 @@ export function profileProvider() {
     profile.value = data;
     localStorage.setItem('profile', data?.id || null);
   }
+
+  onMounted(async () => {
+    const id = localStorage.getItem('profile');
+    if (id) profile.value = await getProfile(id);
+  })
 
   provide('profile', {
     profile,

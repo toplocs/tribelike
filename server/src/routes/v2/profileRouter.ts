@@ -12,7 +12,7 @@ router.get('/user/profiles', authenticate, ProfileController.GetAllProfilesForUs
 router.get('/profiles', ProfileController.GetAllProfiles);
 router.post('/profiles', authenticate, upload.none(), ProfileController.CreateProfile)
 
-router.get('/profile/:id', ProfileController.GetProfileById);
+router.get('/profile/:id', authenticate, ProfileController.GetProfileById);
 router.put('/profile/:id', upload.none(), ProfileController.UpdateProfile);
 router.delete('/profile/:id', ProfileController.DeleteProfile);
 

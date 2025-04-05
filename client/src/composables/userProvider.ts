@@ -48,7 +48,7 @@ export function userProvider() {
   });
 }
 
-export async function useUser() {
+export function useUser() {
   const data = inject('user');
 
   if (!data) {
