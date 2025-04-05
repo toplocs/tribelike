@@ -18,7 +18,7 @@ export function userProvider() {
 
   const getUserProfiles = async (userId: string) => {
     try {
-      const { data } = await axios.get(`/api/v2/user/profiles`);
+      const { data } = await axios.get(`/api/user/profiles`);
    
       return data;
     } catch (e) {

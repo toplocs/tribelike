@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { users, sessions, magicLinks } from '../../models';
+import { users, profiles, sessions, magicLinks } from '../../models';
 import { CustomError, handleError } from '../../lib/error';
 import { sendMail } from '../../lib/email';
 import { url } from '../../config';
@@ -56,6 +56,15 @@ export default class MagicLinkController {
       user = await users.create({
         email: email
       });
+
+      const predefineds = ['Work', 'Friends', 'Private'];
+
+      for (let pre of predefineds) {
+        await profiles.create({
+          type: pre,
+          ...user,
+        })
+      }
   
       if (!user) {
           return next(new CustomError('User Create failed', 400));
