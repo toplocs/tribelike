@@ -24,9 +24,8 @@
           :key="x.id"
         >
           <ProfileListItem
-            :profile="profile"
+            :profile="x"
             :onClick="selectProfile"
-            @updateProfiles="handleUpdateProfiles"
           />
         </ul>
       </SideBar>
@@ -88,7 +87,7 @@ async function selectProfile(selected: Profile) {
 
 watch(route, async () => {
   const newProfile = await fetchProfile(route.params.id);
-  //setProfile(newProfile);
+  setProfile(newProfile);
   if (title) {
     title.value = newProfile?.username + ' – ' + newProfile?.type;
   }
@@ -96,8 +95,7 @@ watch(route, async () => {
 
 onMounted(async () => {
   const newProfile = await fetchProfile(route.params.id);
-  console.log(newProfile);
-  //setProfile(newProfile);
+  setProfile(newProfile);
   if (title) {
     title.value = newProfile?.username + ' – ' + newProfile?.type;
   }

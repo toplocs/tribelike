@@ -77,34 +77,24 @@ import { useRoute, useRouter} from 'vue-router';
 import Title from '@/components/common/Title.vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-
 import ProfileSettings from '@/components/ProfileSettings.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import Callout from '@/components/common/Callout.vue';
-
 import Sidebar from '@/components/SideBar.vue';
 import Divider from '@/components/common/Divider.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
+import { useUser } from '@/composables/userProvider';
+import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const profile = inject('profile');
+const { profile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
-
-const fetchProfile = async (id: string) => {
-  try {
-    const response = await axios.get(`/api/profile/byId/${id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 const onSubmit = async () => {
   try {
@@ -125,15 +115,11 @@ const onSubmit = async () => {
 
 const onDelete = async () => {
   try {
-    await axios.delete(`/api/profile/${profile.value?.id}/?profileId=${profile?.value.id}`);
+    await axios.delete(`/api/profiles/${profile.value?.id}`);
 
     router.push(`/profiles`);
   } catch (error) {
     console.error(error);
   }
 }
-
-onMounted(async () => {
-  profile.value = await fetchProfile(route.params.id);
-});
 </script>
