@@ -64,7 +64,6 @@ const fetchProfiles = async () => {
 }
 
 async function selectProfile(selected: Profile) {
-  console.log(selected)
   setProfile(selected);
   router.push(`/profile/${selected.id}`);
 }

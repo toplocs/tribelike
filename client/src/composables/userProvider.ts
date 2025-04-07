@@ -35,7 +35,6 @@ export function userProvider() {
     if (!user.value) {
       user.value = await getUser();
       userProfiles.value = await getUserProfiles();
-      console.log(userProfiles.value);
     }
   });
 

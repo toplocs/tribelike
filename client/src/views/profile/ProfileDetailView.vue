@@ -1,14 +1,7 @@
 <template>
     
   <div className="min-h-screen">
-    <ProfileComponent
-      v-if="profile && profile?.userId != user?.id"
-      :profile="profile"
-    />
-
-    <Container
-      v-if="profile && profile?.userId == user?.id"
-    >
+    <Container>
       <MyProfileComponent
         :profile="profile"
       />
@@ -27,8 +20,8 @@
           </div>
         </Title>
         <ul
-          v-for="profile in profiles"
-          :key="profile.id"
+          v-for="x in userProfiles"
+          :key="x.id"
         >
           <ProfileListItem
             :profile="profile"
@@ -45,41 +38,29 @@
 import axios from 'axios';
 import { ref, inject, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
 
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 import Container from '@/components/common/Container.vue';
-
 import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import IconButton from '@/components/common/IconButton.vue';
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
-
-interface User {
-  id: string;
-}
-
-interface Profile {
-  id: string;
-  userId: string;
-  username: string;
-  type: string;
-}
+import { useUser } from '@/composables/userProvider';
+import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
+const { profile, setProfile } = useProfile();
+const { user, userProfiles } = useUser();
 
-const globalProfile = inject<{value: Profile}>("profile");  // Users Profile 
-const profile = ref<Profile | null>(null);                  // Show this Profiles Details
 const profiles = ref<Profile[]>([]);
-
-const user = inject<User | null>('user');
 const title = inject<{value: string | null}>('title');
 
 const fetchProfile = async (id: string) => {
   try {
-    const response = await axios.get(`/api/profile/byId/${id}`);
+    const response = await axios.get(`/api/profile/${id}`);
 
     return response.data;
   } catch (error) {
@@ -89,7 +70,8 @@ const fetchProfile = async (id: string) => {
 
 const fetchProfiles = async () => {
   try {
-    const response = await axios.get(`/api/profile`);
+    const response = await axios.get(`/api/profiles`);
+
     return response.data;
   } catch (error) {
     console.error(error);
@@ -105,24 +87,19 @@ async function selectProfile(selected: Profile) {
 }
 
 watch(route, async () => {
-  profile.value = await fetchProfile(route.params.id);
-  if (globalProfile && profile.value && profile.value.userId == user.value?.id) {
-    globalProfile.value = profile.value;
-    localStorage.setItem('profile', profile.value?.id ?? '');
-    title.value = profile.value?.username + ' – ' + profile.value?.type;
-  } else {
-    title.value = profile.value?.username;
+  const newProfile = await fetchProfile(route.params.id);
+  //setProfile(newProfile);
+  if (title) {
+    title.value = newProfile?.username + ' – ' + newProfile?.type;
   }
 });
 
 onMounted(async () => {
-  profiles.value = await fetchProfiles();
-  profile.value = await fetchProfile(route.params.id);
-  if (globalProfile && profile.value && profile.value.userId == user.value?.id) {
-    globalProfile.value = profile.value;
-    title.value = profile.value?.username + ' – ' + profile.value?.type;
-  } else {
-    title.value = profile.value?.username;
+  const newProfile = await fetchProfile(route.params.id);
+  console.log(newProfile);
+  //setProfile(newProfile);
+  if (title) {
+    title.value = newProfile?.username + ' – ' + newProfile?.type;
   }
 });
 

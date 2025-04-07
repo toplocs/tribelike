@@ -76,7 +76,7 @@ const props = defineProps({
   }
 });
 
-const fetchProfileActivity = async (id: string) => {
+/*const fetchProfileActivity = async (id: string) => {
   try {
     const response = await axios.get(`/api/activity`);
 
@@ -146,10 +146,10 @@ const removeLocation = async (location: Object) => {
   } catch (error) {
     console.error(error);
   }
-}
+}*/
 
 
 onMounted(async () => {
-  profileActivity.value = await fetchProfileActivity(props.profile?.id);
+
 });
 </script>
