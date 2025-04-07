@@ -1,35 +1,40 @@
 <template>
-    
   <div className="min-h-screen">
-    <Container>
-      <MyProfileComponent
-        :profile="profile"
-      />
+    <section v-if="user?.id == profile?.userId">
+      <Container>
+        <MyProfileComponent :profile="data" />
 
-      <SideBar>
-        <Title>
-          <div class="flex flex-row items-center justify-between">
-            Profiles
-            <div class="flex justify-between items-center"></div>
-            <router-link to="/profiles/create">
-              <button
-                className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-              > Create new profile
-              </button>
-            </router-link>
-          </div>
-        </Title>
-        <ul
-          v-for="x in userProfiles"
-          :key="x.id"
-        >
-          <ProfileListItem
-            :profile="x"
-            :onClick="selectProfile"
-          />
-        </ul>
-      </SideBar>
-    </Container>
+        <SideBar>
+          <Title>
+            <div class="flex flex-row items-center justify-between">
+              Profiles
+              <div class="flex justify-between items-center"></div>
+              <router-link to="/profiles/create">
+                <button
+                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                > Create new profile
+                </button>
+              </router-link>
+            </div>
+          </Title>
+          <ul
+            v-for="x in userProfiles"
+            :key="x.id"
+          >
+            <ProfileListItem
+              :profile="x"
+              :onClick="selectProfile"
+            />
+          </ul>
+        </SideBar>
+      </Container>
+    </section>
+
+    <section v-else>
+      <Container>
+        <ProfileComponent :profile="data" />
+      </Container>
+    </section>
   </div>
 </template>
 
@@ -53,6 +58,7 @@ const route = useRoute();
 const router = useRouter();
 const { profile, setProfile } = useProfile();
 const { user, userProfiles } = useUser();
+const data = ref(null);
 
 const profiles = ref<Profile[]>([]);
 const title = inject<{value: string | null}>('title');
@@ -81,24 +87,27 @@ const handleUpdateProfiles = async () => {
   profiles.value = await fetchProfiles();
 }
 
-async function selectProfile(selected: Profile) {
+const selectProfile = async (selected: Profile) => {
   router.push(`/profile/${selected.id}`);
 }
 
-watch(route, async () => {
+const handleInit = async () =>  {
   const newProfile = await fetchProfile(route.params.id);
-  setProfile(newProfile);
+  data.value = newProfile;
+  if (user?.id == profile?.userId) {
+    setProfile(newProfile);
+  }
   if (title) {
     title.value = newProfile?.username + ' – ' + newProfile?.type;
   }
+}
+
+watch(route, async () => {
+  await handleInit();
 });
 
 onMounted(async () => {
-  const newProfile = await fetchProfile(route.params.id);
-  setProfile(newProfile);
-  if (title) {
-    title.value = newProfile?.username + ' – ' + newProfile?.type;
-  }
+  await handleInit();
 });
 
 onUnmounted(() => {
