@@ -20,7 +20,6 @@ export default class MagicLinkController {
       user.emailVerified = true;
       await users.update(userId, user);
       
-      console.log(user);
       const session = await sessions.createToken({
         userId: user.id,
       });
@@ -127,7 +126,8 @@ export default class MagicLinkController {
       if (!to || !subject) {
         throw new Error('Missing required fields');
       }
-  
+    
+      console.log(`${url}/magicLink/${magicLink?.token}`)
       await sendMail(to, subject, template);
   
       res.send({ verified: true });
