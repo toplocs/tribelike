@@ -41,6 +41,9 @@ importers:
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
+      gun:
+        specifier: ^0.2020.1240
+        version: 0.2020.1240
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
@@ -3694,6 +3697,10 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  gun@0.2020.1240:
+    resolution: {integrity: sha512-uhnyadZTywn0HHgBjS2DePqpcdwLeVm6nFeSZZBPJRltm9O8MjFPyltaxk2PBKS+O8wSZac9qlbCIriJDgQQog==}
+    engines: {node: '>=0.8.4'}
 
   hachure-fill@0.5.2:
     resolution: {integrity: sha512-3GKBOn+m2LX9iq+JC1064cSFprJY4jL1jCXTcpnfER5HYE2l/4EfWSGzkPa/ZDBmYI0ZOEj5VHV/eKnPGkHuOg==}
@@ -10778,6 +10785,15 @@ snapshots:
   graceful-fs@4.2.11: {}
 
   graphemer@1.4.0: {}
+
+  gun@0.2020.1240:
+    dependencies:
+      ws: 7.5.10
+    optionalDependencies:
+      '@peculiar/webcrypto': 1.5.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   hachure-fill@0.5.2: {}
 
