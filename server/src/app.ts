@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
+import Gun from 'gun';
 import { sessionMiddleware } from './middleware';
 import routes from './routes';
 
@@ -30,6 +31,7 @@ declare global {
 }
 const app = express();
 
+//app.use(Gun.serve);
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
@@ -61,14 +63,20 @@ function startServer() {
     server.listen(port, rpID, () => {
       console.log(`🚀 HTTPS Server ready at https://${rpID}:${port}`);
     });
+
+    return server;
   } else {
     console.log(`Starting http server on ${port}...`);
-    http.createServer(app).listen(port, rpID, () => {
+    const server = http.createServer(app).listen(port, rpID, () => {
       console.log(`🚀 HTTP Server ready at http://${rpID}:${port}`);
     });
+
+    return server;
   }
 }
 
 if (require.main === module) {
-  startServer();
+  const server = startServer();
+
+  Gun({ web: server });
 }
