@@ -13,7 +13,7 @@ import gun from '@/services/gun'
 const message = ref('')
 const newMessage = ref('')
 
-const chat = gun.get('chat-room') // create a 'chat-room' node
+const chat = gun.get('tribelike').get('chat-room') // create a 'chat-room' node
 
 onMounted(() => {
   // Listen for new messages

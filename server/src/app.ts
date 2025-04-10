@@ -31,7 +31,6 @@ declare global {
 }
 const app = express();
 
-//app.use(Gun.serve);
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
@@ -78,13 +77,10 @@ function startServer() {
 if (require.main === module) {
   const server = startServer();
 
-  const gun = Gun({ web: server });
+  const gun = Gun({ web: server, file: 'ra-data' });
 
+  const chatRoomNode = gun.get('tribelike').get('chat-room')
 
-  // Listen to chat room updates
-  const chatRoomNode = gun.get('chat-room')
-
-  // Subscribe to message events in the chat room
   chatRoomNode.get('messages').on((message, key) => {
     console.log('New message:', message);
     console.log('Message key:', key);
@@ -94,4 +90,8 @@ if (require.main === module) {
   chatRoomNode.on((data) => {
     console.log('Chat room state changed:', data);
   });
+
+  setInterval(() => {
+
+  })
 }

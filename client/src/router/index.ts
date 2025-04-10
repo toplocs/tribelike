@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import EmailLoginView from '@/views/EmailLoginView.vue';
-import RegisterView from '@/views/RegisterView.vue';
+import RegisterView from '@/views/GunRegisterView.vue';
 import RegisterFinishView from '@/views/RegisterFinishView.vue';
 import RegisterExpiredView from '@/views/RegisterExpiredView.vue';
 import SettingsView from '@/views/SettingsView.vue';
