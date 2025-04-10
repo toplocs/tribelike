@@ -78,5 +78,20 @@ function startServer() {
 if (require.main === module) {
   const server = startServer();
 
-  Gun({ web: server });
+  const gun = Gun({ web: server });
+
+
+  // Listen to chat room updates
+  const chatRoomNode = gun.get('chat-room')
+
+  // Subscribe to message events in the chat room
+  chatRoomNode.get('messages').on((message, key) => {
+    console.log('New message:', message);
+    console.log('Message key:', key);
+  });
+
+  // To listen for any other events (like message updates or removals), you can use the following pattern:
+  chatRoomNode.on((data) => {
+    console.log('Chat room state changed:', data);
+  });
 }
