@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
 import EmailLoginView from '@/views/EmailLoginView.vue';
-import RegisterView from '@/views/GunRegisterView.vue';
+import RegisterView from '@/views/RegisterView.vue';
 import RegisterFinishView from '@/views/RegisterFinishView.vue';
 import RegisterExpiredView from '@/views/RegisterExpiredView.vue';
 import SettingsView from '@/views/SettingsView.vue';
@@ -33,6 +33,9 @@ import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
 
+import GunRegisterView from '@/views/GunRegisterView.vue';
+import GunLoginView from '@/views/GunLoginView.vue';
+
 import {
   BasePluginRoutes,
   //ProfilePluginRoutes,
@@ -54,10 +57,14 @@ const router = createRouter({
     },
     {
       path: '/login',
-      name: 'login',
       children: [
         {
           path: '',
+          name: 'login',
+          component: GunLoginView,
+        },
+        {
+          path: 'passkey',
           name: 'passkey',
           component: LoginView,
         },
@@ -74,7 +81,7 @@ const router = createRouter({
         {
           path: '',
           name: 'register',
-          component: RegisterView,
+          component: GunRegisterView,
         },
         {
           path: 'finish',

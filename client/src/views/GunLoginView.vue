@@ -3,7 +3,7 @@
     <Card className="pb-10 max-w-sm">
       <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
-        Create a decentralized account
+        Decentralized Login
       </h3>
       <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
@@ -17,6 +17,7 @@
         @submit.prevent="onSubmit"
         class="flex flex-col gap-4"
       >
+
         <div className="mb-2">
           <label
             for="username"
@@ -52,7 +53,7 @@
         </div>
 
         <SubmitButton className="w-full mt-4">
-          Send
+          Sign In
         </SubmitButton>
       </form>
     </Card>
@@ -61,9 +62,9 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, inject, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { startRegistration } from '@simplewebauthn/browser';
+import { startAuthentication } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
@@ -72,12 +73,12 @@ import Callout from '@/components/common/Callout.vue';
 import gun from '@/services/gun';
 
 const router = useRouter();
-const errorMessage = ref('');
-const successMessage = ref('');
+const errorMessage = ref<string>('');
+const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
-const createAccount = async (formData: FormData) => {
-  gun.user().create(
+const sendLogin = async (formData: FormData) => {
+  gun.user().auth(
     formData.get('username'), 
     formData.get('password'),
     (ack) => {
@@ -85,7 +86,7 @@ const createAccount = async (formData: FormData) => {
       if (ack.err) {
         errorMessage.value = ack.err;
       } else {
-        successMessage.value = 'Registration was successfull';
+        successMessage.value = 'Login was successfull';
       }
 
       return ack;
@@ -93,16 +94,17 @@ const createAccount = async (formData: FormData) => {
   );
 }
 
-async function onSubmit() {
+
+const onSubmit = async () => {
+  if (!form.value) return;
+  errorMessage.value = '';
   try {
     const formData = new FormData(form.value ?? undefined);
-    const result = await createAccount(formData);
-    
-    //axios.defaults.headers.common['Authorization'] = result.token;
+    const result = await sendLogin(formData);
+    console.log(result);
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error
   }
 }
-
 </script>
