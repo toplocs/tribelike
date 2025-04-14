@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, provide, inject, computed, onMounted, type Ref } from 'vue';
+import { ref, provide, inject, computed, watch, onMounted, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '@/components/common/BackButton.vue';
 import Card from '@/components/common/Card.vue';
@@ -39,9 +39,12 @@ import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ProfileAddDialog from '@/components/dialog/ProfileAddDialog.vue';
 import { type User } from '@tribelike/types/user';
+import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import gun from '@/services/gun';
 
 const router = useRouter();
+const { userProfiles } = useUser();
 const { profile, setProfile } = useProfile();
 const profiles = ref([]);
 
@@ -68,8 +71,9 @@ async function selectProfile(selected: Profile) {
   router.push(`/profile/${selected.id}`);
 }
 
-
 onMounted(async () => {
-  profiles.value = await fetchProfiles();
+  profiles.value = userProfiles.value;
 });
+
+//unmount
 </script>

@@ -11,6 +11,7 @@ export function userProvider() {
     return new Promise((resolve, reject) => {
       const user = gun.user().recall({ sessionStorage: true });
       if (user) {
+        console.log('session', user);
         resolve(user);
       } else {
         reject('No session found');
@@ -18,18 +19,26 @@ export function userProvider() {
     });
   }
 
-  const getUserProfiles = async (userId: string) => {
-    try {
-      const { data } = await axios.get(`/api/user/profiles`);
-   
-      return data;
-    } catch (e) {
-      console.error(e);
-    }
+  const register = async (formData: FormData) => {
+    return new Promise((resolve, reject) => {
+
+    });
   }
 
-  const login = async (key: String) => {
-    user.value = await getUser();
+  const login = async (formData: FormData) => {
+    return new Promise((resolve, reject) => {
+      gun.user().auth(
+        formData.get('username'),
+        formData.get('password'),
+        (ack) => {
+          if (ack.err) {
+            reject(ack.err);
+          } else {
+            resolve(ack.get);
+          }
+        }
+      );
+    });
   }
 
   const logout = async () => {
@@ -40,8 +49,11 @@ export function userProvider() {
   onMounted(async () => {
     if (!user.value) {
       user.value = await getUser();
-      console.log('session user', user.value);
-      //userProfiles.value = await getUserProfiles();
+
+      //listeners
+      gun.user().get('profiles').map().on((data, key) => {
+        userProfiles.value.push(data);
+      });
     }
   });
 

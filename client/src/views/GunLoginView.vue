@@ -79,23 +79,17 @@ const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
-const sendLogin = (formData: FormData): Promise => {
-  return new Promise((resolve, reject) => {
-    gun.user().auth(
-      formData.get('username'),
-      formData.get('password'),
-      (ack) => {
-        if (ack.err) {
-          errorMessage.value = ack.err;
-          reject(ack.err);
-        } else {
-          successMessage.value = 'Login was successful';
-          resolve(ack.get);
-        }
-      }
-    );
-  });
-};
+const sendLogin = async (formData) => {
+  try {
+     const id = await login(formData);
+     const user = await getUser();
+     console.log(user);
+     
+     return user;
+  } catch(e) {
+    console.error(e);
+  }
+}
 
 
 const onSubmit = async () => {
@@ -104,9 +98,10 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await sendLogin(formData);
-    await login(result);
-
     console.log(result);
+    if (result) {
+      successMessage.value = 'Login successfull';
+    }
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error

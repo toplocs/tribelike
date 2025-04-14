@@ -69,36 +69,52 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
+import { useUser } from '@/composables/userProvider';
+import {
+  defaultProfiles,
+  useProfile
+} from '@/composables/profileProvider';
 import gun from '@/services/gun';
 
 const router = useRouter();
+const { getUser } = useUser();
+const { createProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-const createAccount = async (formData: FormData) => {
-  gun.user().create(
-    formData.get('username'), 
-    formData.get('password'),
-    (ack) => {
-      console.log(ack);
-      if (ack.err) {
-        errorMessage.value = ack.err;
-      } else {
-        successMessage.value = 'Registration was successfull';
+const createAccount = (formData: FormData): Promise => {
+  return new Promise((resolve, reject) => {
+    gun.user().create(
+      formData.get('username'), 
+      formData.get('password'),
+      (ack) => {
+        if (ack.err) {
+          errorMessage.value = ack.err;
+          reject(ack.err);
+        } else {
+          successMessage.value = 'Register was successful';
+          resolve(ack);
+        }
       }
-
-      return ack;
-    }
-  );
+    )
+  });
 }
 
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const result = await createAccount(formData);
-    
-    //axios.defaults.headers.common['Authorization'] = result.token;
+    //const result = await createAccount(formData);
+    const result = await getUser();
+    console.log(result);
+    for (let profileType of defaultProfiles) {
+      const profile = await createProfile({
+        type: profileType,
+        username: result.alias,
+      });
+      console.log(profile);
+    }
+    //await login(); //???
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error

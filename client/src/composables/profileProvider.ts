@@ -1,18 +1,34 @@
 import axios from 'axios';
 import { ref, inject, provide, onMounted } from 'vue';
+import gun from '@/services/gun';
+
+export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
 
   const getProfile = async (profileId?: string) => {
-    try {
-      if (!profileId) throw new Error('Profile ID not found');
-      const { data } = await axios.get(`/api/profile/${profileId}`);
+    return new Promise((resolve, reject) => {
+      user.get('profiles').once((savedProfile) => {
+        if (!savedProfile) {
+          reject('Profile not found after saving.');
+        } else {
+          resolve(savedProfile as Profile);
+        }
+      });
+    });
+  }
 
-      return data;
-    } catch (e) {
-      console.error(e);
-    }
+  const createProfile = async (profile: Profile) => {
+    return new Promise((resolve, reject) => {
+      gun.user().get('profiles').set(profile, (ack) => {
+        if (ack.err) {
+          reject('Failed to save profile:', ack.err);
+        } else {
+          resolve(ack);
+        }
+      });
+    });
   }
 
   const setProfile = async (data: Profile) => {
@@ -28,6 +44,7 @@ export function profileProvider() {
   provide('profile', {
     profile,
     getProfile,
+    createProfile,
     setProfile,
   });
 }
