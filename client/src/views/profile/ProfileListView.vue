@@ -68,7 +68,7 @@ const fetchProfiles = async () => {
 
 async function selectProfile(selected: Profile) {
   setProfile(selected);
-  router.push(`/profile/${selected.id}`);
+  //router.push(`/profile/${selected.id}`);
 }
 
 onMounted(async () => {

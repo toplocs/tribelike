@@ -7,15 +7,17 @@ export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
 
-  const getProfile = async (profileId?: string) => {
+  const getProfile = async (profileId: string) => {
     return new Promise((resolve, reject) => {
-      user.get('profiles').once((savedProfile) => {
-        if (!savedProfile) {
-          reject('Profile not found after saving.');
-        } else {
-          resolve(savedProfile as Profile);
-        }
-      });
+      if (gun.user().is) {
+        gun.user().get('profiles').get(profileId).once((profile) => {
+          if (!profile) {
+            reject('Profile not found.');
+          } else {
+            resolve(profile as Profile);
+          }
+        });
+      }
     });
   }
 
@@ -32,14 +34,15 @@ export function profileProvider() {
   }
 
   const setProfile = async (data: Profile) => {
+    localStorage.setItem('profileId', data?._['#'] || null);
     profile.value = data;
-    localStorage.setItem('profile', data?.id || null);
   }
 
+
   onMounted(async () => {
-    const id = localStorage.getItem('profile');
+    const id = localStorage.getItem('profileId');
     if (id) profile.value = await getProfile(id);
-  })
+  });
 
   provide('profile', {
     profile,
