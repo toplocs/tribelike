@@ -1,19 +1,21 @@
 import axios from 'axios';
 import { ref, computed, inject, provide, onMounted } from 'vue';
+import gun from '@/services/gun';
 
 export function userProvider() {
   const user = ref<User | null>(null);
   const userProfiles = ref<Profile[]>([]);
   const isAuthenticated = computed(user.value !== null);
 
-  const getUser = async (userId: string) => {
-    try {
-      const { data } = await axios.get(`/api/user`);
-   
-      return data;
-    } catch (e) {
-      console.error(e);
-    }
+  const getUser = async () => {
+    return new Promise((resolve, reject) => {
+      const user = gun.user().recall({ sessionStorage: true });
+      if (user) {
+        resolve(user);
+      } else {
+        reject('No session found');
+      }
+    });
   }
 
   const getUserProfiles = async (userId: string) => {
@@ -26,6 +28,10 @@ export function userProvider() {
     }
   }
 
+  const login = async (key: String) => {
+    user.value = await getUser();
+  }
+
   const logout = async () => {
     await localStorage.removeItem('user');
     user.value = null;
@@ -34,7 +40,8 @@ export function userProvider() {
   onMounted(async () => {
     if (!user.value) {
       user.value = await getUser();
-      userProfiles.value = await getUserProfiles();
+      console.log('session user', user.value);
+      //userProfiles.value = await getUserProfiles();
     }
   });
 
@@ -43,6 +50,7 @@ export function userProvider() {
     userProfiles,
     isAuthenticated,
     getUser,
+    login,
     logout
   });
 }

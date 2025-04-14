@@ -18,9 +18,11 @@ import { useRoute } from 'vue-router';
 import InfoView from '@/views/interest/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
+import { useInterest } from '@/composables/interestProvider';
+import gun from '@/services/gun';
 
 const route = useRoute();
-const interest = inject('interest');
+const { interest, getInterest } = useInterest();
 const profile = inject('profile');
 const tab = ref('');
 const pluginSettings = ref([]);
@@ -78,11 +80,14 @@ watch(() => profile.value, async (newId) => {
 });
 
 onMounted(async () => {
-  interest.value = await fetchInterest(route.params.id);
+  /*interest.value = await fetchInterest(route.params.id);
   pluginSettings.value = await fetchPluginSettings(
     interest.value?.id,
     profile.value?.id
-  );
+  );*/
+  const interestId = route.params.id;
+  await getInterest(interestId);
+  
 });
 
 onUnmounted(() => {

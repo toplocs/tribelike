@@ -18,12 +18,12 @@ import Footer from '@/components/FooterComponent.vue';
 import { sessionProvider } from '@/composables/sessionProvider';
 import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
-//import { locationProvider } from '@/composables/location';
+import { interestProvider } from '@/composables/interestProvider';
 
 sessionProvider();
 userProvider();
 profileProvider();
-//locationProvider();
+interestProvider();
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 const authHeader = localStorage.getItem('authHeader');

@@ -91,11 +91,13 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
-
+import { useInterest } from '@/composables/interestProvider';
+ 
 import Plugins from '@/components/plugins/Plugins.vue';
 
 const route = useRoute();
 const router = useRouter();
+const { createInterest } = useInterest();
 const profile = inject('profile');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -130,19 +132,12 @@ const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
-    const formData = new FormData(form.value);
-    const relations = [
-      ...relatedInterests.value,
-      ...relatedLocations.value
-    ];
-    formData.append('relations', JSON.stringify(relations));
-    const response = await axios.post(`/api/interest`, formData);
-    await addInterest(response.data?.id);
-    profile.value.interests = [
-      ...profile.value.interests, response.data
-    ];
 
-    return router.push(`/interest/${response.data?.id}`);
+    const formData = new FormData(form.value);
+    const result = await createInterest(formData);
+    console.log(result);
+
+    //return router.push(`/interest/${response.data?.id}`);
   } catch (error) {
     console.error(error);
     errorMessage.value = error.response.data;

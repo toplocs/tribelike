@@ -1,15 +1,30 @@
 import axios from 'axios';
-import { ref, inject, provide, onMounted } from 'vue';
+import { ref, inject, provide, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
+import gun from '@/services/gun';
 
 export function interestProvider() {
   const interest = ref<Interest | null>(null);
+  const route = useRoute();
 
   const getInterest = async (interestId?: string) => {
     try {
       if (!interestId) throw new Error('Interest ID not found');
-      const { data } = await axios.get(`/api/interest/${interestId}`);
+      gun.get('tribelike')
+        .get('interest')
+        .get(interestId)
+        .on(data => {
+          interest.value = data;
+          console.log(data);
+        });
 
-      return data;
+      gun.get('tribelike')
+        .get('interest')
+        .get(interestId)
+        .get('members')
+        .map(data => {
+          console.log(data);
+        })
     } catch (e) {
       console.error(e);
     }
@@ -28,10 +43,46 @@ export function interestProvider() {
     }
   }
 
+  const createInterest = async (formData: FormData) => {
+    try {
+      gun.get('tribelike')
+      .get('interest')
+      .get(formData.get('title'))
+      .put({
+        title: formData.get('title'),
+        access: formData.get('access'),
+      }, (ack) => {
+        console.log(ack);
+      });
+
+      gun.get('tribelike')
+      .get('interest')
+      .get(formData.get('title'))
+      .get('members')
+      .set({
+        username: 'Yannik',
+      }, (ack) => {
+        console.log(ack);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  onUnmounted(() => {
+    if (interest.value) {
+      gun.get('tribelike')
+      .get('interest')
+      .get(interest.value.title)
+      .off();
+    }
+  });
+
   provide('interest', {
     interest,
     getInterest,
     setInterest,
+    createInterest,
   });
 }
 

@@ -70,29 +70,32 @@ import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
+import { useUser } from '@/composables/userProvider';
 import gun from '@/services/gun';
 
 const router = useRouter();
+const { login } = useUser();
 const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
-const sendLogin = async (formData: FormData) => {
-  gun.user().auth(
-    formData.get('username'), 
-    formData.get('password'),
-    (ack) => {
-      console.log(ack);
-      if (ack.err) {
-        errorMessage.value = ack.err;
-      } else {
-        successMessage.value = 'Login was successfull';
+const sendLogin = (formData: FormData): Promise => {
+  return new Promise((resolve, reject) => {
+    gun.user().auth(
+      formData.get('username'),
+      formData.get('password'),
+      (ack) => {
+        if (ack.err) {
+          errorMessage.value = ack.err;
+          reject(ack.err);
+        } else {
+          successMessage.value = 'Login was successful';
+          resolve(ack.get);
+        }
       }
-
-      return ack;
-    }
-  );
-}
+    );
+  });
+};
 
 
 const onSubmit = async () => {
@@ -101,6 +104,8 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await sendLogin(formData);
+    await login(result);
+
     console.log(result);
   } catch (error: any) {
     console.error(error);

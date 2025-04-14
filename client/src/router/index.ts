@@ -147,7 +147,7 @@ const router = createRouter({
       path: '/interest/create',
       name: 'interestCreate',
       component: InterestCreateView,
-      meta: { requiresAuth: true },
+      //meta: { requiresAuth: true },
     },
     {
       path: '/interest/:id',

@@ -38,7 +38,8 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
-import defaultRelationKeys from '@/assets/defaultRelationKeys';
+
+const defaultRelationKeys = [];
 
 const props = defineProps({
   interestRelations: Array,
