@@ -65,7 +65,7 @@ async function onSubmit() {
       successMessage.value = 'Profile has been created successfully!';
     }
 
-   //router.push(``);
+   router.push(`/profile/${response.id}`);
   } catch (error) {
     errorMessage.value = error;
     console.error(error);

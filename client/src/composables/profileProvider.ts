@@ -52,7 +52,7 @@ export function profileProvider() {
 
   const setProfile = async (id: string) => {
     localStorage.setItem('profileId', id || null);
-    profile.value = data;
+    profile.value = await getProfile(id);
   }
 
 

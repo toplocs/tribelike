@@ -52,7 +52,6 @@ const route = useRoute();
 const router = useRouter();
 const { getProfile, setProfile } = useProfile();
 const { user, userProfiles } = useUser();
-const data = ref(null);
 
 const profile = ref<Profile>();
 const title = inject<{value: string | null}>('title');
@@ -63,6 +62,7 @@ const selectProfile = async (selected: Profile) => {
 
 watch(route, async () => {
   profile.value = await getProfile(route.params.id);
+  await setProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }
@@ -70,6 +70,7 @@ watch(route, async () => {
 
 onMounted(async () => {
   profile.value = await getProfile(route.params.id);
+  await setProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }
