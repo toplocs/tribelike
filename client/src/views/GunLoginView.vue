@@ -74,7 +74,7 @@ import { useUser } from '@/composables/userProvider';
 import gun from '@/services/gun';
 
 const router = useRouter();
-const { login } = useUser();
+const { login, getUser } = useUser();
 const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
@@ -101,6 +101,7 @@ const onSubmit = async () => {
     console.log(result);
     if (result) {
       successMessage.value = 'Login successfull';
+      router.push('/profiles')
     }
   } catch (error: any) {
     console.error(error);

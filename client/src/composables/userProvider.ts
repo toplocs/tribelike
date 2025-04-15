@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ref, computed, inject, provide, onMounted } from 'vue';
+import { ref, computed, inject, provide, watch, onMounted } from 'vue';
 import gun from '@/services/gun';
 
 export function userProvider() {
@@ -46,12 +46,18 @@ export function userProvider() {
     user.value = null;
   }
 
+  watch(() => user.value, () => {
+    gun.user().get('profiles').map().once((data, key) => {
+      userProfiles.value.push(data);
+    });
+  });
+
   onMounted(async () => {
     if (!user.value) {
       user.value = await getUser();
 
       //listeners
-      gun.user().get('profiles').map().on((data, key) => {
+      gun.user().get('profiles').map().once((data, key) => {
         userProfiles.value.push(data);
       });
     }
