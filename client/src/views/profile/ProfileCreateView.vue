@@ -67,7 +67,7 @@ async function onSubmit() {
 
    //router.push(``);
   } catch (error) {
-    errorMessage.value = error.response.data;
+    errorMessage.value = error;
     console.error(error);
   }
 }

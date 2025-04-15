@@ -91,7 +91,8 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { profile } = useProfile();
+const { userProfiles } = useUser();
+const { profile, removeProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -115,7 +116,10 @@ const onSubmit = async () => {
 
 const onDelete = async () => {
   try {
-    await axios.delete(`/api/profiles/${profile.value?.id}`);
+    await removeProfile(route.params.id);
+    userProfiles.value = userProfiles.value.filter(
+      x => x.id !== route.params.id
+    );
 
     router.push(`/profiles`);
   } catch (error) {

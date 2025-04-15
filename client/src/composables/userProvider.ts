@@ -53,7 +53,9 @@ export function userProvider() {
 
     //listeners
     gun.user().get('profiles').map().once((data, key) => {
-      userProfiles.value.push(data);
+      if (data) {
+        userProfiles.value.push(data);
+      }
     });
   });
 

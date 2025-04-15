@@ -1,8 +1,8 @@
 <template>
   <div className="min-h-screen">
-    <section v-if="user?.id == profile?.userId">
+    <section>
       <Container>
-        <MyProfileComponent :profile="data" />
+        <MyProfileComponent :profile="profile" />
 
         <SideBar>
           <Title>
@@ -29,12 +29,6 @@
         </SideBar>
       </Container>
     </section>
-
-    <section v-else>
-      <Container>
-        <ProfileComponent :profile="data" />
-      </Container>
-    </section>
   </div>
 </template>
 
@@ -56,58 +50,29 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { profile, setProfile } = useProfile();
+const { getProfile, setProfile } = useProfile();
 const { user, userProfiles } = useUser();
 const data = ref(null);
 
-const profiles = ref<Profile[]>([]);
+const profile = ref<Profile>();
 const title = inject<{value: string | null}>('title');
-
-const fetchProfile = async (id: string) => {
-  try {
-    const response = await axios.get(`/api/profile/${id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const fetchProfiles = async () => {
-  try {
-    const response = await axios.get(`/api/profiles`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const handleUpdateProfiles = async () => {
-  profiles.value = await fetchProfiles();
-}
 
 const selectProfile = async (selected: Profile) => {
   router.push(`/profile/${selected.id}`);
 }
 
-const handleInit = async () =>  {
-  const newProfile = await fetchProfile(route.params.id);
-  data.value = newProfile;
-  if (user?.id == profile?.userId) {
-    setProfile(newProfile);
-  }
-  if (title) {
-    title.value = newProfile?.username + ' – ' + newProfile?.type;
-  }
-}
-
 watch(route, async () => {
-  await handleInit();
+  profile.value = await getProfile(route.params.id);
+  if (title) {
+    title.value = profile?.username + ' – ' + profile?.type;
+  }
 });
 
 onMounted(async () => {
-  await handleInit();
+  profile.value = await getProfile(route.params.id);
+  if (title) {
+    title.value = profile?.username + ' – ' + profile?.type;
+  }
 });
 
 onUnmounted(() => {

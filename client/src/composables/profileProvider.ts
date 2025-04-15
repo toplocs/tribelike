@@ -25,9 +25,10 @@ export function profileProvider() {
     return new Promise((resolve, reject) => {
       const email = profile.email.toLowerCase();
       const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+      profile.id = crypto.randomUUID();
       profile.image = `https://gravatar.com/avatar/${hash}`;
-      
-      gun.user().get('profiles').set(profile, (ack) => {
+
+      gun.user().get('profiles').get(profile.id).put(profile, (ack) => {
         if (ack.err) {
           reject('Failed to save profile:', ack.err);
         } else {
@@ -37,8 +38,20 @@ export function profileProvider() {
     });
   }
 
-  const setProfile = async (data: Profile) => {
-    localStorage.setItem('profileId', data?._['#'] || null);
+  const removeProfile = async (profileId: string) => {
+    return new Promise((resolve, reject) => {
+      gun.user().get('profiles').get(profileId).put(null, (ack) => {
+        if (ack.err) {
+          reject('Failed to delete profile:', ack.err);
+        } else {
+          resolve(ack);
+        }
+      });
+    });
+  }
+
+  const setProfile = async (id: string) => {
+    localStorage.setItem('profileId', id || null);
     profile.value = data;
   }
 
@@ -52,6 +65,7 @@ export function profileProvider() {
     profile,
     getProfile,
     createProfile,
+    removeProfile,
     setProfile,
   });
 }
