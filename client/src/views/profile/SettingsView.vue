@@ -5,11 +5,12 @@
         <Title>
           Profile Settings
         </Title>
-        <Callout v-if="successMessage" color="green">
-          {{ successMessage }}
-        </Callout>
         <Callout v-if="errorMessage" color="red">
           {{ errorMessage }}
+        </Callout>
+
+        <Callout v-if="successMessage" color="green">
+          {{ successMessage }}
         </Callout>
 
         <form
@@ -92,7 +93,7 @@ import { useProfile } from '@/composables/profileProvider';
 const route = useRoute();
 const router = useRouter();
 const { userProfiles } = useUser();
-const { profile, removeProfile } = useProfile();
+const { profile, editProfile, removeProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -100,17 +101,16 @@ const form = ref<HTMLFormElement | null>(null);
 const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const response = await axios.put(`/api/profile/${profile?.value.id}`, formData);
-    successMessage.value = 'Your profile has been updated successfully!';
-    profile.value = {
-      ...profile.value,
-      ...response.data,
+    const changes = Object.fromEntries(formData.entries());
+    const response = await editProfile(route.params.id, changes);
+    if (response.ok) {
+      successMessage.value = 'Your profile has been updated successfully!';
+      profile.value = changes;
     }
 
-    router.push(`/profile/${profile.value?.id}`);
   } catch (error) {
     console.error(error);
-    errorMessage.value = error.response.data;
+    errorMessage.value = error;
   }
 }
 

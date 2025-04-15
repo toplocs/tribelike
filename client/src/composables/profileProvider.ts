@@ -38,6 +38,18 @@ export function profileProvider() {
     });
   }
 
+  const editProfile = async (profileId: string, data: Profile) => {
+    return new Promise((resolve, reject) => {
+      gun.user().get('profiles').get(profileId).put(data, (ack) => {
+        if (ack.err) {
+          reject('Failed to edit profile:', ack.err);
+        } else {
+          resolve(ack);
+        }
+      });
+    });
+  }
+
   const removeProfile = async (profileId: string) => {
     return new Promise((resolve, reject) => {
       gun.user().get('profiles').get(profileId).put(null, (ack) => {
@@ -65,6 +77,7 @@ export function profileProvider() {
     profile,
     getProfile,
     createProfile,
+    editProfile,
     removeProfile,
     setProfile,
   });
