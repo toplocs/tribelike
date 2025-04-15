@@ -87,11 +87,16 @@ const props = defineProps({
     required: false,
   },
 });
+
 const gravatarImage = computed(() => {
-  if (!props.profile?.email) return '';
+  const defaultAvatar = 'mp';
+  if (!props.profile?.email) {
+    return `https://gravatar.com/avatar/?d=${defaultAvatar}`;
+  }
   const email = props.profile.email.trim().toLowerCase();
   const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
   
   return `https://gravatar.com/avatar/${hash}`;
 });
+
 </script>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import { ref, inject, provide, onMounted } from 'vue';
 import gun from '@/services/gun';
 
@@ -23,6 +23,10 @@ export function profileProvider() {
 
   const createProfile = async (profile: Profile) => {
     return new Promise((resolve, reject) => {
+      const email = profile.email.toLowerCase();
+      const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+      profile.image = `https://gravatar.com/avatar/${hash}`;
+      
       gun.user().get('profiles').set(profile, (ack) => {
         if (ack.err) {
           reject('Failed to save profile:', ack.err);

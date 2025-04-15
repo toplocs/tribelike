@@ -9,6 +9,7 @@
       <Callout v-if="errorMessage" color="red">
         {{ errorMessage }}
       </Callout>
+      
       <Callout v-if="successMessage" color="green">
         {{ successMessage }}
       </Callout>

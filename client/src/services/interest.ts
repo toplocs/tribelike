@@ -9,7 +9,7 @@ class Interest {
 
 	static async GunGetAll(): Promise<Interest[]> {
 		if (this.store == 'gun') {
-			gun.get()
+			gun.get('interest')
 		} else {
 			//await axios
 		}

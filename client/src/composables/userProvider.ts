@@ -46,21 +46,15 @@ export function userProvider() {
     user.value = null;
   }
 
-  watch(() => user.value, () => {
-    gun.user().get('profiles').map().once((data, key) => {
-      userProfiles.value.push(data);
-    });
-  });
-
   onMounted(async () => {
     if (!user.value) {
       user.value = await getUser();
-
-      //listeners
-      gun.user().get('profiles').map().once((data, key) => {
-        userProfiles.value.push(data);
-      });
     }
+
+    //listeners
+    gun.user().get('profiles').map().once((data, key) => {
+      userProfiles.value.push(data);
+    });
   });
 
   provide('user', {
