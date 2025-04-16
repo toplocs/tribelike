@@ -1,4 +1,4 @@
-import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import { ref, inject, provide, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import gun from '@/services/gun';
@@ -7,8 +7,8 @@ export function interestProvider() {
   const interest = ref<Interest | null>(null);
   const route = useRoute();
 
-  const getInterest = async (interestId?: string) => {
-    try {
+  const getInterest = async (title: string) => {
+    /*try {
       if (!interestId) throw new Error('Interest ID not found');
       gun.get('tribelike')
         .get('interest')
@@ -27,7 +27,18 @@ export function interestProvider() {
         })
     } catch (e) {
       console.error(e);
-    }
+    }*/
+    return new Promise((resolve, reject) => {
+      if (gun.user().is) {
+        gun.get(`interest.${title}`).once((interest) => {
+          if (!interest) {
+            reject('Interest not found.');
+          } else {
+            resolve(interest);
+          }
+        });
+      }
+    });
   }
 
   const setInterest = async (formData: FormData) => {
@@ -43,30 +54,23 @@ export function interestProvider() {
     }
   }
 
-  const createInterest = async (formData: FormData) => {
-    try {
-      gun.get('tribelike')
-      .get('interest')
-      .get(formData.get('title'))
-      .put({
-        title: formData.get('title'),
-        access: formData.get('access'),
-      }, (ack) => {
-        console.log(ack);
-      });
-
-      gun.get('tribelike')
-      .get('interest')
-      .get(formData.get('title'))
-      .get('members')
-      .set({
+  const createInterest = async (interest: Interest) => {
+    return new Promise((resolve, reject) => {
+      const relation = interest.relation;
+      interest.id = crypto.randomUUID();
+      interest.profile = {
         username: 'Yannik',
-      }, (ack) => {
-        console.log(ack);
+        test: 'hi',
+      }
+      gun.get(`interest.${interest.title}`)
+      .put(interest, (ack) => {
+        if (ack.err) {
+          reject('Failed to save interest:', ack.err);
+        } else {
+          resolve(ack);
+        }
       });
-    } catch (e) {
-      console.error(e);
-    }
+    });
   }
 
   onUnmounted(() => {

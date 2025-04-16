@@ -150,7 +150,7 @@ const router = createRouter({
       //meta: { requiresAuth: true },
     },
     {
-      path: '/interest/:id',
+      path: '/interest/:title',
       component: InterestDetailView,
       props: true,
       children: [

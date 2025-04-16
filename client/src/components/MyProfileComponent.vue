@@ -38,6 +38,8 @@
       />
     </div>
 
+    {{likes}}
+
     <div class="mb-8">
       <div class="flex flex-wrap gap-2">
         <span
@@ -64,8 +66,11 @@ import IconButton from '@/components/common/IconButton.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import FindInterest from '@/components/search/FindInterest.vue';
 import FindLocation from '@/components/search/FindLocation.vue';
+import { useProfile } from '@/composables/profileProvider';
+import gun from '@/services/gun';
 
 const router = useRouter();
+const { likes } = useProfile();
 const profiles = ref([]);
 const profileActivity = ref([]);
 
@@ -150,6 +155,6 @@ const removeLocation = async (location: Object) => {
 
 
 onMounted(async () => {
-
+  console.log(likes.value);
 });
 </script>

@@ -102,7 +102,7 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const changes = Object.fromEntries(formData.entries());
-    const response = await editProfile(route.params.id, changes);
+    const response = await editProfile(changes);
     if (response.ok) {
       successMessage.value = 'Your profile has been updated successfully!';
       profile.value = changes;

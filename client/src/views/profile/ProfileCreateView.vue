@@ -55,15 +55,12 @@ const defaultProfile = computed(() => ({
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const response = await createProfile({
-      type: formData.get('type'),
-      username: formData.get('username'),
-      email: formData.get('email'),
-      about: formData.get('about'),
-    });
+    const data = Object.fromEntries(formData.entries());
+    const response = await createProfile(data);
     if (response) {
       successMessage.value = 'Profile has been created successfully!';
     }
+    console.log(response);
 
    router.push(`/profile/${response.id}`);
   } catch (error) {

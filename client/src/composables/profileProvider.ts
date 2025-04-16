@@ -1,11 +1,17 @@
 import CryptoJS from 'crypto-js';
-import { ref, inject, provide, onMounted } from 'vue';
+import { ref, computed, inject, provide, onMounted } from 'vue';
 import gun from '@/services/gun';
 
 export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
+  const likes = ref<Interest[]>([]);
+  const gunProfile = computed(() => {
+    return gun.user()
+      .get('profiles')
+      .get(profile.value?.id)
+  });
 
   const getProfile = async (profileId: string) => {
     return new Promise((resolve, reject) => {
@@ -38,9 +44,9 @@ export function profileProvider() {
     });
   }
 
-  const editProfile = async (profileId: string, data: Profile) => {
+  const editProfile = async (data: Profile) => {
     return new Promise((resolve, reject) => {
-      gun.user().get('profiles').get(profileId).put(data, (ack) => {
+      gunProfile.value.put(data, (ack) => {
         if (ack.err) {
           reject('Failed to edit profile:', ack.err);
         } else {
@@ -50,9 +56,9 @@ export function profileProvider() {
     });
   }
 
-  const removeProfile = async (profileId: string) => {
+  const removeProfile = async () => {
     return new Promise((resolve, reject) => {
-      gun.user().get('profiles').get(profileId).put(null, (ack) => {
+      gunProfile.value.put(null, (ack) => {
         if (ack.err) {
           reject('Failed to delete profile:', ack.err);
         } else {
@@ -62,15 +68,43 @@ export function profileProvider() {
     });
   }
 
-  const setProfile = async (id: string) => {
+  const selectProfile = async (id: string) => {
     localStorage.setItem('profileId', id || null);
     profile.value = await getProfile(id);
   }
 
 
+  const like = async (key: string, value: Object) => {
+    return new Promise((resolve, reject) => {
+      gunProfile.value
+      .get('likes')
+      .set(value, (ack) => {
+        if (ack.err) {
+          reject('Failed:', ack.err);
+        } else {
+          console.log(ack);
+          resolve(ack);
+        }
+      });
+    });
+  }
+
+  const getLikes = async () => {
+    return new Promise((resolve, reject) => {
+      gunProfile.value.get('likes').map().once((data) => {
+        if (data) {
+          likes.value.push(data);
+        }
+      });
+    });
+  }
+
   onMounted(async () => {
     const id = localStorage.getItem('profileId');
-    if (id) profile.value = await getProfile(id);
+    if (id) {
+      profile.value = await getProfile(id);
+      await getLikes();
+    }
   });
 
   provide('profile', {
@@ -79,7 +113,9 @@ export function profileProvider() {
     createProfile,
     editProfile,
     removeProfile,
-    setProfile,
+    selectProfile,
+    like,
+    likes,
   });
 }
 

@@ -15,11 +15,29 @@
           class="mt-4 flex flex-col gap-4"
         >
 
-         <input
+          <input
             type="hidden"
             name="profileId"
             :value="profile?.id"
           >
+
+          <div className="mb-2">
+            <label
+              for="relation"
+              class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
+            > Relation Key
+            </label>
+
+            <TextInput
+              type="text"
+              id="relation"
+              name="relation"
+              autoComplete="relation"
+              placeholder="The relation key"
+              :modelValue="relation"
+            />
+          </div>
+
           <div className="mb-2">
             <label
               for="title"
@@ -97,7 +115,7 @@ import Plugins from '@/components/plugins/Plugins.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { createInterest } = useInterest();
+const { getInterest, createInterest } = useInterest();
 const profile = inject('profile');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -132,12 +150,12 @@ const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
-
     const formData = new FormData(form.value);
-    const result = await createInterest(formData);
-    console.log(result);
+    const data = Object.fromEntries(formData.entries());
+    const result = await createInterest(data);
+    const interest = await getInterest(data.title);
 
-    //return router.push(`/interest/${response.data?.id}`);
+    return router.push(`/interest/${interest.title}`);
   } catch (error) {
     console.error(error);
     errorMessage.value = error.response.data;

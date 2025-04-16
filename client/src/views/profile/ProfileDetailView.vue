@@ -23,7 +23,7 @@
           >
             <ProfileListItem
               :profile="x"
-              :onClick="selectProfile"
+              :onClick="select"
             />
           </ul>
         </SideBar>
@@ -50,19 +50,19 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { getProfile, setProfile } = useProfile();
+const { getProfile, selectProfile } = useProfile();
 const { user, userProfiles } = useUser();
 
 const profile = ref<Profile>();
 const title = inject<{value: string | null}>('title');
 
-const selectProfile = async (selected: Profile) => {
+const select = async (selected: Profile) => {
   router.push(`/profile/${selected.id}`);
 }
 
 watch(route, async () => {
   profile.value = await getProfile(route.params.id);
-  await setProfile(route.params.id); //if your own profile
+  await selectProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }
@@ -70,7 +70,7 @@ watch(route, async () => {
 
 onMounted(async () => {
   profile.value = await getProfile(route.params.id);
-  await setProfile(route.params.id); //if your own profile
+  await selectProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }

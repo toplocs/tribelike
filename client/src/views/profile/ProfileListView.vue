@@ -13,7 +13,7 @@
       >
         <ProfileListItem
           :profile="profile"
-          :onClick="selectProfile"
+          :onClick="select"
           @updateProfiles="handleUpdateProfiles"
         />
       </ul>
@@ -44,11 +44,11 @@ import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
 const { userProfiles } = useUser();
-const { profile, setProfile } = useProfile();
+const { profile, selectProfile } = useProfile();
 const profiles = ref([]);
 
-async function selectProfile(selected: Profile) {
-  setProfile(selected.id);
+async function select(selected: Profile) {
+  selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
 

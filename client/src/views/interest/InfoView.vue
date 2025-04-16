@@ -81,9 +81,7 @@
           Community
         </Title>
         <AddInterestButton
-          v-if="interest"
           :interest="interest"
-          :subscribed="subscribed"
         />
       </div>
 
@@ -163,16 +161,16 @@ import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
 import relationKeys from '@/assets/relationKeys';
 import { interestToInterest } from '@/assets/defaultRelationKeys';
+import { useProfile } from '@/composables/profileProvider';
+import { useInterest } from '@/composables/interestProvider';
 
+const { profile } = useProfile();
+const { interest } = useInterest();
 const interestRelations = ref([]);
 const locationRelations = ref([]);
 const profileRelations = ref([]);
-const interest = inject('interest');
-const profile = inject('profile');
 const tab = inject('tab');
-const subscribed = computed(() => profile.value?.interests.some(
-  x => x.id == interest.value?.id)
-);
+const subscribed = computed(() => false);
 const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
 
 const findInterestRelations = async () => {

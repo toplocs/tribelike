@@ -1,5 +1,5 @@
 <template>
-  <div v-if="access">
+  <div>
     <SubNav
       :initialTab="tab"
       :tabs="tabs"
@@ -8,7 +8,6 @@
     <router-view />
   </div>
 
-  <InfoView v-else />
 </template>
 
 <script setup lang="ts">
@@ -19,7 +18,6 @@ import InfoView from '@/views/interest/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 import { useInterest } from '@/composables/interestProvider';
-import gun from '@/services/gun';
 
 const route = useRoute();
 const { interest, getInterest } = useInterest();
@@ -85,9 +83,9 @@ onMounted(async () => {
     interest.value?.id,
     profile.value?.id
   );*/
-  const interestId = route.params.id;
-  await getInterest(interestId);
-  
+  const title = route.params.title;
+  interest.value = await getInterest(title);
+  console.log(interest.value);
 });
 
 onUnmounted(() => {
