@@ -12,7 +12,6 @@ export function profileProvider() {
     return gun.user()
     .get('profiles')
     .get(profile.value?.id)
-    .get('interests')
   });
 
   const getProfile = async (profileId: string) => {
@@ -54,9 +53,7 @@ export function profileProvider() {
 
   const editProfile = async (data: Profile) => {
     return new Promise((resolve, reject) => {
-      gun.user()
-      .get('profiles')
-      .get(profile.value?.id)
+      listener
       .put(data, (ack) => {
         if (ack.err) {
           reject('Failed to edit profile:', ack.err);
@@ -69,9 +66,7 @@ export function profileProvider() {
 
   const removeProfile = async () => {
     return new Promise((resolve, reject) => {
-      gun.user()
-      .get('profiles')
-      .get(profile.value?.id)
+      listener
       .put(null, (ack) => {
         if (ack.err) {
           reject('Failed to delete profile:', ack.err);
@@ -88,47 +83,10 @@ export function profileProvider() {
   }
 
 
-  const relates = async (
-    key: string,
-    value: Object
-  ) => {
-    return new Promise((resolve, reject) => {
-      gun.user()
-      .get('profiles')
-      .get(profile.value?.id)
-      .get('interests')
-      .set(value, (ack) => {
-        if (ack.err) {
-          reject('Failed:', ack.err);
-        } else {
-          console.log(ack);
-          resolve(ack);
-        }
-      });
-    });
-  }
-
-  const listenOnRelations = async (key: string) => {
-    gun.user()
-    .get('profiles')
-    .get(profile.value?.id)
-    .get('interests')
-    //.get(key)
-    .map()
-    .on((ack) => {
-      console.log(ack);
-      relations.push(ack);
-    });
-  }
-
-
   onMounted(async () => {
     const id = localStorage.getItem('profileId');
     if (id) {
       profile.value = await getProfile(id);
-      //listeners
-      listenOnRelations('likes');
-      listenOnRelations('interests');
     }
   });
 
@@ -140,8 +98,6 @@ export function profileProvider() {
     editProfile,
     removeProfile,
     selectProfile,
-    relates,
-    relations
   });
 }
 

@@ -83,13 +83,15 @@ const handleClickOutside = (event: MouseEvent) => {
 
 const clickButton = () => {
   emit('click', inputValue.value);
+  closeDropdown();
+  inputValue.value = '';
 };
 
 watch(inputValue, () => {
-  filteredOptions.value = props.options.filter(option =>
-    option.title.toLowerCase()
-    .startsWith(inputValue.value.toLowerCase())
-  );
+  filteredOptions.value = props.options.filter(option => {
+    return option?.title?.toLowerCase()
+    .startsWith(inputValue.value?.toLowerCase())
+  });
 });
 
 onMounted(() => {

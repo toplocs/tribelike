@@ -36,13 +36,17 @@ export function interestProvider() {
     return new Promise((resolve, reject) => {
       const relation = interest.relation;
       interest.id = crypto.randomUUID();
-      //interest.profile = profile;
       gun.get('interests')
       .get(interest.title)
-      .set(interest, (ack) => {
+      .set(interest)
+
+      gun.get('interests')
+      .get(interest.title)
+      .once((ack) => {
         if (ack.err) {
           reject('Failed to save interest:', ack.err);
         } else {
+
           resolve(ack);
         }
       });

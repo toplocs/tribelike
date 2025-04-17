@@ -26,7 +26,7 @@
       <Headline>Likes:</Headline>
 
       <AddInterests
-
+        :values="likes"
       />
     </section>
 
@@ -34,7 +34,7 @@
       <Headline>Interested in:</Headline>
 
       <AddInterests
-
+        :values="enjoys"
       />
     </section>
   </div>
@@ -51,16 +51,13 @@ import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import AddInterests from '@/components/AddInterests.vue';
-
-import ActivityListItem from '@/components/list/ActivityListItem.vue';
-import FindInterest from '@/components/search/FindInterest.vue';
-import FindLocation from '@/components/search/FindLocation.vue';
 import { useProfile } from '@/composables/profileProvider';
-import gun from '@/services/gun';
 
 const router = useRouter();
 const { listener } = useProfile();
 const profiles = ref([]);
+const likes = ref([]);
+const enjoys = ref([]);
 
 const props = defineProps({
   profile: {
@@ -69,7 +66,22 @@ const props = defineProps({
   }
 });
 
-onMounted(async () => {
-  listener.value.on(x => console.log(x));
+onMounted(() => {
+  listener.value
+  .get('interests')
+  .get('likes')
+  .map()
+  .on(value => {
+    console.log(value);
+    if (value.title) likes.value.push(value);
+  });
+
+  listener.value
+  .get('interests')
+  .get('enjoys')
+  .map()
+  .once(value => {
+    if (value.title) enjoys.value.push(value);
+  });
 });
 </script>

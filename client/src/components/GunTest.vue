@@ -23,7 +23,6 @@ const newInterest = ref('')
 const chat = gun.get('interests')
 
 onMounted(() => {
-  // Listen for new messages
   gun.get('test1').map().once(async (data) => {
     if (data) {
       interests.value.push(data);
