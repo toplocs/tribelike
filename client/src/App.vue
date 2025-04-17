@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+import { ref, provide } from 'vue';
 import { RouterView } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
@@ -20,15 +20,13 @@ import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
 import { interestProvider } from '@/composables/interestProvider';
 
+const title = ref('Tribelike');
+
+provide('title', title);
+
 sessionProvider();
 userProvider();
 profileProvider();
 interestProvider();
 
-const serverURL = import.meta.env.VITE_SERVER_URL;
-const authHeader = localStorage.getItem('authHeader');
-
-axios.defaults.baseURL = serverURL;
-axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Authorization'] = authHeader;
 </script>

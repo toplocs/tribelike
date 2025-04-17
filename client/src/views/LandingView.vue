@@ -9,7 +9,7 @@
       </h1>
     </div>
 
-    <Container>
+    <Container v-if="false">
       <div className="mx-auto max-w-lg w-full flex flex-col gap-2">
         <FindMixed />
 
@@ -35,6 +35,10 @@
         </div>
       </div>
     </Container>
+
+    <Container>
+      <GunTest />
+    </Container>
   </div>
 </template>
 
@@ -46,6 +50,7 @@ import Container from '@/components/common/Container.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import FindMixed from '@/components/search/FindMixed.vue';
+import GunTest from '@/components/GunTest.vue';
 
 const router = useRouter();
 const profile = inject('profile');

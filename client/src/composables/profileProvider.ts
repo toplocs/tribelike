@@ -6,17 +6,22 @@ export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
-  const likes = ref<Interest[]>([]);
-  const gunProfile = computed(() => {
+  const relations = ref<Interest[]>([]);
+
+  const listener = computed(() => {
     return gun.user()
-      .get('profiles')
-      .get(profile.value?.id)
+    .get('profiles')
+    .get(profile.value?.id)
+    .get('interests')
   });
 
   const getProfile = async (profileId: string) => {
     return new Promise((resolve, reject) => {
       if (gun.user().is) {
-        gun.user().get('profiles').get(profileId).once((profile) => {
+        gun.user()
+        .get('profiles')
+        .get(profileId)
+        .once((profile) => {
           if (!profile) {
             reject('Profile not found.');
           } else {
@@ -34,7 +39,10 @@ export function profileProvider() {
       profile.id = crypto.randomUUID();
       profile.image = `https://gravatar.com/avatar/${hash}`;
 
-      gun.user().get('profiles').get(profile.id).put(profile, (ack) => {
+      gun.user()
+      .get('profiles')
+      .get(profile.id)
+      .put(profile, (ack) => {
         if (ack.err) {
           reject('Failed to save profile:', ack.err);
         } else {
@@ -46,7 +54,10 @@ export function profileProvider() {
 
   const editProfile = async (data: Profile) => {
     return new Promise((resolve, reject) => {
-      gunProfile.value.put(data, (ack) => {
+      gun.user()
+      .get('profiles')
+      .get(profile.value?.id)
+      .put(data, (ack) => {
         if (ack.err) {
           reject('Failed to edit profile:', ack.err);
         } else {
@@ -58,7 +69,10 @@ export function profileProvider() {
 
   const removeProfile = async () => {
     return new Promise((resolve, reject) => {
-      gunProfile.value.put(null, (ack) => {
+      gun.user()
+      .get('profiles')
+      .get(profile.value?.id)
+      .put(null, (ack) => {
         if (ack.err) {
           reject('Failed to delete profile:', ack.err);
         } else {
@@ -74,10 +88,15 @@ export function profileProvider() {
   }
 
 
-  const like = async (key: string, value: Object) => {
+  const relates = async (
+    key: string,
+    value: Object
+  ) => {
     return new Promise((resolve, reject) => {
-      gunProfile.value
-      .get('likes')
+      gun.user()
+      .get('profiles')
+      .get(profile.value?.id)
+      .get('interests')
       .set(value, (ack) => {
         if (ack.err) {
           reject('Failed:', ack.err);
@@ -89,33 +108,40 @@ export function profileProvider() {
     });
   }
 
-  const getLikes = async () => {
-    return new Promise((resolve, reject) => {
-      gunProfile.value.get('likes').map().once((data) => {
-        if (data) {
-          likes.value.push(data);
-        }
-      });
+  const listenOnRelations = async (key: string) => {
+    gun.user()
+    .get('profiles')
+    .get(profile.value?.id)
+    .get('interests')
+    //.get(key)
+    .map()
+    .on((ack) => {
+      console.log(ack);
+      relations.push(ack);
     });
   }
+
 
   onMounted(async () => {
     const id = localStorage.getItem('profileId');
     if (id) {
       profile.value = await getProfile(id);
-      await getLikes();
+      //listeners
+      listenOnRelations('likes');
+      listenOnRelations('interests');
     }
   });
 
   provide('profile', {
     profile,
+    listener,
     getProfile,
     createProfile,
     editProfile,
     removeProfile,
     selectProfile,
-    like,
-    likes,
+    relates,
+    relations
   });
 }
 

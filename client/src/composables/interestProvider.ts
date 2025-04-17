@@ -8,36 +8,14 @@ export function interestProvider() {
   const route = useRoute();
 
   const getInterest = async (title: string) => {
-    /*try {
-      if (!interestId) throw new Error('Interest ID not found');
-      gun.get('tribelike')
-        .get('interest')
-        .get(interestId)
-        .on(data => {
-          interest.value = data;
-          console.log(data);
-        });
-
-      gun.get('tribelike')
-        .get('interest')
-        .get(interestId)
-        .get('members')
-        .map(data => {
-          console.log(data);
-        })
-    } catch (e) {
-      console.error(e);
-    }*/
     return new Promise((resolve, reject) => {
-      if (gun.user().is) {
-        gun.get(`interest.${title}`).once((interest) => {
-          if (!interest) {
-            reject('Interest not found.');
-          } else {
-            resolve(interest);
-          }
-        });
-      }
+      gun.get(`interest.${title}`).once((interest) => {
+        if (!interest) {
+          reject('Interest not found.');
+        } else {
+          resolve(interest);
+        }
+      });
     });
   }
 
@@ -54,16 +32,14 @@ export function interestProvider() {
     }
   }
 
-  const createInterest = async (interest: Interest) => {
+  const createInterest = async (interest: Interest, profile: Profile) => {
     return new Promise((resolve, reject) => {
       const relation = interest.relation;
       interest.id = crypto.randomUUID();
-      interest.profile = {
-        username: 'Yannik',
-        test: 'hi',
-      }
-      gun.get(`interest.${interest.title}`)
-      .put(interest, (ack) => {
+      //interest.profile = profile;
+      gun.get('interests')
+      .get(interest.title)
+      .set(interest, (ack) => {
         if (ack.err) {
           reject('Failed to save interest:', ack.err);
         } else {
@@ -73,7 +49,7 @@ export function interestProvider() {
     });
   }
 
-  onUnmounted(() => {
+  onUnmounted(() => { //off listen
     if (interest.value) {
       gun.get('tribelike')
       .get('interest')

@@ -1,8 +1,15 @@
 <template>
   <div>
-    <p>Message: {{ message }}</p>
-    <input v-model="newMessage" placeholder="Type a message" />
-    <button @click="sendMessage">Send</button>
+    <p>Interests:</p>
+    <span v-for="interest of interests" class="mx-2">
+      {{interest.interests}}
+    </span>
+
+    <p>--------</p>
+    <input
+      placeholder="Interest title"
+    />
+    <button @click="createInterest">Save</button>
   </div>
 </template>
 
@@ -10,22 +17,58 @@
 import { ref, onMounted } from 'vue'
 import gun from '@/services/gun'
 
-const message = ref('')
-const newMessage = ref('')
+const interests = ref([])
+const newInterest = ref('')
 
-const chat = gun.get('tribelike').get('chat-room') // create a 'chat-room' node
+const chat = gun.get('interests')
 
 onMounted(() => {
   // Listen for new messages
-  chat.on((data) => {
+  gun.get('test1').map().once(async (data) => {
     if (data) {
-      message.value = data.text
+      interests.value.push(data);
+      await relations(data);
     }
-  })
-})
+  });
 
-const sendMessage = () => {
-  chat.put({ text: newMessage.value })
-  newMessage.value = ''
+});
+
+const relations = async (interest: Object) => {
+  if (interest.interests) {
+    gun.get(interest.interests).map((value, key) => {
+      console.log(key, value);
+      gun.get('test1/Football').map((x, y) => console.log(x, y))
+    });
+  }
+}
+
+const getInterest = async (value: string) => {
+  return new Promise((resolve, reject) => {
+    gun.get('test1').get(value).once((ack) => {
+      resolve(ack);
+    });
+  });
+}
+
+const createInterest = async () => {
+  const newInterests = ['Soccer', 'Football', 'Swimming', 'Coding', 'Surfing'];
+  for (let interest of newInterests) {
+    gun.get('test1')
+    .get(interest)
+    .put({
+      id: interest,
+      title: interest,
+    })
+  }
+  const football = await getInterest('Football');
+  console.log(football);
+  
+  gun.get('test1')
+  .get('Soccer')
+  .get('interests')
+  .get('likes')
+  .set(football)
+
+  console.log('interests created')
 }
 </script>

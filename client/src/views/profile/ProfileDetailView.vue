@@ -2,7 +2,10 @@
   <div className="min-h-screen">
     <section>
       <Container>
-        <MyProfileComponent :profile="profile" />
+        <MyProfileComponent
+          v-if="profile"
+          :profile="profile"
+        />
 
         <SideBar>
           <Title>

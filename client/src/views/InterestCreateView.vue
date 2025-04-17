@@ -158,7 +158,7 @@ const onSubmit = async () => {
     return router.push(`/interest/${interest.title}`);
   } catch (error) {
     console.error(error);
-    errorMessage.value = error.response.data;
+    errorMessage.value = error;
   }
 }
 

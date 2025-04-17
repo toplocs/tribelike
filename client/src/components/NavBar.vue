@@ -7,18 +7,8 @@
         <router-link to="/">
           <IconButton :icon="HomeIcon" />
         </router-link>
-      
-        <span v-if="interest" class="flex flex-row gap-2">
-          <Title>
-            {{ interest?.title }}
-          </Title>
-        </span>
-        <span v-else-if="location" class="flex flex-row gap-2">
-          <Title float="left">
-            {{ location?.title }}
-          </Title>
-        </span>
-        <span v-else-if="title" class="flex flex-row gap-2">
+        
+        <span v-if="title" class="flex flex-row gap-2">
           <Title float="left">
             {{ title }}
           </Title>

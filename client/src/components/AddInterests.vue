@@ -1,52 +1,48 @@
 <template>
   <Search
     placeholder="Add some interests ..."
-    name="selectedItem"
-    :findOptions="findInterests"
-    @selected="addInterest"
+    :options="options"
+    @select="addInterest"
+    @click="createInterest"
   />
-  <div class="mt-2 space-x-1 space-y-1">
-    <span v-for="interest of interests">
+  <div className="mt-2 flex gap-2">
+    <div v-for="value of values">
       <InterestBadge
-        :key="interest.id"
-        :title="interest.title"
-        :remove="() => removeInterest(interest)"
+        :title="value.title"
       />
-    </span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, watchEffect } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import TextInput from './common/TextInput.vue';
-import Search from './search/Index.vue';
+import Search from './search/Filter.vue';
 import InterestBadge from './badges/InterestBadge.vue';
+import { useInterest } from '@/composables/interestProvider';
+import { useProfile } from '@/composables/profileProvider';
+import gun from '@/services/gun';
 
 const props = defineProps({
-  modelValue: {
+  values: {
     type: Array,
     default: [],
   }
 });
+const { relates } = useProfile();
 const emit = defineEmits(['update:modelValue', 'addValue', 'removeValue']);
 const interests = ref(props.modelValue);
+const options = ref([]);
 
-const findInterests = async (title: string) => {
-  try {
-    const response = await axios.get(`/api/interest?title=${title}`);
 
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
+const addInterest = async (selected: Object) => {
+  selected.relation = props.key;
+  const result = await relates('interests', selected);
 }
 
-const addInterest = (selected: Object) => {
-  if (interests.value.find(x => x.id == selected.id)) return;
-  interests.value.push(selected);
-  emit('update:modelValue', interests.value);
-  emit('addValue', selected);
+const createInterest = async (value: String) => {
+  console.log(value)
 }
 
 const removeInterest = (interest: Object) => {
@@ -55,7 +51,17 @@ const removeInterest = (interest: Object) => {
   emit('removeValue', interest);
 }
 
-watchEffect(() => {
-  if (props.modelValue) interests.value = props.modelValue;
+onMounted(() => {
+  gun.get('interests')
+  .map()
+  .once((interest) => {
+    options.value.push(interest);
+  });
+});
+
+onUnmounted(() => {
+  gun.get('interests')
+  .map()
+  .off();
 });
 </script>
