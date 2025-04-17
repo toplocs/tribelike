@@ -71,9 +71,8 @@ onMounted(() => {
   .get('interests')
   .get('likes')
   .map()
-  .on(value => {
-    console.log(value);
-    if (value.title) likes.value.push(value);
+  .once(value => {
+    if (value?.title) likes.value.push(value);
   });
 
   listener.value

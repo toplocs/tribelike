@@ -5,7 +5,7 @@
     <span>{{ title }}</span>
     <XMarkIcon
       v-if="remove"
-      @click.prevent="remove"
+      @click.prevent="() => remove(title)"
       class="w-4 h-4"
     />
   </span>

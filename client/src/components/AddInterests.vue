@@ -6,10 +6,10 @@
     @click="newInterest"
   />
   <div className="mt-2 flex flex-wrap gap-2">
-    <div v-for="value of values">
+    <div v-for="value of interests">
       <InterestBadge
         :title="value.title"
-        :remove="() => removeInterest(value.title)"
+        :remove="removeInterest"
       />
     </div>
   </div>
@@ -34,17 +34,24 @@ const props = defineProps({
 const { listener } = useProfile();
 const { createInterest } = useInterest();
 const emit = defineEmits(['update:modelValue']);
-const interests = ref(props.modelValue);
+const interests = ref(props.values);
 const options = ref([]);
 
 
 const addInterest = async (selected: Object) => {
-  selected.relation = props.key;
-
+  //new global interest?
+  console.log(selected)
+  listener.value
+  .get('interests')
+  .get('likes')
+  .get(selected.title)
+  .put({
+    id: 'testInterestId',
+    title: selected.title
+  });
 }
 
 const newInterest = async (title: String) => {
-  console.log(title);
   listener.value
   .get('interests')
   .get('likes')
@@ -56,7 +63,7 @@ const newInterest = async (title: String) => {
 }
 
 const removeInterest = (title: String) => {
-  console.log(title)
+  interests.value = props.values.filter(x => x.title !== title);
   listener.value
   .get('interests')
   .get('likes')
