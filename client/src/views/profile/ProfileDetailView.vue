@@ -21,7 +21,7 @@
             </div>
           </Title>
           <ul
-            v-for="x in userProfiles"
+            v-for="x in profiles"
             :key="x.id"
           >
             <ProfileListItem
@@ -53,27 +53,22 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { getProfile, selectProfile } = useProfile();
-const { user, userProfiles } = useUser();
-
-const profile = ref<Profile>();
+const { profile, selectProfile } = useProfile();
+const { user, profiles } = useUser();
 const title = inject<{value: string | null}>('title');
 
 const select = async (selected: Profile) => {
+  selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
 
 watch(route, async () => {
-  profile.value = await getProfile(route.params.id);
-  await selectProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }
 });
 
 onMounted(async () => {
-  profile.value = await getProfile(route.params.id);
-  await selectProfile(route.params.id); //if your own profile
   if (title) {
     title.value = profile?.username + ' – ' + profile?.type;
   }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ref, computed, inject, provide, watch, onMounted } from 'vue';
+import { ref, computed, inject, provide, watchEffect, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export function userProvider() {
@@ -34,25 +34,26 @@ export function userProvider() {
     user.value = null;
   }
 
+  watchEffect((newValue) => {
+    
+  });
+
   onMounted(() => {
     gun.user().recall({ sessionStorage: true });
-
-    //put listeners in service
     if (gun.user().is) {
       gun.user()
-      .on(data => {
-        console.log(data);
+      .once(data => {
         user.value = data;
       });
 
       gun.user()
       .get('profiles')
       .map()
-      .on((data) => {
+      .once((data) => {
         if (data) profiles.value.push(data);
-        console.log(profiles.value);
       });
     }
+    //put the listeners in a service
   });
 
   provide('user', {

@@ -1,11 +1,13 @@
 import CryptoJS from 'crypto-js';
-import { ref, inject, provide, watchEffect, onMounted,onUnmounted } from 'vue';
+import { ref, inject, provide, watch, onMounted,onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
+  const interests = ref<Interest>([]);
+  const locations = ref<Location>([]);
 
   const createProfile = async (data: Profile) => {
     const email = data.email.toLowerCase();
@@ -30,12 +32,17 @@ export function profileProvider() {
     profile.value = null;
   }
 
-  const selectProfile = async (id: string) => {
+  const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
-    profile.value = await getProfile(id);
+    gun.user()
+    .get('profiles')
+    .get(id)
+    .once(data => {
+      profile.value = data;
+    });
   }
 
-  watchEffect((newValue) => {
+  watch(() => profile.value, (newValue) => {
     if (gun.user().is) {
       gun.user()
       .get('profiles')
@@ -47,27 +54,38 @@ export function profileProvider() {
 
   onMounted(() => {
     const id = localStorage.getItem('profileId');
-
     if (gun.user().is) {
       gun.user()
       .get('profiles')
       .get(id)
-      .on(data => {
+      .once(data => {
         profile.value = data;
       });
+
+      gun.user()
+      .get('profiles')
+      .get(id)
+      .get('interests')
+      .once(data => {
+        interests.value = data;
+      });
+
+      gun.user()
+      .get('profiles')
+      .get(id)
+      .get('locations')
+      .once(data => {
+        locations.value = data;
+      });
+
+      //listeners in profileService
     }
-  });
-
-  onUnmounted(() => {
-    const id = localStorage.getItem('profileId');
-
-    gun.user()
-    .get('profiles')
-    .off();
   });
 
   provide('profile', {
     profile,
+    interests,
+    locations,
     createProfile,
     editProfile,
     removeProfile,

@@ -54,10 +54,6 @@ import AddInterests from '@/components/AddInterests.vue';
 import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { listener } = useProfile();
-const profiles = ref([]);
-const likes = ref([]);
-const enjoys = ref([]);
 
 const props = defineProps({
   profile: {
@@ -67,20 +63,6 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  listener.value
-  .get('interests')
-  .get('likes')
-  .map()
-  .once(value => {
-    if (value?.title) likes.value.push(value);
-  });
 
-  listener.value
-  .get('interests')
-  .get('enjoys')
-  .map()
-  .once(value => {
-    if (value.title) enjoys.value.push(value);
-  });
 });
 </script>

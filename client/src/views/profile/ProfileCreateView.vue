@@ -43,7 +43,7 @@ import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { user } = useUser();
+const { user, profiles } = useUser();
 const { profile, createProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
@@ -60,9 +60,8 @@ async function onSubmit() {
     if (response) {
       successMessage.value = 'Profile has been created successfully!';
     }
-    console.log(response);
 
-   router.push(`/profile/${response.id}`);
+   router.push(`/profiles`);
   } catch (error) {
     errorMessage.value = error;
     console.error(error);
