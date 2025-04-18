@@ -4,20 +4,8 @@ import gun from '@/services/gun';
 
 export function userProvider() {
   const user = ref<User | null>(null);
-  const userProfiles = ref<Profile[]>([]);
+  const profiles = ref<Profile[]>([]);
   const isAuthenticated = computed(user.value !== null);
-
-  const getUser = async () => {
-    return new Promise((resolve, reject) => {
-      const user = gun.user().recall({ sessionStorage: true });
-      if (user) {
-        console.log('session', user);
-        resolve(user);
-      } else {
-        reject('No session found');
-      }
-    });
-  }
 
   const register = async (formData: FormData) => {
     return new Promise((resolve, reject) => {
@@ -46,24 +34,31 @@ export function userProvider() {
     user.value = null;
   }
 
-  onMounted(async () => {
-    if (!user.value) {
-      user.value = await getUser();
-    }
+  onMounted(() => {
+    gun.user().recall({ sessionStorage: true });
 
-    //listeners
-    gun.user().get('profiles').map().once((data, key) => {
-      if (data) {
-        userProfiles.value.push(data);
-      }
-    });
+    //put listeners in service
+    if (gun.user().is) {
+      gun.user()
+      .on(data => {
+        console.log(data);
+        user.value = data;
+      });
+
+      gun.user()
+      .get('profiles')
+      .map()
+      .on((data) => {
+        if (data) profiles.value.push(data);
+        console.log(profiles.value);
+      });
+    }
   });
 
   provide('user', {
     user,
-    userProfiles,
+    profiles,
     isAuthenticated,
-    getUser,
     login,
     logout
   });
@@ -76,6 +71,5 @@ export function useUser() {
     throw new Error('Composable must have an user provider.');
   }
   
-
   return data;
 }

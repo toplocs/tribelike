@@ -1,80 +1,33 @@
 import CryptoJS from 'crypto-js';
-import { ref, computed, inject, provide, onMounted } from 'vue';
+import { ref, inject, provide, watchEffect, onMounted,onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export const defaultProfiles = ['Work', 'Hobby', 'Family'];
 
 export function profileProvider() {
   const profile = ref<Profile | null>(null);
-  const relations = ref<Interest[]>([]);
 
-  const listener = computed(() => {
-    return gun.user()
-    .get('profiles')
-    .get(profile.value?.id)
-  });
+  const createProfile = async (data: Profile) => {
+    const email = data.email.toLowerCase();
+    const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
 
-  const getProfile = async (profileId: string) => {
-    return new Promise((resolve, reject) => {
-      if (gun.user().is) {
-        gun.user()
-        .get('profiles')
-        .get(profileId)
-        .once((profile) => {
-          if (!profile) {
-            reject('Profile not found.');
-          } else {
-            resolve(profile as Profile);
-          }
-        });
-      }
-    });
-  }
+    profile.value = {
+      ...data,
+      id: crypto.randomUUID(),
+      image: `https://gravatar.com/avatar/${hash}`,
+    }
 
-  const createProfile = async (profile: Profile) => {
-    return new Promise((resolve, reject) => {
-      const email = profile.email.toLowerCase();
-      const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
-      profile.id = crypto.randomUUID();
-      profile.image = `https://gravatar.com/avatar/${hash}`;
-
-      gun.user()
-      .get('profiles')
-      .get(profile.id)
-      .put(profile, (ack) => {
-        if (ack.err) {
-          reject('Failed to save profile:', ack.err);
-        } else {
-          resolve(ack);
-        }
-      });
-    });
+    return profile.value;
   }
 
   const editProfile = async (data: Profile) => {
-    return new Promise((resolve, reject) => {
-      listener
-      .put(data, (ack) => {
-        if (ack.err) {
-          reject('Failed to edit profile:', ack.err);
-        } else {
-          resolve(ack);
-        }
-      });
-    });
+    profile.value = data;
+
+    return profile.value;
   }
 
   const removeProfile = async () => {
-    return new Promise((resolve, reject) => {
-      listener
-      .put(null, (ack) => {
-        if (ack.err) {
-          reject('Failed to delete profile:', ack.err);
-        } else {
-          resolve(ack);
-        }
-      });
-    });
+    profile.value = null;
   }
 
   const selectProfile = async (id: string) => {
@@ -82,18 +35,39 @@ export function profileProvider() {
     profile.value = await getProfile(id);
   }
 
-
-  onMounted(async () => {
-    const id = localStorage.getItem('profileId');
-    if (id) {
-      profile.value = await getProfile(id);
+  watchEffect((newValue) => {
+    if (gun.user().is) {
+      gun.user()
+      .get('profiles')
+      .get(newValue.id)
+      .put(newValue);
     }
+  });
+
+
+  onMounted(() => {
+    const id = localStorage.getItem('profileId');
+
+    if (gun.user().is) {
+      gun.user()
+      .get('profiles')
+      .get(id)
+      .on(data => {
+        profile.value = data;
+      });
+    }
+  });
+
+  onUnmounted(() => {
+    const id = localStorage.getItem('profileId');
+
+    gun.user()
+    .get('profiles')
+    .off();
   });
 
   provide('profile', {
     profile,
-    listener,
-    getProfile,
     createProfile,
     editProfile,
     removeProfile,

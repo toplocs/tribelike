@@ -43,18 +43,11 @@ import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { userProfiles } = useUser();
+const { profiles } = useUser();
 const { profile, selectProfile } = useProfile();
-const profiles = ref([]);
 
 async function select(selected: Profile) {
   selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
-
-onMounted(async () => {
-  profiles.value = userProfiles.value;
-});
-
-//unmount
 </script>
