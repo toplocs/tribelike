@@ -34,6 +34,7 @@
           />
         </div>
 
+        <!--
         <div className="mb-2">
           <label
             for="password"
@@ -50,6 +51,7 @@
             placeholder="Enter your password here"
           />
         </div>
+        -->
 
         <SubmitButton className="w-full mt-4">
           Send
@@ -100,29 +102,48 @@ const createAccount = (formData: FormData): Promise => {
   });
 }
 
+const bufferEncode = (value) => btoa(String.fromCharCode(...new Uint8Array(value)));
+
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     //const result = await createAccount(formData);
     const username = formData.get('username');
     const challenge = crypto.getRandomValues(new Uint8Array(32));
-
     const publicKey = {
       challenge,
-      rp: { name: "Passkey Demo" },
+      rp: {
+        name: "Passkey Demo",
+      },
       user: {
-        id: Uint8Array.from(username, c => c.charCodeAt(0)),
+        id: new Uint8Array([79, 252, 83, 72, 214, 7, 89, 26]),
         name: username,
         displayName: username,
       },
       pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-      authenticatorSelection: { userVerification: "preferred" },
+      authenticatorSelection: {
+        userVerification: "preferred"
+      },
       timeout: 60000,
       attestation: "none"
     };
-    console.log(publicKey)
 
-    await navigator.credentials.create({ publicKey });
+    const credentials = await navigator.credentials.create({
+      publicKey
+    });
+    const rawId = bufferEncode(credentials.rawId);
+    const response = credentials.response;
+
+    gun.get('credentials')
+    .get(username)
+    .put({
+      id: rawId,
+      credential: JSON.stringify({
+        clientDataJSON: bufferEncode(response.clientDataJSON),
+        attestationObject: bufferEncode(response.attestationObject)
+      })
+    });
+
     /*
     const result = await getUser();
     console.log(result);

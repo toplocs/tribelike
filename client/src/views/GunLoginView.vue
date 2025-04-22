@@ -35,6 +35,7 @@
           />
         </div>
 
+        <!--
         <div className="mb-2">
           <label
             for="password"
@@ -51,6 +52,7 @@
             placeholder="Enter your password here"
           />
         </div>
+        -->
 
         <SubmitButton className="w-full mt-4">
           Sign In
@@ -72,6 +74,7 @@ import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import gun from '@/services/gun';
 
 const router = useRouter();
 const { login, profiles } = useUser();
@@ -80,11 +83,38 @@ const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
+const bufferDecode = (value) => Uint8Array.from(atob(value), c => c.charCodeAt(0));
+
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value ?? undefined);
+    const username = formData.get('username');
+
+    gun.get('credentials')
+    .get(username)
+    .once(async (data) => {
+      const challenge = crypto.getRandomValues(new Uint8Array(32));
+      const publicKey = {
+        challenge,
+        allowCredentials: [{
+          id: bufferDecode(data.id),
+          type: "public-key",
+        }],
+        timeout: 60000,
+        userVerification: "preferred"
+      };
+
+      const result = await navigator.credentials.get({
+        publicKey
+      });
+      console.log(result);
+      successMessage.value = result;
+    });
+
+
+    /*
     const result = await login(formData);
     if (result) {
       if (!profile.value) profile.value = profiles.value[0];
@@ -93,6 +123,7 @@ const onSubmit = async () => {
     } else {
       throw new Error('Bad credentials');
     }
+    */
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error
