@@ -98,6 +98,8 @@ const onSubmit = async () => {
     const attestationResponse = await startAuthentication({
       optionsJSON: options
     });
+    console.log(attestationResponse);
+    
     const result = await loginFinish(attestationResponse);
     if (!result.verified) throw new Error('Login not successfull');
     

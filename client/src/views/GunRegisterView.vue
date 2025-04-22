@@ -60,7 +60,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { startRegistration } from '@simplewebauthn/browser';
@@ -105,6 +104,26 @@ async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     //const result = await createAccount(formData);
+    const username = formData.get('username');
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+
+    const publicKey = {
+      challenge,
+      rp: { name: "Passkey Demo" },
+      user: {
+        id: Uint8Array.from(username, c => c.charCodeAt(0)),
+        name: username,
+        displayName: username,
+      },
+      pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+      authenticatorSelection: { userVerification: "preferred" },
+      timeout: 60000,
+      attestation: "none"
+    };
+    console.log(publicKey)
+
+    await navigator.credentials.create({ publicKey });
+    /*
     const result = await getUser();
     console.log(result);
     for (let profileType of defaultProfiles) {
@@ -114,7 +133,7 @@ async function onSubmit() {
       });
       console.log(profile);
     }
-    //await login(); //???
+    //await login(); //???*/
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error
