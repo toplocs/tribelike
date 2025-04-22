@@ -125,12 +125,10 @@ import FindMixed from './search/FindMixed.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
-import { useSession } from '@/composables/sessionProvider';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { session } = useSession();
 const { user } = useUser();
 const { profile } = useProfile();
 const title = inject('title');

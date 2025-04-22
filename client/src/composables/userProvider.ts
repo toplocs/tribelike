@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ref, computed, inject, provide, watchEffect, onMounted, onUnmounted } from 'vue';
+import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export function userProvider() {
@@ -30,12 +30,12 @@ export function userProvider() {
   }
 
   const logout = async () => {
-    await localStorage.removeItem('user');
+    localStorage.removeItem('user');
     user.value = null;
   }
 
-  watchEffect((newValue) => {
-    
+  watch(() => user.value, (newValue) => {
+    gun.user().put(newValue)
   });
 
   onMounted(() => {

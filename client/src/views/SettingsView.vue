@@ -78,9 +78,7 @@ import SelectAvatar from '../components/SelectAvatar.vue';
 import Callout from '../components/common/Callout.vue';
 
 const router = useRouter();
-const session = inject('session');
-const profile = inject('profile');
-const user = computed(() => session.value?.user);
+
 const form = ref<HTMLFormElement | null>(null);
 const account = ref(null);
 const successMessage = ref('');
@@ -112,10 +110,6 @@ const onSubmit = async () => {
 
 const logout = async () => {
   try {
-    session.value = null;
-    profile.value = null;
-    axios.defaults.headers.common['Authorization'] = null;
-    localStorage.removeItem('authHeader');
     router.push('/login');
   } catch (error) {
     console.error(error);

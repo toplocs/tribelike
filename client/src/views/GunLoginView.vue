@@ -71,37 +71,27 @@ import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
-import gun from '@/services/gun';
+import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { login, getUser } = useUser();
+const { login, profiles } = useUser();
+const { profile } = useProfile();
 const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
-
-const sendLogin = async (formData) => {
-  try {
-     const id = await login(formData);
-     const user = await getUser();
-     console.log(user);
-     
-     return user;
-  } catch(e) {
-    console.error(e);
-  }
-}
-
 
 const onSubmit = async () => {
   if (!form.value) return;
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value ?? undefined);
-    const result = await sendLogin(formData);
-    console.log(result);
+    const result = await login(formData);
     if (result) {
+      if (!profile.value) profile.value = profiles.value[0];
       successMessage.value = 'Login successfull';
       router.push('/profiles')
+    } else {
+      throw new Error('Bad credentials');
     }
   } catch (error: any) {
     console.error(error);

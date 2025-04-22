@@ -62,16 +62,16 @@ const select = async (selected: Profile) => {
   router.push(`/profile/${selected.id}`);
 }
 
-watch(route, async () => {
-  if (title) {
-    title.value = profile?.username + ' – ' + profile?.type;
-  }
+watch(() => profile.value, () => {
+  title.value = (
+    profile.value?.username + ' – ' + profile.value?.type
+  );
 });
 
-onMounted(async () => {
-  if (title) {
-    title.value = profile?.username + ' – ' + profile?.type;
-  }
+onMounted(() => {
+  title.value = (
+    profile.value?.username + ' – ' + profile.value?.type
+  );
 });
 
 onUnmounted(() => {

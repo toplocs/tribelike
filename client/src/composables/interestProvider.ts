@@ -5,7 +5,8 @@ import gun from '@/services/gun';
 
 export function interestProvider() {
   const interest = ref<Interest | null>(null);
-  const route = useRoute();
+  const relations = ref<Relation | null>(null);
+  //const route = useRoute();
 
   const getInterest = async (title: string) => {
     return new Promise((resolve, reject) => {
@@ -51,6 +52,33 @@ export function interestProvider() {
         }
       });
     });
+  }
+
+  const createRelation = (key, profile, interest) => {
+    relations.value.push({
+      key: key,
+      from: id,
+      to: interest.value.id,
+    });
+
+    const linkId = uuid();
+
+    const review = db.get(linkId).put({ // A
+      uuid: linkId,
+      type: "Link",
+      name: "review_book",
+      rating: rating,
+      content: content,
+    });
+    review.get("book").put(book); // B
+    review.get("reader").put(reader); // C
+
+    db.get(`reviews/${rating}`).set(review); // D
+
+    book.get("reviews").set(review); // E
+    reader.get("book_reviews").set(review); // F
+
+    return review;
   }
 
   onUnmounted(() => { //off listen

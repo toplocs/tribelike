@@ -15,7 +15,6 @@ import { ref, provide } from 'vue';
 import { RouterView } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
-import { sessionProvider } from '@/composables/sessionProvider';
 import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
 import { interestProvider } from '@/composables/interestProvider';
@@ -24,7 +23,6 @@ const title = ref('Tribelike');
 
 provide('title', title);
 
-sessionProvider();
 userProvider();
 profileProvider();
 interestProvider();
