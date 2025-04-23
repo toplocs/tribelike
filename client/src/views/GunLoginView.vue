@@ -63,7 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { startAuthentication } from '@simplewebauthn/browser';
@@ -75,6 +74,7 @@ import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 import gun from '@/services/gun';
+import { bufferDecode } from '@/lib/utils';
 
 const router = useRouter();
 const { login, profiles } = useUser();
@@ -82,8 +82,6 @@ const { profile } = useProfile();
 const errorMessage = ref<string>('');
 const successMessage = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
-
-const bufferDecode = (value) => Uint8Array.from(atob(value), c => c.charCodeAt(0));
 
 const onSubmit = async () => {
   if (!form.value) return;
@@ -100,10 +98,10 @@ const onSubmit = async () => {
         challenge,
         allowCredentials: [{
           id: bufferDecode(data.id),
-          type: "public-key",
+          type: 'public-key',
         }],
         timeout: 60000,
-        userVerification: "preferred"
+        userVerification: 'preferred'
       };
 
       const result = await navigator.credentials.get({

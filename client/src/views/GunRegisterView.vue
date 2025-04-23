@@ -76,6 +76,7 @@ import {
   useProfile
 } from '@/composables/profileProvider';
 import gun from '@/services/gun';
+import { bufferEncode } from '@/lib/utils';
 
 const router = useRouter();
 const { getUser } = useUser();
@@ -101,8 +102,6 @@ const createAccount = (formData: FormData): Promise => {
     )
   });
 }
-
-const bufferEncode = (value) => btoa(String.fromCharCode(...new Uint8Array(value)));
 
 async function onSubmit() {
   try {
