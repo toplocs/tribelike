@@ -74,7 +74,7 @@ import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 import gun from '@/services/gun';
-import { bufferDecode } from '@/lib/utils';
+import { bufferDecode, bufferEncode } from '@/lib/utils';
 
 const router = useRouter();
 const { login, profiles } = useUser();
@@ -104,11 +104,21 @@ const onSubmit = async () => {
         userVerification: 'preferred'
       };
 
-      const result = await navigator.credentials.get({
-        publicKey
+      const cred = await navigator.credentials.get({ publicKey });
+      const rawId = cred.rawId;
+      const usernameDerived = bufferEncode(rawId);
+
+      const hashBuffer = await crypto.subtle.digest("SHA-256", rawId);
+      const passwordDerived = bufferEncode(hashBuffer);
+      console.log(passwordDerived)
+
+      gun.user().auth(usernameDerived, passwordDerived, (ack) => {
+        if (ack.err) {
+          console.error("Auth failed:", ack.err);
+        } else {
+          console.log("Authenticated with WebAuthn-derived password.");
+        }
       });
-      successMessage.value = 'Login successfull';
-      router.push('/profiles')
     });
   } catch (error: any) {
     console.error(error);
