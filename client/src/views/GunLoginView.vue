@@ -109,21 +109,9 @@ const onSubmit = async () => {
       const result = await navigator.credentials.get({
         publicKey
       });
-      console.log(result);
-      successMessage.value = result;
-    });
-
-
-    /*
-    const result = await login(formData);
-    if (result) {
-      if (!profile.value) profile.value = profiles.value[0];
       successMessage.value = 'Login successfull';
       router.push('/profiles')
-    } else {
-      throw new Error('Bad credentials');
-    }
-    */
+    });
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error
