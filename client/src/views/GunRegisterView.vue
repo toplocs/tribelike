@@ -79,105 +79,32 @@ import gun from '@/services/gun';
 import { bufferEncode } from '@/lib/utils';
 
 const router = useRouter();
-const { getUser } = useUser();
+const { register, login, profiles } = useUser();
 const { createProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-const createAccount = (formData: FormData): Promise => {
-  return new Promise((resolve, reject) => {
-    gun.user().create(
-      formData.get('username'), 
-      formData.get('password'),
-      (ack) => {
-        if (ack.err) {
-          errorMessage.value = ack.err;
-          reject(ack.err);
-        } else {
-          successMessage.value = 'Register was successful';
-          resolve(ack);
-        }
-      }
-    )
-  });
-}
-
-
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
     //const result = await createAccount(formData);
-    const username = formData.get('username');
-    const challenge = crypto.getRandomValues(new Uint8Array(32));
-
-    const publicKey = {
-      challenge,
-      rp: { name: "Your App" },
-      user: {
-        id: new Uint8Array(8), // static or random
-        name: username,
-        displayName: username,
-      },
-      pubKeyCredParams: [{ type: "public-key", alg: -7 }],
-      authenticatorSelection: { userVerification: "preferred" },
-      timeout: 60000,
-      attestation: "none"
-    };
-
-    const cred = await navigator.credentials.create({ publicKey });
-    const rawId = cred.rawId;
-    const usernameDerived = bufferEncode(cred.rawId);
-
-    const hashBuffer = await crypto.subtle.digest("SHA-256", rawId);
-    const passwordDerived = bufferEncode(hashBuffer);
-    console.log('rawid', rawId);
-    console.log(passwordDerived)
-
-    gun.get('credentials').get(username).put({
-      id: bufferEncode(rawId),
-      credential: JSON.stringify({
-        clientDataJSON: bufferEncode(cred.clientDataJSON),
-        attestationObject: bufferEncode(cred.attestationObject),
-      })
-    });
-
-    gun.user().create(usernameDerived, passwordDerived, (ack) => {
-      if (ack.err) {
-        console.error("Create failed:", ack.err);
-      } else {
-        console.log("User created with WebAuthn-derived credentials.");
-      }
-    });
-
-    /*gun.user().create(username, password, async (ack) => {
-      if (ack.err) {
-        console.error('Error creating user:', ack.err);
-        return;
-      }
-
-      gun.get('credentials').get(username).put({
-        id: rawId,
-        credential: JSON.stringify({
-          clientDataJSON: bufferEncode(response.clientDataJSON),
-          attestationObject: bufferEncode(response.attestationObject),
-        })
-      });
-
-      console.log('User created successfully!');
-    });*/
-
-    /*
-    const result = await getUser();
+    const credentials = await register(formData);
+    const result = await login(formData);
     console.log(result);
-    for (let profileType of defaultProfiles) {
-      const profile = await createProfile({
-        type: profileType,
-        username: result.alias,
-      });
-      console.log(profile);
+    if (result) {
+      for (let profileType of defaultProfiles) {
+        const profile = await createProfile({
+          type: profileType,
+          username: 'Test',
+          email: 'yannik@yx3m1.com',
+        });
+        profiles.value.push(profile);
+        console.log(profile);
+      }
+      
+      router.push('/profiles');
     }
-    //await login(); //???*/
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error

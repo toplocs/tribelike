@@ -73,8 +73,6 @@ import Card from '@/components/common/Card.vue';
 import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
-import gun from '@/services/gun';
-import { bufferDecode, bufferEncode } from '@/lib/utils';
 
 const router = useRouter();
 const { login, profiles } = useUser();
@@ -88,38 +86,11 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value ?? undefined);
-    const username = formData.get('username');
-
-    gun.get('credentials')
-    .get(username)
-    .once(async (data) => {
-      const challenge = crypto.getRandomValues(new Uint8Array(32));
-      const publicKey = {
-        challenge,
-        allowCredentials: [{
-          id: bufferDecode(data.id),
-          type: 'public-key',
-        }],
-        timeout: 60000,
-        userVerification: 'preferred'
-      };
-
-      const cred = await navigator.credentials.get({ publicKey });
-      const rawId = cred.rawId;
-      const usernameDerived = bufferEncode(rawId);
-
-      const hashBuffer = await crypto.subtle.digest("SHA-256", rawId);
-      const passwordDerived = bufferEncode(hashBuffer);
-      console.log(passwordDerived)
-
-      gun.user().auth(usernameDerived, passwordDerived, (ack) => {
-        if (ack.err) {
-          console.error("Auth failed:", ack.err);
-        } else {
-          console.log("Authenticated with WebAuthn-derived password.");
-        }
-      });
-    });
+    const result = await login(formData);
+    console.log(result);
+    if (result) {
+      router.push('/profiles');
+    }
   } catch (error: any) {
     console.error(error);
     errorMessage.value = error
