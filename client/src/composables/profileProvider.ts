@@ -10,9 +10,10 @@ export function profileProvider() {
   const interests = ref<Interest>([]);
   const locations = ref<Location>([]);
 
-  const createProfile = async (data: Profile) => {
+  const createProfile = async (formData: FormData) => {
     const email = data.email.toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+    const data = Object.fromEntries(formData.entries());
     profile.value = {
       ...data,
       id: crypto.randomUUID(),
@@ -42,14 +43,6 @@ export function profileProvider() {
     });
   }
 
-  const createRelation = (key, id) => {
-    relations.value.push({
-      key: key,
-      from: profile.value.id,
-      to: id,
-    });
-  }
-
   watch(() => profile.value, (newValue) => {
     if (gun.user().is) {
       gun.user()
@@ -66,7 +59,6 @@ export function profileProvider() {
       .get('profiles')
       .get(id)
       .on(data => {
-        console.log('test')
         profile.value = data;
       });
 

@@ -1,81 +1,40 @@
 import CryptoJS from 'crypto-js';
-import { ref, inject, provide, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export function interestProvider() {
   const interest = ref<Interest | null>(null);
-  const relations = ref<Relation | null>(null);
-  //const route = useRoute();
 
-  const getInterest = async (title: string) => {
-    return new Promise((resolve, reject) => {
-      gun.get(`interest.${title}`).once((interest) => {
-        if (!interest) {
-          reject('Interest not found.');
-        } else {
-          resolve(interest);
-        }
-      });
+  const setInterest = (id: string) => {
+    gun.user()
+    gun.get('interests')
+    .get(id)
+    .once(data => {
+      interest.value = data;
     });
   }
 
-  const setInterest = async (formData: FormData) => {
-    try {
-      const interestId = formData.get('interestId');
-      const { data } = await axios.put(`/api/interest/${interestId}`, {
-        
-      });
+  const createInterest = (formData: FormData) => {
+    const data = Object.fromEntries(formData.entries());
+    interest.value = {
+      id: crypto.randomUUID(),
+      ...data,
+    };
 
-      return data;
-    } catch (e) {
-      console.error(e);
-    }
+    return interest.value;
   }
 
-  const createInterest = async (
-    interest: Interest,
-    profile: Profile
-  ) => {
-    return new Promise((resolve, reject) => {
-      const relation = interest.relation;
-      interest.id = crypto.randomUUID();
+  watch(() => interest.value, (newValue) => {
+    if (interest.value) {
       gun.get('interests')
-      .get(interest.title)
-      .set(interest)
-    });
-  }
-
-  const createRelation = (key, profile, interest) => {
-    relations.value.push({
-      key: key,
-      from: id,
-      to: interest.value.id,
-    });
-
-    const linkId = uuid();
-
-    const review = db.get(linkId).put({ // A
-      uuid: linkId,
-      type: "Link",
-      name: "review_book",
-      rating: rating,
-      content: content,
-    });
-    review.get("book").put(book); // B
-    review.get("reader").put(reader); // C
-
-    db.get(`reviews/${rating}`).set(review); // D
-
-    book.get("reviews").set(review); // E
-    reader.get("book_reviews").set(review); // F
-
-    return review;
-  }
+      .get(newValue.id)
+      .put(newValue);
+    }
+  });
 
   onMounted(() => {
     gun.get('interests')
-    .get(interest.id) //title?
+    .get(interest.id) //title later on??
     .once((data) => {
       console.log(data);
       interest.value = data;
@@ -84,7 +43,6 @@ export function interestProvider() {
 
   provide('interest', {
     interest,
-    getInterest,
     setInterest,
     createInterest,
   });

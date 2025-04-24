@@ -115,7 +115,7 @@ import Plugins from '@/components/plugins/Plugins.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { getInterest, createInterest } = useInterest();
+const { interest, createInterest } = useInterest();
 const profile = inject('profile');
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -151,11 +151,9 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
-    const data = Object.fromEntries(formData.entries());
-    const result = await createInterest(data);
-    const interest = await getInterest(data.title);
+    const result = await createInterest(formData);
 
-    return router.push(`/interest/${interest.title}`);
+    return router.push(`/interest/${result.id}`);
   } catch (error) {
     console.error(error);
     errorMessage.value = error;

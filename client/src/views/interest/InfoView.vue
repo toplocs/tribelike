@@ -166,41 +166,10 @@ import { useInterest } from '@/composables/interestProvider';
 
 const { profile } = useProfile();
 const { interest } = useInterest();
-const interestRelations = ref([]);
-const locationRelations = ref([]);
-const profileRelations = ref([]);
 const tab = inject('tab');
 const subscribed = computed(() => false);
-const people = computed(() => interest.value?.profiles.filter(x => x.id !== profile.value?.id));
-
-const findInterestRelations = async () => {
-  try {
-    const response = await axios.get(`/api/v2/interest/interests/${interest.value?.id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const findLocationRelations = async () => {
-  try {
-    const response = await axios.get(`/api/v2/interest/locations/${interest.value?.id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-watch(() => interest.value, async () => {
-  interestRelations.value = await findInterestRelations();
-  locationRelations.value = await findLocationRelations();
-});
 
 onMounted(async () => {
   tab.value = 'Info';
-  interestRelations.value = await findInterestRelations();
-  locationRelations.value = await findLocationRelations();
 });
 </script>

@@ -17,11 +17,13 @@ import { useRoute } from 'vue-router';
 import InfoView from '@/views/interest/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
+import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
 
 const route = useRoute();
-const { interest, getInterest } = useInterest();
-const profile = inject('profile');
+const { profile } = useProfile();
+const { interest, setInterest } = useInterest();
+const title = inject('title');
 const tab = ref('');
 const pluginSettings = ref([]);
 const access = computed(
@@ -45,15 +47,6 @@ const tabs = computed(() => {
   ];
 });
 
-const fetchInterest = async (id: string) => {
-  try {
-    const response = await axios.get(`/api/interest/byId/${id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 const fetchPluginSettings = async (key: string, id: string) => {
   try {
@@ -66,9 +59,14 @@ const fetchPluginSettings = async (key: string, id: string) => {
 }
 
 
-watch(() => route.params.id, async (newId) => {
-  interest.value = await fetchInterest(newId);
+watch(() => route.params.id, (newId) => {
+  interest.value = setInterest(newId);
 });
+
+watch(() => interest.value, (newValue) => {
+  title.value = newValue?.title;
+});
+
 
 watch(() => profile.value, async (newId) => {
   pluginSettings.value = await fetchPluginSettings(
@@ -77,15 +75,14 @@ watch(() => profile.value, async (newId) => {
   );
 });
 
-onMounted(async () => {
+onMounted(() => {
   /*interest.value = await fetchInterest(route.params.id);
   pluginSettings.value = await fetchPluginSettings(
     interest.value?.id,
     profile.value?.id
   );*/
-  const title = route.params.title;
-  interest.value = await getInterest(title);
-  console.log(interest.value);
+  const id = route.params.id;
+  interest.value = setInterest(id);
 });
 
 onUnmounted(() => {

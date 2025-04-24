@@ -90,17 +90,16 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    //const result = await createAccount(formData);
     const credentials = await register(formData);
     const result = await login(formData);
     console.log(result);
     if (result) {
       for (let profileType of defaultProfiles) {
-        const profile = await createProfile({
-          type: profileType,
-          username: 'Test',
-          email: 'yannik@yx3m1.com',
-        });
+        const formData = new FormData();
+        formData.append('type', profileType);
+        formData.append('username', 'Test');
+        formData.append('email','yannik@yx3m1.com');
+        const profile = await createProfile(formData);
         profiles.value.push(profile);
       }
       
