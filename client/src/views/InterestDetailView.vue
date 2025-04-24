@@ -67,13 +67,14 @@ watch(() => interest.value, (newValue) => {
   title.value = newValue?.title;
 });
 
-
+/*
 watch(() => profile.value, async (newId) => {
   pluginSettings.value = await fetchPluginSettings(
     interest.value?.id,
     profile.value?.id
   );
 });
+*/
 
 onMounted(() => {
   /*interest.value = await fetchInterest(route.params.id);
