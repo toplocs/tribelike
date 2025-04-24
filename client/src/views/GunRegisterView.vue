@@ -34,6 +34,8 @@
           />
         </div>
 
+        add bot check here
+
         <!--
         <div className="mb-2">
           <label
@@ -100,7 +102,6 @@ async function onSubmit() {
           email: 'yannik@yx3m1.com',
         });
         profiles.value.push(profile);
-        console.log(profile);
       }
       
       router.push('/profiles');

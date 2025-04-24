@@ -90,8 +90,9 @@ export function userProvider() {
   }
 
   const logout = async () => {
-    localStorage.removeItem('user');
     user.value = null;
+    profiles.value = [];
+    gun.user().leave();
   }
 
   watch(() => user.value, (newValue) => {
