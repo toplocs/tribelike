@@ -26,6 +26,20 @@ export function relationProvider(
     return relation;
   }
 
+  const populateRelation = async (
+    key: string,
+    relation: Relation,
+  ) => {
+    return Promise.all([
+      gun.get(key).get(relation.one).then(),
+      gun.get(key).get(relation.two).then()
+    ]).then(([dataOne, dataTwo]) => ({
+      ...relation,
+      one: dataOne,
+      two: dataTwo
+    }));
+  }
+
   watch(relations, (newVal) => {
     const latest = newVal[newVal.length - 1];
     if (!latest) return;
@@ -57,6 +71,7 @@ export function relationProvider(
     relations,
     byType,
     createRelation,
+    populateRelation,
   });
 }
 
