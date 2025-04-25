@@ -36,11 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
-
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 import Container from '@/components/common/Container.vue';
@@ -50,6 +48,7 @@ import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { relationProvider } from '@/composables/relationProvider';
 
 const route = useRoute();
 const router = useRouter();
@@ -79,4 +78,6 @@ onUnmounted(() => {
     title.value = null;
   }
 });
+
+relationProvider(route.params.id);
 </script>

@@ -12,7 +12,7 @@ export function relationProvider(
     };
   });
 
-  const createRelation = (
+  const createRelation = async (
     type: string,
     two: string,
   ) => {

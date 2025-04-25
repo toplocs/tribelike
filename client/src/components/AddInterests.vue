@@ -2,8 +2,8 @@
   <Search
     placeholder="Add some interests ..."
     :options="options"
-    @select="addInterest"
-    @click="newInterest"
+    @select="handleSelect"
+    @click="handleClick"
   />
   <div className="mt-2 flex flex-wrap gap-2">
     <div v-for="value of interests">
@@ -12,6 +12,11 @@
         :remove="removeInterest"
       />
     </div>
+
+    <div v-for="relation of relations" class="dark:text-white">
+      {{relation.type}} - {{ relation.two }}
+    </div>
+
   </div>
 </template>
 
@@ -23,6 +28,7 @@ import Search from './search/Filter.vue';
 import InterestBadge from './badges/InterestBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
+import { useRelation } from '@/composables/relationProvider';
 import gun from '@/services/gun';
 
 const props = defineProps({
@@ -31,48 +37,29 @@ const props = defineProps({
     default: [],
   }
 });
-const { listener } = useProfile();
 const { createInterest } = useInterest();
+const { relations, createRelation } = useRelation();
 const emit = defineEmits(['update:modelValue']);
 const interests = ref(props.values);
 const options = ref([]);
 
-
-const addInterest = async (selected: Object) => {
-  //new global interest?
-  console.log(selected)
-  listener.value
-  .get('interests')
-  .get('likes')
-  .get(selected.title)
-  .put({
-    id: 'testInterestId',
-    title: selected.title
-  });
+const handleSelect = async (selected: Object) => {
+  const result = await createRelation('like', selected.id);
+  console.log(result);
 }
 
-const newInterest = async (title: String) => {
-  listener.value
-  .get('interests')
-  .get('likes')
-  .get(title)
-  .put({
-    id: 'testInterestId',
-    title: title
-  });
+const handleClick = async (title: String) => {
+
 }
 
 const removeInterest = (title: String) => {
   interests.value = props.values.filter(x => x.title !== title);
-  listener.value
-  .get('interests')
-  .get('likes')
-  .get(title)
-  .put(null);
+
 }
 
 onMounted(() => {
-  gun.get('interests')
+  console.log(relations.value);
+  gun.get('interests') //change the whole search with a listener/query inside
   .map()
   .once((interest) => {
     options.value.push(interest);
@@ -80,8 +67,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  gun.get('interests')
-  .map()
-  .off();
+
 });
 </script>

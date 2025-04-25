@@ -22,9 +22,7 @@ import { interestProvider } from '@/composables/interestProvider';
 const title = ref('Tribelike');
 
 provide('title', title);
-
 userProvider();
 profileProvider();
 interestProvider();
-
 </script>
