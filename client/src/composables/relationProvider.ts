@@ -1,8 +1,9 @@
-import { ref, computed, inject, provide, onMounted, onUnmounted } from 'vue';
+import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
-export function relationProvider() {
-  const by = ref<string>('');
+export function relationProvider(
+  one: string,
+) {
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
     return {
@@ -14,29 +15,43 @@ export function relationProvider() {
 
   const createRelation = (
     type: string,
-    by: string,
-    to: string,
+    two: string,
   ) => {
     const relation = {
       type: type,
-      by: by,
-      to: to,
+      one: one,
+      two: two,
     };
-    relations.value?.push(relation);
+    relations.value = [...relations.value, relation];
+    console.log(relation);
 
     return relation;
   }
 
+  watch(relations, (newVal) => {
+    const latest = newVal[newVal.length - 1];
+    if (!latest) return;
+
+    gun.get('relations')
+    .get(one)
+    .set(latest)
+  });
+
   onMounted(() => {
     gun.get('relations')
-    .get(by.value)
+    .get(one)
+    .map()
     .once((data) => {
-      console.log(data);
+      if (data) relations.value.push(data);
     });
   });
 
+  onUnmounted(() => {
+    console.log('UNMOUNT');
+    relations.value = [];
+  })
+
   provide('relation', {
-    by,
     relations,
     byType,
     createRelation,

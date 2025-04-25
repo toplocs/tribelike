@@ -19,6 +19,7 @@ import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
+import { relationProvider } from '@/composables/relationProvider';
 
 const route = useRoute();
 const { profile } = useProfile();
@@ -91,4 +92,5 @@ onUnmounted(() => {
 });
 
 provide('tab', tab);
+relationProvider(route.params.id);
 </script>
