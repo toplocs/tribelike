@@ -1,6 +1,6 @@
 <template>
   <button
-    @click="likeInterest"
+    @click="handleClick"
     :class="[
       'px-4 py-2 cursor-pointer rounded font-semibold transition-colors duration-200',
       subscribed ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
@@ -12,22 +12,29 @@
 
 <script setup lang="ts">
 import { useProfile } from '@/composables/profileProvider';
-import { useInterest } from '@/composables/interestProvider';
+import { useRelation } from '@/composables/relationProvider';
 
-const props = defineProps({
-
+const props = defineProps({//to addRelationButton???
+  to: String,
 });
-const { profile, like, getProfile } = useProfile();
-const { interest } = useInterest();
+const { profile } = useProfile();
+const { relations, createRelation } = useRelation();
 
-const likeInterest = async () => {
+
+const handleClick = async () => {
   try {
-    console.log(interest.value);
-    const result = await like('interest', interest.value);
-    const test = await getProfile(profile.value.id);
-    console.log(test);
-    console.log(result);
-
+    await createRelation(
+      'like',
+      profile.value?.id,
+      props?.to,
+    );
+    await createRelation(
+      'likes',
+      props?.to,
+      profile.value?.id,
+    );
+    console.log(relations.value);
+    
   } catch (error) {
     console.error(error);
   }

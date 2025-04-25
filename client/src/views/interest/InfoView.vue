@@ -81,7 +81,7 @@
           Community
         </Title>
         <AddInterestButton
-          :interest="interest"
+          :to="interest?.id"
         />
       </div>
 

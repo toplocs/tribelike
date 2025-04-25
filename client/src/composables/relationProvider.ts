@@ -2,7 +2,8 @@ import { ref, computed, inject, provide, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export function relationProvider() {
-  const relations = ref<Relation | null>(null);
+  const by = ref<string>('');
+  const relations = ref<Relation[]>([]);
   const byType = computed(() => {
     return {
       likes: relations.value.filter(x => x.type === 'likes'),
@@ -13,35 +14,36 @@ export function relationProvider() {
 
   const createRelation = (
     type: string,
-    from: string,
+    by: string,
     to: string,
   ) => {
     const relation = {
       type: type,
-      from: from,
+      by: by,
       to: to,
     };
-    relations.push(relation);
+    relations.value?.push(relation);
 
     return relation;
   }
 
   onMounted(() => {
     gun.get('relations')
-    .get(relation.id) //title?
+    .get(by.value)
     .once((data) => {
       console.log(data);
-      relation.value = data;
     });
   });
 
   provide('relation', {
+    by,
     relations,
     byType,
+    createRelation,
   });
 }
 
-export function useInterest() {
+export function useRelation() {
   const data = inject('relation');
 
   if (!data) {

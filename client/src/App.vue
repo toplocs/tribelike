@@ -19,6 +19,8 @@ import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
 import { interestProvider } from '@/composables/interestProvider';
 
+import { relationProvider } from '@/composables/relationProvider';
+
 const title = ref('Tribelike');
 
 provide('title', title);
@@ -26,5 +28,7 @@ provide('title', title);
 userProvider();
 profileProvider();
 interestProvider();
+
+relationProvider();
 
 </script>
