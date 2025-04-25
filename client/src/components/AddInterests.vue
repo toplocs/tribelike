@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import TextInput from './common/TextInput.vue';
 import Search from './search/Filter.vue';
 import InterestBadge from './badges/InterestBadge.vue';
@@ -35,16 +35,7 @@ const { createInterest } = useInterest();
 const { relations, createRelation, populateRelation } = useRelation();
 const emit = defineEmits(['update:modelValue']);
 const options = ref([]);
-const interests = computed(async () => {
-  const values = [];
-  for (let relation of relations.value) {
-    const result = await populateRelation('interests', relation);
-    values.push(result.two);
-  }
-  console.log(values);
-  return values;
-});
-
+const interests = ref([]);
 const handleSelect = async (selected: Object) => {
   const result = await createRelation('like', selected.id);
   console.log(result);
@@ -58,6 +49,16 @@ const removeInterest = (title: String) => {
   interests.value = props.values.filter(x => x.title !== title);
 
 }
+
+watchEffect(async () => {
+  if (!relations.value) return;
+
+  const populated = await Promise.all(
+    relations.value.map(relation => populateRelation('interests', relation))
+  );
+
+  interests.value = populated.map(r => r.two);
+});
 
 onMounted(async () => {
   gun.get('interests') //change the whole search to a listener/query inside
