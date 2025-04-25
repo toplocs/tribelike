@@ -163,13 +163,16 @@ import relationKeys from '@/assets/relationKeys';
 import { interestToInterest } from '@/assets/defaultRelationKeys';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
+import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
 const { interest } = useInterest();
+const { relations } = useRelation();
 const tab = inject('tab');
 const subscribed = computed(() => false);
 
 onMounted(async () => {
+  console.log('relations', relations.value);
   tab.value = 'Info';
 });
 </script>

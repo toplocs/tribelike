@@ -12,7 +12,6 @@ export function relationProvider(
     };
   });
 
-
   const createRelation = (
     type: string,
     two: string,
@@ -23,7 +22,6 @@ export function relationProvider(
       two: two,
     };
     relations.value = [...relations.value, relation];
-    console.log(relation);
 
     return relation;
   }
@@ -32,8 +30,12 @@ export function relationProvider(
     const latest = newVal[newVal.length - 1];
     if (!latest) return;
 
-    gun.get('relations')
-    .get(one)
+    gun.get('relations') //save for first entry
+    .get(latest.one)
+    .set(latest);
+
+    gun.get('relations') //save for second entry
+    .get(latest.two)
     .set(latest)
   });
 
