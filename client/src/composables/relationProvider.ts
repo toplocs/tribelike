@@ -2,7 +2,7 @@ import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'v
 import gun from '@/services/gun';
 
 export function relationProvider(
-  one: string,
+  one: string, //instance? work on profile or other
 ) {
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
@@ -24,38 +24,28 @@ export function relationProvider(
       two: two,
     };
     relations.value.push(relation);
-    console.log(relations.value)
 
-    gun.get('relations')
-    .get(relation.one)  //save type:id for unique types
-    .get(id)
-    .put(relation);
-
-    gun.get('relations')
-    .get(relation.two)
-    .get(id)
-    .put(relation)
+    const node = gun.get(`relations/${id}`).put(relation);
+    gun.get(one).get('relations').set(node);
+    gun.get(two).get('relations').set(node);
 
     return relation;
   }
 
-  const removeRelation = async (
-    id: string,
-    one: string,
-    two: string,
-  ) => {
-    relations.value = relations.value.filter(x => x.id != id);
+  const removeRelation = async (relation: Relation) => {
+    console.log(relation);
+    relations.value = relations.value.filter(x => (
+      x.id !== relation.id
+    ));
 
-    gun.get('relations')
-    .get(one)
-    .get(id)
-    .put(null)
-    .then(data => console.log(data))
+    const node = gun.get(`relations/${relation.id}`);
+    gun.get(relation.one?.id || relation.one)
+    .get('relations')
+    .unset(node);
 
-    gun.get('relations')
-    .get(two)
-    .get(id)
-    .put(null);
+    gun.get(relation.two?.id || relation.two)
+    .get('relations')
+    .unset(node);
 
     return relations.value;
   }
@@ -69,18 +59,19 @@ export function relationProvider(
       gun.get(key).get(relation.two).then()
     ]).then(([dataOne, dataTwo]) => ({
       ...relation,
-      one: dataOne,
-      two: dataTwo
+      one: { id: relation.one, ...dataOne },
+      two: { id: relation.two, ...dataTwo },
     }));
   }
 
   onMounted(() => {
-    gun.get('relations')
-    .get(one)
+    gun.get(one)
+    .get('relations')
     .map()
     .once((data) => {
+      console.log('ONCE', data);
       if (data) relations.value.push(data);
-    });
+    })
   });
 
   onUnmounted(() => {
