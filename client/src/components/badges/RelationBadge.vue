@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
 import { computed } from 'vue';
 import {
   HeartIcon,
