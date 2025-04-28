@@ -8,8 +8,8 @@
   <div className="mt-2 flex flex-wrap gap-2">
     <div v-for="relation of populated">
       <RelationBadge
+        is="interest"
         :relation="relation"
-        :remove="handleRemove"
       />
     </div>
 

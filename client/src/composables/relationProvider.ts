@@ -69,9 +69,13 @@ export function relationProvider(
     .get('relations')
     .map()
     .once((data) => {
-      console.log('ONCE', data);
-      if (data) relations.value.push(data);
-    })
+      if (data) {
+        const alreadyExists = relations.value.some(item => item.id === data.id);
+        if (!alreadyExists) {
+          relations.value.push(data);
+        }
+      }
+    });
   });
 
   onUnmounted(() => {

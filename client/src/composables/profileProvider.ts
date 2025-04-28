@@ -50,7 +50,6 @@ export function profileProvider() {
   }
 
   watch(() => profile.value, (newValue) => {
-    console.log(newValue)
     if (gun.user().is && newValue) {
       gun.user()
       .get('profiles')

@@ -27,12 +27,6 @@
 
       <AddInterests />
     </section>
-
-    <section class="mb-8">
-      <Headline>Interested in:</Headline>
-
-      <AddInterests />
-    </section>
   </div>
 </template>
 
