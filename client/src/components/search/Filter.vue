@@ -17,6 +17,7 @@
       <InterestBadge
         v-for="option of filteredOptions"
         :title="option.title"
+        :id="option.id"
         @click="selectOption(option)"
       />
 

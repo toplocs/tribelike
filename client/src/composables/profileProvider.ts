@@ -11,9 +11,9 @@ export function profileProvider() {
   const locations = ref<Location>([]);
 
   const createProfile = async (formData: FormData) => {
+    const data = Object.fromEntries(formData.entries());
     const email = data.email.toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
-    const data = Object.fromEntries(formData.entries());
     profile.value = {
       ...data,
       id: crypto.randomUUID(),
@@ -30,6 +30,12 @@ export function profileProvider() {
   }
 
   const removeProfile = async () => {
+    if (gun.user().is) {
+      gun.user()
+      .get('profiles')
+      .get(profile.value?.id)
+      .put(null);
+    }
     profile.value = null;
   }
 
@@ -44,7 +50,8 @@ export function profileProvider() {
   }
 
   watch(() => profile.value, (newValue) => {
-    if (gun.user().is) {
+    console.log(newValue)
+    if (gun.user().is && newValue) {
       gun.user()
       .get('profiles')
       .get(newValue.id)

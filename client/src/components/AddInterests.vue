@@ -8,8 +8,10 @@
   <div className="mt-2 flex flex-wrap gap-2">
     <div v-for="interest of interests">
       <InterestBadge
+        v-if="interest"
+        :id="interest.id"
         :title="interest.title"
-        :remove="removeInterest"
+        :remove="handleRemove"
       />
     </div>
 
@@ -30,14 +32,22 @@ import { useInterest } from '@/composables/interestProvider';
 import { useRelation } from '@/composables/relationProvider';
 import gun from '@/services/gun';
 
-const props = defineProps();
+const { profile } = useProfile();
 const { createInterest } = useInterest();
-const { relations, createRelation, populateRelation } = useRelation();
+const {
+  relations,
+  createRelation,
+  populateRelation,
+  removeRelation
+} = useRelation();
 const emit = defineEmits(['update:modelValue']);
 const options = ref([]);
 const interests = ref([]);
+
 const handleSelect = async (selected: Object) => {
+  console.log(selected)
   const result = await createRelation('like', selected.id);
+  await addRelation(result);
   console.log(result);
 }
 
@@ -45,14 +55,17 @@ const handleClick = async (title: String) => {
 
 }
 
-const removeInterest = (title: String) => {
-  interests.value = props.values.filter(x => x.title !== title);
-
+const handleRemove = async (id: string) => {
+  const result = await removeRelation(
+    'like',
+    profile.value?.id,
+    id,
+  );
+  console.log(result);
 }
 
 watchEffect(async () => {
   if (!relations.value) return;
-
   const populated = await Promise.all(
     relations.value.map(relation => populateRelation('interests', relation))
   );

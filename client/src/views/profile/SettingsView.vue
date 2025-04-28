@@ -117,9 +117,6 @@ const onSubmit = async () => {
 const onDelete = async () => {
   try {
     await removeProfile(route.params.id);
-    userProfiles.value = userProfiles.value.filter(
-      x => x.id !== route.params.id
-    );
 
     router.push(`/profiles`);
   } catch (error) {

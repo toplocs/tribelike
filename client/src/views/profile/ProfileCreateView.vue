@@ -55,8 +55,7 @@ const defaultProfile = computed(() => ({
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
-    const data = Object.fromEntries(formData.entries());
-    const response = await createProfile(data);
+    const response = await createProfile(formData);
     if (response) {
       successMessage.value = 'Profile has been created successfully!';
     }

@@ -7,8 +7,8 @@ export function relationProvider(
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
     return {
-      likes: relations.value.filter(x => x.type === 'likes'),
-      interests: relations.value.filter(x => x.type === 'interests'),
+      likes: relations.value.filter(x => x.type === 'like'),
+      interests: relations.value.filter(x => x.type === 'interest'),
     };
   });
 
@@ -16,14 +16,48 @@ export function relationProvider(
     type: string,
     two: string,
   ) => {
+    const id = crypto.randomUUID();
     const relation = {
+      id: id,
       type: type,
       one: one,
       two: two,
     };
-    relations.value = [...relations.value, relation];
+    relations.value.push(relation);
+    console.log(relations.value)
+
+    gun.get('relations')
+    .get(relation.one)  //save type:id for unique types
+    .get(id)
+    .put(relation);
+
+    gun.get('relations')
+    .get(relation.two)
+    .get(id)
+    .put(relation)
 
     return relation;
+  }
+
+  const removeRelation = async (
+    id: string,
+    one: string,
+    two: string,
+  ) => {
+    relations.value = relations.value.filter(x => x.id != id);
+
+    gun.get('relations')
+    .get(one)
+    .get(id)
+    .put(null)
+    .then(data => console.log(data))
+
+    gun.get('relations')
+    .get(two)
+    .get(id)
+    .put(null);
+
+    return relations.value;
   }
 
   const populateRelation = async (
@@ -39,19 +73,6 @@ export function relationProvider(
       two: dataTwo
     }));
   }
-
-  watch(relations, (newVal) => {
-    const latest = newVal[newVal.length - 1];
-    if (!latest) return;
-
-    gun.get('relations') //save for first entry
-    .get(latest.one)
-    .set(latest);
-
-    gun.get('relations') //save for second entry
-    .get(latest.two)
-    .set(latest)
-  });
 
   onMounted(() => {
     gun.get('relations')
@@ -72,6 +93,7 @@ export function relationProvider(
     byType,
     createRelation,
     populateRelation,
+    removeRelation,
   });
 }
 

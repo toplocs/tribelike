@@ -5,7 +5,7 @@
     <span>{{ title }}</span>
     <XMarkIcon
       v-if="remove"
-      @click.prevent="() => remove(title)"
+      @click.prevent="() => remove(id)"
       class="w-4 h-4"
     />
   </span>
@@ -15,6 +15,10 @@
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,

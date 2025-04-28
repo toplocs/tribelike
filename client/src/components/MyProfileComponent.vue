@@ -25,17 +25,13 @@
     <section class="mb-8">
       <Headline>Likes:</Headline>
 
-      <AddInterests
-        :values="likes"
-      />
+      <AddInterests />
     </section>
 
     <section class="mb-8">
       <Headline>Interested in:</Headline>
 
-      <AddInterests
-        :values="enjoys"
-      />
+      <AddInterests />
     </section>
   </div>
 </template>
