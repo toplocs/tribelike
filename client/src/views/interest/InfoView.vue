@@ -3,13 +3,14 @@
     <div class="w-full space-y-4">
       <Card>
         <AddInterestRelation 
-          v-model:interestRelations="interestRelations"
-          v-model:locationRelations="locationRelations"
-          v-model:profileRelations="profileRelations"
+          v-model:interestRelations="relations"
+          v-model:locationRelations="relations"
+          v-model:profileRelations="relations"
         />
       </Card>
 
-      <Card v-if="interestRelations?.length">
+      <!--
+      <Card v-if="relations?.length">
         <h2 class="font-bold">Relations:</h2>
         <div
           v-for="data of relationKeys"
@@ -32,52 +33,12 @@
           <Divider />
         </div>
       </Card>
-
-      <Card v-if="locationRelations?.length">
-        <h2 class="font-bold">Related locations:</h2>
-        <div
-          v-for="data of relationKeys"
-          :key="data.value"
-          class="mt-2 space-x-1 space-y-2"
-        >
-          <h3 className="mb-2">{{data.label}}:</h3>
-          <RelationListItem
-            v-for="relation in locationRelations.filter(x => x.key == data.value)"
-            :key="relation.id"
-            is="interest"
-            path="location"
-            :relation="relation"
-            :relationId="relation.Location.id"
-            :relationTitle="relation.Location.title"
-            @removeRelation="(id) => {
-              locationRelations = locationRelations.filter(x => x.id != id);
-            }"
-          />
-          <Divider />
-        </div>
-      </Card>
-
-      <Card v-if="profileRelations?.length">
-        <h2 class="font-bold">Related profiles:</h2>
-        <div
-          v-for="data of relationKeys"
-          :key="data.value"
-          class="mt-2 space-x-1 space-y-2"
-        >
-          <h3 className="mb-2">{{data.label}}:</h3>
-          <InterestBadge
-            v-for="relation in profileRelations.filter(x => x.key == data.value)"
-            :key="relation.id"
-            :title="relation.Profile.username"
-          />
-          <Divider />
-        </div>
-      </Card>
+      -->
 
       <section class="flex flex-wrap gap-4">
         <ProfileCard
           v-for="relation of populated"
-          :profile="relation.profile"
+          :profile="relation.one"
           :relation="relation"
         />
       </section>
@@ -174,16 +135,16 @@ const { profile } = useProfile();
 const { interest } = useInterest();
 const { relations, populateRelation } = useRelation();
 const tab = inject('tab');
+const people = ref([]); //friends
 const populated = ref([]);
 
 watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
     relations.value.map(
-      x => populateRelation('profile', x)
+      x => populateRelation(['profiles', 'interests'], x)
     )
   );
-  console.log(populated.value);
 });
 
 onMounted(async () => {

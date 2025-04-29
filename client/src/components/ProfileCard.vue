@@ -1,14 +1,30 @@
 <template>
-  <div class="w-[200px]">
-    <Card class="flex flex-row">
-      <router-link>
+  <div class="w-[300px]">
+    <Card class="flex flex-row items-center gap-2 p-3 text-center">
+      <router-link :to="`/profile/${profile?.id}`">
         <img
           alt="Avatar"
-          className="w-[60px] h-[60px] rounded-full mx-auto"
-          :src="profile.image"
-          @click=""
+          class="w-[60px] h-[60px] rounded-full mx-auto"
+          :src="profile?.image"
         />
       </router-link>
+
+      <div>
+        <div class="text-base font-semibold">
+          {{ profile?.username }}
+        </div>
+
+        <div
+          v-if="relation && relation.type"
+          class="text-sm text-gray-600"
+        >
+          {{ profile?.username }}
+          {{ relation.type }}
+          <span class="font-medium">
+            {{ relation.two?.title }}
+          </span>
+        </div>
+      </div>
     </Card>
   </div>
 </template>
@@ -27,5 +43,4 @@ const props = defineProps({
     required: false,
   }
 });
-
 </script>

@@ -55,10 +55,13 @@ export function profileProvider() {
   onMounted(() => {
     const id = localStorage.getItem('profileId');
     if (gun.user().is) {
-      gun.get('profiles')
-      .get(id)
-      .on(data => {
-        profile.value = data;
+      gun.user()
+      .get('profiles')
+      .map()
+      .once((data) => {
+        if (data && data.id === id) {
+          profile.value = data;
+        }
       });
 
       //listeners in profileService

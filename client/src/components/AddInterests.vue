@@ -65,7 +65,7 @@ watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
     relations.value.map(
-      x => populateRelation('interests', x)
+      x => populateRelation(['interests'], x)
     )
   );
 });

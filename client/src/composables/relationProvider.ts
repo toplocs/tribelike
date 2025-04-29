@@ -33,7 +33,6 @@ export function relationProvider(
   }
 
   const removeRelation = async (relation: Relation) => {
-    console.log(relation);
     relations.value = relations.value.filter(x => (
       x.id !== relation.id
     ));
@@ -51,12 +50,12 @@ export function relationProvider(
   }
 
   const populateRelation = async (
-    key: string,
+    keys: string[],
     relation: Relation,
   ) => {
     return Promise.all([
-      gun.get(key).get(relation.one).then(),
-      gun.get(key).get(relation.two).then()
+      gun.get(keys[0]).get(relation.one).then(),
+      gun.get(keys[1] || keys[0]).get(relation.two).then()
     ]).then(([dataOne, dataTwo]) => ({
       ...relation,
       one: { id: relation.one, ...dataOne },
