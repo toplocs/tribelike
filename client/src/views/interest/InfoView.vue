@@ -73,6 +73,14 @@
           <Divider />
         </div>
       </Card>
+
+      <section class="flex flex-wrap gap-4">
+        <ProfileCard
+          v-for="relation of populated"
+          :profile="relation.profile"
+          :relation="relation"
+        />
+      </section>
     </div>
 
     <Sidebar class="space-y-4">
@@ -80,9 +88,7 @@
         <Title>
           Community
         </Title>
-        <AddInterestButton
-          :to="interest?.id"
-        />
+        <RelationButtons />
       </div>
 
       <div className="mb-8 flex flex-row gap-2">
@@ -144,8 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import { ref, inject, computed, watch, onMounted } from 'vue';
+import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
@@ -153,13 +158,13 @@ import ProfileImage from '@/components/common/ProfileImage.vue';
 import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
 import AddInterestRelation from '@/components/AddInterestRelation.vue';
+import ProfileCard from '@/components/ProfileCard.vue';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
-import AddInterestButton from '@/components/AddInterestButton.vue';
+import RelationButtons from '@/components/RelationButtons.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
-import relationKeys from '@/assets/relationKeys';
 import { interestToInterest } from '@/assets/defaultRelationKeys';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
@@ -167,9 +172,19 @@ import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
 const { interest } = useInterest();
-const { relations } = useRelation();
+const { relations, populateRelation } = useRelation();
 const tab = inject('tab');
-const subscribed = computed(() => false);
+const populated = ref([]);
+
+watchEffect(async () => {
+  if (!relations.value) return;
+  populated.value = await Promise.all(
+    relations.value.map(
+      x => populateRelation('profile', x)
+    )
+  );
+  console.log(populated.value);
+});
 
 onMounted(async () => {
   console.log('relations', relations.value);

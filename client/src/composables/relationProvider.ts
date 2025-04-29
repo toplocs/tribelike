@@ -96,7 +96,7 @@ export function useRelation() {
   const data = inject('relation');
 
   if (!data) {
-    throw new Error('Composable must have an relation provider.');
+    throw new Error('Composable must have a relation provider.');
   }
 
   return data;
