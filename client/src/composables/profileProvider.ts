@@ -35,8 +35,7 @@ export function profileProvider() {
 
   const removeProfile = async () => {
     if (gun.user().is) {
-      gun
-      .get('profiles')
+      gun.get('profiles')
       .get(profile.value?.id)
       .put(null);
     }

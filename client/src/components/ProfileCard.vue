@@ -1,6 +1,6 @@
 <template>
-  <div class="w-[300px]">
-    <Card class="flex flex-row items-center gap-2 p-3 text-center">
+  <div>
+    <Card class="flex flex-row mx-4 items-center gap-2 p-3 text-center">
       <router-link :to="`/profile/${profile?.id}`">
         <img
           alt="Avatar"
@@ -13,24 +13,22 @@
         <div class="text-base font-semibold">
           {{ profile?.username }}
         </div>
-
-        <div
-          v-if="relation && relation.type"
-          class="text-sm text-gray-600"
-        >
-          {{ profile?.username }}
+        <span class="font-medium">
           {{ relation.type }}
-          <span class="font-medium">
-            {{ relation.two?.title }}
-          </span>
-        </div>
+        </span>
       </div>
+
+      <HeartIcon
+        v-if="relation.type == 'like'"
+        class="absolute top-1 right-1 h-6 w-6"
+      />
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { HeartIcon } from '@heroicons/vue/24/outline';
 import Card from '@/components/common/Card.vue';
 
 const props = defineProps({

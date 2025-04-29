@@ -22,16 +22,6 @@ const newInterest = ref('')
 
 const chat = gun.get('interests')
 
-onMounted(() => {
-  gun.get('test1').map().once(async (data) => {
-    if (data) {
-      interests.value.push(data);
-      await relations(data);
-    }
-  });
-
-});
-
 const relations = async (interest: Object) => {
   if (interest.interests) {
     gun.get(interest.interests).map((value, key) => {
@@ -67,7 +57,20 @@ const createInterest = async () => {
   .get('interests')
   .get('likes')
   .set(football)
-
-  console.log('interests created')
 }
+
+onMounted(async () => {
+  var data = JSON.stringify({
+    id: 'test',
+    active: 'testing',
+    passive: 'tested by',
+  });
+  var hash = await SEA.work(data, null, null, {name: "SHA-256"});
+  console.log(hash);
+
+  gun.get('#relations').get(hash).put(data);
+  gun.get('#relations').map().once(data => {
+    console.log(JSON.parse(data))
+  });
+});
 </script>

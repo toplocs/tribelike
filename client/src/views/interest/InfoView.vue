@@ -148,7 +148,6 @@ watchEffect(async () => {
 });
 
 onMounted(async () => {
-  console.log('relations', relations.value);
   tab.value = 'Info';
 });
 </script>

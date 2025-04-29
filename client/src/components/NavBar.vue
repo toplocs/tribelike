@@ -79,9 +79,9 @@
           </Dropdown> -->
         </div>
 
-        <router-link :to="`/profile/${profile.id}`">
+        <router-link :to="`/profile/${profile?.id}`">
           <img
-            :src="profile.image"
+            :src="profile?.image"
             alt="logo"
             width="30"
             height="30"
