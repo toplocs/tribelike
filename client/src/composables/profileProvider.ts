@@ -11,14 +11,18 @@ export function profileProvider() {
   const locations = ref<Location>([]);
 
   const createProfile = async (formData: FormData) => {
+    const id = crypto.randomUUID();
     const data = Object.fromEntries(formData.entries());
     const email = data.email.toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     profile.value = {
       ...data,
-      id: crypto.randomUUID(),
+      id: id,
       image: `https://gravatar.com/avatar/${hash}`,
     }
+
+    const node = gun.get('profiles').get(id).put(profile.value);
+    gun.user().get('profiles').set(node);
 
     return profile.value;
   }
@@ -31,7 +35,7 @@ export function profileProvider() {
 
   const removeProfile = async () => {
     if (gun.user().is) {
-      gun.user()
+      gun
       .get('profiles')
       .get(profile.value?.id)
       .put(null);
@@ -41,47 +45,20 @@ export function profileProvider() {
 
   const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
-    gun.user()
-    .get('profiles')
+    gun.get('profiles')
     .get(id)
     .once(data => {
       profile.value = data;
     });
   }
 
-  watch(() => profile.value, (newValue) => {
-    if (gun.user().is && newValue) {
-      gun.user()
-      .get('profiles')
-      .get(newValue.id)
-      .put(newValue);
-    }
-  });
-
   onMounted(() => {
     const id = localStorage.getItem('profileId');
     if (gun.user().is) {
-      gun.user()
-      .get('profiles')
+      gun.get('profiles')
       .get(id)
       .on(data => {
         profile.value = data;
-      });
-
-      gun.user()
-      .get('profiles')
-      .get(id)
-      .get('interests')
-      .once(data => {
-        interests.value = data;
-      });
-
-      gun.user()
-      .get('profiles')
-      .get(id)
-      .get('locations')
-      .once(data => {
-        locations.value = data;
       });
 
       //listeners in profileService
