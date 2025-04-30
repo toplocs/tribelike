@@ -52,7 +52,11 @@ const handleClick = async () => {
     );
     console.log(result);
     if (result) {
-      await removeRelation(result);
+      await removeRelation(
+        profile.value?.id,
+        props.relationKey.id,
+        interest.value?.id
+      );
       isPassive.value = false;
       console.log('relation removed');
     } else {

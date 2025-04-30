@@ -32,19 +32,23 @@ export function relationProvider(
     return relation;
   }
 
-  const removeRelation = async (relation: Relation) => {
-    const one = relation.one?.id || relation.one;
-    const type = relation.type;
-    const two = relation.two?.id || relation.two;
+  const removeRelation = async (
+    one: string = instance,
+    type: string,
+    two: string
+  ) => {
+    const path = `relations/${one}/${type}/${two}`;
 
+    // Remove from relations list based on the path instead of id
     relations.value = relations.value.filter(x => (
-      x.id !== relation.id
+      `relations/${x.one}/${x.type}/${x.two}` !== path
     ));
 
-    const node = gun.get(`relations/${one}/${type}/${two}`);
+    console.log(path);
+
+    const node = gun.get(path);
     gun.get(one).get('relations').unset(node);
     gun.get(two).get('relations').unset(node);
-    node.set('removed');
 
     return relations.value;
   }
@@ -68,24 +72,11 @@ export function relationProvider(
     two: string,
     type?: string
   ): Promise<Relation | undefined> => {
-    return new Promise((resolve, reject) => {
-      gun.get(`relations/${one}/${type}/${two}`)
-      .once((data: Relation | undefined) => {
-        if (data) {
-          const removed = Object.entries(data).some(
-            ([key, value]) => value === 'removed'
-          );
-          console.log(removed);
-          if (removed) {
-            resolve(null);
-          } else {
-            resolve(data);
-          }//bit ugly but works
-        } else {
-          resolve(null);
-        }
-      });
-    });
+    const chain = await gun.get(one)
+    .get('relations')
+    .then();
+    console.log(chain);
+    return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
 
   onMounted(() => {
