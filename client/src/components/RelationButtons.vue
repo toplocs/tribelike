@@ -1,26 +1,36 @@
 <template>
-  <button
-    v-if="!hasProfileRelation"
-    @click="handleClick"
-    :class="[
-      'px-4 py-2 cursor-pointer rounded font-semibold transition-colors duration-200',
-      subscribed ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
-    ]"
-  >
-    Like
-  </button>
+  <div class="space-y-2">
+    <BigButton
+      title="Like"
+      icon="heart"
+      color="green"
+      @click="handleClick"
+    />
+
+    <BigButton
+      title="Studying"
+      icon="study"
+      color="green"
+      @click="handleClick"
+    />
+
+    <BigButton
+      title="Studying"
+      icon="study"
+      color="red"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useRelation } from '@/composables/relationProvider';
 
-const props = defineProps({//to addRelationButton???
-  to: String,
-});
 const { profile } = useProfile();
-const { relations, createRelation } = useRelation();
+const { relations, createRelation } = useRelation(); //provide profile relations for children 
 const hasProfileRelation = computed(() => {
   return relations.value.some(x =>
     x.one === profile.value?.id || x.two === profile.value?.id
