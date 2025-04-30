@@ -2,7 +2,7 @@ import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'v
 import gun from '@/services/gun';
 
 export function relationProvider(
-  one: string,
+  instance: string,
 ) {
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
@@ -13,19 +13,19 @@ export function relationProvider(
   });
 
   const createRelation = async (
+    one: string = instance,
     type: string,
     two: string,
   ) => {
-    const id = crypto.randomUUID();
+    console.log(one, two)
     const relation = {
-      id: id,
-      type: type,
       one: one,
+      type: type,
       two: two,
     };
     relations.value.push(relation);
 
-    const node = gun.get(`relations/${id}`).put(relation);
+    const node = gun.get(`relations/${one}/${type}/${two}`).put(relation);
     gun.get(one).get('relations').set(node);
     gun.get(two).get('relations').set(node);
 
@@ -38,7 +38,7 @@ export function relationProvider(
     ));
 
     const node = gun.get(`relations/${relation.id}`);
-    gun.get(relation.one?.id || relation.one)
+    gun.get(relation.instance?.id || relation.instance)
     .get('relations')
     .unset(node);
 
@@ -54,40 +54,30 @@ export function relationProvider(
     relation: Relation,
   ) => {
     return Promise.all([
-      gun.get(keys[0]).get(relation.one).then(),
+      gun.get(keys[0]).get(relation.instance).then(),
       gun.get(keys[1] || keys[0]).get(relation.two).then()
     ]).then(([dataOne, dataTwo]) => ({
       ...relation,
-      one: { id: relation.one, ...dataOne },
+      instance: { id: relation.instance, ...dataOne },
       two: { id: relation.two, ...dataTwo },
     }));
   }
 
   const compareRelation = async (
-    one: string,
+    instance: string,
     two: string,
     type?: string
   ): Promise<Relation | undefined> => {
     return new Promise((resolve) => {
-      gun.get(one)
-      .get('relations')
-      .map()
+      gun.get(`relations/${instance}/${type}/${two}`)
       .once((data: Relation | undefined) => {
-        if (!data) return;
-        const isMatch =
-          data.one === one &&
-          data.two === two &&
-          (!type || data.type === type);
-
-        if (isMatch) {
-          resolve(data);
-        }
+        resolve(data);
       });
     });
-  };
+  }
 
   onMounted(() => {
-    gun.get(one)
+    gun.get(instance)
     .get('relations')
     .map()
     .once((data) => {

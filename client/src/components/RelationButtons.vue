@@ -21,7 +21,6 @@ onMounted(() => {
   .map()
   .once(data => {
     relationKeys.value.push(JSON.parse(data));
-    console.log(relationKeys.value);
   });
 })
 </script>

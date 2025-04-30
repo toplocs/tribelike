@@ -22,7 +22,7 @@ export function profileProvider() {
     }
 
     const node = gun.get('profiles').get(id).put(profile.value);
-    gun.user().get('profiles').set(node);
+    gun.user().get('profiles').set(node); //save the other way in user space then link
 
     return profile.value;
   }

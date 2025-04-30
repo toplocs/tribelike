@@ -25,7 +25,11 @@ const props = defineProps({
 });
 const { profile } = useProfile();
 const { interest } = useInterest();
-const { relations, compareRelation } = useRelation();
+const {
+  createRelation,
+  removeRelation,
+  compareRelation
+} = useRelation();
 const isPassive = ref(false);
 
 watchEffect(async () => {
@@ -41,11 +45,24 @@ watchEffect(async () => {
 
 const handleClick = async () => {
   try {
+    console.log()
     const result = await compareRelation(
       profile.value?.id,
-      interest.value?.id
+      interest.value?.id,
+      props.relationKey.id,
     );
     console.log(result);
+    if (result) {
+      await removeRelation(result);
+      console.log('relation removed');
+    } else {
+      await createRelation(
+        profile.value?.id,
+        props.relationKey.id,
+        interest.value?.id
+      );
+      console.log('relation added');
+    }
 
     /*if (!hasProfileRelation.value) {
       const result = await createRelation(
