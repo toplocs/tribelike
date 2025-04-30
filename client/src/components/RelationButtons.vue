@@ -10,7 +10,7 @@
     <BigButton
       title="Studying"
       icon="study"
-      color="green"
+      color="blue"
       @click="handleClick"
     />
 
