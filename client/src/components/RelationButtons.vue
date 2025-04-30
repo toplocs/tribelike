@@ -4,6 +4,7 @@
       title="Like"
       icon="heart"
       color="green"
+      :isPassive="true"
       @click="handleClick"
     />
 
@@ -27,25 +28,28 @@
 import { computed } from 'vue';
 import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
-import { useRelation } from '@/composables/relationProvider';
+import { useInterest } from '@/composables/interestProvider';
+import { relationProvider, useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
-const { relations, createRelation } = useRelation(); //provide profile relations for children 
-const hasProfileRelation = computed(() => {
-  return relations.value.some(x =>
-    x.one === profile.value?.id || x.two === profile.value?.id
-  );
-});
+const { interest } = useInterest();
+const { relations, compareRelation } = useRelation();
 
 const handleClick = async () => {
   try {
-    if (!hasProfileRelation.value) {
+    const result = await compareRelation(
+      profile.value?.id,
+      interest.value.id
+    );
+    console.log(result);
+
+    /*if (!hasProfileRelation.value) {
       const result = await createRelation(
         'likes',
         profile.value?.id,
       );
       console.log(result);
-    }    
+    } */   
   } catch (error) {
     console.error(error);
   }

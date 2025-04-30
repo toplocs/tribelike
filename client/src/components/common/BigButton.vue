@@ -3,7 +3,7 @@
     @click="useAction"
     :class="[
       'flex flex-row gap-1 px-4 py-2 cursor-pointer rounded font-semibold transition-colors duration-200 text-white',
-      subscribed ? 'bg-gray-700 hover:bg-gray-800' : colorMap[color] || 'bg-gray-400 hover:bg-gray-500'
+      isPassive ? 'bg-gray-700 hover:bg-gray-800' : colorMap[color] || 'bg-gray-400 hover:bg-gray-500'
     ]"
   >
     <HeartIcon v-if="icon == 'heart'" class="m-auto w-4 h-4" />
@@ -28,6 +28,10 @@ const props = defineProps({
   color: {
     type: String,
     required: true
+  },
+  isPassive: {
+    type: Boolean,
+    default: false,
   }
 });
 

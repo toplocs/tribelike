@@ -2,7 +2,7 @@ import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'v
 import gun from '@/services/gun';
 
 export function relationProvider(
-  one: string, //instance? work on profile or other
+  one: string,
 ) {
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
@@ -63,6 +63,29 @@ export function relationProvider(
     }));
   }
 
+  const compareRelation = async (
+    one: string,
+    two: string,
+    type?: string
+  ): Promise<Relation | undefined> => {
+    return new Promise((resolve) => {
+      gun.get(one)
+      .get('relations')
+      .map()
+      .once((data: Relation | undefined) => {
+        if (!data) return;
+        const isMatch =
+          data.one === one &&
+          data.two === two &&
+          (!type || data.type === type);
+
+        if (isMatch) {
+          resolve(data);
+        }
+      });
+    });
+  };
+
   onMounted(() => {
     gun.get(one)
     .get('relations')
@@ -86,8 +109,9 @@ export function relationProvider(
     relations,
     byType,
     createRelation,
-    populateRelation,
     removeRelation,
+    populateRelation,
+    compareRelation,
   });
 }
 

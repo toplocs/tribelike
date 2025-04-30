@@ -44,7 +44,8 @@ export function profileProvider() {
 
   const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
-    gun.get('profiles')
+    gun.user()
+    .get('profiles')
     .get(id)
     .once(data => {
       profile.value = data;
