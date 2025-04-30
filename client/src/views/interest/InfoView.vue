@@ -45,12 +45,7 @@
     </div>
 
     <Sidebar class="space-y-4">
-      <div class="flex flex-row items-center justify-between">
-        <Title>
-          Community
-        </Title>
-        <RelationButtons />
-      </div>
+      <RelationButtons />
 
       <div className="mb-8 flex flex-row gap-2">
         <div 

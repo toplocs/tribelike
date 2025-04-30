@@ -57,7 +57,6 @@ const handleClick = async () => {
         interest.value?.id
       );
       isPassive.value = false;
-      console.log('relation removed');
     } else {
       await createRelation(
         profile.value?.id,
@@ -65,7 +64,6 @@ const handleClick = async () => {
         interest.value?.id
       );
       isPassive.value = true;
-      console.log('relation added');
     }
   } catch (error) {
     console.error(error);
