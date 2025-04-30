@@ -45,7 +45,6 @@ watchEffect(async () => {
 
 const handleClick = async () => {
   try {
-    console.log()
     const result = await compareRelation(
       profile.value?.id,
       interest.value?.id,
@@ -54,6 +53,7 @@ const handleClick = async () => {
     console.log(result);
     if (result) {
       await removeRelation(result);
+      isPassive.value = false;
       console.log('relation removed');
     } else {
       await createRelation(
@@ -61,6 +61,7 @@ const handleClick = async () => {
         props.relationKey.id,
         interest.value?.id
       );
+      isPassive.value = true;
       console.log('relation added');
     }
 

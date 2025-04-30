@@ -17,8 +17,8 @@ export function relationProvider(
     type: string,
     two: string,
   ) => {
-    console.log(one, two)
     const relation = {
+      id: crypto.randomUUID(),
       one: one,
       type: type,
       two: two,
@@ -33,18 +33,18 @@ export function relationProvider(
   }
 
   const removeRelation = async (relation: Relation) => {
+    const one = relation.one?.id || relation.one;
+    const type = relation.type;
+    const two = relation.two?.id || relation.two;
+
     relations.value = relations.value.filter(x => (
       x.id !== relation.id
     ));
 
-    const node = gun.get(`relations/${relation.id}`);
-    gun.get(relation.instance?.id || relation.instance)
-    .get('relations')
-    .unset(node);
-
-    gun.get(relation.two?.id || relation.two)
-    .get('relations')
-    .unset(node);
+    const node = gun.get(`relations/${one}/${type}/${two}`);
+    gun.get(one).get('relations').unset(node);
+    gun.get(two).get('relations').unset(node);
+    node.set('removed');
 
     return relations.value;
   }
@@ -54,24 +54,36 @@ export function relationProvider(
     relation: Relation,
   ) => {
     return Promise.all([
-      gun.get(keys[0]).get(relation.instance).then(),
+      gun.get(keys[0]).get(relation.one).then(),
       gun.get(keys[1] || keys[0]).get(relation.two).then()
     ]).then(([dataOne, dataTwo]) => ({
       ...relation,
-      instance: { id: relation.instance, ...dataOne },
+      one: { id: relation.one, ...dataOne },
       two: { id: relation.two, ...dataTwo },
     }));
   }
 
   const compareRelation = async (
-    instance: string,
+    one: string,
     two: string,
     type?: string
   ): Promise<Relation | undefined> => {
-    return new Promise((resolve) => {
-      gun.get(`relations/${instance}/${type}/${two}`)
+    return new Promise((resolve, reject) => {
+      gun.get(`relations/${one}/${type}/${two}`)
       .once((data: Relation | undefined) => {
-        resolve(data);
+        if (data) {
+          const removed = Object.entries(data).some(
+            ([key, value]) => value === 'removed'
+          );
+          console.log(removed);
+          if (removed) {
+            resolve(null);
+          } else {
+            resolve(data);
+          }//bit ugly but works
+        } else {
+          resolve(null);
+        }
       });
     });
   }
@@ -82,8 +94,8 @@ export function relationProvider(
     .map()
     .once((data) => {
       if (data) {
-        const alreadyExists = relations.value.some(item => item.id === data.id);
-        if (!alreadyExists) {
+        const exists = relations.value.some(x => x.id === data.id);
+        if (!exists) {
           relations.value.push(data);
         }
       }

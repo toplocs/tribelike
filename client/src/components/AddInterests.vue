@@ -50,7 +50,11 @@ const options = ref([]);
 const populated = ref([]);
 
 const handleSelect = async (selected: Object) => {
-  const result = await createRelation('like', selected.id);
+  const result = await createRelation(
+    profile.value?.id,
+    'likes',
+    selected.id
+  );
 }
 
 const handleClick = async (title: String) => {
