@@ -33,7 +33,7 @@ watchEffect(async () => {
     const result = await compareRelation(
       profile.value?.id,
       interest.value?.id,
-      'like',
+      props.relationKey.id,
     );
     if (result) isPassive.value = true;
   }
