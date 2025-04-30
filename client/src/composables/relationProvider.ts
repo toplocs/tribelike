@@ -38,13 +38,9 @@ export function relationProvider(
     two: string
   ) => {
     const path = `relations/${one}/${type}/${two}`;
-
-    // Remove from relations list based on the path instead of id
     relations.value = relations.value.filter(x => (
       `relations/${x.one}/${x.type}/${x.two}` !== path
     ));
-
-    console.log(path);
 
     const node = gun.get(path);
     gun.get(one).get('relations').unset(node);
@@ -75,7 +71,6 @@ export function relationProvider(
     const chain = await gun.get(one)
     .get('relations')
     .then();
-    console.log(chain);
     return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
 

@@ -50,7 +50,6 @@ const handleClick = async () => {
       interest.value?.id,
       props.relationKey.id,
     );
-    console.log(result);
     if (result) {
       await removeRelation(
         profile.value?.id,
@@ -68,14 +67,6 @@ const handleClick = async () => {
       isPassive.value = true;
       console.log('relation added');
     }
-
-    /*if (!hasProfileRelation.value) {
-      const result = await createRelation(
-        'likes',
-        profile.value?.id,
-      );
-      console.log(result);
-    } */   
   } catch (error) {
     console.error(error);
   }
