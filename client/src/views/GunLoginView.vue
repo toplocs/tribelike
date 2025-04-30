@@ -87,8 +87,8 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await login(formData);
-    console.log(result);
     if (result) {
+      profile.value = profiles.value[0];
       router.push('/profiles');
     }
   } catch (error: any) {

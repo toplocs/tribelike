@@ -83,6 +83,13 @@ export function userProvider() {
             reject('Auth failed:', ack.err);
           } else {
             resolve(ack.get);
+
+            gun.user()
+            .get('profiles')
+            .map()
+            .once((data) => {
+              if (data) profiles.value.push(data);
+            });
           }
         });
       });
