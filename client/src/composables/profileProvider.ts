@@ -23,7 +23,7 @@ export function profileProvider() {
 
     const node = gun.user().get(`profile_${id}`).put(profile.value);
     gun.user().get('profiles').set(node);
-    gun.get('profiles').set(node);
+    gun.get('profiles').get(id).set(node);
 
     return profile.value;
   }
@@ -39,7 +39,7 @@ export function profileProvider() {
       const node = gun.user().get(`profile_${id}`);
       node.then(() => {
         gun.user().get('profiles').unset(node);
-        gun.get('profiles').unset(node);
+        gun.get('profiles').get(id).unset(node);
         profile.value = null;
       });
     }

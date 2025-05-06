@@ -18,18 +18,16 @@
         </span>
       </div>
 
-      <HeartIcon
-        v-if="relation.type == 'like'"
-        class="absolute top-1 right-1 h-6 w-6"
-      />
+      <div class="absolute top-1 right-1 h-6 w-6">
+        <Icon :icon="relation.type" />
+      </div>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { HeartIcon } from '@heroicons/vue/24/outline';
 import Card from '@/components/common/Card.vue';
+import Icon from '@/components/common/Icon.vue';
 
 const props = defineProps({
   profile: {

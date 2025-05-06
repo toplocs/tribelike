@@ -140,6 +140,7 @@ watchEffect(async () => {
       x => populateRelation(['profiles', 'interests'], x)
     )
   );
+  console.log(populated.value)
 });
 
 onMounted(async () => {

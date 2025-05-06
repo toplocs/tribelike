@@ -55,14 +55,16 @@ export function relationProvider(
     keys: string[],
     relation: Relation,
   ) => {
-    return Promise.all([
-      gun.get(keys[0]).get(relation.one).then(),
-      gun.get(keys[1] || keys[0]).get(relation.two).then()
-    ]).then(([dataOne, dataTwo]) => ({
+    const [dataOne, dataTwo] = await Promise.all([
+      gun.lookup(keys[0], relation.one),
+      gun.lookup((keys[1] || keys[0]), relation.two)
+    ]);
+
+    return {
       ...relation,
-      one: { id: relation.one, ...dataOne },
-      two: { id: relation.two, ...dataTwo },
-    }));
+      one: dataOne || { id: relation.one },
+      two: dataTwo || { id: relation.two },
+    };
   }
 
   const compareRelation = async (

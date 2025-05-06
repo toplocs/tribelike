@@ -118,7 +118,6 @@ export function userProvider() {
       .get('profiles')
       .map()
       .once((data) => {
-        console.log(data.username, data.type);
         if (data) profiles.value.push(data);
       });
     }

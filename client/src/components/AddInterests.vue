@@ -12,18 +12,6 @@
         :relation="relation"
       />
     </div>
-
-    <div v-for="relation of relations" class="dark:text-white">
-      {{relation.type}} - {{ relation.two }}
-
-      <span
-        class="cursor-pointer"
-        @click="() => handleRemove(relation)"
-      >
-        Remove
-      </span>
-    </div>
-
   </div>
 </template>
 
