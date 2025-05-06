@@ -27,7 +27,6 @@ gun.lookup = async function(key: string, id: string) {
   const soul = ref?._?.['>'] && Object.keys(ref._['>'])[0];
   if (!soul) return null;
   const data = await gun.get(soul).then();
-  console.log(data);
   return data ? { id, ...data } : null;
 }
 

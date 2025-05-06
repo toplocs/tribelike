@@ -136,11 +136,8 @@ const populated = ref([]);
 watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
-    relations.value.map(
-      x => populateRelation(['profiles', 'interests'], x)
-    )
+    relations.value.map(x => populateRelation(['profiles', 'interests'], x))
   );
-  console.log(populated.value)
 });
 
 onMounted(async () => {

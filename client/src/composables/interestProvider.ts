@@ -6,37 +6,29 @@ export function interestProvider() {
   const interest = ref<Interest | null>(null);
 
   const setInterest = (id: string) => {
-    gun.user()
-    gun.get('interests')
-    .get(id)
-    .once(data => {
+    gun.get(`interest_${id}`)
+    .once((data) => {
       interest.value = data;
     });
   }
 
   const createInterest = (formData: FormData) => {
+    const id = crypto.randomUUID();
     const data = Object.fromEntries(formData.entries());
     interest.value = {
-      id: crypto.randomUUID(),
+      id: id,
       ...data,
     };
+    const node = gun.get(`interest_${id}`).put(interest.value);
+    gun.get('interests').get(id).set(node);
 
     return interest.value;
   }
 
-  watch(() => interest.value, (newValue) => {
-    if (interest.value) {
-      gun.get('interests')
-      .get(newValue.id)
-      .put(newValue);
-    }
-  });
-
   onMounted(() => {
-    gun.get('interests')
-    .get(interest.id) //title later on??
+    gun.get(`interest_${interest.id}`)
     .once((data) => {
-      console.log(data);
+      console.log(interest.value);
       interest.value = data;
     });
   });
