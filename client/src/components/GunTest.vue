@@ -61,9 +61,11 @@ const createInterest = async () => {
 
 onMounted(async () => {
   var data = JSON.stringify({
-    id: 'like',
-    active: 'likes',
-    passive: 'liked by',
+    id: 'new',
+    active: 'new',
+    passive: 'new by',
+    color: 'green',
+    icon: 'study',
   });
   var hash = await SEA.work(data, null, null, {name: "SHA-256"});
   console.log(hash);

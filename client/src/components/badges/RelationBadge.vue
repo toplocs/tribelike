@@ -5,14 +5,7 @@
       :title="data.title"
       :remove="handleRemove"
     >
-      <HeartIcon
-        v-if="relation.type == 'like'"
-        class="w-4 h-4"
-      />
-      <BellIcon
-        v-if="relation.type == 'interested'"
-        class="w-4 h-4"
-      />
+      <Icon :icon="relation.type" />
       –
     </InterestBadge>
   </router-link>
@@ -23,14 +16,7 @@
       :title="data.title"
       :remove="handleRemove"
     >
-      <HeartIcon
-        v-if="relation.type == 'like'"
-        class="w-4 h-4"
-      />
-      <BellIcon
-        v-if="relation.type == 'interested'"
-        class="w-4 h-4"
-      />
+      <Icon icon="like" />
     </InterestBadge>
   </router-link>
 </template>
@@ -43,6 +29,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import InterestBadge from '@/components/badges/InterestBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
+import Icon from '@/components/common/Icon.vue';
 import { useRelation } from '@/composables/relationProvider';
 
 const props = defineProps({

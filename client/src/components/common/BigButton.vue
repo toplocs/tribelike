@@ -6,15 +6,14 @@
       isPassive ? 'bg-gray-700 hover:bg-gray-800' : colorMap[color] || 'bg-gray-400 hover:bg-gray-500'
     ]"
   >
-    <HeartIcon v-if="icon == 'heart'" class="m-auto w-4 h-4" />
-    <AcademicCapIcon v-if="icon == 'study'" class="m-auto w-4 h-4" />
+    <Icon :icon="icon" />
     {{ title }}
   </button>
 </template>
 
 <script setup lang="ts">
-import { HeartIcon } from '@heroicons/vue/24/outline';
-import { AcademicCapIcon } from '@heroicons/vue/24/outline';
+import { HeartIcon,  AcademicCapIcon } from '@heroicons/vue/24/outline';
+import Icon from '@/components/common/Icon.vue';
 
 const props = defineProps({
   title: {
