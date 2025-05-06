@@ -11,7 +11,7 @@
 
     <div
       v-if="options.length && isOpen"
-      class="absolute p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
+      class="absolute space-x-1 space-y-1 p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
       <InterestBadge

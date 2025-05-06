@@ -46,7 +46,13 @@ const { removeRelation } = useRelation();
 const data = computed(() => props.relation?.two);
 
 const handleRemove = async () => {
-  const result = await removeRelation(props.relation);
+  console.log(props.relation);
+  const result = await removeRelation(
+    props.relation?.one?.id,
+    props.relation?.type,
+    props.relation?.two?.id
+  );
+  console.log(result);
 }
 
 </script>
