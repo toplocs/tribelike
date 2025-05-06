@@ -61,9 +61,9 @@ const createInterest = async () => {
 
 onMounted(async () => {
   var data = JSON.stringify({
-    id: 'new',
-    active: 'new',
-    passive: 'new by',
+    id: 'learn',
+    active: 'learning',
+    passive: 'is learning',
     color: 'green',
     icon: 'study',
   });

@@ -49,5 +49,4 @@ const handleRemove = async () => {
   const result = await removeRelation(props.relation);
 }
 
-
 </script>
