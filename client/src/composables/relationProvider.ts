@@ -43,8 +43,10 @@ export function relationProvider(
     ));
 
     const node = gun.get(path);
-    gun.get(one).get('relations').unset(node);
-    gun.get(two).get('relations').unset(node);
+    node.then(() => {
+      gun.get(one).get('relations').unset(node);
+      gun.get(two).get('relations').unset(node);
+    });
 
     return relations.value;
   }

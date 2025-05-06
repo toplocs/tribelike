@@ -21,8 +21,9 @@ export function profileProvider() {
       image: `https://gravatar.com/avatar/${hash}`,
     }
 
-    const node = gun.get('profiles').get(id).put(profile.value);
-    gun.user().get('profiles').set(node); //save the other way in user space then link
+    const node = gun.user().get(`profile_${id}`).put(profile.value);
+    gun.user().get('profiles').set(node);
+    gun.get('profiles').set(node);
 
     return profile.value;
   }
@@ -33,13 +34,15 @@ export function profileProvider() {
     return profile.value;
   }
 
-  const removeProfile = async () => {
+  const removeProfile = async (id: string) => {
     if (gun.user().is) {
-      gun.get('profiles')
-      .get(profile.value?.id)
-      .put(null);
+      const node = gun.user().get(`profile_${id}`);
+      node.then(() => {
+        gun.user().get('profiles').unset(node);
+        gun.get('profiles').unset(node);
+        profile.value = null;
+      });
     }
-    profile.value = null;
   }
 
   const selectProfile = (id: string) => {
