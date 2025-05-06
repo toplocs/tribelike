@@ -27,7 +27,7 @@ export function interestProvider() {
 
   onMounted(() => {
     gun.get(`interest_${interest.id}`)
-    .once((data) => {
+    .once((data) => { //listener that should be 'on'
       console.log(interest.value);
       interest.value = data;
     });

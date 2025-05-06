@@ -1,13 +1,11 @@
 <template>
-  <div class="space-y-2">
-    <BigButton
-      :title="relationKey.id"
-      :icon="relationKey.icon || 'heart'"
-      :color="relationKey.color || 'blue'"
-      :isPassive="isPassive"
-      @click="handleClick"
-    />
-  </div>
+  <BigButton
+    :title="relationKey.id"
+    :icon="relationKey.icon || 'heart'"
+    :color="relationKey.color || 'blue'"
+    :isPassive="isPassive"
+    @click="handleClick"
+  />
 </template>
 
 <script setup lang="ts">
