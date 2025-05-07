@@ -30,6 +30,7 @@
       />
     </div>
 
+    <!--
     <div className="mb-2">
       <label
         for="access"
@@ -48,6 +49,7 @@
         v-model="access"
       />
     </div>
+    -->
 
     <SubmitButton className="w-full mt-4">
       Create interest
@@ -56,7 +58,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
@@ -68,10 +69,14 @@ import TextInput from '@/components/common/TextInput.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
 import RelationSelect from '@/components/RelationSelect.vue';
+import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
+import { relationProvider } from '@/composables/relationProvider';
 
 const router = useRouter();
+const { profile } = useProfile();
 const { interest, createInterest } = useInterest();
+const { createRelation } = relationProvider;
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 

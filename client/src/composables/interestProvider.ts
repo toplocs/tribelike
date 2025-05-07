@@ -22,6 +22,16 @@ export function interestProvider() {
     const node = gun.get(`interest_${id}`).put(interest.value);
     gun.get('interests').get(id).set(node);
 
+    //initial relation
+    const relation = gun.get(`relations/${data.profileId}/${data.relationId}/${id}`).put({
+      id: crypto.randomUUID(),
+      one: data.profileId,
+      type: data.relationId,
+      two: id,
+    });
+    gun.get(data.profileId).get('relations').set(relation);
+    gun.get(id).get('relations').set(relation);
+
     return interest.value;
   }
 
