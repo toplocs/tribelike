@@ -1,18 +1,27 @@
 export default [
   {
-    value: 'childOf',
-    label: 'Child of',
-    title: 'Parents',
-    description: 'The parent of this item.',
+    id: 'like',
+    active: 'likes',
+    passive: 'is liked by',
+    color: 'green',
+    icon: 'heart',
   }, {
-    value: 'isA',
-    label: 'Is a',
-    title: 'Categories',
+    id: 'love',
+    active: 'loves',
+    passive: 'is loved by',
+    color: 'red',
+    icon: 'heart',
   }, {
-    value: 'allowsVotingTo',
-    label: 'Allows voting to',
+    id: 'learn',
+    active: 'learns',
+    passive: 'is learned by',
+    color: 'blue',
+    icon: 'study',
   }, {
-    value: 'showsContentOf',
-    label: 'Shows content of',
+    id: 'teach',
+    active: 'teaches',
+    passive: 'is teached by',
+    color: 'yellow',
+    icon: 'study',
   }, 
 ];

@@ -1,6 +1,6 @@
 <template>
   <Search
-    placeholder="Add some interests ..."
+    placeholder="Add some topics ..."
     :options="options"
     @select="handleSelect"
     @click="handleClick"
@@ -8,7 +8,7 @@
   <div className="mt-2 flex flex-wrap gap-2">
     <div v-for="relation of populated">
       <RelationBadge
-        is="interest"
+        is="topic"
         :relation="relation"
       />
     </div>
@@ -57,16 +57,16 @@ watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
     relations.value.map(
-      x => populateRelation(['interests'], x)
+      x => populateRelation(['topics'], x)
     )
   );
 });
 
 onMounted(async () => {
-  gun.get('interests') //change the whole search to a listener/query inside
+  gun.get('topics') //change the whole search to a listener/query inside
   .map()
-  .once((interest) => {
-    options.value.push(interest);
+  .once((topic) => {
+    options.value.push(topic);
   });
 });
 </script>

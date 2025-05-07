@@ -1,14 +1,14 @@
 <template>
   <HeartIcon
-    v-if="icon == 'like' || icon == 'likes'"
-    class="w-4 h-4"
+    v-if="icon == 'heart'"
+    class="m-auto w-4 h-4"
   />
   <BellIcon
     v-if="icon == 'interested'"
     class="m-auto w-4 h-4"
   />
   <AcademicCapIcon
-    v-if="icon == 'learn' || icon == 'study'"
+    v-if="icon == 'study'"
     class="m-auto w-4 h-4"
   />
 </template>

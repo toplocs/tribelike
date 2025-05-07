@@ -11,8 +11,6 @@
       :value="profile?.id"
     >
 
-    <RelationSelect />
-
     <div className="mb-2">
       <label
         for="title"
@@ -29,6 +27,8 @@
         :modelValue="title"
       />
     </div>
+
+    <RelationSelect />
 
     <!--
     <div className="mb-2">

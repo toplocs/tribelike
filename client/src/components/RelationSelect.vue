@@ -24,21 +24,17 @@
 import { ref, onMounted } from 'vue';
 import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
-import gun from '@/services/gun';
+import relationKeys from '@/assets/relationKeys.ts';
+
+const props = defineProps({
+
+});
 
 const { profile } = useProfile();
 const selected = ref({ active: 'likes' });
-const relationKeys = ref([]);
 
 const handleClick = (relationKey: Object) => {
   selected.value = relationKey;
 }
 
-onMounted(() => {
-  gun.get('#relations') //in service or provider
-  .map()
-  .once(data => {
-    relationKeys.value.push(JSON.parse(data));
-  });
-})
 </script>

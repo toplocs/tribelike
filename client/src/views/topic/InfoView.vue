@@ -3,7 +3,7 @@
     <div class="w-full space-y-4">
       <Card>
         <AddInterestRelation 
-          v-model:interestRelations="relations"
+          v-model:topicRelations="relations"
           v-model:locationRelations="relations"
           v-model:profileRelations="relations"
         />
@@ -19,15 +19,15 @@
         >
           <h3 className="mb-2">{{data.label}}:</h3>
           <RelationListItem
-            v-for="relation in interestRelations.filter(x => x.key == data.value)"
+            v-for="relation in topicRelations.filter(x => x.key == data.value)"
             :key="relation.id"
-            is="interest"
-            path="interest"
+            is="topic"
+            path="topic"
             :relation="relation"
             :relationId="relation.OtherInterest.id"
             :relationTitle="relation.OtherInterest.title"
             @removeRelation="(id) => {
-              interestRelations = interestRelations.filter(x => x.id != id);
+              topicRelations = topicRelations.filter(x => x.id != id);
             }"
           />
           <Divider />
@@ -75,10 +75,10 @@
 
           <template #content="{ closeDialog }">
             <LinkDialog
-              type="interest"
-              :id="interest?.id"
+              type="topic"
+              :id="topic?.id"
               :closeDialog="(x) => {
-                interest?.links.push(x);
+                topic?.links.push(x);
                 closeDialog()
               }"
             />
@@ -87,7 +87,7 @@
       </div>
 
       <div 
-        v-for="link of interest?.links"
+        v-for="link of topic?.links"
         :key="link"
         class="mb-2 dark:text-white"
       > • 
@@ -121,13 +121,13 @@ import RelationButtons from '@/components/RelationButtons.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
-import { interestToInterest } from '@/assets/defaultRelationKeys';
+import { topicToInterest } from '@/assets/defaultRelationKeys';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
 import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
-const { interest } = useInterest();
+const { topic } = useInterest();
 const { relations, populateRelation } = useRelation();
 const tab = inject('tab');
 const people = ref([]); //friends
@@ -136,7 +136,7 @@ const populated = ref([]);
 watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
-    relations.value.map(x => populateRelation(['profiles', 'interests'], x))
+    relations.value.map(x => populateRelation(['profiles', 'topics'], x))
   );
 });
 

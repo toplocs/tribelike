@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import LandingView from '@/views/LandingView.vue';
@@ -20,10 +19,10 @@ import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 //Interest
 import InterestCreateView from '@/views/InterestCreateView.vue';
 import InterestDetailView from '@/views/InterestDetailView.vue';
-import InterestInfoView from '@/views/interest/InfoView.vue';
-import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
-import InterestPluginsView from '@/views/interest/PluginsView.vue';
-import InterestSettingsView from '@/views/interest/SettingsView.vue';
+import InterestInfoView from '@/views/topic/InfoView.vue';
+import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
+import InterestPluginsView from '@/views/topic/PluginsView.vue';
+import InterestSettingsView from '@/views/topic/SettingsView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
@@ -144,35 +143,35 @@ const router = createRouter({
 
     //Interests
     {
-      path: '/interest/create',
-      name: 'interestCreate',
+      path: '/topic/create',
+      name: 'topicCreate',
       component: InterestCreateView,
       //meta: { requiresAuth: true },
     },
     {
-      path: '/interest/:id',
+      path: '/topic/:id',
       component: InterestDetailView,
       props: true,
       children: [
         {
           path: '',
-          name: 'interestActivity',
+          name: 'topicActivity',
           component: InterestInfoView,
         },
 
         {
           path: 'discussions',
-          name: 'interestDiscussion',
+          name: 'topicDiscussion',
           component: InterestDiscussionView,
         },
         {
           path: 'plugins',
-          name: 'interestPlugins',
+          name: 'topicPlugins',
           component: InterestPluginsView,
         },
         {
           path: 'settings',
-          name: 'interestSettings',
+          name: 'topicSettings',
           component: InterestSettingsView,
         },
         ...InterestPluginRoutes,

@@ -14,21 +14,21 @@
 import axios from 'axios';
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import InfoView from '@/views/interest/InfoView.vue';
+import InfoView from '@/views/topic/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 import { useProfile } from '@/composables/profileProvider';
-import { useInterest } from '@/composables/interestProvider';
+import { useInterest } from '@/composables/topicProvider';
 import { relationProvider } from '@/composables/relationProvider';
 
 const route = useRoute();
 const { profile } = useProfile();
-const { interest, setInterest } = useInterest();
+const { topic, setInterest } = useInterest();
 const title = inject('title');
 const tab = ref('');
 const pluginSettings = ref([]);
 const access = computed(
-  () => profile.value?.interests.some(x => x.id == interest.value?.id)
+  () => profile.value?.topics.some(x => x.id == topic.value?.id)
 );
 const tabs = computed(() => {
   const routes = defaultPluginSettings.map(plugin => {
@@ -36,15 +36,15 @@ const tabs = computed(() => {
       x => x.pluginId == plugin.pluginId
     );
     if (settings?.active == false) return null;
-    else return { value: plugin.name, href: `/interest/${interest.value?.id}/${plugin.path}` };
+    else return { value: plugin.name, href: `/topic/${topic.value?.id}/${plugin.path}` };
   }).filter(Boolean);
 
   return [
-    { value: 'Info', href: `/interest/${interest.value?.id}` },
-    { value: 'Discussions', href: `/interest/${interest.value?.id}/discussions` },
+    { value: 'Info', href: `/topic/${topic.value?.id}` },
+    { value: 'Discussions', href: `/topic/${topic.value?.id}/discussions` },
     ...routes,
-    { value: 'Plugins', href: `/interest/${interest.value?.id}/plugins` },
-    { value: 'Settings', href: `/interest/${interest.value?.id}/settings` },
+    { value: 'Plugins', href: `/topic/${topic.value?.id}/plugins` },
+    { value: 'Settings', href: `/topic/${topic.value?.id}/settings` },
   ];
 });
 
@@ -61,34 +61,34 @@ const fetchPluginSettings = async (key: string, id: string) => {
 
 
 watch(() => route.params.id, (newId) => {
-  interest.value = setInterest(newId);
+  topic.value = setInterest(newId);
 });
 
-watch(() => interest.value, (newValue) => {
+watch(() => topic.value, (newValue) => {
   title.value = newValue?.title;
 });
 
 /*
 watch(() => profile.value, async (newId) => {
   pluginSettings.value = await fetchPluginSettings(
-    interest.value?.id,
+    topic.value?.id,
     profile.value?.id
   );
 });
 */
 
 onMounted(() => {
-  /*interest.value = await fetchInterest(route.params.id);
+  /*topic.value = await fetchInterest(route.params.id);
   pluginSettings.value = await fetchPluginSettings(
-    interest.value?.id,
+    topic.value?.id,
     profile.value?.id
   );*/
   const id = route.params.id;
-  interest.value = setInterest(id);
+  topic.value = setInterest(id);
 });
 
 onUnmounted(() => {
-  interest.value = null;
+  topic.value = null;
 });
 
 provide('tab', tab);

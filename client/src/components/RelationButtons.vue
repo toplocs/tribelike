@@ -20,7 +20,9 @@ onMounted(() => {
   gun.get('#relations') //in service or provider
   .map()
   .once(data => {
-    relationKeys.value.push(JSON.parse(data));
+    if (data) {
+      relationKeys.value.push(JSON.parse(data));
+    }
   });
 })
 </script>

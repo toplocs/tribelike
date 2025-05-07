@@ -67,7 +67,7 @@ onMounted(async () => {
     color: 'yellow',
     icon: 'study',
   });
-  var hash = await SEA.work(data, null, null, {name: "SHA-256"});
+  var hash = await SEA.work(data, null, null, {name: 'SHA-256'});
   console.log(hash);
 
   gun.get('#relations').get(hash).put(data);

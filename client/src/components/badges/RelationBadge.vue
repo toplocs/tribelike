@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="is == 'interest'" :to="`/interest/${data.id}`">
+  <router-link v-if="is == 'topic'" :to="`/topic/${data.id}`">
     <InterestBadge
       :id="data.id"
       :title="data.title"
