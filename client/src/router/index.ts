@@ -27,8 +27,8 @@ import TopicCreateView from '@/views/topic/CreateView.vue';
 import TopicDetailView from '@/views/topic/DetailView.vue';
 
 //Location
-import LocationCreateView from '@/views/LocationCreateView.vue';
-import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationCreateView from '@/views/location/LocationCreateView.vue';
+import LocationDetailView from '@/views/location/LocationDetailView.vue';
 import LocationInfoView from '@/views/location/InfoView.vue';
 import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';

@@ -1,15 +1,10 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-      <!--
       <Card>
-        <AddInterestRelation 
-          v-model:topicRelations="relations"
-          v-model:locationRelations="relations"
-          v-model:profileRelations="relations"
-        />
+        <Headline>Add a relation:</Headline>
+        <AddRelations />
       </Card>
-      -->
 
       <!--
       <Card v-if="relations?.length">
@@ -115,10 +110,11 @@ import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
-import AddInterestRelation from '@/components/AddInterestRelation.vue';
+import AddRelations from '@/components/AddRelations.vue';
 import ProfileCard from '@/components/ProfileCard.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
+import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';

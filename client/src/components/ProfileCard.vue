@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card class="flex flex-row mx-4 items-center gap-2 p-3 text-center">
+    <Card class="flex flex-row items-center gap-2 p-2 text-center">
       <router-link :to="`/profile/${profile?.id}`">
         <img
           alt="Avatar"
