@@ -3,16 +3,16 @@ import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
 export function topicProvider() {
-  const topic = ref<Interest | null>(null);
+  const topic = ref<Topic | null>(null);
 
-  const setInterest = (id: string) => {
+  const setTopic = (id: string) => {
     gun.get(`topic_${id}`)
     .once((data) => {
       topic.value = data;
     });
   }
 
-  const createInterest = (formData: FormData) => {
+  const createTopic = (formData: FormData) => {
     const id = crypto.randomUUID();
     const data = Object.fromEntries(formData.entries());
     topic.value = {
@@ -45,12 +45,12 @@ export function topicProvider() {
 
   provide('topic', {
     topic,
-    setInterest,
-    createInterest,
+    setTopic,
+    createTopic,
   });
 }
 
-export function useInterest() {
+export function useTopic() {
   const data = inject('topic');
 
   if (!data) {

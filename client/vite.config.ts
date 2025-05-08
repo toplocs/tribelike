@@ -17,9 +17,9 @@ export default defineConfig({
     federation({
         name: 'tribelike',
         remotes: {
-            chat_plugin: `${url}:3001/assets/plugin.js`,
-            wiki_plugin: `${url}:3002/assets/plugin.js`,
-            event_plugin: `${url}:3003/assets/plugin.js`,
+          chat_plugin: `${url}:3001/assets/plugin.js`,
+          wiki_plugin: `${url}:3002/assets/plugin.js`,
+          event_plugin: `${url}:3003/assets/plugin.js`,
         },
         shared: ['vue']
     })

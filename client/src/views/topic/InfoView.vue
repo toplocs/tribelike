@@ -123,11 +123,11 @@ import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
 import { topicToInterest } from '@/assets/defaultRelationKeys';
 import { useProfile } from '@/composables/profileProvider';
-import { useInterest } from '@/composables/interestProvider';
+import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
-const { topic } = useInterest();
+const { topic } = useTopic();
 const { relations, populateRelation } = useRelation();
 const tab = inject('tab');
 const people = ref([]); //friends

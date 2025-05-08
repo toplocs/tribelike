@@ -1,5 +1,11 @@
 export default [
   {
+    id: 'member',
+    active: 'is member of',
+    passive: 'has member',
+    color: 'green',
+    icon: '',
+  }, {
     id: 'like',
     active: 'likes',
     passive: 'is liked by',

@@ -24,6 +24,10 @@ import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
 import InterestPluginsView from '@/views/topic/PluginsView.vue';
 import InterestSettingsView from '@/views/topic/SettingsView.vue';
 
+//Topic
+import TopicDetailView from '@/views/TopicDetailView.vue';
+import TopicCreateView from '@/views/TopicCreateView.vue';
+
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
 import LocationDetailView from '@/views/LocationDetailView.vue';
@@ -145,12 +149,12 @@ const router = createRouter({
     {
       path: '/topic/create',
       name: 'topicCreate',
-      component: InterestCreateView,
-      //meta: { requiresAuth: true },
+      component: TopicCreateView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/topic/:id',
-      component: InterestDetailView,
+      component: TopicDetailView,
       props: true,
       children: [
         {

@@ -87,7 +87,7 @@ const onSubmit = async () => {
     const formData = new FormData(form.value);
     const result = await createInterest(formData);
 
-    return router.push(`/interest/${result.id}`);
+    return router.push(`/topic/${result.id}`);
   } catch (error) {
     console.error(error);
     errorMessage.value = error;

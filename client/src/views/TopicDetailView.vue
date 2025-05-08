@@ -18,12 +18,12 @@ import InfoView from '@/views/topic/InfoView.vue';
 import SubNav from '@/components/SubNav.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 import { useProfile } from '@/composables/profileProvider';
-import { useInterest } from '@/composables/interestProvider';
+import { useTopic } from '@/composables/topicProvider';
 import { relationProvider } from '@/composables/relationProvider';
 
 const route = useRoute();
 const { profile } = useProfile();
-const { topic, setInterest } = useInterest();
+const { topic, setTopic } = useTopic();
 const title = inject('title');
 const tab = ref('');
 const pluginSettings = ref([]);
@@ -61,7 +61,7 @@ const fetchPluginSettings = async (key: string, id: string) => {
 
 
 watch(() => route.params.id, (newId) => {
-  topic.value = setInterest(newId);
+  topic.value = setTopic(newId);
 });
 
 watch(() => topic.value, (newValue) => {
@@ -84,7 +84,7 @@ onMounted(() => {
     profile.value?.id
   );*/
   const id = route.params.id;
-  topic.value = setInterest(id);
+  topic.value = setTopic(id);
 });
 
 onUnmounted(() => {
