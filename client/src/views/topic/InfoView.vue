@@ -1,6 +1,7 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
+      <!--
       <Card>
         <AddInterestRelation 
           v-model:topicRelations="relations"
@@ -8,6 +9,7 @@
           v-model:profileRelations="relations"
         />
       </Card>
+      -->
 
       <!--
       <Card v-if="relations?.length">

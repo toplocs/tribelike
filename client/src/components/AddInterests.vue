@@ -68,9 +68,7 @@ onMounted(async () => {
   .once((refNode, key) => {
     if (!refNode) return;
     gun.get(`topic_${key}`).once((data) => {
-      if (data) {
-        options.value.push(data);
-      }
+      if (data) options.value.push(data);
     });
   });
 });

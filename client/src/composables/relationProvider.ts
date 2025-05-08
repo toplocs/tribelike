@@ -24,6 +24,7 @@ export function relationProvider(
       two: two,
     };
     relations.value.push(relation);
+    console.log(relation);
 
     const node = gun.get(`relations/${one}/${type}/${two}`).put(relation);
     gun.get(one).get('relations').set(node);
@@ -69,12 +70,13 @@ export function relationProvider(
 
   const compareRelation = async (
     one: string,
+    type: string,
     two: string,
-    type?: string
   ): Promise<Relation | undefined> => {
     const chain = await gun.get(one)
     .get('relations')
     .then();
+
     return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
 

@@ -10,19 +10,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import RelationButton from '@/components/RelationButton.vue';
-import { useRelation } from '@/composables/relationProvider';
-import gun from '@/services/gun';
-
-const { relations } = useRelation();
-const relationKeys = ref([]);
-
-onMounted(() => {
-  gun.get('#relations') //in service or provider
-  .map()
-  .once(data => {
-    if (data) {
-      relationKeys.value.push(JSON.parse(data));
-    }
-  });
-})
+import relationKeys from '@/assets/relationKeys.ts';
 </script>

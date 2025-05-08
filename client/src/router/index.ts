@@ -17,16 +17,14 @@ import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
 //Interest
-import InterestCreateView from '@/views/InterestCreateView.vue';
-import InterestDetailView from '@/views/InterestDetailView.vue';
 import InterestInfoView from '@/views/topic/InfoView.vue';
 import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
 import InterestPluginsView from '@/views/topic/PluginsView.vue';
 import InterestSettingsView from '@/views/topic/SettingsView.vue';
 
 //Topic
-import TopicDetailView from '@/views/TopicDetailView.vue';
 import TopicCreateView from '@/views/TopicCreateView.vue';
+import TopicDetailView from '@/views/TopicDetailView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';
