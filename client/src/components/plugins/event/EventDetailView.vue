@@ -39,7 +39,7 @@
                 :key="interest.id"
                 :to="`/interests/${interest.id}`"
               >
-                <InterestBadge :title="interest.title" />
+                <TopicBadge :title="interest.title" />
               </router-link>
             </div>
           </div>
@@ -76,7 +76,7 @@ import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 
 import events from './service.ts';

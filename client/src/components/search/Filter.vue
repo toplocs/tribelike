@@ -14,7 +14,7 @@
       class="absolute space-x-1 space-y-1 p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
-      <InterestBadge
+      <TopicBadge
         v-for="option of filteredOptions"
         :title="option.title"
         :id="option.id"
@@ -35,7 +35,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import Button from '@/components/common/Button.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 
 const props = defineProps({
   options: {

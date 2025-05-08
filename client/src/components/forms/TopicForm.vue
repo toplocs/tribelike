@@ -27,9 +27,6 @@
       />
     </div>
 
-    <RelationSelect />
-
-    <!--
     <div className="mb-2">
       <label
         for="access"
@@ -48,7 +45,6 @@
         v-model="access"
       />
     </div>
-    -->
 
     <SubmitButton className="w-full mt-4">
       Create topic

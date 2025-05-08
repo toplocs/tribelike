@@ -23,7 +23,7 @@
       :title="searchResult.option.title"
       :remove="() => setSearchResult(null)"
     />
-    <InterestBadge
+    <TopicBadge
       v-if="searchResult.key == 'Interests'"
       :title="searchResult.option.title"
       :remove="() => setSearchResult(null)"
@@ -37,7 +37,7 @@ import { ref, inject, watch } from 'vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import relationKeys from '@/assets/relationKeys';
 
 const props = defineProps({

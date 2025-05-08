@@ -118,8 +118,6 @@ import {
   BellIcon
 } from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
-import InterestBadge from './badges/InterestBadge.vue';
-import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/Dropdown.vue';
 import FindMixed from './search/FindMixed.vue';
 import IconButton from './common/IconButton.vue';

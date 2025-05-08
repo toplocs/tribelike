@@ -36,7 +36,7 @@
                   v-if="key == 'Locations'"
                   :title="item.title"
                 />
-                <InterestBadge
+                <TopicBadge
                   v-if="key == 'Interests'"
                   :title="item.title"
                 />
@@ -60,7 +60,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import Divider from '@/components/common/Divider.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 
 const props = defineProps({
   findOptions: {

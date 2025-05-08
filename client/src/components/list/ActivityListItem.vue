@@ -9,7 +9,7 @@
               :key="interest.id"
               :to="`/interest/${interest.id}`"
             >
-              <InterestBadge
+              <TopicBadge
                 :key="interest.id"
                 :title="interest.title"
               />
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import StatusBadge from '@/components/badges/StatusBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 
 const props = defineProps({
   activity: {

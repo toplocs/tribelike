@@ -60,7 +60,7 @@
           class="mt-2 space-x-1 space-y-2"
         >
           <h3 className="mb-2">{{data.label}}:</h3>
-          <InterestBadge
+          <TopicBadge
             v-for="relation in profileRelations.filter(x => x.key == data.value)"
             :title="relation.Profile.username"
           />
@@ -179,7 +179,7 @@ import Divider from '@/components/common/Divider.vue';
 import AddLocationRelation from '@/components/AddLocationRelation.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddLocationButton from '@/components/AddLocationButton.vue';

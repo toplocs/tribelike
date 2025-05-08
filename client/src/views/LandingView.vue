@@ -18,7 +18,7 @@
             v-for="interest in interests"
             :to="`/interest/${interest.id}`"
           >
-            <InterestBadge
+            <TopicBadge
               :key="interest.id"
               :title="interest.title"
             />
@@ -47,7 +47,7 @@ import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Container from '@/components/common/Container.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import FindMixed from '@/components/search/FindMixed.vue';
 import GunTest from '@/components/GunTest.vue';

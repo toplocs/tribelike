@@ -7,7 +7,7 @@
   />
   <div className="mt-2 flex flex-wrap gap-2">
     <div v-for="value of interests">
-      <InterestBadge
+      <TopicBadge
         :title="value.title"
         :remove="removeInterest"
       />
@@ -20,7 +20,7 @@ import axios from 'axios';
 import { ref, onMounted, onUnmounted } from 'vue';
 import TextInput from './common/TextInput.vue';
 import Search from './search/Filter.vue';
-import InterestBadge from './badges/InterestBadge.vue';
+import TopicBadge from './badges/TopicBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useInterest } from '@/composables/interestProvider';
 import gun from '@/services/gun';

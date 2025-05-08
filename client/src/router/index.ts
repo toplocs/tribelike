@@ -23,8 +23,8 @@ import InterestPluginsView from '@/views/topic/PluginsView.vue';
 import InterestSettingsView from '@/views/topic/SettingsView.vue';
 
 //Topic
-import TopicCreateView from '@/views/TopicCreateView.vue';
-import TopicDetailView from '@/views/TopicDetailView.vue';
+import TopicCreateView from '@/views/topic/CreateView.vue';
+import TopicDetailView from '@/views/topic/DetailView.vue';
 
 //Location
 import LocationCreateView from '@/views/LocationCreateView.vue';

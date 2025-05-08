@@ -24,7 +24,7 @@
               v-for="interest in profile?.interests"
               :to="`/interest/${interest.id}`"
             >
-              <InterestBadge
+              <TopicBadge
                 :key="interest.id"
                 :title="interest.title"
               />
@@ -63,7 +63,7 @@ import BackButton from '@/components/common/BackButton.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 
 const props = defineProps({
   profile: {

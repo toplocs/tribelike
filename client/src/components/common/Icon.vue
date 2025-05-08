@@ -3,6 +3,10 @@
     v-if="icon == 'heart' || icon == 'like'"
     class="m-auto w-4 h-4"
   />
+  <HeartIcon
+    v-if="icon == 'love'"
+    class="m-auto w-4 h-4"
+  />
   <BellIcon
     v-if="icon == 'interested'"
     class="m-auto w-4 h-4"

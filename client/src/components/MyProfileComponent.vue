@@ -39,7 +39,7 @@ import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import AddInterests from '@/components/AddInterests.vue';
 import { useProfile } from '@/composables/profileProvider';
 
