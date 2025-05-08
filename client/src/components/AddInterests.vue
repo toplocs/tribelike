@@ -21,12 +21,12 @@ import TextInput from './common/TextInput.vue';
 import Search from './search/Filter.vue';
 import RelationBadge from '@/components/badges/RelationBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
-import { useInterest } from '@/composables/interestProvider';
+import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
 import gun from '@/services/gun';
 
 const { profile } = useProfile();
-const { createInterest } = useInterest();
+const { createTopic } = useTopic();
 const {
   relations,
   createRelation,
@@ -63,10 +63,15 @@ watchEffect(async () => {
 });
 
 onMounted(async () => {
-  gun.get('topics') //change the whole search to a listener/query inside
+  gun.get('topics')
   .map()
-  .once((topic) => {
-    options.value.push(topic);
+  .once((refNode, key) => {
+    if (!refNode) return;
+    gun.get(`topic_${key}`).once((data) => {
+      if (data) {
+        options.value.push(data);
+      }
+    });
   });
 });
 </script>

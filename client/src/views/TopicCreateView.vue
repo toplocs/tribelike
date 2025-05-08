@@ -9,7 +9,7 @@
           {{ errorMessage }}
         </p>
 
-        <InterestForm />
+        <TopicForm />
       </Card>
     </div>
       
@@ -38,13 +38,11 @@ import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
-import InterestForm from '@/components/forms/InterestForm.vue';
-import { useTopic } from '@/composables/topicProvider';
+import TopicForm from '@/components/forms/TopicForm.vue';
  
 import Plugins from '@/components/plugins/Plugins.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { topic, createTopic } = useTopic();
 const errorMessage = ref('');
 </script>
