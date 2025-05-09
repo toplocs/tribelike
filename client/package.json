@@ -17,6 +17,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@formkit/drag-and-drop": "^0.5.3",
     "@heroicons/vue": "^2.2.0",
     "@simplewebauthn/browser": "^13.1.0",
     "@tailwindcss/vite": "^4.1.1",

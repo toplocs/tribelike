@@ -18,10 +18,6 @@
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
