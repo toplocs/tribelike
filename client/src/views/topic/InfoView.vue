@@ -1,7 +1,9 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-      <AddRelations />
+      <div class="mb-4">
+        <AddRelations />
+      </div>
       <DragDropRelations />
 
       <!--

@@ -1,5 +1,5 @@
 <template>
-  <span class="flex flex-row gap-2">
+  <span class="mb-2 flex flex-row gap-2">
     <Search
       placeholder="Select a topic or a location ..."
       :options="options"
@@ -10,6 +10,9 @@
       title="Connect"
       @click="handleSubmit"
     />
+  </span>
+  <span v-if="two">
+    {{ topic?.title }} is related to <TopicBadge :title="two?.title"/>
   </span>
 </template>
 
