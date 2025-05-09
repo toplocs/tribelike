@@ -1,10 +1,50 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-      <Card>
-        <Headline>Add a relation:</Headline>
-        <AddRelations />
-      </Card>
+      <section class="flex flex-wrap gap-4">
+         <Card>
+          <AddRelations />
+        </Card>
+
+        <Card>
+          <div class="space-x-1">
+            <TopicBadge
+              v-for="relation of sortedRelations.relations"
+              :title="relation.two?.title"
+            />
+          </div>
+        </Card>
+
+        <Card>
+          <div class="space-x-1">
+            <b>Likes:</b>
+            <TopicBadge
+              v-for="relation of sortedRelations.likes"
+              :title="relation.two?.title"
+            />
+          </div>
+        </Card>
+
+        <Card>
+          <div class="space-x-1">
+            <b>Learns:</b>
+            <TopicBadge
+              v-for="relation of sortedRelations.learns"
+              :title="relation.two?.title"
+            />
+          </div>
+        </Card>
+
+        <Card>
+          <div class="space-x-1">
+            <b>Teaches:</b>
+            <TopicBadge
+              v-for="relation of sortedRelations.teaches"
+              :title="relation.two?.title"
+            />
+          </div>
+        </Card>
+      </section>
 
       <!--
       <Card v-if="relations?.length">
@@ -112,6 +152,7 @@ import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import ProfileCard from '@/components/ProfileCard.vue';
+import TopicCard from '@/components/TopicCard.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
@@ -125,16 +166,27 @@ import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
 const { topic } = useTopic();
-const { relations, populateRelation } = useRelation();
+const { relations, byType, populateRelation } = useRelation();
 const tab = inject('tab');
 const people = ref([]); //friends
 const populated = ref([]);
+const sortedRelations = ref({
+  relations: [],
+  likes: [],
+  teaches: [],
+  learns: [],
+});
 
 watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['profiles', 'topics'], x))
   );
+  sortedRelations.value.relations = populated.value.filter(x => x.type === '');
+  sortedRelations.value.likes = populated.value.filter(x => x.type === 'like');
+  sortedRelations.value.teaches = populated.value.filter(x => x.type === 'teach');
+  sortedRelations.value.learns = populated.value.filter(x => x.type === 'learn');
+  console.log(sortedRelations.value);
 });
 
 onMounted(async () => {

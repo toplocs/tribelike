@@ -7,8 +7,10 @@ export function relationProvider(
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
     return {
-      likes: relations.value.filter(x => x.type === 'like'),
-      interests: relations.value.filter(x => x.type === 'interest'),
+      relation: relations.value.filter(x => x.type === ''),
+      like: relations.value.filter(x => x.type === 'like'),
+      love: relations.value.filter(x => x.type === 'love'),
+      teach: relations.value.filter(x => x.type === 'teach'),
     };
   });
 

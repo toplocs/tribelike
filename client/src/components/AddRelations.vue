@@ -1,29 +1,16 @@
 <template>
-  <div class="mb-4 flex flex-wrap gap-2">
-    <BigButton
-      v-for="relationKey of relationKeys"
-      :title="relationKey.id"
-      :icon="relationKey.icon || 'heart'"
-      :color="relationKey.color || 'blue'"
-      @click="() => handleClick(relationKey)"
+  <span class="flex flex-row gap-2">
+    <Search
+      placeholder="Select a topic or a location ..."
+      :options="options"
+      @select="handleSelect"
+      @click="handleClick"
     />
-  </div>
-
-  <Search
-    placeholder="Select a topic or a location ..."
-    :options="options"
-    @select="handleSelect"
-    @click="handleClick"
-  />
-  <div className="my-4 flex flex-wrap gap-2">
-    {{ topic?.title }} {{ type.active }}
-    <TopicBadge v-if="two" :title="two.title" />
-  </div>
-
-  <ActionButton
-    title="Create relation"
-    @click="handleSubmit"
-  />
+    <ActionButton
+      title="Connect"
+      @click="handleSubmit"
+    />
+  </span>
 </template>
 
 <script setup lang="ts">

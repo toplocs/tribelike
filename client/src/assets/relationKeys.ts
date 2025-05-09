@@ -1,9 +1,9 @@
 export default [
   {
-    id: 'member',
-    active: 'is member of',
-    passive: 'has member',
-    color: 'green',
+    id: '',
+    active: 'is related to',
+    passive: 'is related to',
+    color: 'blue',
     icon: '',
   }, {
     id: 'like',
@@ -31,3 +31,25 @@ export default [
     icon: 'study',
   }, 
 ];
+
+export const interestToInterest = [
+  {
+    id: '',
+    active: 'is related to',
+    passive: 'is related to',
+    color: 'blue',
+    icon: '',
+  }, {
+    id: 'in',
+    active: 'is child of',
+    passive: 'is parent of',
+    color: 'green',
+    icon: '',
+  }, {
+    id: 'category',
+    active: 'is a',
+    passive: 'contains',
+    color: 'blue',
+    icon: '',
+  },
+]
