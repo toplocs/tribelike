@@ -1,6 +1,6 @@
 <template>
   <Card>
-    <ul ref="baseList" class="flex flex-wrap gap-1">
+    <ul ref="baseList" key="" class="flex flex-wrap gap-1">
       <li v-for="base in bases" :key="base.id">
         <TopicBadge :title="base.two?.title" />
       </li>
@@ -9,7 +9,7 @@
 
   <Card>
     <b>Likes:</b>
-    <ul ref="likeList" class="flex flex-wrap gap-1 min-h-[50px]">
+    <ul ref="likeList" id="likes" class="flex flex-wrap gap-1 min-h-[50px]">
       <li v-for="like in likes" :key="like.id">
         <TopicBadge :title="like.two?.title" />
       </li>
@@ -42,7 +42,13 @@ const populated = ref([]);
 const baseRelations = ref([]);
 const likeRelations = ref([]);
 const learnRelations = ref([]);
-const [baseList, bases] = useDragAndDrop(baseRelations, { group: 'relations' });
+const [baseList, bases] = useDragAndDrop(baseRelations, {
+  group: 'relations',
+  onTransfer: (e) => {
+    console.log(e.targetParent.el.id, e.draggedNodes[0].data.value);
+    //change relation
+  },
+});
 const [likeList, likes] = useDragAndDrop(likeRelations, { group: 'relations' });
 const [learnList, learns] = useDragAndDrop(learnRelations, { group: 'relations' });
 
@@ -54,7 +60,6 @@ watchEffect(async () => {
   baseRelations.value = populated.value.filter(x => x.type === '');
   likeRelations.value = populated.value.filter(x => x.type === 'like');
   learnRelations.value = populated.value.filter(x => x.type === 'learn');
-  console.log(baseRelations.value)
 
   /*sortedRelations.value.teaches = populated.value.filter(x => x.type === 'teach');
   sortedRelations.value.learns = populated.value.filter(x => x.type === 'learn');
