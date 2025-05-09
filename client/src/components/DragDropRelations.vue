@@ -32,8 +32,8 @@ const { relations, byType, populateRelation } = useRelation();
 const populated = ref([]);
 const baseRelations = ref([]);
 const likeRelations = ref([]);
-const [baseList, bases] = useDragAndDrop(baseRelations, { group: 'baseList' });
-const [likeList, likes] = useDragAndDrop(likeRelations, { group: 'likeList' });
+const [baseList, bases] = useDragAndDrop(baseRelations, { group: 'relations' });
+const [likeList, likes] = useDragAndDrop(likeRelations, { group: 'relations' });
 
 watchEffect(async () => {
   if (!relations.value) return;
