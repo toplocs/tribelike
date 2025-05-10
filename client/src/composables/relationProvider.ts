@@ -35,14 +35,12 @@ export function relationProvider(
   }
 
   const updateRelation = async (
-    one: string,
+    id: string,
     type: string,
-    two: string,
-    newType: string,
   ) => {
-    await removeRelation(one, type, two);
-    const relation = await createRelation(one, newType, two);
-    console.log(relation);
+    const update = relations.value.find(x => x.id == id);
+    await removeRelation(update.one, update.type, update.two);
+    const relation = await createRelation(update.one, type, update.two);
 
     return relation;
   }

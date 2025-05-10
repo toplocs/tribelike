@@ -42,34 +42,35 @@ const childRelations = ref([]);
 const categoryRelations = ref([]);
 const [baseList, bases] = useDragAndDrop(baseRelations, {
   group: 'relations',
-  onTransfer: async (e) => {
-    const newType = e.targetParent.el.id;
+  onDragend: async (e) => {
+    console.log('transfer')
+    const newType = parent.el.id;
     const relation = e.draggedNodes[0].data.value;
-    await updateRelation(
-      relation.one?.id,
-      relation.type,
-      relation.two?.id,
-      newType,
-    );
+    await updateRelation(relation.id, newType);
   },
 });
 const [childList, children] = useDragAndDrop(
   childRelations, {
     group: 'relations',
-    onTransfer: async (e) => {
-      const newType = e.targetParent.el.id;
+    onDragend: async (e) => {
+      console.log('drag end')
+      const newType = e.parent.el.id;
       const relation = e.draggedNodes[0].data.value;
-      await updateRelation(
-        relation.one?.id,
-        relation.type,
-        relation.two?.id,
-        newType,
-      );
+      await updateRelation(relation.id, newType);
     },
   }
 );
 const [categoryList, categorys] = useDragAndDrop(
-  categoryRelations, { group: 'relations' }
+  categoryRelations, {
+    group: 'relations',
+    onDragend: async (e) => {
+      console.log(e)
+      const newType = e.parent.el.id;
+      const relation = e.draggedNodes[0].data.value;
+      console.log(newType, relation)
+      await updateRelation(relation.id, newType);
+    },
+  }
 );
 
 watchEffect(async () => {
@@ -77,7 +78,6 @@ watchEffect(async () => {
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['profiles', 'topics'], x))
   );
-  console.log(populated.value)
   baseRelations.value = populated.value.filter(x => x.type === '');
   childRelations.value = populated.value.filter(x => x.type === 'child');
   categoryRelations.value = populated.value.filter(x => x.type === 'category');
