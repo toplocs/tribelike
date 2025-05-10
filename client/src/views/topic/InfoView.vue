@@ -1,10 +1,27 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-      <div class="mb-4">
-        <AddRelations />
-      </div>
-      <DragDropRelations />
+      <section>
+        <Card>
+          <Headline>Relations:</Headline>
+          <div class="mb-4">
+            <AddRelations />
+          </div>
+          <DragDropRelations />
+        </Card>
+      </section>
+
+      <section>
+        <Card>
+          <div class="space-y-4">
+            <Headline>Profiles:</Headline>
+            <ProfileRelations
+              v-for="relationKey of relationKeys"
+              :relationKey="relationKey.id"
+            />
+          </div>
+        </Card>
+      </section>
 
       <!--
       <Card v-if="relations?.length">
@@ -113,9 +130,11 @@ import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/DragDropRelations.vue';
+import ProfileRelations from '@/components/ProfileRelations.vue';
 import ProfileCard from '@/components/ProfileCard.vue';
 import TopicCard from '@/components/TopicCard.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
+import ProfileBadge from '@/components/badges/ProfileBadge.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';
@@ -125,6 +144,7 @@ import RelationListItem from '@/components/list/RelationListItem.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
+import relationKeys from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { topic } = useTopic();

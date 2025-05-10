@@ -49,7 +49,6 @@ const handleRemove = async (relation: Relation) => {
 }
 
 const handleSubmit = async () => {
-  
   const result = await createRelation(
     topic.value?.id,
     type.value?.id,

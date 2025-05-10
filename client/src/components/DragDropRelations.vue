@@ -1,26 +1,35 @@
 <template>
-  <Card>
-    <Headline>Relations:</Headline>
-    <ul ref="baseList" key="" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
-      <li v-for="base in bases" :key="base.id">
-        <TopicBadge :title="base.two?.title" />
-      </li>
-    </ul>
+  <span v-if="!bases.length">
+    Drag and drop relations
+  </span>
+  <ul ref="baseList" key="" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
+    <li v-for="base in bases" :key="base.id">
+      <TopicBadge
+        :title="base.two?.title"
+        :remove="() => handleRemove(base)"
+      />
+    </li>
+  </ul>
 
-    <b>Is child of:</b>
-    <ul ref="childList" id="child" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
-      <li v-for="child in children" :key="child.id">
-        <TopicBadge :title="child.two?.title" />
-      </li>
-    </ul>
+  <b>Is child of:</b>
+  <ul ref="childList" id="child" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
+    <li v-for="child in children" :key="child.id">
+      <TopicBadge
+        :title="child.two?.title"
+        :remove="() => handleRemove(child)"
+      />
+    </li>
+  </ul>
 
-    <b>Is a:</b>
-    <ul ref="categoryList" id="category" class="flex flex-wrap gap-1 min-h-[50px]">
-      <li v-for="category in categorys" :key="category.id">
-        <TopicBadge :title="category.two?.title" />
-      </li>
-    </ul>
-  </Card>
+  <b>Is a:</b>
+  <ul ref="categoryList" id="category" class="flex flex-wrap gap-1 min-h-[50px]">
+    <li v-for="category in categorys" :key="category.id">
+      <TopicBadge
+        :title="category.two?.title"
+        :remove="() => handleRemove(category)"
+      />
+    </li>
+  </ul>
 </template>
 
 <script setup lang="ts">
@@ -35,7 +44,12 @@ import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
 const { topic, createTopic } = useTopic();
-const { relations, byType, updateRelation, populateRelation } = useRelation();
+const {
+  relations,
+  updateRelation,
+  removeRelation,
+  populateRelation
+} = useRelation();
 const populated = ref([]);
 const baseRelations = ref([]);
 const childRelations = ref([]);
@@ -45,6 +59,14 @@ const handleDragEnd = async (e) => {
   const newType = e.parent.el.id;
   const relation = e.draggedNodes[0].data.value;
   await updateRelation(relation.id, newType);
+}
+
+const handleRemove = async (relation: Relation) => {
+  const result = await removeRelation(
+    relation.one?.id,
+    relation.type,
+    relation.two?.id,
+  );
 }
 
 const [baseList, bases] = useDragAndDrop(
