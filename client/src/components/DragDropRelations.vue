@@ -8,14 +8,14 @@
     </ul>
 
     <b>Is child of:</b>
-    <ul ref="childList" id="childs" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
-      <li v-for="child in childs" :key="child.id">
+    <ul ref="childList" id="child" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
+      <li v-for="child in children" :key="child.id">
         <TopicBadge :title="child.two?.title" />
       </li>
     </ul>
 
     <b>Is a:</b>
-    <ul ref="categoryList" class="flex flex-wrap gap-1 min-h-[50px]">
+    <ul ref="categoryList" id="category" class="flex flex-wrap gap-1 min-h-[50px]">
       <li v-for="category in categorys" :key="category.id">
         <TopicBadge :title="category.two?.title" />
       </li>
@@ -35,20 +35,38 @@ import { useRelation } from '@/composables/relationProvider';
 
 const { profile } = useProfile();
 const { topic, createTopic } = useTopic();
-const { relations, byType, populateRelation } = useRelation();
+const { relations, byType, updateRelation, populateRelation } = useRelation();
 const populated = ref([]);
 const baseRelations = ref([]);
 const childRelations = ref([]);
 const categoryRelations = ref([]);
 const [baseList, bases] = useDragAndDrop(baseRelations, {
   group: 'relations',
-  onTransfer: (e) => {
-    console.log(e.targetParent.el.id, e.draggedNodes[0].data.value);
-    //change relation
+  onTransfer: async (e) => {
+    const newType = e.targetParent.el.id;
+    const relation = e.draggedNodes[0].data.value;
+    await updateRelation(
+      relation.one?.id,
+      relation.type,
+      relation.two?.id,
+      newType,
+    );
   },
 });
-const [childList, childs] = useDragAndDrop(
-  childRelations, { group: 'relations' }
+const [childList, children] = useDragAndDrop(
+  childRelations, {
+    group: 'relations',
+    onTransfer: async (e) => {
+      const newType = e.targetParent.el.id;
+      const relation = e.draggedNodes[0].data.value;
+      await updateRelation(
+        relation.one?.id,
+        relation.type,
+        relation.two?.id,
+        newType,
+      );
+    },
+  }
 );
 const [categoryList, categorys] = useDragAndDrop(
   categoryRelations, { group: 'relations' }
@@ -59,6 +77,7 @@ watchEffect(async () => {
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['profiles', 'topics'], x))
   );
+  console.log(populated.value)
   baseRelations.value = populated.value.filter(x => x.type === '');
   childRelations.value = populated.value.filter(x => x.type === 'child');
   categoryRelations.value = populated.value.filter(x => x.type === 'category');

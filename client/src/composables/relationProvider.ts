@@ -34,6 +34,19 @@ export function relationProvider(
     return relation;
   }
 
+  const updateRelation = async (
+    one: string,
+    type: string,
+    two: string,
+    newType: string,
+  ) => {
+    await removeRelation(one, type, two);
+    const relation = await createRelation(one, newType, two);
+    console.log(relation);
+
+    return relation;
+  }
+
   const removeRelation = async (
     one: string = instance,
     type: string,
@@ -104,6 +117,7 @@ export function relationProvider(
     relations,
     byType,
     createRelation,
+    updateRelation,
     removeRelation,
     populateRelation,
     compareRelation,
