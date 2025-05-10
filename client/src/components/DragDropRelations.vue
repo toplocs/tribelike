@@ -1,7 +1,7 @@
 <template>
   <Card>
     <Headline>Relations:</Headline>
-    <ul ref="baseList" key="" class="mb-4 flex flex-wrap gap-1">
+    <ul ref="baseList" key="" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
       <li v-for="base in bases" :key="base.id">
         <TopicBadge :title="base.two?.title" />
       </li>
@@ -40,36 +40,29 @@ const populated = ref([]);
 const baseRelations = ref([]);
 const childRelations = ref([]);
 const categoryRelations = ref([]);
-const [baseList, bases] = useDragAndDrop(baseRelations, {
-  group: 'relations',
-  onDragend: async (e) => {
-    console.log('transfer')
-    const newType = parent.el.id;
-    const relation = e.draggedNodes[0].data.value;
-    await updateRelation(relation.id, newType);
-  },
-});
+
+const handleDragEnd = async (e) => {
+  const newType = e.parent.el.id;
+  const relation = e.draggedNodes[0].data.value;
+  await updateRelation(relation.id, newType);
+}
+
+const [baseList, bases] = useDragAndDrop(
+  baseRelations, {
+    group: 'relations',
+    onDragend: handleDragEnd,
+  }
+);
 const [childList, children] = useDragAndDrop(
   childRelations, {
     group: 'relations',
-    onDragend: async (e) => {
-      console.log('drag end')
-      const newType = e.parent.el.id;
-      const relation = e.draggedNodes[0].data.value;
-      await updateRelation(relation.id, newType);
-    },
+    onDragend: handleDragEnd,
   }
 );
 const [categoryList, categorys] = useDragAndDrop(
   categoryRelations, {
     group: 'relations',
-    onDragend: async (e) => {
-      console.log(e)
-      const newType = e.parent.el.id;
-      const relation = e.draggedNodes[0].data.value;
-      console.log(newType, relation)
-      await updateRelation(relation.id, newType);
-    },
+    onDragend: handleDragEnd,
   }
 );
 

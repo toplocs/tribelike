@@ -19,6 +19,14 @@ export function relationProvider(
     type: string,
     two: string,
   ) => {
+     const exists = relations.value.find(
+      x => x.one === one && x.type === type && x.two === two
+    );
+
+    if (exists) {
+      console.error("Relation already exists.");
+      return;
+    }
     const relation = {
       id: crypto.randomUUID(),
       one: one,
