@@ -1,6 +1,6 @@
 <template>
   <span
-    class="inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-900 ring-blue-500/30 cursor-pointer dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30"
+    class="inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-green-200 text-green-900 ring-green-800/30 cursor-pointer dark:bg-green-400/10 dark:text-green-400 dark:ring-green-400/30"
   >
     <slot />
 

@@ -1,8 +1,12 @@
 <template>
-  <span v-if="!bases.length">
+  <span v-if="!bases.length" class="absolute p-1 text-gray-500">
     Drag and drop relations
   </span>
-  <ul ref="baseList" key="" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
+  <ul
+    ref="baseList"
+    key=""
+    class="mb-4 p-1 flex flex-wrap gap-1 min-h-[50px] border border-dashed border-gray-300"
+  >
     <li v-for="base in bases" :key="base.id">
       <TopicBadge
         :title="base.two?.title"
@@ -12,7 +16,11 @@
   </ul>
 
   <b>Is child of:</b>
-  <ul ref="childList" id="child" class="mb-4 flex flex-wrap gap-1 min-h-[50px]">
+  <ul
+    ref="childList"
+    id="child"
+    class="mb-4 p-1 flex flex-wrap gap-1 min-h-[50px] border border-dashed border-gray-300"
+  >
     <li v-for="child in children" :key="child.id">
       <TopicBadge
         :title="child.two?.title"
@@ -22,7 +30,11 @@
   </ul>
 
   <b>Is a:</b>
-  <ul ref="categoryList" id="category" class="flex flex-wrap gap-1 min-h-[50px]">
+  <ul
+    ref="categoryList"
+    id="category"
+    class="mb-4 p-1 flex flex-wrap gap-1 min-h-[50px] border border-dashed border-gray-300"
+  >
     <li v-for="category in categorys" :key="category.id">
       <TopicBadge
         :title="category.two?.title"
@@ -30,12 +42,17 @@
       />
     </li>
   </ul>
+
+  <SubmitButton>
+    Submit for discussion
+  </SubmitButton>
 </template>
 
 <script setup lang="ts">
 import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 import Card from '@/components/common/Card.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import { useProfile } from '@/composables/profileProvider';

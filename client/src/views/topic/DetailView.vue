@@ -1,12 +1,11 @@
 <template>
   <div>
     <Banner v-if="space == 'local'">
-      You are looking at your local version of {{ topic?.title }}.
-       <b
+      You are viewing the local version of {{ topic?.title }}.
+      <b
         class="p-2 cursor-pointer"
         @click="switchSpace"
-       >
-        Switch to global
+      > Switch to global
       </b>
     </Banner>
 
@@ -59,7 +58,7 @@ const tabs = computed(() => {
 
 const switchSpace = () => {
   space.value = 'global';
-  topic.value = setTopic(newId);
+  topic.value = setTopic(route.params.id);
 }
 
 

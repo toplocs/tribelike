@@ -24,7 +24,7 @@ export function relationProvider(
     );
 
     if (exists) {
-      console.error("Relation already exists.");
+      console.error('Relation already exists.');
       return;
     }
     const relation = {
