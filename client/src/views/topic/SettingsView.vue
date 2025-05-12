@@ -10,7 +10,7 @@
         </Callout>
 
         <Title>
-          Settings for {{ interest?.title }}
+          Settings for {{ topic?.title }}
         </Title>
 
         <form
@@ -20,8 +20,8 @@
         >
           <input
             type="hidden"
-            name="interestId"
-            :value="interest?.id"
+            name="topicId"
+            :value="topic?.id"
           >
 
           <div className="mb-2">
@@ -36,8 +36,8 @@
               id="title"
               name="title"
               autoComplete="title"
-              placeholder="The title of the interest"
-              :modelValue="interest?.title"
+              placeholder="The title of the topic"
+              :modelValue="topic?.title"
             />
           </div>
 
@@ -88,7 +88,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, watchEffect, onMounted } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
@@ -101,8 +100,9 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Callout from '@/components/common/Callout.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
+import { useTopic } from '@/composables/topicProvider';
 
-const interest = inject('interest');
+const { topic } = useTopic();
 const profile = inject('profile');
 const tab = inject('tab');
 const form = ref<HTMLFormElement | null>(null);
@@ -127,12 +127,12 @@ const findProfiles = async () => {
 const inviteFriends = async () => {
   try {
     const invites = friends.value?.filter(x => x.selected);
-    const response = await axios.put(`/api/interest/invite`, {
+    const response = await axios.put(`/api/topic/invite`, {
       invites: invites.map(x => x.id),
-      interestId: interest.value?.id,
+      topicId: topic.value?.id,
     });
-    interest.value.invites = [
-      ...interest.value?.invites,
+    topic.value.invites = [
+      ...topic.value?.invites,
       invites.map(x => x.id)
     ];
 
@@ -151,7 +151,7 @@ const onSubmit = async () => {
       ...relatedLocations.value
     ];
     formData.append('relations', JSON.stringify(relations));
-    const response = await axios.put(`/api/interest`, formData);
+    const response = await axios.put(`/api/topic`, formData);
     successMessage.value = 'Your settings have been updated successfully!';
 
     return response.data;
@@ -162,9 +162,9 @@ const onSubmit = async () => {
 }
 
 watchEffect(() => {
-  access.value = String(interest.value?.access);
-  relatedInterests.value = interest.value?.relations.filter(x => x.type == 'interest');
-  relatedLocations.value = interest.value?.relations.filter(x => x.type == 'location');
+  access.value = String(topic.value?.access);
+  relatedInterests.value = topic.value?.relations.filter(x => x.type == 'topic');
+  relatedLocations.value = topic.value?.relations.filter(x => x.type == 'location');
 });
 
 onMounted(async () => {

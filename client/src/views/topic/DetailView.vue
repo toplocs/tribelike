@@ -1,5 +1,15 @@
 <template>
   <div>
+    <Banner v-if="space == 'local'">
+      You are looking at your local version of {{ topic?.title }}.
+       <b
+        class="p-2 cursor-pointer"
+        @click="switchSpace"
+       >
+        Switch to global
+      </b>
+    </Banner>
+
     <SubNav
       :initialTab="tab"
       :tabs="tabs"
@@ -11,19 +21,18 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import InfoView from '@/views/topic/InfoView.vue';
+import Banner from '@/components/common/Banner.vue';
 import SubNav from '@/components/SubNav.vue';
-import defaultPluginSettings from '@/assets/pluginSettings';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { relationProvider } from '@/composables/relationProvider';
+import defaultPluginSettings from '@/assets/pluginSettings';
 
 const route = useRoute();
 const { profile } = useProfile();
-const { topic, setTopic } = useTopic();
+const { topic, space, setTopic } = useTopic();
 const title = inject('title');
 const tab = ref('');
 const pluginSettings = ref([]);
@@ -48,19 +57,19 @@ const tabs = computed(() => {
   ];
 });
 
+const switchSpace = () => {
+  space.value = 'global';
+  topic.value = setTopic(newId);
+}
+
 
 const fetchPluginSettings = async (key: string, id: string) => {
-  try {
-    const response = await axios.get(`/api/plugin?key=${key}&profileId=${id}`);
 
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 
 watch(() => route.params.id, (newId) => {
+  space.value = 'local';
   topic.value = setTopic(newId);
 });
 
@@ -84,7 +93,8 @@ onMounted(() => {
     profile.value?.id
   );*/
   const id = route.params.id;
-  topic.value = setTopic(id);
+  space.value = 'local';
+  topic.value = setTopic(id); //change?!
 });
 
 onUnmounted(() => {

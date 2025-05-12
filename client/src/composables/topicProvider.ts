@@ -2,14 +2,18 @@ import CryptoJS from 'crypto-js';
 import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 
-export function topicProvider() {
+export function topicProvider(
+  instance: string,
+) {
   const topic = ref<Topic | null>(null);
-  const space = ref('global');
+  const space = ref('local');
 
   const setTopic = (id: string) => {
-    gun.get(`topic_${id}`)
-    .once((data) => {
-      topic.value = data;
+    gun.get(`topic_${id}_${space.value}`)
+    .once((data) => { //listener that should be 'on'
+      if (data) {
+        topic.value = data;
+      }
     });
   }
 
@@ -42,21 +46,16 @@ export function topicProvider() {
   }
 
   onMounted(() => {
-    gun.get(`topic_${topic.id}`)
+    gun.get(`topic_${instance}_${space.value}`)
     .once((data) => { //listener that should be 'on'
       if (data) {
         topic.value = data;
-        space.value = 'global';
       }
     });
+  });
 
-    gun.get(`topic_${topic.id}_local`)
-    .once((data) => { //listener that should be 'on'
-      if (data) {
-        topic.value = data;
-        space.value = 'local';
-      }
-    });
+  onUnmounted(() => {
+    topic.value = null;
   });
 
   provide('topic', {
