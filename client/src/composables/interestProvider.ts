@@ -4,6 +4,7 @@ import gun from '@/services/gun';
 
 export function interestProvider() {
   const interest = ref<Interest | null>(null);
+  const space = ref('global');
 
   const setInterest = (id: string) => {
     gun.get(`interest_${id}`)
@@ -19,7 +20,7 @@ export function interestProvider() {
       id: id,
       ...data,
     };
-    const node = gun.get(`interest_${id}`).put(interest.value);
+    const node = gun.get(`interest_${id}_local`).put(interest.value);
     gun.get('interests').get(id).set(node);
 
     //initial relation
@@ -38,13 +39,24 @@ export function interestProvider() {
   onMounted(() => {
     gun.get(`interest_${interest.id}`)
     .once((data) => { //listener that should be 'on'
-      console.log(interest.value);
-      interest.value = data;
+      if (data) {
+        interest.value = data;
+        space.value = 'global'
+      }
+    });
+
+    gun.get(`interest_${interest.id}_local`)
+    .once((data) => {
+       if (data) {
+        interest.value = data;
+        space.value = 'local';
+      }
     });
   });
 
   provide('interest', {
     interest,
+    space,
     setInterest,
     createInterest,
   });
