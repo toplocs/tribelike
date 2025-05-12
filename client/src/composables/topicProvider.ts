@@ -4,6 +4,7 @@ import gun from '@/services/gun';
 
 export function topicProvider() {
   const topic = ref<Topic | null>(null);
+  const space = ref('global');
 
   const setTopic = (id: string) => {
     gun.get(`topic_${id}`)
@@ -19,7 +20,7 @@ export function topicProvider() {
       id: id,
       ...data,
     };
-    const node = gun.get(`topic_${id}`).put(topic.value);
+    const node = gun.get(`topic_${id}_local`).put(topic.value);
     gun.get('topics').get(id).set(node);
 
     //initial relation
@@ -35,16 +36,32 @@ export function topicProvider() {
     return topic.value;
   }
 
+  const setGlobal = () => {
+    const node = gun.get(`topic_${id}_global`).put(topic.value);
+    gun.get('topics').get(id).set(node);
+  }
+
   onMounted(() => {
     gun.get(`topic_${topic.id}`)
     .once((data) => { //listener that should be 'on'
-      console.log(topic.value);
-      topic.value = data;
+      if (data) {
+        topic.value = data;
+        space.value = 'global';
+      }
+    });
+
+    gun.get(`topic_${topic.id}_local`)
+    .once((data) => { //listener that should be 'on'
+      if (data) {
+        topic.value = data;
+        space.value = 'local';
+      }
     });
   });
 
   provide('topic', {
     topic,
+    space,
     setTopic,
     createTopic,
   });
