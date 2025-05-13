@@ -7,7 +7,7 @@
             <Headline>Other Topics:</Headline>
             <TopicRelations
               v-for="relationKey of topicToTopic"
-              :relationKey="relationKey.id"
+              :relationKey="relationKey"
             />
           </div>
         </section>
@@ -19,7 +19,7 @@
             <Headline>Profiles:</Headline>
             <ProfileRelations
               v-for="relationKey of profileToInterest"
-              :relationKey="relationKey.id"
+              :relationKey="relationKey"
             />
           </div>
         </section>

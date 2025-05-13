@@ -19,7 +19,7 @@ import { useRelation } from '@/composables/relationProvider';
 
 const props = defineProps({
   relationKey: {
-    type: String,
+    type: Object,
     required: true,
   }
 });
@@ -27,11 +27,12 @@ const { profile } = useProfile();
 const { byType, populateRelation } = useRelation();
 const populated = ref([]);
 const title = computed(() => {
-  return props.relationKey.charAt(0).toUpperCase() + props.relationKey.slice(1);
+  const value = props.relationKey.passive;
+  return value.charAt(0).toUpperCase() + value.slice(1);
 });
 
 watchEffect(async () => {
-  const relations = byType.value[props.relationKey];
+  const relations = byType.value[props.relationKey.id];
   if (!relations) return;
   populated.value = await Promise.all(
     relations.map(x => populateRelation(['profiles'], x))

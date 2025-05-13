@@ -4,7 +4,7 @@
 
       <section>
         <Card>
-          <Headline>Relations:</Headline>
+          <Headline>Edit Relations:</Headline>
           <div class="mb-4">
             <AddRelations />
           </div>
@@ -15,7 +15,7 @@
       <section>
         <Card>
           <div class="space-y-4">
-            <Headline>Profiles:</Headline>
+            <Headline>Manage Profiles:</Headline>
             <ProfileRelations
               v-for="relationKey of profileToInterest"
               :relationKey="relationKey.id"

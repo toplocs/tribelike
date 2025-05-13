@@ -71,7 +71,7 @@ onMounted(async () => {
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`topic_${key}`).once((data) => {
+    gun.get(`topic/${key}/local`).once((data) => {
       if (data) options.value.push(data);
     });
   });
