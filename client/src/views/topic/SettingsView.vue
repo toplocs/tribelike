@@ -18,7 +18,7 @@
             <Headline>Manage Profiles:</Headline>
             <ProfileRelations
               v-for="relationKey of profileToInterest"
-              :relationKey="relationKey.id"
+              :relationKey="relationKey"
             />
           </div>
         </Card>

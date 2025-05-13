@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <RelationProvider :key="route.params.id">
     <Banner v-if="space == 'local'">
       You are viewing the local version of {{ topic?.title }}.
       <b
@@ -15,14 +15,14 @@
     />
 
     <router-view />
-  </div>
-
+  </RelationProvider>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Banner from '@/components/common/Banner.vue';
+import RelationProvider from '@/components/RelationProvider.vue';
 import SubNav from '@/components/SubNav.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
@@ -70,11 +70,13 @@ const fetchPluginSettings = async (key: string, id: string) => {
 watch(() => route.params.id, (newId) => {
   space.value = 'local';
   topic.value = setTopic(newId);
+  relationProvider(newId);
 });
 
 watch(() => topic.value, (newValue) => {
   title.value = newValue?.title;
 });
+
 
 /*
 watch(() => profile.value, async (newId) => {

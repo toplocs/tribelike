@@ -101,8 +101,9 @@ export function relationProvider(
 
     return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
-
+  
   onMounted(() => {
+    console.log('MOUNTED')
     gun.get(instance)
     .get('relations')
     .map()
