@@ -167,7 +167,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';

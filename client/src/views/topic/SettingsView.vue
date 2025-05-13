@@ -17,7 +17,7 @@
           <div class="space-y-4">
             <Headline>Profiles:</Headline>
             <ProfileRelations
-              v-for="relationKey of relationKeys"
+              v-for="relationKey of profileToInterest"
               :relationKey="relationKey.id"
             />
           </div>
@@ -130,6 +130,7 @@ import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/DragDropRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useTopic } from '@/composables/topicProvider';
+import { profileToInterest } from '@/assets/relationKeys';
 
 const { topic } = useTopic();
 const profile = inject('profile');
