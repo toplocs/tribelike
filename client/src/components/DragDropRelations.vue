@@ -59,6 +59,12 @@ import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
 
+const props = defineProps({
+  editable: {
+    type: Boolean,
+    default: true,
+  }
+});
 const { profile } = useProfile();
 const { topic, createTopic } = useTopic();
 const {

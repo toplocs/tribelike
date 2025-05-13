@@ -1,4 +1,4 @@
-export default [
+export const profileToInterest = [
   {
     id: '',
     active: 'is related to',
@@ -32,7 +32,7 @@ export default [
   }, 
 ];
 
-export const interestToInterest = [
+export const topicToTopic = [
   {
     id: '',
     active: 'is related to',
@@ -40,7 +40,7 @@ export const interestToInterest = [
     color: 'blue',
     icon: '',
   }, {
-    id: 'in',
+    id: 'child',
     active: 'is child of',
     passive: 'is parent of',
     color: 'green',
@@ -52,4 +52,6 @@ export const interestToInterest = [
     color: 'blue',
     icon: '',
   },
-]
+];
+
+export default [];

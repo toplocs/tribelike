@@ -1,27 +1,30 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-      <section>
-        <Card>
-          <Headline>Relations:</Headline>
-          <div class="mb-4">
-            <AddRelations />
-          </div>
-          <DragDropRelations />
-        </Card>
-      </section>
-
-      <section>
-        <Card>
+      <Card>
+        <section class="mb-8">
           <div class="space-y-4">
-            <Headline>Profiles:</Headline>
-            <ProfileRelations
-              v-for="relationKey of relationKeys"
+            <Headline>Other Topics:</Headline>
+            <TopicRelations
+              v-for="relationKey of topicToTopic"
               :relationKey="relationKey.id"
             />
           </div>
-        </Card>
-      </section>
+        </section>
+
+        <Divider />
+
+        <section class="mt-8 mb-8">
+          <div class="space-y-4">
+            <Headline>Profiles:</Headline>
+            <ProfileRelations
+              v-for="relationKey of profileToInterest"
+              :relationKey="relationKey.id"
+            />
+          </div>
+        </section>
+      </Card>
+      
 
       <!--
       <Card v-if="relations?.length">
@@ -128,10 +131,8 @@ import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
-import AddRelations from '@/components/AddRelations.vue';
-import DragDropRelations from '@/components/DragDropRelations.vue';
+import TopicRelations from '@/components/TopicRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
-import ProfileCard from '@/components/ProfileCard.vue';
 import TopicCard from '@/components/TopicCard.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ProfileBadge from '@/components/badges/ProfileBadge.vue';
@@ -144,7 +145,7 @@ import RelationListItem from '@/components/list/RelationListItem.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
-import relationKeys from '@/assets/relationKeys';
+import { profileToInterest, topicToTopic } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { topic } = useTopic();

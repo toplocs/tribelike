@@ -8,6 +8,8 @@ export function relationProvider(
   const byType = computed(() => {
     return {
       relation: relations.value.filter(x => x.type === ''),
+      child: relations.value.filter(x => x.type === 'child'),
+      category: relations.value.filter(x => x.type === 'category'),
       like: relations.value.filter(x => x.type === 'like'),
       love: relations.value.filter(x => x.type === 'love'),
       teach: relations.value.filter(x => x.type === 'teach'),

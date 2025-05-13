@@ -15,7 +15,7 @@
     <SelectInput
       name="relationKey"
       placeholder="Select a relation"
-      :options="relationKeys"
+      :options="profileToInterest"
       v-model="relationKey"
     />
     <LocationBadge
@@ -38,7 +38,7 @@ import SelectInput from '@/components/common/SelectInput.vue';
 import FindContext from '@/components/search/FindContext.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
-import relationKeys from '@/assets/relationKeys';
+import { profileToInterest } from '@/assets/relationKeys';
 
 const props = defineProps({
   interestRelations: Array,

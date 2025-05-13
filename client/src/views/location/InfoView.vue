@@ -186,7 +186,7 @@ import AddLocationButton from '@/components/AddLocationButton.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
-import relationKeys from '@/assets/relationKeys';
+import { profileToInterest, interestToInterest } from '@/assets/relationKeys';
 
 const route = useRoute();
 const interestRelations = ref([]);
