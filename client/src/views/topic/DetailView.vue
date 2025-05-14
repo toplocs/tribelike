@@ -1,5 +1,5 @@
 <template>
-  <RelationProvider :key="route.params.id">
+  <RelationProvider>
     <Banner v-if="space == 'local'">
       You are viewing the local version of {{ topic?.title }}.
       <b

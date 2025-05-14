@@ -104,7 +104,6 @@
 
         <ActionButton
           title="Send invites"
-          @useAction="inviteFriends"
         />
       </div>
     </Sidebar>

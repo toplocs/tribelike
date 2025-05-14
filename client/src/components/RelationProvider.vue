@@ -1,5 +1,7 @@
 <template>
-  <slot />
+  <div :id="route.params.id">
+   <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
