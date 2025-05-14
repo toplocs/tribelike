@@ -79,6 +79,7 @@ const populated = ref([]);
 const baseRelations = ref([]);
 const childRelations = ref([]);
 const categoryRelations = ref([]);
+const successMessage = ref(null);
 
 const handleDragEnd = async (e) => {
   const newType = e.parent.el.id;
@@ -95,6 +96,7 @@ const handleRemove = async (relation: Relation) => {
 }
 
 const onSubmit = () => {
+  successMessage.value = 'Changes submitted to global space';
   setGlobal();
 }
 

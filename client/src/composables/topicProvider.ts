@@ -19,6 +19,7 @@ export function topicProvider() {
   const setGlobal = () => {
     const node = gun.get(`topic/${topic.value?.id}/global`).put(topic.value);
     gun.get('topics').get(topic.value?.id).set(node);
+    space.value = 'global';
     console.log('globally saved!')
   }
 
