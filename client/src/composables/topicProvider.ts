@@ -16,6 +16,12 @@ export function topicProvider() {
     });
   }
 
+  const setGlobal = () => {
+    const node = gun.get(`topic/${topic.value?.id}/global`).put(topic.value);
+    gun.get('topics').get(topic.value?.id).set(node);
+    console.log('globally saved!')
+  }
+
   const createTopic = (formData: FormData) => {
     const id = crypto.randomUUID();
     const data = Object.fromEntries(formData.entries());
@@ -39,11 +45,6 @@ export function topicProvider() {
     return topic.value;
   }
 
-  const setGlobal = () => {
-    const node = gun.get(`topic/${id}/global`).put(topic.value);
-    gun.get('topics').get(id).set(node);
-  }
-
   onMounted(() => {
     gun.get(`topic/${topic.value?.id}/${space.value}`)
     .once((data) => { //listener that should be 'on'
@@ -61,6 +62,7 @@ export function topicProvider() {
     topic,
     space,
     setTopic,
+    setGlobal,
     createTopic,
   });
 }

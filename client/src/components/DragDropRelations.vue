@@ -43,9 +43,11 @@
     </li>
   </ul>
 
-  <SubmitButton>
-    Submit for discussion
-  </SubmitButton>
+  <form @submit.prevent="onSubmit">
+    <SubmitButton>
+      Submit for global
+    </SubmitButton>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -66,7 +68,7 @@ const props = defineProps({
   }
 });
 const { profile } = useProfile();
-const { topic, createTopic } = useTopic();
+const { topic, setGlobal, createTopic } = useTopic();
 const {
   relations,
   updateRelation,
@@ -90,6 +92,10 @@ const handleRemove = async (relation: Relation) => {
     relation.type,
     relation.two?.id,
   );
+}
+
+const onSubmit = () => {
+  setGlobal();
 }
 
 const [baseList, bases] = useDragAndDrop(
