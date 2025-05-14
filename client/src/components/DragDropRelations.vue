@@ -44,10 +44,12 @@
   </ul>
 
   <form @submit.prevent="onSubmit">
-    <SubmitButton>
-      Submit for global
+    <SubmitButton :resetTrigger="resetForm">
+      Submit changes
     </SubmitButton>
   </form>
+
+  Journal
 </template>
 
 <script setup lang="ts">
@@ -79,12 +81,13 @@ const populated = ref([]);
 const baseRelations = ref([]);
 const childRelations = ref([]);
 const categoryRelations = ref([]);
-const successMessage = ref(null);
+const resetForm = ref(0);
 
 const handleDragEnd = async (e) => {
   const newType = e.parent.el.id;
   const relation = e.draggedNodes[0].data.value;
   await updateRelation(relation.id, newType);
+  resetForm.value++;
 }
 
 const handleRemove = async (relation: Relation) => {
@@ -96,7 +99,6 @@ const handleRemove = async (relation: Relation) => {
 }
 
 const onSubmit = () => {
-  successMessage.value = 'Changes submitted to global space';
   setGlobal();
 }
 

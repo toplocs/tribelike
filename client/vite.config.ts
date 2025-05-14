@@ -82,9 +82,9 @@ export default defineConfig({
     target: 'esnext',
     outDir: './server/src/views'
   },
-  server: {
+  /*server: {
     watch: {
-      ignored: ['**/.gun/**']
+      ignored: ['**']
     }
-  }
+  }*/
 });

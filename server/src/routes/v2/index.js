@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const interest_1 = __importDefault(require("../../api/v2/interest"));
+const location_1 = __importDefault(require("../../api/v2/location"));
+const profile_1 = __importDefault(require("../../api/v2/profile"));
+const magicLinkRouter_1 = __importDefault(require("./magicLinkRouter"));
+const passkeyRouter_1 = __importDefault(require("./passkeyRouter"));
+const userRouter_1 = __importDefault(require("./userRouter"));
+const profileRouter_1 = __importDefault(require("./profileRouter"));
+const sessionRouter_1 = __importDefault(require("./sessionRouter"));
+const router = (0, express_1.Router)();
+router.use('/', sessionRouter_1.default, magicLinkRouter_1.default, passkeyRouter_1.default, userRouter_1.default, profileRouter_1.default);
+router.use('/interest', interest_1.default);
+router.use('/location', location_1.default);
+router.use('/profile', profile_1.default);
+exports.default = router;
