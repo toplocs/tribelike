@@ -30,7 +30,7 @@
             name="username"
             autoComplete="username"
             placeholder="Enter the name of your profile"
-            :modelValue="account?.username || ''"
+            :modelValue="user?.username || ''"
           />
         </div>
 
@@ -47,7 +47,7 @@
             name="email"
             autoComplete="email"
             placeholder="Enter your email address"
-            :modelValue="account?.email || ''"
+            :modelValue="user?.email || ''"
           />
         </div>
 
@@ -57,7 +57,7 @@
       </form>
 
       <button
-        @click="logout"
+        @click="handleLogout"
         className="inline-flex justify-center w-full mt-2 px-4 py-2 text-sm font-medium border border-red-600 dark:border-red-400 text-red-600 dark:text-red-400 bg-transparent rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
       > Logout
       </button>
@@ -66,40 +66,27 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Card from '../components/common/Card.vue';
-import Title from '../components/common/Title.vue';
-import SubmitButton from '../components/common/SubmitButton.vue';
-import TextInput from '../components/common/TextInput.vue';
-import TextArea from '../components/common/TextArea.vue';
-import SelectAvatar from '../components/SelectAvatar.vue';
-import Callout from '../components/common/Callout.vue';
+import Card from '@/components/common/Card.vue';
+import Title from '@/components/common/Title.vue';
+import SubmitButton from '@/components/common/SubmitButton.vue';
+import TextInput from '@/components/common/TextInput.vue';
+import TextArea from '@/components/common/TextArea.vue';
+import SelectAvatar from '@/components/SelectAvatar.vue';
+import Callout from '@/components/common/Callout.vue';
+import { useUser } from '@/composables/userProvider';
 
 const router = useRouter();
-
+const { user, logout } = useUser();
 const form = ref<HTMLFormElement | null>(null);
-const account = ref(null);
 const successMessage = ref('');
 const errorMessage = ref('');
 
-const fetchAccount = async () => {
-  try {
-    const response = await axios.get(`/api/user/byId/${user.value?.id}`);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 const onSubmit = async () => {
   try {
-    const formData = new FormData(form.value ?? undefined);
-    const response = await axios.put(`/api/user`, formData);
-    account.value = response.data;
-    successMessage.value = 'Your account was updated successfully!';
+    user.value = response.data;
+    successMessage.value = 'Your user was updated successfully!';
 
     router.push(`/profile/${profile?.value.id}`);
   } catch (error) {
@@ -108,15 +95,12 @@ const onSubmit = async () => {
   }
 }
 
-const logout = async () => {
+const handleLogout = async () => {
   try {
+    await logout();
     router.push('/login');
   } catch (error) {
     console.error(error);
   }
 }
-
-onMounted(async () => {
-  account.value = await fetchAccount();
-});
 </script>

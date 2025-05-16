@@ -92,7 +92,7 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { userProfiles } = useUser();
+const { user, userProfiles } = useUser();
 const { profile, editProfile, removeProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');

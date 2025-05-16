@@ -1,25 +1,28 @@
 <template>
   <button
     type="submit"
-    :disabled="pending"
     :class="buttonClass"
     @click="handleClick"
   >
-    <template v-if="pending">
-      Sending ...
-    </template>
-    <template v-else-if="check">
-      Finished
-    </template>
-    <template v-else>
-      <slot></slot>
-    </template>
+    <div class="mx-auto flex flex-row">
+      <template v-if="pending">
+        Sending ...
+      </template>
 
-    <CheckCircleIcon
-      v-if="check"
-      class="m-auto ml-1 w-4 h-4"
-      style="stroke-width: 2;"
-    />
+      <template v-else-if="check">
+        Finished
+      </template>
+      
+      <template v-else>
+        <slot></slot>
+      </template>
+
+      <CheckCircleIcon
+        v-if="check"
+        class="m-auto ml-1 w-4 h-4"
+        style="stroke-width: 2;"
+      />
+    </div>
   </button>
 </template>
 

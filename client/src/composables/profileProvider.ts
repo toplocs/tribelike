@@ -21,7 +21,7 @@ export function profileProvider() {
       image: `https://gravatar.com/avatar/${hash}`,
     }
 
-    const node = gun.user().get(`profile_${id}`).put(profile.value);
+    const node = gun.user().get(`profile/${id}`).put(profile.value);
     gun.user().get('profiles').set(node);
     gun.get('profiles').get(id).set(node);
 
@@ -36,7 +36,7 @@ export function profileProvider() {
 
   const removeProfile = async (id: string) => {
     if (gun.user().is) {
-      const node = gun.user().get(`profile_${id}`);
+      const node = gun.user().get(`profile/${id}`);
       node.then(() => {
         gun.user().get('profiles').unset(node);
         gun.get('profiles').get(id).unset(node);
@@ -47,12 +47,17 @@ export function profileProvider() {
 
   const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
-    gun.user()
-    .get('profiles')
-    .get(id)
-    .once(data => {
-      profile.value = data;
-    });
+    console.log(gun.user().is);
+    console.log(id);
+    if (gun.user().is) {
+      gun.user()
+      .get(`profile/${id}`)
+      .once(data => {
+        if (data) {
+          profile.value = data;
+        }
+      });
+    }
   }
 
   onMounted(() => {

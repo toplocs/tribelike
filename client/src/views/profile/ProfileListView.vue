@@ -47,7 +47,7 @@ const { profiles } = useUser();
 const { profile, selectProfile } = useProfile();
 
 async function select(selected: Profile) {
-  selectProfile(selected.id);
+  await selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
 </script>

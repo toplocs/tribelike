@@ -60,38 +60,40 @@ export function userProvider() {
       gun.get('credentials')
       .get(username)
       .once(async (data) => {
-        const challenge = crypto.getRandomValues(new Uint8Array(32));
-        const publicKey = {
-          challenge,
-          allowCredentials: [{
-            id: bufferDecode(data.id),
-            type: 'public-key',
-          }],
-          timeout: 60000,
-          userVerification: 'preferred'
-        };
+        if (data) {
+          const challenge = crypto.getRandomValues(new Uint8Array(32));
+          const publicKey = {
+            challenge,
+            allowCredentials: [{
+              id: bufferDecode(data.id),
+              type: 'public-key',
+            }],
+            timeout: 60000,
+            userVerification: 'preferred'
+          };
 
-        const cred = await navigator.credentials.get({ publicKey });
-        const rawId = cred.rawId;
-        const usernameDerived = bufferEncode(rawId);
+          const cred = await navigator.credentials.get({ publicKey });
+          const rawId = cred.rawId;
+          const usernameDerived = bufferEncode(rawId);
 
-        const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
-        const passwordDerived = bufferEncode(hashBuffer);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
+          const passwordDerived = bufferEncode(hashBuffer);
 
-        gun.user().auth(usernameDerived, passwordDerived, (ack) => {
-          if (ack.err) {
-            reject('Auth failed:', ack.err);
-          } else {
-            resolve(ack.get);
+          gun.user().auth(usernameDerived, passwordDerived, (ack) => {
+            if (ack.err) {
+              reject('Auth failed:', ack.err);
+            } else {
+              resolve(ack.get);
 
-            gun.user()
-            .get('profiles')
-            .map()
-            .once((data) => {
-              if (data) profiles.value.push(data);
-            });
-          }
-        });
+              gun.user()
+              .get('profiles')
+              .map()
+              .once((data) => {
+                if (data) profiles.value.push(data);
+              });
+            }
+          });
+        }
       });
     });
   }
