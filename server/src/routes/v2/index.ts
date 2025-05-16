@@ -9,17 +9,22 @@ import userRouter from './userRouter';
 import profileRouter from './profileRouter';
 import sessionRouter from './sessionRouter';
 
+import pluginRouter from './pluginRouter';
+
 const router = Router();
 router.use('/',
   sessionRouter,
   magicLinkRouter,
   passkeyRouter, 
   userRouter, 
-  profileRouter
+  profileRouter,
+  pluginRouter,
 );
 
 router.use('/interest', v2interestRouter);
 router.use('/location', v2locationRouter);
 router.use('/profile', v2profileRouter);
+
+router.use('/plugins', pluginRouter);
 
 export default router;

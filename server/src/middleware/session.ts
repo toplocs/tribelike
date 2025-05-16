@@ -4,7 +4,7 @@ import { sessions } from '../models';
 
 export const sessionMiddleware: RequestHandler = async (req: RequestWithSession, res: Response, next: NextFunction): Promise<void> => {
     try {
-        if (req.method === "OPTIONS") {
+        /*if (req.method === "OPTIONS") {
             next();
         }
         if (req.path === '/api/auth/session') return next();
@@ -35,7 +35,7 @@ export const sessionMiddleware: RequestHandler = async (req: RequestWithSession,
             loggedIn: loggedIn,
             token: token,
             expires: validatedSession.expires
-        };
+        };*/
         next();
     } catch (err) {
         res.status(500).json({ error: 'Server Error', details: err });

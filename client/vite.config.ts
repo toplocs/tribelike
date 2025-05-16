@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import tailwindcss from "@tailwindcss/vite"
@@ -6,7 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import federation from '@originjs/vite-plugin-federation'
 import gun from './src/services/gun'
 
-const url = 'https://toplocs.com';
+const url = 'http://localhost:3000';
 
 /*async function fetchPluginList() {
   return new Promise((resolve) => {
@@ -17,19 +18,14 @@ const url = 'https://toplocs.com';
 }*/
 
 async function fetchPluginList() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Simulate fetching plugin list data
-      const mockData = {
-        chat_plugin: 'https://example.com/chat_plugin.js',
-        wiki_plugin: 'https://example.com/wiki_plugin.js',
-        event_plugin: 'https://example.com/event_plugin.js',
-      };
-
-      // Resolve the promise with the mock data
-      resolve(mockData);
-    }, 2000); // 2 seconds delay to mimic network request
-  });
+  try {
+    const response = await axios.get(`${url}/api/v2/plugins`);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching plugin list:', error);
+    throw error;
+  }
 }
 
 

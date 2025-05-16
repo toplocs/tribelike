@@ -6,9 +6,9 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
-import Gun from 'gun';
 import { sessionMiddleware } from './middleware';
 import routes from './routes';
+import { initGun } from './gun';
 
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
@@ -76,22 +76,5 @@ function startServer() {
 
 if (require.main === module) {
   const server = startServer();
-
-  const gun = Gun({ web: server, file: 'ra-data' });
-
-  const chatRoomNode = gun.get('tribelike').get('chat-room')
-
-  chatRoomNode.get('messages').on((message, key) => {
-    console.log('New message:', message);
-    console.log('Message key:', key);
-  });
-
-  // To listen for any other events (like message updates or removals), you can use the following pattern:
-  chatRoomNode.on((data) => {
-    console.log('Chat room state changed:', data);
-  });
-
-  setInterval(() => {
-
-  })
+  initGun(server);
 }
