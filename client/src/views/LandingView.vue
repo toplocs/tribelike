@@ -39,6 +39,10 @@
     <Container>
       <GunTest />
     </Container>
+
+      <Container>
+      <PluginTest />
+    </Container>
   </div>
 </template>
 
@@ -51,6 +55,7 @@ import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import FindMixed from '@/components/search/FindMixed.vue';
 import GunTest from '@/components/GunTest.vue';
+import PluginTest from '@/components/PluginTest.vue';
 
 const router = useRouter();
 const profile = inject('profile');

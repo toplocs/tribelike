@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
       if (!data) {
         return res.status(404).json({ message: 'No plugin data found' });
       }
+      console.log(data);
       res.json(data);
     });
 

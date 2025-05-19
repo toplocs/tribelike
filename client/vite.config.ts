@@ -7,11 +7,11 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import federation from '@originjs/vite-plugin-federation'
 import gun from './src/services/gun'
 
-const url = 'http://localhost:3000';
+const url = 'http://localhost';
 
 /*async function fetchPluginList() {
   return new Promise((resolve) => {
-    gun.get('plugins').once((data) => {
+    gun.get('plugins').on((data) => {
       resolve(data || {});
     });
   });
@@ -19,7 +19,8 @@ const url = 'http://localhost:3000';
 
 async function fetchPluginList() {
   try {
-    const response = await axios.get(`${url}/api/v2/plugins`);
+    const response = await axios.get(`${url}:3000/api/v2/plugins`);
+    console.log(response.data)
     
     return response.data;
   } catch (error) {
@@ -40,20 +41,8 @@ async function createFederationRemotes() {
   //return remotes;
 
   return {
-    chat_plugin: {
-      external: `
-        new Promise((resolve) => {
-          gun.get('plugins')
-          .get('chat_plugin')
-          .once(data => {
-            console.log(data);
-            resolve(data);
-          })
-        })
-      `,
-      externalType: 'promise'
-    },
-    wiki_plugin: `${url}:3002/assets/plugin.js`,
+    chat_plugin: `${url}:3001/assets/plugin.js`,
+    //wiki_plugin: `${url}:3002/assets/plugin.js`,
     event_plugin: `${url}:3003/assets/plugin.js`,
   };
 }
@@ -65,8 +54,8 @@ export default defineConfig({
     tailwindcss(),
     federation({
       name: 'tribelike',
-      remotes: await createFederationRemotes(),
-      shared: ['vue']
+      shared: ['vue'],
+      remotes: [],
     })
   ],
   resolve: {
