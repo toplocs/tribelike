@@ -1,7 +1,11 @@
 <template>
   <Suspense>
     <template #default>
-      <component :is="RemoteComponent" v-if="RemoteComponent" />
+      <component
+        v-if="RemoteComponent"
+        :is="RemoteComponent"
+        :parentId="route.params?.id"
+      />
     </template>
     <template #fallback>
       <div>Loading remote component...</div>
@@ -17,12 +21,14 @@ import {
   __federation_method_unwrapDefault as unwrapModule,
 } from "virtual:__federation__";
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   name: String,
   url: String,
   component: String,
 });
+const route = useRoute();
 const RemoteComponent = ref();
 
 

@@ -18,5 +18,5 @@ import OpenLayersMap from 'vue3-openlayers';
 
 	app.mount('#app');
 
-	axios.defaults.withCredentials = true;
+	//axios.defaults.withCredentials = true;
 })();

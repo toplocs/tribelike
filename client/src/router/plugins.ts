@@ -26,7 +26,7 @@ export const getPluginRoutes = async () => {
   });
 
   const pluginRoutes = Object.entries(gunData || {}).map(([key, plugin]) => ({
-    path: plugin.path,
+    path: /*plugin.path ||*/ 'wiki', //update accordingly
     name: `${plugin.name}View`,
     component: PluginView,
     props: plugin,
@@ -35,8 +35,6 @@ export const getPluginRoutes = async () => {
       errorComponent: ErrorView,
     })*/
   }));
-
-  console.log(pluginRoutes);
 
   return pluginRoutes;
 }

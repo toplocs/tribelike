@@ -141,7 +141,7 @@ export const initRouter = async (): Promise<Router> => {
         ]
       },
 
-      //Interests
+      //Topics
       {
         path: '/topic/create',
         name: 'topicCreate',
@@ -155,7 +155,7 @@ export const initRouter = async (): Promise<Router> => {
         children: [
           {
             path: '',
-            name: 'topicActivity',
+            name: 'topicInfo',
             component: InterestInfoView,
           },
 
@@ -174,6 +174,7 @@ export const initRouter = async (): Promise<Router> => {
             name: 'topicSettings',
             component: InterestSettingsView,
           },
+          ...pluginRoutes,
         ],
       },
 
@@ -213,7 +214,6 @@ export const initRouter = async (): Promise<Router> => {
           },
         ],
       },
-      ...pluginRoutes,
     ]
   });
 
