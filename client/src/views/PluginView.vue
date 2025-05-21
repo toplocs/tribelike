@@ -19,13 +19,12 @@ import {
   __federation_method_getRemote as getRemote,
   __federation_method_setRemote as setRemote,
   __federation_method_unwrapDefault as unwrapModule,
-} from "virtual:__federation__";
-import { ref, onMounted } from 'vue';
+} from 'virtual:__federation__';
+import { ref, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
-  name: String,
-  url: String,
+  plugin: Object,
   component: String,
 });
 const route = useRoute();
@@ -34,11 +33,7 @@ const RemoteComponent = ref();
 
 const loadPlugin = async () => {
   try {
-    const plugin = {
-      ...props,
-      component: './WikiView',
-    };
-    console.log(plugin);
+    const plugin = props.plugin;
 
     setRemote(plugin.name, {
       url: () => Promise.resolve(plugin.url),
@@ -46,7 +41,7 @@ const loadPlugin = async () => {
       from: 'vite'
     });
 
-    const module = await getRemote(plugin.name, plugin.component);
+    const module = await getRemote(plugin.name, props.component);
     const component = await unwrapModule(module);
 
     RemoteComponent.value = component;
@@ -55,7 +50,12 @@ const loadPlugin = async () => {
   }
 };
 
-onMounted(() => {
-  loadPlugin();
+watchEffect(async () => {
+  console.log('watch')
+  await loadPlugin();
+});
+
+onMounted(async () => {
+  await loadPlugin();
 });
 </script>

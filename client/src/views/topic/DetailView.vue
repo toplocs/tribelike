@@ -44,15 +44,15 @@ const tabs = computed(() => {
       x => x.pluginId == plugin.pluginId
     );
     if (settings?.active == false) return null;
-    else return { value: plugin.name, href: `/topic/${topic.value?.id}/${plugin.path}` };
+    else return { value: plugin.name, href: `/topic/${route.params.id}/${plugin.path}` };
   }).filter(Boolean);
 
   return [
-    { value: 'Info', href: `/topic/${topic.value?.id}` },
-    { value: 'Discussions', href: `/topic/${topic.value?.id}/discussions` },
+    { value: 'Info', href: `/topic/${route.params.id}` },
+    { value: 'Discussions', href: `/topic/${route.params.id}/discussions` },
     ...routes,
-    { value: 'Plugins', href: `/topic/${topic.value?.id}/plugins` },
-    { value: 'Settings', href: `/topic/${topic.value?.id}/settings` },
+    { value: 'Plugins', href: `/topic/${route.params.id}/plugins` },
+    { value: 'Settings', href: `/topic/${route.params.id}/settings` },
   ];
 });
 

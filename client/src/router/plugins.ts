@@ -2,7 +2,34 @@ import { defineAsyncComponent } from 'vue';
 import PluginView from '@/views/PluginView.vue';
 import gun from '@/services/gun'
 
-export const getPluginRoutes = async () => {
+export const addPluginRoutes = (router: any) => { //sync loading
+  console.log(router);
+  gun.get('plugins')
+  .map()
+  .once(plugin => {
+    if (plugin.paths) {
+      gun.get(plugin.paths)
+      .map()
+      .once(data => {
+        if (data) {
+          const route = {
+            path: data.path,
+            name: data.component,
+            component: PluginView,
+            props: {
+              plugin: plugin,
+              component: `./${data.component}`
+            },
+          }
+          console.log(route);
+          router.addRoute('topicDetail', route);
+        }
+      });
+    }
+  });
+}
+
+export const getPluginRoutes = async () => { //async loading
   const gunData = await new Promise((resolve) => {
     gun.get('plugins').once((pluginRefs) => {
       if (!pluginRefs) return resolve([]);

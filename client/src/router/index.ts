@@ -37,188 +37,189 @@ import LocationSettingsView from '@/views/location/SettingsView.vue';
 import GunRegisterView from '@/views/GunRegisterView.vue';
 import GunLoginView from '@/views/GunLoginView.vue';
 
-import { getPluginRoutes } from './plugins.ts';
+import { addPluginRoutes } from './plugins';
 
-export const initRouter = async (): Promise<Router> => {
-  const pluginRoutes = await getPluginRoutes();
-
-  return createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    scrollBehavior(to, from, savedPosition) {
-      return { top: 0, behavior: 'smooth' }
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0, behavior: 'smooth' }
+  },
+  routes: [
+    {
+      path: '/',
+      name: 'landing',
+      component: LandingView,
+      meta: { title: "TOPLOCS" },
     },
-    routes: [
-      {
-        path: '/',
-        name: 'landing',
-        component: LandingView,
-        meta: { title: "TOPLOCS" },
-      },
-      {
-        path: '/login',
-        children: [
-          {
-            path: '',
-            name: 'login',
-            component: GunLoginView,
-          },
-          {
-            path: 'passkey',
-            name: 'passkey',
-            component: LoginView,
-          },
-          {
-            path: 'email',
-            name: 'emailLogin',
-            component: EmailLoginView,
-          },
-        ]
-      },
-      {
-        path: '/register',
-        children: [
-          {
-            path: '',
-            name: 'register',
-            component: GunRegisterView,
-          },
-          {
-            path: 'finish',
-            name: 'registerFinish',
-            component: RegisterFinishView,
-          },
-          {
-            path: 'expired',
-            name: 'registerExpired',
-            component: RegisterExpiredView,
-          },
-        ]
-      },
-      {
-        path: '/settings',
-        name: 'settings',
-        component: SettingsView,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/passkeys',
-        name: 'passkeys',
-        component: PasskeyView
-      },
-      {
-        path: '/magicLink/:token',
-        name: 'magicLink',
-        component: MagicLinkView
-      },
+    {
+      path: '/login',
+      children: [
+        {
+          path: '',
+          name: 'login',
+          component: GunLoginView,
+        },
+        {
+          path: 'passkey',
+          name: 'passkey',
+          component: LoginView,
+        },
+        {
+          path: 'email',
+          name: 'emailLogin',
+          component: EmailLoginView,
+        },
+      ]
+    },
+    {
+      path: '/register',
+      children: [
+        {
+          path: '',
+          name: 'register',
+          component: GunRegisterView,
+        },
+        {
+          path: 'finish',
+          name: 'registerFinish',
+          component: RegisterFinishView,
+        },
+        {
+          path: 'expired',
+          name: 'registerExpired',
+          component: RegisterExpiredView,
+        },
+      ]
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/passkeys',
+      name: 'passkeys',
+      component: PasskeyView
+    },
+    {
+      path: '/magicLink/:token',
+      name: 'magicLink',
+      component: MagicLinkView
+    },
 
-      //Profiles
-      {
-        path: '/profiles',
-        name: 'profiles',
-        component: ProfileListView,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/profiles/create',
-        name: 'profileCreate',
-        component: ProfileCreateView,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/profile/:id',
-        props: true,
-        children: [
-          {
-            path: '',
-            name: 'profile',
-            component: ProfileDetailView,
-          },
-          {
-            path: 'settings',
-            name: 'profileSettings',
-            component: ProfileSettingsView,
-          },
-        ]
-      },
+    //Profiles
+    {
+      path: '/profiles',
+      name: 'profiles',
+      component: ProfileListView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profiles/create',
+      name: 'profileCreate',
+      component: ProfileCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profile/:id',
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'profile',
+          component: ProfileDetailView,
+        },
+        {
+          path: 'settings',
+          name: 'profileSettings',
+          component: ProfileSettingsView,
+        },
+      ]
+    },
 
-      //Topics
-      {
-        path: '/topic/create',
-        name: 'topicCreate',
-        component: TopicCreateView,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/topic/:id',
-        component: TopicDetailView,
-        props: true,
-        children: [
-          {
-            path: '',
-            name: 'topicInfo',
-            component: InterestInfoView,
-          },
+    //Interests
+    {
+      path: '/topic/create',
+      name: 'topicCreate',
+      component: TopicCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/topic/:id',
+      name: 'topicDetail',
+      component: TopicDetailView,
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'topicActivity',
+          component: InterestInfoView,
+        },
 
-          {
-            path: 'discussions',
-            name: 'topicDiscussion',
-            component: InterestDiscussionView,
-          },
-          {
-            path: 'plugins',
-            name: 'topicPlugins',
-            component: InterestPluginsView,
-          },
-          {
-            path: 'settings',
-            name: 'topicSettings',
-            component: InterestSettingsView,
-          },
-          ...pluginRoutes,
-        ],
-      },
+        {
+          path: 'discussions',
+          name: 'topicDiscussion',
+          component: InterestDiscussionView,
+        },
+        {
+          path: 'plugins',
+          name: 'topicPlugins',
+          component: InterestPluginsView,
+        },
+        {
+          path: 'settings',
+          name: 'topicSettings',
+          component: InterestSettingsView,
+        },
+      ],
+    },
 
-      //Locations
-      {
-        path: '/location/create',
-        name: 'locationCreate',
-        component: LocationCreateView,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/location/:id',
-        component: LocationDetailView,
-        props: true,
-        children: [
-          {
-            path: '',
-            name: 'locationActivity',
-            component: LocationInfoView,
-          },
+    //Locations
+    {
+      path: '/location/create',
+      name: 'locationCreate',
+      component: LocationCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/location/:id',
+      component: LocationDetailView,
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'locationActivity',
+          component: LocationInfoView,
+        },
 
-          {
-            path: 'discussions',
-            name: 'locationDiscussion',
-            component: LocationDiscussionView,
-          },
+        {
+          path: 'discussions',
+          name: 'locationDiscussion',
+          component: LocationDiscussionView,
+        },
 
-          {
-            path: 'plugins',
-            name: 'locationPlugins',
-            component: LocationPluginsView,
-          },
-          {
-            path: 'settings',
-            name: 'locationSettings',
-            component: LocationSettingsView,
-          },
-        ],
-      },
-    ]
-  });
+        {
+          path: 'plugins',
+          name: 'locationPlugins',
+          component: LocationPluginsView,
+        },
+        {
+          path: 'settings',
+          name: 'locationSettings',
+          component: LocationSettingsView,
+        },
+      ],
+    },
 
-  router.beforeEach(async (to, from, next) => {
+  ]
+});
 
-    next();
-  });
-}
+addPluginRoutes(router);
+
+router.beforeEach(async (to, from, next) => {
+
+  next();
+});
+
+export default router
