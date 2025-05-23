@@ -5,6 +5,7 @@
         v-if="RemoteComponent"
         :is="RemoteComponent"
         :parentId="route.params?.id"
+        :query="route.query"
       />
     </template>
     <template #fallback>
@@ -51,7 +52,6 @@ const loadPlugin = async () => {
 };
 
 watchEffect(async () => {
-  console.log('watch')
   await loadPlugin();
 });
 

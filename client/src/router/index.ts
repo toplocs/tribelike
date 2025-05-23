@@ -36,6 +36,7 @@ import LocationSettingsView from '@/views/location/SettingsView.vue';
 
 import GunRegisterView from '@/views/GunRegisterView.vue';
 import GunLoginView from '@/views/GunLoginView.vue';
+import PluginLoaderView from '@/views/PluginLoaderView.vue';
 
 import { addPluginRoutes } from './plugins';
 
@@ -138,7 +139,7 @@ const router = createRouter({
       ]
     },
 
-    //Interests
+    //Topics
     {
       path: '/topic/create',
       name: 'topicCreate',
@@ -156,7 +157,6 @@ const router = createRouter({
           name: 'topicActivity',
           component: InterestInfoView,
         },
-
         {
           path: 'discussions',
           name: 'topicDiscussion',
@@ -171,6 +171,11 @@ const router = createRouter({
           path: 'settings',
           name: 'topicSettings',
           component: InterestSettingsView,
+        },
+        {
+          path: ':pluginPath(.*)*',
+          name: 'pluginLoader',
+          component: PluginLoaderView,
         },
       ],
     },
@@ -218,7 +223,7 @@ const router = createRouter({
 addPluginRoutes(router);
 
 router.beforeEach(async (to, from, next) => {
-
+  //check if the route exists in gun
   next();
 });
 

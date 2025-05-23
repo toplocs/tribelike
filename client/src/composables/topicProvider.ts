@@ -32,6 +32,7 @@ export function topicProvider() {
     };
     const node = gun.get(`topic/${id}/local`).put(topic.value);
     gun.get('topics').get(id).set(node);
+    gun.get('topics/titles').get(topic.value.title).set(node);
 
     //initial relation
     const relation = gun.get(`relations/${data.profileId}/${data.relationId}/${id}`).put({
