@@ -49,9 +49,6 @@ const tabs = computed(() => {
 
   return [
     { value: 'Info', href: `/topic/${route.params.id}` },
-    { value: 'Discussions', href: `/topic/${route.params.id}/discussions` },
-    ...routes,
-    { value: 'Plugins', href: `/topic/${route.params.id}/plugins` },
     { value: 'Settings', href: `/topic/${route.params.id}/settings` },
   ];
 });
@@ -60,12 +57,6 @@ const switchSpace = () => {
   space.value = 'global';
   topic.value = setTopic(route.params.id);
 }
-
-
-const fetchPluginSettings = async (key: string, id: string) => {
-
-}
-
 
 watch(() => route.params.id, (newId) => {
   space.value = 'local';
@@ -88,11 +79,6 @@ watch(() => profile.value, async (newId) => {
 */
 
 onMounted(() => {
-  /*topic.value = await fetchInterest(route.params.id);
-  pluginSettings.value = await fetchPluginSettings(
-    topic.value?.id,
-    profile.value?.id
-  );*/
   const id = route.params.id;
   space.value = 'local';
   topic.value = setTopic(id); //change?!

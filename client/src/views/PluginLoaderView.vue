@@ -5,34 +5,21 @@
 </template>
 
 <script setup>
-import { onMounted} from 'vue';
+import { watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import PluginView from '@/views/PluginView.vue';
+import { usePlugins } from '@/composables/pluginProvider';
 import gun from '@/services/gun';
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
+const { routes } = usePlugins();
 
-onMounted(() => {
+watch(routes.value, (newValue) => {
   const pluginPath = route.params.pluginPath;
+  const exists = newValue.find(x => x.path === pluginPath[0]);
 
-  gun.get('plugins')
-  .map()
-  .once(plugin => {
-    if (plugin && plugin.paths) {
-      gun.get(plugin.paths)
-      .map()
-      .once(data => {
-        if (data) {
-          if (data.path === pluginPath[0]) {
-            gun.get('plugins').map().off();
-            gun.get(plugin.paths).map().off();
-
-            router.replace(route.fullPath)
-          }
-        }
-      });
-    }
-  });
+  if (exists) router.replace(route.fullPath)
 });
+
 </script>
