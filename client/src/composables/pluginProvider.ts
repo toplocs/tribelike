@@ -5,6 +5,7 @@ export function pluginProvider() {
   const plugins = ref<Plugin[]>([]);
   const routes = ref<Route[]>([]);
   const slots = ref<Slot[]>([]);
+  const tabs = ref<Tab[]>([]);
 
   onMounted(() => {
     gun.get('plugins')
@@ -19,12 +20,21 @@ export function pluginProvider() {
             routes.value?.push(data);
           }
         });
+
         gun.get(plugin.slots)
         .map()
         .once(data => {
-          console.log(data);
           if (data) {
             slots.value?.push(data);
+          }
+        });
+
+        gun.get(plugin.tabs)
+        .map()
+        .once(data => {
+          if (data && data.value) {
+            const exists = tabs.value.some(x => x.value === data.value);
+            if (!exists) tabs.value?.push(data);
           }
         });
       }
@@ -35,12 +45,14 @@ export function pluginProvider() {
     plugins.value = [];
     routes.value = [];
     slots.value = [];
+    tabs.value = [];
   });
 
   provide('plugin', {
     plugins,
     routes,
     slots,
+    tabs,
   });
 }
 

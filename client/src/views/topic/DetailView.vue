@@ -11,7 +11,11 @@
 
     <SubNav
       :initialTab="tab"
-      :tabs="tabs"
+      :tabs="[
+        { value: 'Info', href: `/topic/${route.params.id}` },
+        { value: 'Settings', href: `/topic/${route.params.id}/settings` },
+        ...routedTabs,
+      ]"
     />
 
     <router-view />
@@ -26,32 +30,23 @@ import RelationProvider from '@/components/RelationProvider.vue';
 import SubNav from '@/components/SubNav.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
+import { usePlugins } from '@/composables/pluginProvider';
 import { relationProvider } from '@/composables/relationProvider';
-import defaultPluginSettings from '@/assets/pluginSettings';
 
 const route = useRoute();
 const { profile } = useProfile();
 const { topic, space, setTopic } = useTopic();
+const { tabs } = usePlugins();
 const title = inject('title');
 const tab = ref('');
-const pluginSettings = ref([]);
-const access = computed(
-  () => profile.value?.topics.some(x => x.id == topic.value?.id)
-);
-const tabs = computed(() => {
-  const routes = defaultPluginSettings.map(plugin => {
-    const settings = pluginSettings.value.find(
-      x => x.pluginId == plugin.pluginId
-    );
-    if (settings?.active == false) return null;
-    else return { value: plugin.name, href: `/topic/${route.params.id}/${plugin.path}` };
-  }).filter(Boolean);
-
-  return [
-    { value: 'Info', href: `/topic/${route.params.id}` },
-    { value: 'Settings', href: `/topic/${route.params.id}/settings` },
-  ];
+const routedTabs = computed(() => {
+  return tabs.value.map(x => ({
+    ...x,
+    href: `/topic/${route.params.id}/${x.href}`
+  }));
 });
+
+
 
 const switchSpace = () => {
   space.value = 'global';
@@ -67,16 +62,6 @@ watch(() => route.params.id, (newId) => {
 watch(() => topic.value, (newValue) => {
   title.value = newValue?.title;
 });
-
-
-/*
-watch(() => profile.value, async (newId) => {
-  pluginSettings.value = await fetchPluginSettings(
-    topic.value?.id,
-    profile.value?.id
-  );
-});
-*/
 
 onMounted(() => {
   const id = route.params.id;

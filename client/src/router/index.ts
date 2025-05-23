@@ -154,7 +154,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'topicActivity',
+          name: 'topicInfo',
           component: InterestInfoView,
         },
         {
