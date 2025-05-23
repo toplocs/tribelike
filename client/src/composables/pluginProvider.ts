@@ -4,7 +4,7 @@ import gun from '@/services/gun';
 export function pluginProvider() {
   const plugins = ref<Plugin[]>([]);
   const routes = ref<Route[]>([]);
-  const tabs = ref<String>([]);
+  const slots = ref<Slot[]>([]);
 
   onMounted(() => {
     gun.get('plugins')
@@ -19,17 +19,28 @@ export function pluginProvider() {
             routes.value?.push(data);
           }
         });
+        gun.get(plugin.slots)
+        .map()
+        .once(data => {
+          console.log(data);
+          if (data) {
+            slots.value?.push(data);
+          }
+        });
       }
     });
   });
 
   onUnmounted(() => {
     plugins.value = [];
+    routes.value = [];
+    slots.value = [];
   });
 
   provide('plugin', {
     plugins,
     routes,
+    slots,
   });
 }
 
