@@ -25,7 +25,9 @@ export function pluginProvider() {
         .map()
         .once(data => {
           if (data) {
-            slots.value?.push(data);
+            const exists = slots.value.some(x => x.slot === data.slot);
+            const slot = { plugin: plugin, ...data };
+            if (!exists) slots.value?.push(slot);
           }
         });
 

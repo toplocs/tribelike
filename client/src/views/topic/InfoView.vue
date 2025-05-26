@@ -118,6 +118,15 @@
         </a>
       </div>
       <Divider />
+
+      <section>
+        <PluginComponent
+          v-for="slot of slots"
+          :plugin="slot.plugin"
+          :position="slot.component"
+        />
+      </section>
+
     </Sidebar>
 
   </Container>
@@ -138,16 +147,19 @@ import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
+import PluginComponent from '@/components/PluginComponent.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
-import { useRelation } from '@/composables/relationProvider';
+import { usePlugins } from '@/composables/pluginProvider';
 import { profileToInterest, topicToTopic } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { topic } = useTopic();
-const { relations, byType, populateRelation } = useRelation();
+const { slots } = usePlugins();
 const tab = inject('tab');
-const people = ref([]); //friends
+const pluginSlots = computed(() => (
+  slots.map(x => x.slot == 'InfoView')
+));
 
 onMounted(async () => {
   tab.value = 'Info';

@@ -21,39 +21,36 @@ import {
   __federation_method_setRemote as setRemote,
   __federation_method_unwrapDefault as unwrapModule,
 } from 'virtual:__federation__';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
   plugin: Object,
-  component: String,
+  position: String,
 });
 const route = useRoute();
 const RemoteComponent = ref();
 
-
 const loadPlugin = async () => {
   try {
     const plugin = props.plugin;
+    console.log(props)
+    if (plugin) {
+      setRemote(plugin.name, {
+        url: () => Promise.resolve(plugin.url),
+        format: 'esm',
+        from: 'vite'
+      });
 
-    setRemote(plugin.name, {
-      url: () => Promise.resolve(plugin.url),
-      format: 'esm',
-      from: 'vite'
-    });
+      const module = await getRemote(plugin.name, `./${props.position}`);
+      const component = await unwrapModule(module);
 
-    const module = await getRemote(plugin.name, `./${props.component}`);
-    const component = await unwrapModule(module);
-
-    RemoteComponent.value = component;
+      RemoteComponent.value = component;
+    }
   } catch (e) {
     console.error('Failed to load remote plugin:', e);
   }
 };
-
-watchEffect(async () => {
-  await loadPlugin();
-});
 
 onMounted(async () => {
   await loadPlugin();

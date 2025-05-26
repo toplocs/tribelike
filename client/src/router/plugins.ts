@@ -17,7 +17,7 @@ export const addPluginRoutes = (router: any) => { //sync loading
             component: PluginView,
             props: {
               plugin: plugin,
-              component: `./${data.component}`
+              component: data.component,
             },
           }
           router.addRoute('topicDetail', route);
