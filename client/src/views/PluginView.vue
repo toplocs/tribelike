@@ -21,7 +21,7 @@ import {
   __federation_method_setRemote as setRemote,
   __federation_method_unwrapDefault as unwrapModule,
 } from 'virtual:__federation__';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, inject, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
@@ -29,6 +29,7 @@ const props = defineProps({
   component: String,
 });
 const route = useRoute();
+const tab = inject('tab');
 const RemoteComponent = ref();
 
 
@@ -57,5 +58,6 @@ watchEffect(async () => {
 
 onMounted(async () => {
   await loadPlugin();
+  tab.value = props.plugin?.name;
 });
 </script>

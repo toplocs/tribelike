@@ -81,50 +81,13 @@
       </div>
       <Divider />
 
-      <div class="flex flex-row items-center justify-between">
-        <Title>Links</Title>
-        <Dialog>
-          <template #trigger="{ openDialog }">
-            <ActionButton
-              title="Add"
-              @click="openDialog"
-            />
-          </template>
-
-          <template #content="{ closeDialog }">
-            <LinkDialog
-              type="topic"
-              :id="topic?.id"
-              :closeDialog="(x) => {
-                topic?.links.push(x);
-                closeDialog()
-              }"
-            />
-          </template>
-        </Dialog>
-      </div>
-
-      <div 
-        v-for="link of topic?.links"
-        :key="link"
-        class="mb-2 dark:text-white"
-      > • 
-        <a
-          :key="link"
-          :href="link"
-          class="text-blue-500 hover:text-blue-700 underline"
-        >
-          {{ link }}
-        </a>
-      </div>
-      <Divider />
-
-      <section>
+      <section v-for="slot of slots">
         <PluginComponent
-          v-for="slot of slots"
           :plugin="slot.plugin"
           :position="slot.component"
         />
+
+        <Divider />
       </section>
 
     </Sidebar>
@@ -145,8 +108,6 @@ import ProfileRelations from '@/components/ProfileRelations.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';
-import Dialog from '@/components/common/Dialog.vue';
-import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import PluginComponent from '@/components/PluginComponent.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
