@@ -44,29 +44,13 @@
                     Create location
                   </li>
                 </router-link>
-
-                <Divider />
-
-                <router-link to="/chat/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create chat
-                  </li>
-                </router-link>
-
-                <router-link to="/wiki/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create wiki
-                  </li>
-                </router-link>
-
-                <router-link to="/event/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create event
-                  </li>
-                </router-link>
               </ul>
             </template>
           </Dropdown>
+
+          <router-link v-if="on == 'topic'" :to="settings">
+            <IconButton :icon="Cog6ToothIcon" />
+          </router-link>
 
           <!-- <Dropdown name="dropdown2" className="min-w-40">
             <template #trigger>
@@ -108,14 +92,14 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   HomeIcon,
   MagnifyingGlassIcon,
   PlusIcon,
-  BellIcon
+  BellIcon,
+  Cog6ToothIcon
 } from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
 import Dropdown from './common/Dropdown.vue';
@@ -125,13 +109,19 @@ import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { useTopic } from '@/composables/topicProvider';
 
 const router = useRouter();
 const { user } = useUser();
 const { profile } = useProfile();
+const { topic } = useTopic();
 const title = inject('title');
+const settings = inject('settings');
 const hideSearch = ref(true);
 const dropdown = ref(null);
+const on = computed(() => (
+    topic.value ? 'topic' : ''
+));
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;

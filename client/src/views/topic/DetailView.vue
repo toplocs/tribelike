@@ -13,7 +13,6 @@
       :initialTab="tab"
       :tabs="[
         { value: 'Info', href: `/topic/${route.params.id}` },
-        { value: 'Settings', href: `/topic/${route.params.id}/settings` },
         ...routedTabs,
       ]"
     />
@@ -38,6 +37,7 @@ const { profile } = useProfile();
 const { topic, space, setTopic } = useTopic();
 const { tabs } = usePlugins();
 const title = inject('title');
+const settings = inject('settings');
 const tab = ref('');
 const routedTabs = computed(() => {
   return tabs.value.map(x => ({
@@ -67,6 +67,7 @@ onMounted(() => {
   const id = route.params.id;
   space.value = 'local';
   topic.value = setTopic(id); //change?!
+  settings.value = `/topic/${id}/settings`;
 });
 
 onUnmounted(() => {

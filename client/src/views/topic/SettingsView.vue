@@ -26,84 +26,17 @@
 
       <section>
         <Card className="mt-4">
-          <Callout v-if="successMessage" color="green">
-            {{ successMessage }}
-          </Callout>
-          <Callout v-if="errorMessage" color="red">
-            {{ errorMessage }}
-          </Callout>
-
-          <Title>
-            Settings for {{ topic?.title }}
-          </Title>
-
-          <form
-            ref="form"
-            @submit.prevent="onSubmit"
-            class="mt-4 flex flex-col gap-4"
-          >
-            <input
-              type="hidden"
-              name="topicId"
-              :value="topic?.id"
-            >
-
-            <div className="mb-2">
-              <label
-                for="title"
-                class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-              > Title
-              </label>
-
-              <TextInput
-                type="text"
-                id="title"
-                name="title"
-                autoComplete="title"
-                placeholder="The title of the topic"
-                :modelValue="topic?.title"
-              />
-            </div>
-
-            <div className="mb-2">
-              <label
-                for="access"
-                class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
-              > Community access
-              </label>
-
-              <SelectInput
-                name="access"
-                placeholder="Manage the access"
-                :options="[
-                  { label: 'All', value: '0' },
-                  { label: 'Ask', value: '1' },
-                  { label: 'Invitation', value: '2' }
-                ]"
-                v-model="access"
-              />
-            </div>
-
-            <SubmitButton className="w-full mt-4">
-              Update Settings
-            </SubmitButton>
-          </form>
+          <TopicForm />
         </Card>
       </section>
     </div>
       
     <Sidebar>
       <div className="mb-8">
-        <Title>Invite friends:</Title>
-        <div v-for="friend of friends" class="mb-2">
-          <FriendListItem
-            :key="friend.id"
-            :profile="friend"
-          />
-        </div>
-
-        <ActionButton
-          title="Send invites"
+        <Title>Plugin Settings:</Title>
+        <PluginListItem
+          v-for="slot of slots"
+          :plugin="slot.plugin"
         />
       </div>
     </Sidebar>
@@ -117,34 +50,15 @@ import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
-import Divider from '@/components/common/Divider.vue';
-import SubmitButton from '@/components/common/SubmitButton.vue';
-import TextInput from '@/components/common/TextInput.vue';
-import SelectInput from '@/components/common/SelectInput.vue';
-import ActionButton from '@/components/common/ActionButton.vue';
-import Callout from '@/components/common/Callout.vue';
-import Headline from '@/components/common/Headline.vue';
-import FriendListItem from '@/components/list/FriendListItem.vue';
+import TopicForm from '@/components/forms/TopicForm.vue';
+import PluginListItem from '@/components/list/PluginListItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/DragDropRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useTopic } from '@/composables/topicProvider';
+import { usePlugins } from '@/composables/pluginProvider';
 import { profileToInterest } from '@/assets/relationKeys';
 
 const { topic } = useTopic();
-const profile = inject('profile');
-const tab = inject('tab');
-const form = ref<HTMLFormElement | null>(null);
-const selectedModel = ref('');
-const successMessage = ref('');
-const errorMessage = ref('');
-const friends = ref([]);
-const access = ref('');
-const relatedInterests = ref([]);
-const relatedLocations = ref([]);
-
-
-onMounted(async () => {
-  tab.value = 'Settings';
-});
+const { slots } = usePlugins();
 </script>

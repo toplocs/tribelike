@@ -34,7 +34,6 @@ const RemoteComponent = ref();
 const loadPlugin = async () => {
   try {
     const plugin = props.plugin;
-    console.log(props)
     if (plugin) {
       setRemote(plugin.name, {
         url: () => Promise.resolve(plugin.url),

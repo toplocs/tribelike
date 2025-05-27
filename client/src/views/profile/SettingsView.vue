@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
 import { useRoute, useRouter} from 'vue-router';
 import Title from '@/components/common/Title.vue';

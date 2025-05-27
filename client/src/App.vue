@@ -21,8 +21,10 @@ import { topicProvider } from '@/composables/topicProvider';
 import { pluginProvider } from '@/composables/pluginProvider';
 
 const title = ref('Tribelike');
+const settings = ref('');
 
 provide('title', title);
+provide('settings', settings);
 
 userProvider();
 profileProvider();
