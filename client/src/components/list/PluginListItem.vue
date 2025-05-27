@@ -22,10 +22,23 @@
         :icon="CheckIcon"
         @click.prevent="toggleActive"
       />
-      <IconButton
-        tooltipText="Settings"
-        :icon="Cog6ToothIcon"
-      />
+
+      <Dialog>
+        <template #trigger="{ openDialog }">
+          <IconButton
+            tooltipText="Settings"
+            :icon="Cog6ToothIcon"
+            @click="openDialog"
+          />
+        </template>
+
+        <template #content="{ closeDialog }">
+          <PluginComponent
+            :plugin="plugin"
+            position="Settings"
+          />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -39,6 +52,8 @@ import {
 } from '@heroicons/vue/24/outline';
 import Title from '@/components/common/Title.vue';
 import IconButton from '@/components/common/IconButton.vue';
+import Dialog from '@/components/common/Dialog.vue';
+import PluginComponent from '@/components/PluginComponent.vue';
 
 const props = defineProps({
   plugin: {
@@ -46,7 +61,7 @@ const props = defineProps({
     required: true,
   },
 });
-const isActive = ref(true);
+const isActive = ref(false);
 
 const toggleActive = async () => {
   isActive.value = !isActive.value;
