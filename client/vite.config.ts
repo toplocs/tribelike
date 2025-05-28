@@ -13,7 +13,7 @@ export default defineConfig({
     tailwindcss(),
     federation({
       name: 'tribelike',
-      shared: ['vue'],
+      shared: ['vue', 'tailwindcss'],
       remotes: [],
     })
   ],
