@@ -1,11 +1,13 @@
 <template>
-  <Title>{{ title || 'Base' }}:</Title>
-  <div class="flex flex-wrap gap-1">
-    <router-link
-      v-for="relation of populated"
-      :to="`/topic/${relation.two?.id}`">
-      <TopicBadge :title="relation.two?.title" />
-    </router-link>
+  <div v-if="populated.length > 0">
+    <Title>{{ title }}:</Title>
+    <div class="flex flex-wrap gap-1">
+      <router-link
+        v-for="relation of populated"
+        :to="`/topic/${relation.two?.id}`">
+        <TopicBadge :title="relation.two?.title" />
+      </router-link>
+    </div>
   </div>
 </template>
 

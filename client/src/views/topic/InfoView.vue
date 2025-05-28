@@ -24,47 +24,11 @@
           </div>
         </section>
       </Card>
-      
-
-      <!--
-      <Card v-if="relations?.length">
-        <h2 class="font-bold">Relations:</h2>
-        <div
-          v-for="data of relationKeys"
-          :key="data.value"
-          class="mt-2 space-x-1 space-y-4"
-        >
-          <h3 className="mb-2">{{data.label}}:</h3>
-          <RelationListItem
-            v-for="relation in topicRelations.filter(x => x.key == data.value)"
-            :key="relation.id"
-            is="topic"
-            path="topic"
-            :relation="relation"
-            :relationId="relation.OtherInterest.id"
-            :relationTitle="relation.OtherInterest.title"
-            @removeRelation="(id) => {
-              topicRelations = topicRelations.filter(x => x.id != id);
-            }"
-          />
-          <Divider />
-        </div>
-      </Card>
-      
-
-      <section class="flex flex-wrap gap-4">
-        <ProfileCard
-          v-for="relation of populated"
-          :profile="relation.one"
-          :relation="relation"
-        />
-      </section>
-      -->
     </div>
 
     <Sidebar class="space-y-4">
       <RelationButtons />
-      
+
       <Divider />
 
       <section v-for="slot of slots">

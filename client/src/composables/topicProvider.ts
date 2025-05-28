@@ -10,7 +10,6 @@ export function topicProvider() {
   const setTopic = async (id: string) => {
     gun.get(`topic/${id}/${space.value}`)
     .once((data) => {
-      console.log(data);
       if (data) {
         topic.value = data;
       }
