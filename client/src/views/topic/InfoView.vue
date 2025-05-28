@@ -64,21 +64,7 @@
 
     <Sidebar class="space-y-4">
       <RelationButtons />
-
-      <div className="mb-8 flex flex-row gap-2">
-        <div 
-          v-for="suggestion of people" 
-          :key="suggestion.id"
-        >
-          <router-link :to="`/profile/${suggestion.id}`">
-            <ProfileImage
-              :src="suggestion.image"
-              :tooltipText="suggestion.username"
-              size="small"
-            />
-          </router-link>
-        </div>
-      </div>
+      
       <Divider />
 
       <section v-for="slot of slots">

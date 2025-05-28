@@ -53,9 +53,9 @@ const switchSpace = () => {
   topic.value = setTopic(route.params.id);
 }
 
-watch(() => route.params.id, (newId) => {
+watch(() => route.params.id, async (newId) => {
   space.value = 'local';
-  topic.value = setTopic(newId);
+  await setTopic(newId);
   relationProvider(newId);
 });
 
@@ -63,10 +63,11 @@ watch(() => topic.value, (newValue) => {
   title.value = newValue?.title;
 });
 
-onMounted(() => {
+onMounted(async () => {
   const id = route.params.id;
   space.value = 'local';
-  topic.value = setTopic(id); //change?!
+  await setTopic(id);
+  console.log(topic.value);
   settings.value = `/topic/${id}/settings`;
 });
 

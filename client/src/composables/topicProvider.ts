@@ -7,9 +7,10 @@ export function topicProvider() {
   const space = ref('local');
   const journal = ref([]);
 
-  const setTopic = (id: string) => {
+  const setTopic = async (id: string) => {
     gun.get(`topic/${id}/${space.value}`)
-    .once((data) => { //listener that should be 'on'
+    .once((data) => {
+      console.log(data);
       if (data) {
         topic.value = data;
       }

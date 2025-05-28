@@ -21,7 +21,6 @@
     "@heroicons/vue": "^2.2.0",
     "@simplewebauthn/browser": "^13.1.0",
     "@tailwindcss/vite": "^4.1.1",
-    "axios": "^1.8.4",
     "crypto-js": "^4.2.0",
     "gun": "^0.2020.1240",
     "nodemon": "^3.1.9",

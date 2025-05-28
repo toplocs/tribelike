@@ -7,6 +7,11 @@
         :parentId="route.params?.id"
         :query="route.query"
       />
+      <div v-else>
+        <i class="text-sm text-gray-400">
+          {{plugin.name}} is not available
+        </i>
+      </div>
     </template>
     <template #fallback>
       <div>Loading remote component...</div>
@@ -48,6 +53,7 @@ const loadPlugin = async () => {
     }
   } catch (e) {
     console.error('Failed to load remote plugin:', e);
+
   }
 };
 
