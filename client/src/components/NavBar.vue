@@ -48,7 +48,7 @@
             </template>
           </Dropdown>
 
-          <router-link v-if="on == 'topic'" :to="settings">
+          <router-link v-if="on == 'topic' || 'profile'" :to="settings">
             <IconButton :icon="Cog6ToothIcon" />
           </router-link>
 
@@ -120,7 +120,8 @@ const settings = inject('settings');
 const hideSearch = ref(true);
 const dropdown = ref(null);
 const on = computed(() => (
-    topic.value ? 'topic' : ''
+    topic.value ? 'topic' :
+    profile.value ? 'profile' : ''
 ));
 
 const toggleSearch = () => {

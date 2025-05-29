@@ -8,10 +8,6 @@
       />
 
       <div class="flex-grow"></div>
-
-      <router-link :to="`/profile/${profile?.id}/settings`">
-        <IconButton :icon="Cog6ToothIcon" class="mb-8"/>
-      </router-link>
     </div>
 
     <div>

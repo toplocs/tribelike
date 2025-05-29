@@ -7,6 +7,11 @@
         :parentId="route.params?.id"
         :query="route.query"
       />
+      <div v-else class="h-[80vh] flex justify-center items-center">
+       <i class="text-sm text-gray-400">
+          {{plugin.name}} is not available
+        </i>
+      </div>
     </template>
     <template #fallback>
       <div>Loading remote component...</div>

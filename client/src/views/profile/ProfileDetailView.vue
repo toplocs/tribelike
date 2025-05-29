@@ -55,6 +55,7 @@ const router = useRouter();
 const { profile, selectProfile } = useProfile();
 const { user, profiles } = useUser();
 const title = inject<{value: string | null}>('title');
+const settings = inject('settings');
 
 const select = async (selected: Profile) => {
   selectProfile(selected.id);
@@ -62,15 +63,13 @@ const select = async (selected: Profile) => {
 }
 
 watch(() => profile.value, () => {
-  title.value = (
-    profile.value?.username + ' – ' + profile.value?.type
-  );
+  title.value = profile.value?.username + ' – ' + profile.value?.type;
+  settings.value = `/profile/${route.params.id}/settings`;
 });
 
 onMounted(() => {
-  title.value = (
-    profile.value?.username + ' – ' + profile.value?.type
-  );
+  title.value = profile.value?.username + ' – ' + profile.value?.type;
+  settings.value = `/profile/${route.params.id}/settings`;
 });
 
 onUnmounted(() => {
