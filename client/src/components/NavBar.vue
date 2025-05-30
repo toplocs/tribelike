@@ -16,7 +16,7 @@
       </span>
 
       <span
-        v-if="user"
+        v-if="user && profile"
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">

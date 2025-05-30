@@ -83,7 +83,10 @@ export function userProvider() {
             if (ack.err) {
               reject('Auth failed:', ack.err);
             } else {
-              resolve(ack.get);
+              gun.user()
+              .once(data => {
+                user.value = data;
+              });
 
               gun.user()
               .get('profiles')
@@ -91,6 +94,8 @@ export function userProvider() {
               .once((data) => {
                 if (data) profiles.value.push(data);
               });
+
+              resolve(ack.get);
             }
           });
         }
