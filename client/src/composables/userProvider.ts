@@ -101,7 +101,7 @@ export function userProvider() {
               resolve(ack.get);
             }
           });
-        } else reject('Login failed:', 'User does not exist');
+        } else reject('Login failed: User does not exist');
       });
     });
   }
