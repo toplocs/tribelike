@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
@@ -38,7 +37,7 @@ import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
-import TopicForm from '@/components/forms/TopicForm.vue';
+import TopicForm from '@/components/forms/Topic.vue';
  
 import Plugins from '@/components/plugins/Plugins.vue';
 

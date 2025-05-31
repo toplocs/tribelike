@@ -51,7 +51,7 @@ import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
-import TopicForm from '@/components/forms/TopicForm.vue';
+import TopicForm from '@/components/forms/Topic.vue';
 import PluginListItem from '@/components/list/PluginListItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/DragDropRelations.vue';

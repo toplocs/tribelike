@@ -12,42 +12,47 @@ export function userProvider() {
     return new Promise(async (resolve, reject) => {
       const email = formData.get('email');
       const challenge = crypto.getRandomValues(new Uint8Array(32));
+      const chain = gun.get('credentials').get(email);
+      chain.once(async () => {
+        if (!data) {
+          const publicKey = {
+            challenge,
+            rp: { name: 'Toplocs' },
+            user: {
+              id: new Uint8Array(8),
+              name: email,
+              displayName: email,
+            },
+            pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+            authenticatorSelection: { userVerification: 'preferred' },
+            timeout: 60000,
+            attestation: 'none'
+          };
 
-      const publicKey = {
-        challenge,
-        rp: { name: 'Toplocs' },
-        user: {
-          id: new Uint8Array(8),
-          name: email,
-          displayName: email,
-        },
-        pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-        authenticatorSelection: { userVerification: 'preferred' },
-        timeout: 60000,
-        attestation: 'none'
-      };
+          const cred = await navigator.credentials.create({ publicKey });
+          const rawId = cred.rawId;
+          const emailDerived = bufferEncode(cred.rawId);
 
-      const cred = await navigator.credentials.create({ publicKey });
-      const rawId = cred.rawId;
-      const emailDerived = bufferEncode(cred.rawId);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
+          const passwordDerived = bufferEncode(hashBuffer);
 
-      const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
-      const passwordDerived = bufferEncode(hashBuffer);
+          chain.put({
+            id: bufferEncode(rawId),
+            credential: JSON.stringify({
+              clientDataJSON: bufferEncode(cred.clientDataJSON),
+              attestationObject: bufferEncode(cred.attestationObject),
+            })
+          });
 
-      gun.get('credentials').get(email).put({
-        id: bufferEncode(rawId),
-        credential: JSON.stringify({
-          clientDataJSON: bufferEncode(cred.clientDataJSON),
-          attestationObject: bufferEncode(cred.attestationObject),
-        })
-      });
+          gun.user().create(emailDerived, passwordDerived, (ack) => {
+            if (ack.err) {
+              reject('Create failed:', ack.err);
+            } else {
+              resolve(ack);
+            }
+          });
+        } else reject('Create failed:', 'Email is already registered');
 
-      gun.user().create(emailDerived, passwordDerived, (ack) => {
-        if (ack.err) {
-          reject('Create failed:', ack.err);
-        } else {
-          resolve(ack);
-        }
       });
     });
   }
@@ -96,7 +101,7 @@ export function userProvider() {
               resolve(ack.get);
             }
           });
-        }
+        } else reject('Login failed:', 'User does not exist');
       });
     });
   }

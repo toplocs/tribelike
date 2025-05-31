@@ -57,6 +57,7 @@ watch(() => route.params.id, async (newId) => {
   space.value = 'local';
   await setTopic(newId);
   relationProvider(newId);
+  settings.value = `/topic/${newId}/settings`;
 });
 
 watch(() => topic.value, (newValue) => {
@@ -67,7 +68,6 @@ onMounted(async () => {
   const id = route.params.id;
   space.value = 'local';
   await setTopic(id);
-  console.log(topic.value);
   settings.value = `/topic/${id}/settings`;
 });
 

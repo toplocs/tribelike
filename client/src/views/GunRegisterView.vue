@@ -10,5 +10,5 @@
 <script setup lang="ts">
 import Card from '@/components/common/Card.vue';
 import BackButton from '@/components/common/BackButton.vue';
-import Register from '@/components/forms/Register.vue';
+import RegisterForm from '@/components/forms/Register.vue';
 </script>
