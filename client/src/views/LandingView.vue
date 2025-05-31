@@ -24,8 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import Container from '@/components/common/Container.vue';
 import MixedCloud from '@/components/MixedCloud.vue';
 import GunTest from '@/components/GunTest.vue';
