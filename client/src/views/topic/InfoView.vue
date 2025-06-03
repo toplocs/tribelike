@@ -18,7 +18,7 @@
           <div class="space-y-4">
             <Headline>Profiles:</Headline>
             <ProfileRelations
-              v-for="relationKey of profileToInterest"
+              v-for="relationKey of profileToTopic"
               :relationKey="relationKey"
             />
           </div>
@@ -62,7 +62,7 @@ import PluginComponent from '@/components/PluginComponent.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { profileToInterest, topicToTopic } from '@/assets/relationKeys';
+import { profileToTopic, topicToTopic } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { topic } = useTopic();

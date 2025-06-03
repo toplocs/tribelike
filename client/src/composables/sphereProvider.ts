@@ -34,16 +34,6 @@ export function sphereProvider() {
     gun.get('spheres').get(id).set(node);
     gun.get('spheres/titles').get(sphere.value.title).set(node);
 
-    //initial relation
-    const relation = gun.get(`relations/${data.profileId}/${data.relationId}/${id}`).put({
-      id: crypto.randomUUID(),
-      one: data.profileId,
-      type: data.relationId,
-      two: id,
-    });
-    gun.get(data.profileId).get('relations').set(relation);
-    gun.get(id).get('relations').set(relation);
-
     return sphere.value;
   }
 

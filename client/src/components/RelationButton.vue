@@ -12,7 +12,7 @@
 import { ref, watchEffect } from 'vue';
 import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
-import { useTopic } from '@/composables/topicProvider';
+import { useSphere } from '@/composables/sphereProvider';
 import { useRelation } from '@/composables/relationProvider';
 
 const props = defineProps({
@@ -22,7 +22,7 @@ const props = defineProps({
   }
 });
 const { profile } = useProfile();
-const { topic } = useTopic();
+const { sphere } = useSphere();
 const {
   createRelation,
   removeRelation,
@@ -31,11 +31,11 @@ const {
 const isPassive = ref(false);
 
 watchEffect(async () => {
-  if (profile.value?.id && topic.value?.id) {
+  if (profile.value?.id && sphere.value?.id) {
     const result = await compareRelation(
       profile.value?.id,
       props.relationKey.id,
-      topic.value?.id,
+      sphere.value?.id,
     );
     if (result) isPassive.value = true;
   }
@@ -46,20 +46,20 @@ const handleClick = async () => {
     const result = await compareRelation(
       profile.value?.id,
       props.relationKey.id,
-      topic.value?.id,
+      sphere.value?.id,
     );
     if (result) {
       await removeRelation(
         profile.value?.id,
         props.relationKey.id,
-        topic.value?.id
+        sphere.value?.id
       );
       isPassive.value = false;
     } else {
       await createRelation(
         profile.value?.id,
         props.relationKey.id,
-        topic.value?.id
+        sphere.value?.id
       );
       isPassive.value = true;
     }

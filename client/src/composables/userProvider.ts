@@ -92,7 +92,6 @@ export function userProvider() {
               } else {
                 gun.user()
                 .once(data => {
-                  console.log(data)
                   user.value = data;
                 });
 
@@ -129,7 +128,6 @@ export function userProvider() {
     if (gun.user().is) {
       gun.user()
       .once(data => {
-        console.log(data);
         user.value = data;
       });
 
@@ -140,7 +138,6 @@ export function userProvider() {
         if (data) profiles.value.push(data);
       });
     }
-    //put the listeners in a service
   });
 
   provide('user', {

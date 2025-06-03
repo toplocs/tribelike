@@ -99,11 +99,12 @@ export function relationProvider(
     .get('relations')
     .then();
 
+    if (!chain) return false;
+
     return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
   
   onMounted(() => {
-    console.log('MOUNTED')
     gun.get(instance)
     .get('relations')
     .map()
@@ -118,7 +119,6 @@ export function relationProvider(
   });
 
   onUnmounted(() => {
-    console.log('UNMOUNT');
     relations.value = [];
   })
 

@@ -1,4 +1,6 @@
-export const profileToInterest = [
+export const profileToInterest = []; //remove
+
+export const profileToTopic = [
   {
     id: '',
     active: 'is related to',

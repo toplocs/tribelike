@@ -48,7 +48,6 @@ const defaultProfile = computed(() => ({
 }));
 
 async function onSubmit() {
-  return console.log(user.value);
   try {
     const formData = new FormData(form.value ?? undefined);
     const response = await createProfile(formData);

@@ -85,7 +85,6 @@ async function onSubmit() {
         const newData = new FormData();
         const email = formData.get('email');
         const username = formData.get('username');
-        console.log(email, username);
         newData.append('type', profileType);
         newData.append('username', username);
         newData.append('email',email);

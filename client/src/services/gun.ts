@@ -22,10 +22,13 @@ gun.clear = function() {
 }
 
 gun.lookup = async function(key: string, id: string) {
+	console.log(key, id);
 	const ref = await gun.get(key).get(id).then();
+	console.log(ref);
   const soul = ref?._?.['>'] && Object.keys(ref._['>'])[0];
   if (!soul) return null;
   const data = await gun.get(soul).then();
+
   return data ? { id, ...data } : null;
 }
 

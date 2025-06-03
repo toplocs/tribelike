@@ -18,7 +18,7 @@
           <div class="space-y-4">
             <Headline>Profiles:</Headline>
             <ProfileRelations
-              v-for="relationKey of profileToInterest"
+              v-for="relationKey of profileToTopic"
               :relationKey="relationKey"
             />
           </div>
@@ -28,7 +28,15 @@
 
     <Sidebar class="space-y-4">
 
-      <b>This is a: </b><TopicBadge :title="type" />
+      <div v-if="type == 'Topic'" class="mb-4">
+        <b>This is a: </b>
+        <TopicBadge :title="type" />
+      </div>
+
+      <div v-if="type == 'Location'" class="mb-4">
+        <b>This is a: </b>
+        <LocationBadge v-if="type == 'Location'" :title="type" />
+      </div>
 
       <Divider />
 
@@ -69,7 +77,7 @@ import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { profileToInterest, topicToTopic } from '@/assets/relationKeys';
+import { profileToTopic, topicToTopic } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { sphere } = useSphere();

@@ -1,11 +1,11 @@
 <template>
   <div v-if="populated.length > 0">
-    <Title>{{ title }}:</Title>
+  <Title>{{ title }}:</Title>
     <div class="flex flex-wrap gap-1">
       <router-link
         v-for="relation of populated"
         :to="`/profile/${relation.one?.id}`">
-        <ProfileBadge :username="relation.one?.username" />
+        <ProfileBadge :username="relation.one?.name" />
       </router-link>
     </div>
   </div>
