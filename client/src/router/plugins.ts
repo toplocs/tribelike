@@ -11,6 +11,7 @@ export const addPluginRoutes = (router: any) => { //sync loading
       .map()
       .once(data => {
         if (data && data.path) {
+          if (!data.path.startsWith('/')) return console.warn('Invalid path');
           const route = {
             path: data.path,
             name: data.component,
@@ -20,7 +21,7 @@ export const addPluginRoutes = (router: any) => { //sync loading
               component: data.component,
             },
           }
-          router.addRoute('topicDetail', route);
+          router.addRoute('sphereDetail', route);
         }
       });
     }

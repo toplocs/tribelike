@@ -16,18 +16,18 @@
 
     <div className="mb-2">
       <label
-        for="username"
+        for="email"
         class="block text-gray-900 dark:text-gray-100 font-medium text-sm mb-2"
       >
-        Username
+        Email
       </label>
 
       <TextInput
         type="text"
-        id="username"
-        name="username"
-        autoComplete="username"
-        placeholder="Enter your username"
+        id="email"
+        name="email"
+        autoComplete="email"
+        placeholder="Enter your email"
       />
     </div>
 
@@ -81,7 +81,6 @@ const onSubmit = async () => {
   try {
     const formData = new FormData(form.value ?? undefined);
     const result = await login(formData);
-    console.log(result);
     if (result) {
       profile.value = profiles.value[0];
       router.push('/profiles');

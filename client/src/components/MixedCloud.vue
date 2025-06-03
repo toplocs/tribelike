@@ -2,7 +2,7 @@
   <div class="mx-auto flex flex-col">
     <span class="mx-auto">
       <Search
-        placeholder="Select a topic or a location ..."
+        placeholder="Select a sphere or a location ..."
         :options="options"
         @select="handleSelect"
         @click="handleClick"
@@ -11,8 +11,8 @@
     <br />
 
     <div class="flex flex-row flex-wrap gap-1">
-      <router-link v-for="topic of topics" :to="`/topic/${topic.id}`">
-        <TopicBadge :title="topic.title"/>
+      <router-link v-for="sphere of spheres" :to="`/sphere/${sphere.id}`">
+        <TopicBadge :title="sphere.title"/>
       </router-link>
     </div>
   </div>
@@ -30,23 +30,23 @@ import gun from '@/services/gun';
 
 const router = useRouter();
 const options = ref([]);
-const topics = ref([]);
+const spheres = ref([]);
 
 const handleSelect = async (selected: Object) => {
   two.value = selected;
 }
 
 const handleClick = async (value: String) => {
-  router.push(`/topic/create?title=${value}`)
+  router.push(`/sphere/create?title=${value}`)
 }
 
 onMounted(async () => {
-  gun.get('topics') //listener in service
+  gun.get('spheres') //listener in service
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`topic/${key}/local`).once((data) => {
-      if (data) topics.value.push(data);
+    gun.get(`sphere/${key}/local`).once((data) => {
+      if (data) spheres.value.push(data);
     });
   });
 });

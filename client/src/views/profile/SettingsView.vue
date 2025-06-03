@@ -32,16 +32,6 @@
     <Sidebar class="space-y-4">
       <div class="flex flex-row items-center justify-between">
         <Title>
-          Account Settings
-        </Title>
-        <router-link to="/settings">
-          <IconButton :icon="Cog6ToothIcon"/>
-        </router-link>
-      </div>
-      <Divider />
-
-      <div class="flex flex-row items-center justify-between">
-        <Title>
           Delete Profile
         </Title>
         <div class="ml-auto">
@@ -66,6 +56,12 @@
         </div>
       </div>
       <Divider />
+
+      <button
+        @click="handleLogout"
+        className="inline-flex justify-center w-full mt-2 px-4 py-2 text-sm font-medium border border-red-600 dark:border-red-400 text-red-600 dark:text-red-400 bg-transparent rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
+      > Logout
+      </button>
     </Sidebar>
 
   </Container>
@@ -91,7 +87,7 @@ import { useProfile } from '@/composables/profileProvider';
 
 const route = useRoute();
 const router = useRouter();
-const { user, userProfiles } = useUser();
+const { user, logout, userProfiles } = useUser();
 const { profile, editProfile, removeProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
@@ -118,6 +114,15 @@ const onDelete = async () => {
     await removeProfile(route.params.id);
 
     router.push(`/profiles`);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const handleLogout = async () => {
+  try {
+    await logout();
+    router.push('/login');
   } catch (error) {
     console.error(error);
   }

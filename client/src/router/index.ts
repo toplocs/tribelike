@@ -34,6 +34,13 @@ import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
 
+
+//Sphere
+import SphereCreateView from '@/views/sphere/CreateView.vue';
+import SphereDetailView from '@/views/sphere/DetailView.vue';
+import SphereInfoView from '@/views/sphere/InfoView.vue';
+import SphereSettingsView from '@/views/sphere/SettingsView.vue';
+
 import GunRegisterView from '@/views/GunRegisterView.vue';
 import GunLoginView from '@/views/GunLoginView.vue';
 import PluginLoaderView from '@/views/PluginLoaderView.vue';
@@ -140,7 +147,7 @@ const router = createRouter({
     },
 
     //Topics
-    {
+    /*{
       path: '/topic/create',
       name: 'topicCreate',
       component: TopicCreateView,
@@ -180,8 +187,10 @@ const router = createRouter({
       ],
     },
 
+    
+
+
     //Locations
-    {
       path: '/location/create',
       name: 'locationCreate',
       component: LocationCreateView,
@@ -215,6 +224,37 @@ const router = createRouter({
           component: LocationSettingsView,
         },
       ],
+    },*/
+
+    //Spheres
+    {
+      path: '/sphere/create',
+      name: 'sphereCreate',
+      component: SphereCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/sphere/:id',
+      name: 'sphereDetail',
+      component: SphereDetailView,
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'sphereInfo',
+          component: SphereInfoView,
+        },
+        {
+          path: 'settings',
+          name: 'sphereSettings',
+          component: SphereSettingsView,
+        },
+        {
+          path: ':pluginPath(.*)*',
+          name: 'pluginLoader',
+          component: PluginLoaderView,
+        },
+      ],
     },
 
   ]
@@ -223,7 +263,7 @@ const router = createRouter({
 addPluginRoutes(router);
 
 router.beforeEach(async (to, from, next) => {
-  //check if the route exists in gun
+  //middleware functions here
   next();
 });
 

@@ -26,6 +26,7 @@
   </div>
 </template>
 
+//
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -39,16 +40,11 @@ import TopicBadge from '@/components/badges/TopicBadge.vue';
 import AddInterests from '@/components/AddInterests.vue';
 import { useProfile } from '@/composables/profileProvider';
 
-const router = useRouter();
-
 const props = defineProps({
   profile: {
     type: Object,
     required: true
   }
 });
-
-onMounted(() => {
-
-});
+const router = useRouter();
 </script>

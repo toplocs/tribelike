@@ -18,6 +18,7 @@ import Footer from '@/components/FooterComponent.vue';
 import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
 import { topicProvider } from '@/composables/topicProvider';
+import { sphereProvider } from '@/composables/sphereProvider';
 import { pluginProvider } from '@/composables/pluginProvider';
 
 const title = ref('Tribelike');
@@ -29,6 +30,7 @@ provide('settings', settings);
 userProvider();
 profileProvider();
 topicProvider();
+sphereProvider();
 
 pluginProvider();
 </script>

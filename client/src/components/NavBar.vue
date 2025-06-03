@@ -34,14 +34,12 @@
 
             <template #default="{ closeDropdown }">
               <ul>
-                <router-link to="/topic/create" @click.native="closeDropdown">
+                <router-link
+                  to="/sphere/create"
+                  @click.native="closeDropdown"
+                >
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create topic
-                  </li>
-                </router-link>
-                <router-link to="/location/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create location
+                    Create a Sphere
                   </li>
                 </router-link>
               </ul>
