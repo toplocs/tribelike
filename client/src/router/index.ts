@@ -147,7 +147,7 @@ const router = createRouter({
     },
 
     //Topics
-    /*{
+    {
       path: '/topic/create',
       name: 'topicCreate',
       component: TopicCreateView,
@@ -187,10 +187,8 @@ const router = createRouter({
       ],
     },
 
-    
-
-
     //Locations
+    {
       path: '/location/create',
       name: 'locationCreate',
       component: LocationCreateView,
@@ -224,7 +222,7 @@ const router = createRouter({
           component: LocationSettingsView,
         },
       ],
-    },*/
+    },
 
     //Spheres
     {

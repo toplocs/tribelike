@@ -21,7 +21,7 @@ export function profileProvider() {
       image: `https://gravatar.com/avatar/${hash}`,
     }
 
-    const node = gun.user().get(`profile/${id}`).put(profile.value);
+    const node = gun.get(`profile/${id}`).put(profile.value);
     gun.user().get('profiles').set(node);
     gun.get('profiles').get(id).set(node);
 

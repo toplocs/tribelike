@@ -5,7 +5,7 @@
       <router-link
         v-for="relation of populated"
         :to="`/profile/${relation.one?.id}`">
-        <ProfileBadge :username="relation.one?.name" />
+        <ProfileBadge :username="relation.one?.username" />
       </router-link>
     </div>
   </div>

@@ -35,7 +35,7 @@
 
       <div v-if="type == 'Location'" class="mb-4">
         <b>This is a: </b>
-        <LocationBadge v-if="type == 'Location'" :title="type" />
+        <LocationBadge :title="type" />
       </div>
 
       <Divider />
