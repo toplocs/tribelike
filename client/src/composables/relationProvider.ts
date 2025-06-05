@@ -61,9 +61,9 @@ export function relationProvider(
     two: string
   ) => {
     const path = `relations/${one}/${type}/${two}`;
-    relations.value = relations.value.filter(x => (
+    /*relations.value = relations.value.filter(x => (
       `relations/${x.one}/${x.type}/${x.two}` !== path
-    ));
+    ));*/
 
     const node = gun.get(path);
     node.then(() => {
@@ -108,12 +108,16 @@ export function relationProvider(
     gun.get(instance)
     .get('relations')
     .map()
-    .once((data) => {
+    .on((data, key) => {
       if (data) {
         const exists = relations.value.some(x => x.id === data.id);
         if (!exists) {
           relations.value.push(data);
         }
+      } else {
+        relations.value = relations.value.filter(x => (
+          `relations/${x.one}/${x.type}/${x.two}` !== key
+        ));
       }
     });
   });

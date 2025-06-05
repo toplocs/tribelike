@@ -1,6 +1,7 @@
 <template>
-  <router-link v-if="is == 'topic'" :to="`/topic/${data.id}`">
+  <router-link :to="`/sphere/${data.id}`">
     <TopicBadge
+      v-if="is == 'topic'" 
       :id="data.id"
       :title="data.title"
       :remove="handleRemove"
@@ -8,16 +9,13 @@
       <Icon :icon="relation.type" />
       –
     </TopicBadge>
-  </router-link>
 
-  <router-link v-else :to="`/locations/${data.id}`">
-    <TopicBadge
+    <LocationBadge
+      v-if="is == 'location'" 
       :id="data.id"
       :title="data.title"
       :remove="handleRemove"
-    >
-      <Icon icon="like" />
-    </TopicBadge>
+    />
   </router-link>
 </template>
 
@@ -47,7 +45,6 @@ const handleRemove = async () => {
     props.relation?.type,
     props.relation?.two?.id
   );
-  console.log(result);
 }
 
 </script>

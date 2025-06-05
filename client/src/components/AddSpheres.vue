@@ -1,6 +1,6 @@
 <template>
   <Search
-    placeholder="Add some topics ..."
+    placeholder="Add some spheres ..."
     :options="options"
     @select="handleSelect"
     @click="handleClick"
@@ -21,12 +21,12 @@ import TextInput from './common/TextInput.vue';
 import Search from './search/Filter.vue';
 import RelationBadge from '@/components/badges/RelationBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
-import { useTopic } from '@/composables/topicProvider';
+import { useSphere } from '@/composables/sphereProvider';
 import { useRelation } from '@/composables/relationProvider';
 import gun from '@/services/gun';
 
 const { profile } = useProfile();
-const { createTopic } = useTopic();
+const { createSphere } = useSphere();
 const {
   relations,
   createRelation,
@@ -56,18 +56,16 @@ const handleRemove = async (relation: Relation) => {
 watchEffect(async () => {
   if (!relations.value) return;
   populated.value = await Promise.all(
-    relations.value.map(
-      x => populateRelation(['topics'], x)
-    )
+    relations.value.map(x => populateRelation(['spheres'], x))
   );
 });
 
 onMounted(async () => {
-  gun.get('topics')
+  gun.get('spheres')
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`topic_${key}`).once((data) => {
+    gun.get(`sphere/${key}`).once((data) => {
       if (data) options.value.push(data);
     });
   });

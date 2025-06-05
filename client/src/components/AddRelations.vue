@@ -67,11 +67,11 @@ watch(() => two.value, async () => {
 });
 
 onMounted(async () => {
-  gun.get('topics') //listener in service
+  gun.get('spheres') //listener in service
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`topic/${key}/local`).once((data) => {
+    gun.get(`sphere/${key}/local`).once((data) => {
       if (data) options.value.push(data);
     });
   });

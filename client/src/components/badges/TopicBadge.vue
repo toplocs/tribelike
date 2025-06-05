@@ -9,7 +9,7 @@
     <XMarkIcon
       v-if="remove"
       @click.prevent="() => remove()"
-      class="w-4 h-4"
+      class="w-3 h-3"
     />
   </span>
 </template>

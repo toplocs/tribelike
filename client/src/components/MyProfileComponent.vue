@@ -21,7 +21,7 @@
     <section class="mb-8">
       <Headline>Likes:</Headline>
 
-      <AddInterests />
+      <AddSpheres />
     </section>
   </div>
 </template>
@@ -37,7 +37,7 @@ import Card from '@/components/common/Card.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
-import AddInterests from '@/components/AddInterests.vue';
+import AddSpheres from '@/components/AddSpheres.vue';
 import { useProfile } from '@/composables/profileProvider';
 
 const props = defineProps({
@@ -46,5 +46,4 @@ const props = defineProps({
     required: true
   }
 });
-const router = useRouter();
 </script>
