@@ -1,5 +1,3 @@
-export const profileToInterest = []; //remove
-
 export const profileToTopic = [
   {
     id: '',
@@ -29,6 +27,40 @@ export const profileToTopic = [
     id: 'teach',
     active: 'teaches',
     passive: 'is teached by',
+    color: 'yellow',
+    icon: 'study',
+  }, 
+];
+
+export const profileToLocation = [
+  {
+    id: '',
+    active: 'is related to',
+    passive: 'is related to',
+    color: 'blue',
+    icon: '',
+  }, {
+    id: 'visit',
+    active: 'is visiting',
+    passive: 'is visited by',
+    color: 'green',
+    icon: 'heart',
+  }, {
+    id: 'live',
+    active: 'is living in',
+    passive: 'is being lived',
+    color: 'red',
+    icon: 'house',
+  }, {
+    id: 'going',
+    active: 'is going to',
+    passive: 'is the destination of',
+    color: 'blue',
+    icon: 'shoe',
+  }, {
+    id: 'work',
+    active: 'is working in',
+    passive: 'is workingplace of',
     color: 'yellow',
     icon: 'study',
   }, 
