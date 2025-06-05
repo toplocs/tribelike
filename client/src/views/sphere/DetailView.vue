@@ -46,8 +46,6 @@ const routedTabs = computed(() => {
   }));
 });
 
-
-
 const switchSpace = () => {
   space.value = 'global';
   sphere.value = setSphere(route.params.id);
@@ -73,6 +71,8 @@ onMounted(async () => {
 
 onUnmounted(() => {
   sphere.value = null;
+  title.value = null;
+  settings.value = null;
 });
 
 provide('tab', tab);

@@ -2,30 +2,9 @@
   <Container>
     <div class="w-full">
       <Card>
-        <Title>
-          Profile Settings
-        </Title>
-        <Callout v-if="errorMessage" color="red">
-          {{ errorMessage }}
-        </Callout>
-
-        <Callout v-if="successMessage" color="green">
-          {{ successMessage }}
-        </Callout>
-
-        <form
-			    ref="form"
-			    @submit.prevent="onSubmit"
-			    class="flex flex-col gap-4"
-			  >
-			    <input name="profileId" type="hidden" :value="profile?.id" />
-
-			    <ProfileSettings :profile="profile" />
-
-			    <SubmitButton className="w-full mt-4">
-			      Update Settings
-			    </SubmitButton>
-			  </form>
+			   <ProfileSettingsForm
+          :profile="profile"
+        />
       </Card>
     </div>
       
@@ -73,7 +52,7 @@ import { useRoute, useRouter} from 'vue-router';
 import Title from '@/components/common/Title.vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import ProfileSettings from '@/components/ProfileSettings.vue';
+import ProfileSettingsForm from '@/components/forms/ProfileSettings.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import Callout from '@/components/common/Callout.vue';
 import Sidebar from '@/components/SideBar.vue';
@@ -88,26 +67,7 @@ import { useProfile } from '@/composables/profileProvider';
 const route = useRoute();
 const router = useRouter();
 const { user, logout, userProfiles } = useUser();
-const { profile, editProfile, removeProfile } = useProfile();
-const errorMessage = ref('');
-const successMessage = ref('');
-const form = ref<HTMLFormElement | null>(null);
-
-const onSubmit = async () => {
-  try {
-    const formData = new FormData(form.value ?? undefined);
-    const changes = Object.fromEntries(formData.entries());
-    const response = await editProfile(changes);
-    if (response.ok) {
-      successMessage.value = 'Your profile has been updated successfully!';
-      profile.value = changes;
-    }
-
-  } catch (error) {
-    console.error(error);
-    errorMessage.value = error;
-  }
-}
+const { profile, removeProfile } = useProfile();
 
 const onDelete = async () => {
   try {

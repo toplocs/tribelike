@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js';
 import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
+import { useUser } from '@/composables/userProvider';
 import gun from '@/services/gun';
 
 export const defaultProfiles = ['Work', 'Hobby', 'Family'];
@@ -25,18 +26,20 @@ export function profileProvider() {
     gun.user().get('profiles').set(node);
     gun.get('profiles').get(id).set(node);
 
-    return profile.value;
+    return node;
   }
 
-  const editProfile = async (data: Profile) => {
-    profile.value = data;
+  const editProfile = async (formData: FormData) => {
+    const id = profile.value?.id;
+    await removeProfile(id);
+    const node = await createProfile(formData);
 
-    return profile.value;
+    return node;
   }
 
   const removeProfile = async (id: string) => {
     if (gun.user().is) {
-      const node = gun.user().get(`profile/${id}`);
+      const node = gun.get(`profile/${id}`);
       node.then(() => {
         gun.user().get('profiles').unset(node);
         gun.get('profiles').get(id).unset(node);
@@ -48,8 +51,7 @@ export function profileProvider() {
   const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
     if (gun.user().is) {
-      gun.user()
-      .get(`profile/${id}`)
+      gun.get(`profile/${id}`)
       .once(data => {
         if (data) {
           profile.value = data;

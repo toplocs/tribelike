@@ -134,9 +134,27 @@ export function userProvider() {
       gun.user()
       .get('profiles')
       .map()
-      .once((data) => {
-        if (data) profiles.value.push(data);
+      .on((data, key) => {
+        if (data) {
+          const exists = profiles.value.some(x => x.id === data.id);
+          if (!exists) profiles.value.push(data);
+        } else {
+          const id = key.replace('profile/', '');
+          profiles.value = profiles.value.filter(x => x.id !== id);
+        }
       });
+    }
+  });
+
+  onUnmounted(() => {
+    if (gun.user().is) {
+      gun.user()
+      .off()
+
+      gun.user()
+      .get('profiles')
+      .map()
+      .off()
     }
   });
 

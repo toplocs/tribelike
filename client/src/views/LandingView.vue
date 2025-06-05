@@ -12,20 +12,10 @@
     <Container>
       <MixedCloud />
     </Container>
-
-    <Container>
-      <GunTest />
-    </Container>
-
-      <Container>
-      <PluginTest />
-    </Container>
   </div>
 </template>
 
 <script setup lang="ts">
 import Container from '@/components/common/Container.vue';
 import MixedCloud from '@/components/MixedCloud.vue';
-import GunTest from '@/components/GunTest.vue';
-import PluginTest from '@/components/PluginTest.vue';
 </script>

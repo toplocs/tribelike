@@ -15,8 +15,6 @@
       {{ successMessage }}
     </Callout>
 
-    <ProfileSettings :profile="defaultProfile" />
-
     <SubmitButton className="w-full mt-4">
       Create
     </SubmitButton>
@@ -26,12 +24,9 @@
 <script setup lang="ts">
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import Card from '@/components/common/Card.vue';
-import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
-import ProfileSettings from '@/components/ProfileSettings.vue';
 import Callout from '@/components/common/Callout.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';

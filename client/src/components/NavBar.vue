@@ -8,9 +8,9 @@
           <IconButton :icon="HomeIcon" />
         </router-link>
         
-        <span v-if="title" class="flex flex-row gap-2">
+        <span class="flex flex-row gap-2">
           <Title float="left">
-            {{ title }}
+            {{ title || 'Tribelike' }}
           </Title>
         </span>
       </span>
@@ -46,7 +46,10 @@
             </template>
           </Dropdown>
 
-          <router-link v-if="on == 'topic' || 'profile'" :to="settings">
+          <router-link
+            v-if="settings"
+            :to="settings"
+          >
             <IconButton :icon="Cog6ToothIcon" />
           </router-link>
 
@@ -107,20 +110,16 @@ import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
-import { useTopic } from '@/composables/topicProvider';
+import { useSphere } from '@/composables/sphereProvider';
 
 const router = useRouter();
 const { user } = useUser();
 const { profile } = useProfile();
-const { topic } = useTopic();
+const { sphere } = useSphere();
 const title = inject('title');
 const settings = inject('settings');
 const hideSearch = ref(true);
 const dropdown = ref(null);
-const on = computed(() => (
-    topic.value ? 'topic' :
-    profile.value ? 'profile' : ''
-));
 
 const toggleSearch = () => {
   hideSearch.value = !hideSearch.value;

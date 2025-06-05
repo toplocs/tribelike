@@ -73,9 +73,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (title) {
-    title.value = null;
-  }
+  title.value = null;
+  settings.value = null;
 });
 
 relationProvider(route.params.id);

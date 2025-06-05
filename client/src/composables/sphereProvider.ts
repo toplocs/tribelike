@@ -7,7 +7,7 @@ export function sphereProvider() {
   const space = ref('local');
   const journal = ref([]);
 
-  const setSphere = async (id: string) => {
+  const setSphere = (id: string) => {
     gun.get(`sphere/${id}/${space.value}`)
     .once((data) => {
       if (data) {

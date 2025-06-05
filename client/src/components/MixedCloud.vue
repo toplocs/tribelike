@@ -12,7 +12,18 @@
 
     <div class="flex flex-row flex-wrap gap-1">
       <router-link v-for="sphere of spheres" :to="`/sphere/${sphere.id}`">
-        <TopicBadge :title="sphere.title"/>
+        <TopicBadge
+          v-if="sphere.type == 'topic'"
+          :title="sphere.title"
+        />
+        <LocationBadge
+          v-else-if="sphere.type == 'location'"
+          :title="sphere.title"
+        />
+        <BasicBadge
+          v-else
+          :title="sphere.title"
+        />
       </router-link>
     </div>
   </div>
@@ -26,6 +37,8 @@ import Search from '@/components/search/Filter.vue';
 import BigButton from '@/components/common/BigButton.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
+import BasicBadge from '@/components/badges/BasicBadge.vue';
 import gun from '@/services/gun';
 
 const router = useRouter();
