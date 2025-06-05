@@ -17,7 +17,7 @@
           <div class="space-y-4">
             <Headline>Manage Profiles:</Headline>
             <ProfileRelations
-              v-for="relationKey of profileToInterest"
+              v-for="relationKey of profileToTopic"
               :relationKey="relationKey"
             />
           </div>
@@ -58,7 +58,7 @@ import DragDropRelations from '@/components/DragDropRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useTopic } from '@/composables/topicProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { profileToInterest } from '@/assets/relationKeys';
+import { profileToTopic } from '@/assets/relationKeys';
 
 const { topic } = useTopic();
 const { slots } = usePlugins();
