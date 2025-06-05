@@ -107,7 +107,7 @@ import SelectAvatar from '@/components/SelectAvatar.vue';
 import { useProfile } from '@/composables/profileProvider';
 
 const router = useRouter();
-const { profile, editProfile } = useProfile();
+const { profile, editProfile, selectProfile } = useProfile();
 const errorMessage = ref('');
 const successMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
@@ -128,6 +128,7 @@ const onSubmit = async () => {
     const result = await editProfile(formData);
     if (result) {
       successMessage.value = 'Your profile has been updated successfully!';
+      selectProfile(result.id);
       router.push(`/profile/${profile.value?.id}`);
     }
   } catch (error) {

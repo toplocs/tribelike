@@ -32,7 +32,7 @@ export function profileProvider() {
   const editProfile = async (formData: FormData) => {
     const id = profile.value?.id;
     await removeProfile(id);
-    const node = await createProfile(formData);
+    const node = await createProfile(formData);    
 
     return node;
   }
