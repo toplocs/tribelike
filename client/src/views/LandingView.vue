@@ -10,12 +10,12 @@
     </div>
 
     <Container>
-      <MixedCloud />
+      <SphereCloud />
     </Container>
   </div>
 </template>
 
 <script setup lang="ts">
 import Container from '@/components/common/Container.vue';
-import MixedCloud from '@/components/MixedCloud.vue';
+import SphereCloud from '@/components/sphereCloud.vue';
 </script>

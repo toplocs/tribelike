@@ -1,33 +1,13 @@
 <template>
   <Container>
-    <div class="w-full space-y-4">    
-      <Card>
-        <section class="mb-8">
-          <div class="space-y-4">
-            <Headline>Other Topics:</Headline>
-            <TopicRelations
-              v-for="relationKey of topicToTopic"
-              :relationKey="relationKey"
-            />
-          </div>
-        </section>
-
-        <Divider />
-
-        <section class="mt-8 mb-8">
-          <div class="space-y-4">
-            <Headline>Profiles:</Headline>
-            <ProfileRelations
-              v-for="relationKey of profileToTopic"
-              :relationKey="relationKey"
-            />
-          </div>
-        </section>
+    <div class="w-full">    
+      <Card class="flex flex-col gap-4">
+        <TopicRelations v-if="sphere?.type == 'topic'"/>
+        <LocationRelations v-if="sphere?.type == 'location'"/>
       </Card>
     </div>
 
     <Sidebar class="space-y-4">
-
       <div v-if="type == 'Topic'" class="mb-4">
         <b>This is a: </b>
         <TopicBadge :title="type" />
@@ -38,19 +18,13 @@
         <LocationBadge :title="type" />
       </div>
 
-      <Divider />
-
       <RelationButtons />
-
-      <Divider />
 
       <section v-for="slot of slots">
         <PluginComponent
           :plugin="slot.plugin"
           :position="slot.component"
         />
-
-        <Divider />
       </section>
 
     </Sidebar>
@@ -61,13 +35,10 @@
 <script setup lang="ts">
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
-import Title from '@/components/common/Title.vue';
-import ProfileImage from '@/components/common/ProfileImage.vue';
-import Divider from '@/components/common/Divider.vue';
+import Sidebar from '@/components/SideBar.vue';;
 import Card from '@/components/common/Card.vue';
 import TopicRelations from '@/components/TopicRelations.vue';
-import ProfileRelations from '@/components/ProfileRelations.vue';
+import LocationRelations from '@/components/LocationRelations.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';

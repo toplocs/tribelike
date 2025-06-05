@@ -88,4 +88,14 @@ export const topicToTopic = [
   },
 ];
 
+export const topicToLocation = [
+  {
+    id: '',
+    active: 'is related to',
+    passive: 'is related to',
+    color: 'blue',
+    icon: '',
+  }
+];
+
 export default [];

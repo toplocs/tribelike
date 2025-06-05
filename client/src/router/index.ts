@@ -16,6 +16,7 @@ import ProfileCreateView from '@/views/profile/ProfileCreateView.vue';
 import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
+/*
 //Interest
 import InterestInfoView from '@/views/topic/InfoView.vue';
 import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
@@ -33,7 +34,7 @@ import LocationInfoView from '@/views/location/InfoView.vue';
 import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
-
+*/
 
 //Sphere
 import SphereCreateView from '@/views/sphere/CreateView.vue';
@@ -145,7 +146,7 @@ const router = createRouter({
         },
       ]
     },
-
+/*
     //Topics
     {
       path: '/topic/create',
@@ -223,7 +224,7 @@ const router = createRouter({
         },
       ],
     },
-
+*/
     //Spheres
     {
       path: '/sphere/create',
