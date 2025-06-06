@@ -3,7 +3,7 @@ import Gun from 'gun';
 let gun: any;
 
 export function initGun(server: Object) {
-  gun = Gun({ web: server, file: 'ra-data' });
+  gun = Gun({ peers: [], web: server, file: 'ra-data' });
 
   return gun;
 }

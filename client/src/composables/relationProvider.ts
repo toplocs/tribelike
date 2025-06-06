@@ -35,7 +35,7 @@ export function relationProvider(
       type: type,
       two: two,
     };
-    relations.value.push(relation);
+    //relations.value.push(relation);
     
     const node = gun.get(`relations/${one}/${type}/${two}`).put(relation);
     gun.get(one).get('relations').set(node);
