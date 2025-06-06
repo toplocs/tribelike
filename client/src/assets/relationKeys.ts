@@ -48,7 +48,7 @@ export const profileToLocation = [
   }, {
     id: 'live',
     active: 'is living in',
-    passive: 'is being lived',
+    passive: 'is living here',
     color: 'red',
     icon: 'house',
   }, {
@@ -98,4 +98,12 @@ export const topicToLocation = [
   }
 ];
 
-export default [];
+const relationTypes = [
+  ...profileToTopic,
+  ...profileToLocation,
+  ...topicToLocation,
+  ...topicToTopic,
+];
+
+export const relationTypeIds = Array.from(new Set(relationTypes.map(r => r.id)));
+

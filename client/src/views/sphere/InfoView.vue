@@ -18,7 +18,7 @@
         <LocationBadge :title="type" />
       </div>
 
-      <RelationButtons />
+      <RelationButtons :for="sphere?.type" />
 
       <section v-for="slot of slots">
         <PluginComponent

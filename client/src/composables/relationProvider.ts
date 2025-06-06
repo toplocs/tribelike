@@ -1,4 +1,5 @@
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
+import { relationTypeIds } from '@/assets/relationKeys';
 import gun from '@/services/gun';
 
 export function relationProvider(
@@ -6,14 +7,11 @@ export function relationProvider(
 ) {
   const relations = ref<Relation[]>([]);
   const byType = computed(() => {
-    return {
-      relation: relations.value.filter(x => x.type === ''),
-      child: relations.value.filter(x => x.type === 'child'),
-      category: relations.value.filter(x => x.type === 'category'),
-      like: relations.value.filter(x => x.type === 'like'),
-      love: relations.value.filter(x => x.type === 'love'),
-      teach: relations.value.filter(x => x.type === 'teach'),
-    };
+    const result: Record<string, any[]> = {};
+    for (const id of relationTypeIds) {
+      result[id || 'relation'] = relations.value.filter(x => x.type === id);
+    }
+    return result;
   });
 
   const createRelation = async (
@@ -35,7 +33,6 @@ export function relationProvider(
       type: type,
       two: two,
     };
-    //relations.value.push(relation);
     
     const node = gun.get(`relations/${one}/${type}/${two}`).put(relation);
     gun.get(one).get('relations').set(node);
@@ -61,10 +58,6 @@ export function relationProvider(
     two: string
   ) => {
     const path = `relations/${one}/${type}/${two}`;
-    /*relations.value = relations.value.filter(x => (
-      `relations/${x.one}/${x.type}/${x.two}` !== path
-    ));*/
-
     const node = gun.get(path);
     node.then(() => {
       gun.get(one).get('relations').unset(node);

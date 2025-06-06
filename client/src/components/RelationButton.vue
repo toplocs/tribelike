@@ -1,6 +1,6 @@
 <template>
   <BigButton
-    :title="relationKey.id"
+    :title="capitalizedTitle"
     :icon="relationKey.icon || 'heart'"
     :color="relationKey.color || 'blue'"
     :isPassive="isPassive"
@@ -8,8 +8,9 @@
   />
 </template>
 
+//
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
@@ -29,6 +30,10 @@ const {
   compareRelation
 } = useRelation();
 const isPassive = ref(false);
+const capitalizedTitle = computed(() => {
+  const id = props.relationKey.id || '';
+  return id.charAt(0).toUpperCase() + id.slice(1);
+});
 
 watchEffect(async () => {
   if (profile.value?.id && sphere.value?.id) {

@@ -4,6 +4,7 @@
       <Headline>Topics:</Headline>
       <SphereRelations
         v-for="relationKey of topicToTopic"
+        :key="relationKey"
         :relationKey="relationKey"
       />
     </div>
@@ -16,6 +17,7 @@
       <Headline>Locations:</Headline>
       <SphereRelations
         v-for="relationKey of topicToLocation"
+        :key="relationKey"
         :relationKey="relationKey"
       />
     </div>
@@ -28,6 +30,7 @@
       <Headline>Profiles:</Headline>
       <ProfileRelations
         v-for="relationKey of profileToLocation"
+        :key="relationKey"
         :relationKey="relationKey"
       />
     </div>
@@ -40,8 +43,8 @@ import Divider from '@/components/common/Divider.vue';
 import SphereRelations from '@/components/SphereRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import {
-  profileToTLocation,
   topicToTopic,
-  topicToLocation
+  topicToLocation,
+  profileToLocation,
 } from '@/assets/relationKeys';
 </script>
