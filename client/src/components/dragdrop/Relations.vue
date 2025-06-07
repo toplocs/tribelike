@@ -17,10 +17,12 @@
           <TopicBadge
             v-if="relation.two?.type == 'topic'"
             :title="relation.two?.title"
+            :remove="() => handleRemove(relation)"
           />
           <LocationBadge
             v-if="relation.two?.type == 'location'"
             :title="relation.two?.title"
+            :remove="() => handleRemove(relation)"
           />
         </Draggable>
       </span>
@@ -41,7 +43,10 @@
           :groups="['topic']"
           @start="dragged = relation"
         >
-          <TopicBadge :title="relation.two?.title" />
+          <TopicBadge
+            :title="relation.two?.title"
+            :remove="() => handleRemove(relation)"
+          />
         </Draggable>
       </span>
     </Droppable>
@@ -61,7 +66,10 @@
           :groups="['location']"
           @start="dragged = relation"
         >
-          <LocationBadge :title="relation.two?.title" />
+          <LocationBadge
+            :title="relation.two?.title"
+            :remove="() => handleRemove(relation)"
+          />
         </Draggable>
       </span>
     </Droppable>
@@ -95,6 +103,14 @@ const populated = ref([]);
 const handleDrop = async (e: string) => {
   const changes = dragged.value?.type === e ? false: true;
   if (changes) await updateRelation(dragged.value?.id, e);
+}
+
+const handleRemove = async (relation: Object) => {
+  await removeRelation(
+    relation?.one?.id,
+    relation?.type,
+    relation?.two?.id
+  );
 }
 
 watchEffect(async () => {
