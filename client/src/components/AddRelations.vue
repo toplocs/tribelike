@@ -7,6 +7,7 @@
       @click="handleClick"
     />
   </span>
+
   <!--
   <span v-if="two">
     {{ topic?.title }} is related to <TopicBadge :title="two?.title"/>
@@ -23,17 +24,17 @@ import BigButton from '@/components/common/BigButton.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
-import { useTopic } from '@/composables/topicProvider';
+import { useSphere } from '@/composables/sphereProvider';
 import { useRelation } from '@/composables/relationProvider';
 import { topicToTopic } from '@/assets/relationKeys.ts';
 import gun from '@/services/gun';
 
 const router = useRouter();
 const { profile } = useProfile();
-const { topic, createTopic } = useTopic();
+const { sphere, createSphere } = useSphere();
 const { relations, createRelation } = useRelation();
 const options = ref([]);
-const type = ref('');
+const type = ref('relation');
 const two = ref(null);
 
 const handleSelect = async (selected: Object) => {
@@ -41,7 +42,7 @@ const handleSelect = async (selected: Object) => {
 }
 
 const handleClick = async (value: String) => {
-  router.push(`/topic/create?title=${value}`)
+  router.push(`/sphere/create?title=${value}`)
 }
 
 const handleRemove = async (relation: Relation) => {
@@ -50,7 +51,7 @@ const handleRemove = async (relation: Relation) => {
 
 const handleSubmit = async () => {
   const result = await createRelation(
-    topic.value?.id,
+    sphere.value?.id,
     type.value?.id,
     two.value?.id,
   );
@@ -59,7 +60,7 @@ const handleSubmit = async () => {
 watch(() => two.value, async () => {
   if (two.value) {
     const result = await createRelation(
-      topic.value?.id,
+      sphere.value?.id,
       type.value,
       two.value?.id,
     );
@@ -71,18 +72,10 @@ onMounted(async () => {
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`sphere/${key}/local`).once((data) => {
+    gun.get(`sphere/${key}/local`)
+    .once((data) => {
       if (data) options.value.push(data);
     });
   });
-
-  /*gun.get('locations') //listener in service
-  .map()
-  .once((refNode, key) => {
-    if (!refNode) return;
-    gun.get(`topic_${key}`).once((data) => {
-      if (data) options.value.push(data);
-    });
-  });*/
 });
 </script>

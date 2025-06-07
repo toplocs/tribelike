@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import TopicBadge from '@/components/badges/TopicBadge.vue';

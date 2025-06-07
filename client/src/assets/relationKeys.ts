@@ -68,7 +68,7 @@ export const profileToLocation = [
 
 export const topicToTopic = [
   {
-    id: '',
+    id: 'relation',
     active: 'is related to',
     passive: 'is related to',
     color: 'blue',
@@ -85,20 +85,32 @@ export const topicToTopic = [
     passive: 'contains',
     color: 'blue',
     icon: '',
+  }, {
+    id: 'test',
+    active: 'test',
+    passive: 'testing',
+    color: 'blue',
+    icon: '',
   },
 ];
 
 export const topicToLocation = [
   {
-    id: '',
+    id: 'relation',
     active: 'is related to',
     passive: 'is related to',
+    color: 'blue',
+    icon: '',
+  }, {
+    id: 'having',
+    active: 'is having',
+    passive: 'is having',
     color: 'blue',
     icon: '',
   }
 ];
 
-const relationTypes = [
+export const relationTypes = [
   ...profileToTopic,
   ...profileToLocation,
   ...topicToLocation,

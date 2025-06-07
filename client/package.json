@@ -21,6 +21,9 @@
     "@heroicons/vue": "^2.2.0",
     "@simplewebauthn/browser": "^13.1.0",
     "@tailwindcss/vite": "^4.1.1",
+    "@vue-dnd-kit/core": "^1.5.0",
+    "@vueuse/core": "^13.3.0",
+    "axios": "^1.9.0",
     "crypto-js": "^4.2.0",
     "gun": "^0.2020.1240",
     "nodemon": "^3.1.9",
@@ -30,6 +33,7 @@
     "ts-node": "^10.9.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
+    "vue3-dnd": "^2.1.0",
     "vue3-openlayers": "^11.5.0"
   },
   "devDependencies": {

@@ -8,7 +8,14 @@
           <div class="mb-4">
             <AddRelations />
           </div>
-          <DragDropRelations />
+          <b>Topics</b>
+          <DragDropRelations :relationKeys="topicToTopic" />
+
+          <b>Locations</b>
+          <DragDropRelations 
+            v-for="relationKey of topicToLocation"
+            :relationKey="relationKey"
+          />
         </Card>
       </section>
 
@@ -27,6 +34,12 @@
       <section>
         <Card className="mt-4">
           <TopicForm />
+        </Card>
+      </section>
+
+      <section>
+        <Card className="mt-4">
+          Put the Journal here
         </Card>
       </section>
     </div>
@@ -48,17 +61,18 @@
 import { ref, inject, watchEffect, onMounted } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
+import Divider from '@/components/common/Divider.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicForm from '@/components/forms/Topic.vue';
 import PluginListItem from '@/components/list/PluginListItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
-import DragDropRelations from '@/components/DragDropRelations.vue';
+import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useTopic } from '@/composables/topicProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { profileToTopic } from '@/assets/relationKeys';
+import { topicToTopic, topicToLocation, profileToTopic } from '@/assets/relationKeys';
 
 const { topic } = useTopic();
 const { slots } = usePlugins();

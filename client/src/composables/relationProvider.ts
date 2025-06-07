@@ -38,7 +38,7 @@ export function relationProvider(
     gun.get(one).get('relations').set(node);
     gun.get(two).get('relations').set(node);
 
-    return relation;
+    return node;
   }
 
   const updateRelation = async (
@@ -46,10 +46,14 @@ export function relationProvider(
     type: string,
   ) => {
     const update = relations.value.find(x => x.id == id);
-    await removeRelation(update.one, update.type, update.two);
-    const relation = await createRelation(update.one, type, update.two);
+    if (update) {
+      await removeRelation(update.one, update.type, update.two);
+      const node = await createRelation(update.one, type, update.two);
 
-    return relation;
+      return node;
+    } else {
+      console.error('Update data was not found', id)
+    }
   }
 
   const removeRelation = async (

@@ -4,7 +4,7 @@
   >
     <UserIcon class="w-4 h-4" />
 
-    <span>{{ username }}</span>
+    <span>{{ username || 'Anonym' }}</span>
   </span>
 </template>
 
@@ -14,7 +14,6 @@ import { UserIcon } from '@heroicons/vue/24/outline';
 const props = defineProps({
   username: {
     type: String,
-    required: true,
   },
 });
 </script>

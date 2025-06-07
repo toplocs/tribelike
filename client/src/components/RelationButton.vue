@@ -1,5 +1,6 @@
 <template>
   <BigButton
+    v-if="relationKey.id !== ''"
     :title="capitalizedTitle"
     :icon="relationKey.icon || 'heart'"
     :color="relationKey.color || 'blue'"

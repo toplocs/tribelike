@@ -37,7 +37,7 @@ watchEffect(async () => {
   const relations = byType.value[props.relationKey.id];
   if (!relations) return;
   populated.value = await Promise.all(
-    relations.map(x => populateRelation(['topics'], x))
+    relations.map(x => populateRelation(['spheres'], x))
   );
 });
 </script>
