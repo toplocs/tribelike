@@ -27,6 +27,11 @@
             @click="toggleSearch"
           />
 
+          <router-link to="/sphere/create">
+            <IconButton :icon="PlusIcon" />
+          </router-link>
+
+          <!--
           <Dropdown name="dropdown1" className="min-w-40">
             <template #trigger>
               <IconButton :icon="PlusIcon" />
@@ -45,6 +50,7 @@
               </ul>
             </template>
           </Dropdown>
+          -->
 
           <router-link
             v-if="settings"

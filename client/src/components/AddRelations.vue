@@ -7,12 +7,6 @@
       @click="handleClick"
     />
   </span>
-
-  <!--
-  <span v-if="two">
-    {{ topic?.title }} is related to <TopicBadge :title="two?.title"/>
-  </span>
-  -->
 </template>
 
 <script setup lang="ts">
@@ -38,7 +32,11 @@ const type = ref('relation');
 const two = ref(null);
 
 const handleSelect = async (selected: Object) => {
-  two.value = selected;
+  const result = await createRelation(
+    sphere.value?.id,
+    type.value,
+    selected?.id,
+  );
 }
 
 const handleClick = async (value: String) => {
@@ -56,16 +54,6 @@ const handleSubmit = async () => {
     two.value?.id,
   );
 }
-
-watch(() => two.value, async () => {
-  if (two.value) {
-    const result = await createRelation(
-      sphere.value?.id,
-      type.value,
-      two.value?.id,
-    );
-  }
-});
 
 onMounted(async () => {
   gun.get('spheres') //listener in service

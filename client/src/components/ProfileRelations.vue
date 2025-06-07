@@ -1,6 +1,6 @@
 <template>
-  <div v-if="populated.length > 0">
-    <Title>{{ title }}:</Title>
+  <div v-if="populated.length > 0" class="flex flex-row gap-1">
+   <b>{{ capitalized }}:</b>
     <div class="flex flex-wrap gap-1">
       <router-link
         v-for="relation of populated"
@@ -28,7 +28,7 @@ const props = defineProps({
 const { profile } = useProfile();
 const { byType, populateRelation } = useRelation();
 const populated = ref([]);
-const title = computed(() => {
+const capitalized = computed(() => {
   const value = props.relationKey.passive;
   return value.charAt(0).toUpperCase() + value.slice(1);
 });

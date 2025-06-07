@@ -4,6 +4,13 @@
     @submit.prevent="onSubmit"
     class="mt-4 flex flex-col gap-4"
   >
+    <Title>
+      Create a new sphere:
+    </Title>
+    <Callout v-if="errorMessage" color="red">
+      {{ errorMessage }}
+    </Callout>
+
     <div className="mb-2">
       <label
         for="title"
@@ -12,12 +19,12 @@
       </label>
 
       <TextInput
+        v-model="title"
         type="text"
         id="title"
         name="title"
         autoComplete="title"
         placeholder="The title of the sphere"
-        :modelValue="title"
       />
     </div>
 
@@ -48,20 +55,22 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import Title from '@/components/common/Title.vue';
+import Callout from '@/components/common/Callout.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import SelectInput from '@/components/common/SelectInput.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
-import { relationProvider } from '@/composables/relationProvider';
 
+const route = useRoute();
 const router = useRouter();
 const { profile } = useProfile();
 const { createSphere } = useSphere();
-const { createRelation } = relationProvider;
 const errorMessage = ref('');
+const title = ref(route.query?.title || '');
 const form = ref<HTMLFormElement | null>(null);
 
 const onSubmit = async () => {

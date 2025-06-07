@@ -2,8 +2,7 @@
   <Container>
     <div class="w-full">    
       <Card class="flex flex-col gap-4">
-        <TopicRelations v-if="sphere?.type == 'topic'"/>
-        <LocationRelations v-if="sphere?.type == 'location'"/>
+        <SphereRelations />
       </Card>
     </div>
 
@@ -37,8 +36,7 @@ import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
 import Sidebar from '@/components/SideBar.vue';;
 import Card from '@/components/common/Card.vue';
-import TopicRelations from '@/components/TopicRelations.vue';
-import LocationRelations from '@/components/LocationRelations.vue';
+import SphereRelations from '@/components/SphereRelations.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import RelationButtons from '@/components/RelationButtons.vue';

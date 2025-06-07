@@ -14,28 +14,38 @@
       class="absolute space-x-1 space-y-1 p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
-      <TopicBadge
-        v-for="option of filteredOptions"
-        :title="option.title"
-        :id="option.id"
-        @click="selectOption(option)"
-      />
+      <span  v-for="option of filteredOptions" :key="option.id">
+        <TopicBadge
+          v-if="option.type == 'topic'"
+          :title="option.title"
+          :id="option.id"
+          @click="selectOption(option)"
+        />
+
+        <LocationBadge
+        v-if="option.type == 'location'"
+          :title="option.title"
+          :id="option.id"
+          @click="selectOption(option)"
+        />
+      </span>
 
       <Button
         v-if="!filteredOptions.length"
         @click="clickButton"
-      >
-        Create new
+      > Create new
       </Button>
     </div>
   </div>
 </template>
 
+//
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import Button from '@/components/common/Button.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
 
 const props = defineProps({
   options: {

@@ -79,20 +79,14 @@ export const topicToTopic = [
     passive: 'contains',
     color: 'blue',
     icon: '',
-  }, {
-    id: 'test',
-    active: 'test',
-    passive: 'testing',
-    color: 'blue',
-    icon: '',
   },
 ];
 
 export const topicToLocation = [
   {
-    id: 'having',
-    active: 'is having',
-    passive: 'is having',
+    id: 'in',
+    active: 'is in',
+    passive: 'contains',
     color: 'blue',
     icon: '',
   }
