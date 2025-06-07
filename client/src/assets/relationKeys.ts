@@ -68,15 +68,9 @@ export const profileToLocation = [
 
 export const topicToTopic = [
   {
-    id: 'relation',
-    active: 'is related to',
-    passive: 'is related to',
-    color: 'blue',
-    icon: '',
-  }, {
     id: 'child',
-    active: 'is child of',
-    passive: 'is parent of',
+    active: 'child of',
+    passive: 'parent of',
     color: 'green',
     icon: '',
   }, {
@@ -96,12 +90,6 @@ export const topicToTopic = [
 
 export const topicToLocation = [
   {
-    id: 'relation',
-    active: 'is related to',
-    passive: 'is related to',
-    color: 'blue',
-    icon: '',
-  }, {
     id: 'having',
     active: 'is having',
     passive: 'is having',

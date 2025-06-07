@@ -4,18 +4,11 @@
 
       <section>
         <Card>
-          <Headline>Edit Relations:</Headline>
+          <Headline>{{ sphere?.title }} is ...</Headline>
           <div class="mb-4">
             <AddRelations />
           </div>
-          <b>Topics</b>
-          <DragDropRelations :relationKeys="topicToTopic" />
-
-          <b>Locations</b>
-          <DragDropRelations 
-            v-for="relationKey of topicToLocation"
-            :relationKey="relationKey"
-          />
+          <DragDropRelations />
         </Card>
       </section>
 
@@ -70,10 +63,10 @@ import PluginListItem from '@/components/list/PluginListItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
-import { useTopic } from '@/composables/topicProvider';
+import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { topicToTopic, topicToLocation, profileToTopic } from '@/assets/relationKeys';
+import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
-const { topic } = useTopic();
+const { sphere } = useSphere();
 const { slots } = usePlugins();
 </script>

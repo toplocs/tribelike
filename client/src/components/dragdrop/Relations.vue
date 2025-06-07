@@ -1,55 +1,85 @@
 <template>
-  <div class="container">
-    <Draggable
-      v-if="!dropped"
-      data="Test"
-      :groups="['topic']"
-      @start="dragged = 'Test'"
+  <div class="space-y-2">
+    <Droppable
+      id="relation"
+      title="Related to"
+      :groups="['topic', 'location']"
+      @drop="handleDrop"
+      class="flex flex-row flex-wrap gap-1 items-center cursor-pointer"
     >
-      <TopicBadge title="test" />
-    </Draggable>
-    <div>
-      <Droppable
-        :groups="['']"
-        @drop="dropped = 'b'"
-      >
+      <span v-for="relation of populated">
         <Draggable
-          v-if="dropped === 'b'"
-          :groups="['b']"
-          @end="dropped = null"
-        />
-      </Droppable>
+          v-if="relation.type == 'relation'"
+          :data="relation"
+          :groups="[relation.two?.type]"
+          @start="dragged = relation"
+        >
+          <TopicBadge
+            v-if="relation.two?.type == 'topic'"
+            :title="relation.two?.title"
+          />
+          <LocationBadge
+            v-if="relation.two?.type == 'location'"
+            :title="relation.two?.title"
+          />
+        </Draggable>
+      </span>
+    </Droppable>
 
-      <Droppable
-        v-for="relationKey of relationKeys"
-        :id="relationKey.id"
-        :groups="['topic']"
-        @drop="handleDrop"
-      >
-        <span v-for="relation of relations">
-          <Draggable
-            v-if="relation.type == relationKey.id"
-            :data="relation"
-            :groups="['topic']"
-            @start="dragged = relation.id"
-          >
-            <TopicBadge title="test" />
-          </Draggable>
-        </span>
-      </Droppable>
-    </div>
+    <Droppable
+      v-for="relationKey of topicToTopic"
+      :id="relationKey.id"
+      :title="`${relationKey.active} topic`"
+      :groups="['topic']"
+      @drop="handleDrop"
+      class="flex flex-row flex-wrap gap-1 items-center cursor-pointer"
+    >
+      <span v-for="relation of populated">
+        <Draggable
+          v-if="relation.type == relationKey.id"
+          :data="relation"
+          :groups="['topic']"
+          @start="dragged = relation"
+        >
+          <TopicBadge :title="relation.two?.title" />
+        </Draggable>
+      </span>
+    </Droppable>
+
+    <Droppable
+      v-for="relationKey of topicToLocation"
+      :id="relationKey.id"
+      :title="`${relationKey.active} location`"
+      :groups="['location']"
+      @drop="handleDrop"
+      class="flex flex-row flex-wrap gap-1 cursor-pointer"
+    >
+      <span v-for="relation of populated">
+        <Draggable
+          v-if="relation.type == relationKey.id"
+          :data="relation"
+          :groups="['location']"
+          @start="dragged = relation"
+        >
+          <LocationBadge :title="relation.two?.title" />
+        </Draggable>
+      </span>
+    </Droppable>
   </div>
 </template>
 
 //
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Droppable from './Droppable.vue';
 import Draggable from './Draggable.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useRelation } from '@/composables/relationProvider';
+import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
 const { relationKeys } = defineProps<{
+  sphere: string;
   relationKeys: string[];
 }>();
 const {
@@ -59,15 +89,18 @@ const {
   populateRelation
 } = useRelation();
 const dropped = ref<string | null>(null);
-const dragged = ref<string | null>(null);
-
-
-const handleEnd = (e) => {
-  console.log(e)
-}
+const dragged = ref<Relation | null>(null);
+const populated = ref([]);
 
 const handleDrop = async (e: string) => {
-  console.log(dragged.value)
-  await updateRelation(dragged.value, e);
+  const changes = dragged.value?.type === e ? false: true;
+  if (changes) await updateRelation(dragged.value?.id, e);
 }
+
+watchEffect(async () => {
+  if (!relations.value || relations.value.length === 0) return;
+  populated.value = await Promise.all(
+    relations.value.map(x => populateRelation(['spheres'], x))
+  );
+});
 </script>
