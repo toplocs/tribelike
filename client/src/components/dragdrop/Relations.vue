@@ -84,7 +84,6 @@ import Draggable from './Draggable.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useRelation } from '@/composables/relationProvider';
-import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
 const { topics, locations } = defineProps<{
   topics: Object[];

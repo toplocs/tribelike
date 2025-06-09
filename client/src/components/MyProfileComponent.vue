@@ -34,15 +34,10 @@
 
 //
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
-import TopicBadge from '@/components/badges/TopicBadge.vue';
-import AddSpheres from '@/components/AddSpheres.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import { useProfile } from '@/composables/profileProvider';

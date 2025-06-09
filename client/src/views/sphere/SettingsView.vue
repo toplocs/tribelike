@@ -8,7 +8,10 @@
           <div class="mb-4">
             <AddRelations />
           </div>
-          <DragDropRelations />
+          <DragDropRelations
+            :topics="topicToTopic"
+            :locations="topicToLocation"
+          />
         </Card>
       </section>
 
