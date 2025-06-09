@@ -15,7 +15,11 @@
   </div>
 </template>
 
+//
 <script setup lang="ts">
 import Container from '@/components/common/Container.vue';
 import SphereCloud from '@/components/sphereCloud.vue';
+import { useProfile } from '@/composables/profileProvider';
+
+const { profile } = useProfile();
 </script>
