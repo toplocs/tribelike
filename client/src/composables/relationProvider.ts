@@ -3,12 +3,13 @@ import { relationTypeIds } from '@/assets/relationKeys';
 import gun from '@/services/gun';
 
 export function relationProvider(
-  instance: string,
+  base: string,
 ) {
+  const instance = ref<String>(base);
   const relations = ref<Relation[]>([]);
 
   const createRelation = async (
-    one: string = instance,
+    one: string = instance.value,
     type: string,
     two: string,
   ) => {
@@ -50,7 +51,7 @@ export function relationProvider(
   }
 
   const removeRelation = async (
-    one: string = instance,
+    one: string = instance.value,
     type: string,
     two: string
   ) => {
@@ -93,9 +94,9 @@ export function relationProvider(
 
     return chain[`relations/${one}/${type}/${two}`]? true: false;
   }
-  
-  onMounted(() => {
-    gun.get(instance)
+
+  const listen = (id: String) => {
+    gun.get(id)
     .get('relations')
     .map()
     .on((data, key) => {
@@ -110,13 +111,31 @@ export function relationProvider(
         ));
       }
     });
+  }
+
+  const clear = (id) => {
+    relations.value = [];
+    gun.get(id)
+    .get('relations')
+    .map()
+    .off();
+  }
+
+  watch(() => instance.value, (newId) => {
+    clear(instance.value);
+    listen(newId);
+  });
+  
+  onMounted(() => {
+    listen(instance.value);
   });
 
   onUnmounted(() => {
-    relations.value = [];
-  })
+    clear(instance.value);
+  });
 
   provide('relation', {
+    instance,
     relations,
     createRelation,
     updateRelation,

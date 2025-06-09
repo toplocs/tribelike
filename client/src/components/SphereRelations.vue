@@ -58,7 +58,7 @@
 
 //
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue';
 import Title from '@/components/common/Title.vue';
 import Divider from '@/components/common/Divider.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';

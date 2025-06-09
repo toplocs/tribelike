@@ -32,11 +32,14 @@
 
 //
 <script setup lang="ts">
+import { watch } from 'vue';
 import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import SphereRelations from '@/components/SphereRelations.vue';
+import { useProfile } from '@/composables/profileProvider';
+import { useRelation } from '@/composables/relationProvider';
 import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
 
 const props = defineProps({
@@ -45,4 +48,11 @@ const props = defineProps({
     required: true
   }
 });
+const { profile } = useProfile();
+const { instance } = useRelation();
+
+watch(() => profile.value, (newProfile) => {
+  instance.value = newProfile.id;
+});
+
 </script>
