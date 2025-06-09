@@ -68,6 +68,7 @@ import {
     topicToTopic,
     topicToLocation,
     profileToTopic,
+    profileToLocation
 } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
