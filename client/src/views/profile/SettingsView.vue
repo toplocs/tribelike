@@ -1,7 +1,20 @@
 <template>
   <Container>
-    <div class="w-full">
+    <div class="w-full space-y-4">
       <Card>
+        <Headline>{{ profile?.username }}'s Relations</Headline>
+        <div class="mb-4">
+          <AddRelations />
+        </div>
+
+        <DragDropRelations
+          :topics="profileToTopic"
+          :locations="profileToLocation"
+        />
+      </Card>
+
+      <Card>
+          <Headline>Settings</Headline>
 			   <ProfileSettingsForm
           :profile="profile"
         />
@@ -49,20 +62,24 @@
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
 import { useRoute, useRouter} from 'vue-router';
+import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import Title from '@/components/common/Title.vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import ProfileSettingsForm from '@/components/forms/ProfileSettings.vue';
-import SubmitButton from '@/components/common/SubmitButton.vue';
 import Callout from '@/components/common/Callout.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Divider from '@/components/common/Divider.vue';
 import IconButton from '@/components/common/IconButton.vue';
-import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import Headline from '@/components/common/Headline.vue';
+import AddRelations from '@/components/AddRelations.vue';
+import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { relationProvider } from '@/composables/relationProvider';
+import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
 
 const route = useRoute();
 const router = useRouter();
@@ -87,4 +104,6 @@ const handleLogout = async () => {
     console.error(error);
   }
 }
+
+relationProvider(route.params.id);
 </script>

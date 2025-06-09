@@ -2,7 +2,10 @@
   <Container>
     <div class="w-full">    
       <Card class="flex flex-col gap-4">
-        <SphereRelations />
+        <SphereRelations
+          :topics="profileToTopic"
+          :locations="profileToLocation"
+        />
       </Card>
     </div>
 
@@ -46,7 +49,7 @@ import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { profileToTopic, topicToTopic } from '@/assets/relationKeys';
+import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
 const { sphere } = useSphere();

@@ -6,13 +6,6 @@ export function relationProvider(
   instance: string,
 ) {
   const relations = ref<Relation[]>([]);
-  const byType = computed(() => {
-    const result: Record<string, any[]> = {};
-    for (const id of relationTypeIds) {
-      result[id || 'relation'] = relations.value.filter(x => x.type === id);
-    }
-    return result;
-  });
 
   const createRelation = async (
     one: string = instance,
@@ -125,7 +118,6 @@ export function relationProvider(
 
   provide('relation', {
     relations,
-    byType,
     createRelation,
     updateRelation,
     removeRelation,

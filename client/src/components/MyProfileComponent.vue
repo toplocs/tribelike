@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full space-y-4">
     <div class="mb-8 flex flex-row gap-2">
       <img
         :src="profile?.image"
@@ -11,23 +11,21 @@
     </div>
 
     <div>
-      <Card v-if="profile?.about?.length" class="mb-8">
+      <Card v-if="profile?.about?.length">
         <p v-if="profile?.about">
           {{ profile?.about }}
         </p>
       </Card>
     </div>
 
-    <section class="mb-8">
-      <Headline>{{ profile?.username }}'s Relations:</Headline>
-      <div class="mb-4">
-        <AddRelations />
-      </div>
-
-      <DragDropRelations
-        :topics="profileToTopic"
-        :locations="profileToLocation"
-      />
+    <section>
+      <Card class="flex flex-col gap-4">
+        <Headline>{{profile?.username}} ...</Headline>
+        <SphereRelations
+          :topics="profileToTopic"
+          :locations="profileToLocation"
+        />
+      </Card>
     </section>
   </div>
 </template>
@@ -38,10 +36,8 @@ import Container from '@/components/common/Container.vue';
 import Card from '@/components/common/Card.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
-import AddRelations from '@/components/AddRelations.vue';
-import DragDropRelations from '@/components/dragdrop/Relations.vue';
-import { useProfile } from '@/composables/profileProvider';
-import {profileToTopic, profileToLocation } from '@/assets/relationKeys';
+import SphereRelations from '@/components/SphereRelations.vue';
+import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
 
 const props = defineProps({
   profile: {

@@ -4,9 +4,6 @@
     @submit.prevent="onSubmit"
     class="flex flex-col gap-4"
   >
-    <Title>
-      Profile Settings
-    </Title>
     <Callout v-if="errorMessage" color="red">
       {{ errorMessage }}
     </Callout>
@@ -98,7 +95,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import Title from '@/components/common/Title.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import TextArea from '@/components/common/TextArea.vue';
 import Callout from '@/components/common/Callout.vue';

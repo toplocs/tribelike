@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap gap-1">
-    <u>Is related to:</u>
+    <u>is related to:</u>
     <span v-for="relation of populated">
       <router-link
         v-if="relation.type == 'relation'"
@@ -22,10 +22,10 @@
   <Divider />
 
   <div
-    v-for="relationKey of topicToTopic"
+    v-for="relationKey of topics"
     class="mt-4 flex flex-wrap gap-1"
   >
-    <u>{{ relationKey.active }}:</u>
+    <u>{{ relationKey.active }} topic:</u>
     <span v-for="relation of populated">
       <router-link
         v-if="relation.type == relationKey.id"
@@ -39,10 +39,10 @@
   <Divider />
 
   <div
-    v-for="relationKey of topicToLocation"
+    v-for="relationKey of locations"
     class="mt-4 flex flex-wrap gap-1"
   >
-    <u>{{ relationKey.active }}:</u>
+    <u>{{ relationKey.active }} location:</u>
     <span v-for="relation of populated">
       <router-link
         v-if="relation.type == relationKey.id"
@@ -66,8 +66,11 @@ import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
-import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
+const { topics, locations } = defineProps<{
+  topics: Object[];
+  locations: Object[];
+}>();
 const { profile } = useProfile();
 const { relations, populateRelation } = useRelation();
 const populated = ref([]);
