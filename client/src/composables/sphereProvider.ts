@@ -32,9 +32,36 @@ export function sphereProvider() {
     };
     const node = gun.get(`sphere/${id}/local`).put(sphere.value);
     gun.get('spheres').get(id).set(node);
-    gun.get('spheres/titles').get(sphere.value.title).set(node);
+    gun.get('spheres/titles').get(sphere.value?.title.toLowerCase()).set(node);
 
     return sphere.value;
+  }
+
+
+  const searchSphereByTitle = async (term: string): Promise<any[]> => {
+    return new Promise((resolve) => {
+      const results: any[] = [];
+
+      const start = term.toLowerCase();
+      const end = incrementLastChar(start);
+
+      gun.get('spheres/titles')
+      .get({ '.': { '>': start, '<': end }, '%': 50000 }) //50kb
+      .map()
+      .once((data, key) => {
+        if (data && !results.find(x => x.id === data.id)) {
+          results.push(data);
+        }
+      });
+
+      setTimeout(() => resolve(results), 300);
+    });
+  };
+
+  function incrementLastChar(str: string) { //utils
+    const last = str.slice(-1);
+    const inc = String.fromCharCode(last.charCodeAt(0) + 1);
+    return str.slice(0, -1) + inc;
   }
 
   onMounted(() => {
@@ -55,6 +82,7 @@ export function sphereProvider() {
     space,
     setSphere,
     createSphere,
+    searchSphereByTitle
   });
 }
 

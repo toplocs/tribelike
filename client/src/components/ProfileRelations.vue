@@ -32,7 +32,6 @@ const { relations, populateRelation } = useRelation();
 const populated = ref([]);
 
 watchEffect(async () => {
-  console.log(relations);
   if (!relations.value || relations.value.length === 0) return;
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['profiles'], x))

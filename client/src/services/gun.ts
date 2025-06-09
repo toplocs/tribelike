@@ -1,8 +1,12 @@
 import Gun from 'gun' // You can also use 'gun' here
 import 'gun/sea' // Optional: for user authentication
 import 'gun/lib/unset'; //optional
+import 'gun/lib/radix'; // optional: for radix index structure
+import 'gun/lib/radisk'; // optional: if you're using radisk storage
+import 'gun/lib/store'; // optional: if using indexed storage
+import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 
-const gun = Gun(['http://localhost:3000/gun']);
+const gun = Gun({ peers: ['http://localhost:3000/gun'], rad: true });
 
 gun.clear = function() {
 	// Clear localStorage

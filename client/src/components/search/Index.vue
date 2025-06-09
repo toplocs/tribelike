@@ -15,42 +15,29 @@
       class="absolute z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
-      <ul>
-        <li
-          v-for="[key, value] of Object.entries(filteredOptions)"
-          :key="key"
-          class="p-2"
-        >
-          <div v-if="value.length">
-            <span class="mt-1">
-              {{ key }}:
-            </span>
-
-            <div class="my-2 flex flex-row flex-wrap gap-2">
-              <span
-                v-for="item of value"
-                :key="item.id"
-                @click="selectOption(key, item)"
-              >
-                <LocationBadge
-                  v-if="key == 'Locations'"
-                  :title="item.title"
-                />
-                <TopicBadge
-                  v-if="key == 'Interests'"
-                  :title="item.title"
-                />
-              </span>
-            </div>
-            <Divider />
-          </div>
+      <ul
+        v-if="filteredOptions.length > 0"
+        class="p-2 flex flex-row gap-1"
+      >
+        <li v-for="item of filteredOptions">
+          <TopicBadge
+            v-if="item.type == 'topic'"
+            :title="item.title"
+            @click="selectOption(item)"
+          />
+          <LocationBadge
+            v-if="item.type == 'location'"
+            :title="item.title"
+            @click="selectOption(item)"
+          />
         </li>
-        <li v-if="filteredOptions.length === 0" class="px-4 py-2 text-gray-500">
-          No search results
-        </li>
-
-        <slot />
       </ul>
+      <div
+        v-else
+        class="p-2 text-gray-400"
+      >
+        No search results
+      </div>
     </div>
   </div>
 </template>
@@ -112,11 +99,11 @@ const onInput = () => {
   openDropdown();
 };
 
-const selectOption = (key, option) => {
+const selectOption = (option) => {
   selectedOption.value = option;
   inputValue.value = '';
   emit('update:modelValue', option);
-  emit('selected', { key: key, option: option });
+  emit('selected', { option: option });
   closeDropdown();
 };
 

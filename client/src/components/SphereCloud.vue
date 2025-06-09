@@ -1,16 +1,9 @@
 <template>
   <div class="mx-auto flex flex-col">
-    <span class="mx-auto">
-      <Search
-        placeholder="Select a sphere or a location ..."
-        :options="options"
-        @select="handleSelect"
-        @click="handleClick"
-      />
-    </span>
+    <FindSphere />
     <br />
 
-    <div class="flex flex-row flex-wrap gap-1">
+    <div class="max-w-sm flex flex-row flex-wrap gap-1">
       <router-link v-for="sphere of spheres" :to="`/sphere/${sphere.id}`">
         <TopicBadge
           v-if="sphere.type == 'topic'"
@@ -32,8 +25,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref, watch, watchEffect, onMounted, onUnmounted } from 'vue';
-import TextInput from '@/components/common/TextInput.vue';
-import Search from '@/components/search/Filter.vue';
+import FindSphere from '@/components/search/FindSphere.vue';
 import BigButton from '@/components/common/BigButton.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
@@ -54,7 +46,7 @@ const handleClick = async (value: String) => {
 }
 
 onMounted(async () => {
-  gun.get('spheres') //listener in service
+  gun.get('spheres') //use a real search query function
   .map()
   .once((refNode, key) => {
     if (!refNode) return;

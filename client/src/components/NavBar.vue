@@ -20,7 +20,7 @@
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
-          <FindMixed v-if="!hideSearch" />
+          <FindSphere v-if="!hideSearch" />
 
           <IconButton
             :icon="MagnifyingGlassIcon"
@@ -98,6 +98,7 @@
   </div>
 </template>
 
+//
 <script setup lang="ts">
 import { ref, inject, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -110,7 +111,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
 import Dropdown from './common/Dropdown.vue';
-import FindMixed from './search/FindMixed.vue';
+import FindSphere from './search/FindSphere.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';

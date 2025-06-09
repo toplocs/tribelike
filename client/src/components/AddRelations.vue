@@ -56,7 +56,7 @@ const handleSubmit = async () => {
 }
 
 onMounted(async () => {
-  gun.get('spheres') //listener in service
+  gun.get('spheres') //use the real search function
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
