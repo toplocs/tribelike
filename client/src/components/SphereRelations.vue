@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap gap-1">
-    <u>is related to:</u>
+    <u>related to:</u>
     <span v-for="relation of populated">
       <router-link
         v-if="relation.type == 'relation'"

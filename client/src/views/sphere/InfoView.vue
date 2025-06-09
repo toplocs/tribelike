@@ -2,7 +2,7 @@
   <Container>
     <div class="w-full">    
       <Card class="flex flex-col gap-4">
-        <Headline>{{ sphere?.title}} ...</Headline>
+        <Headline>{{ sphere?.title}} is ...</Headline>
         <SphereRelations
           :topics="topicToTopic"
           :locations="topicToLocation"

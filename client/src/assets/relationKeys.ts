@@ -2,25 +2,25 @@ export const profileToTopic = [
   {
     id: 'like',
     active: 'likes',
-    passive: 'is liked by',
+    passive: 'liked by',
     color: 'green',
     icon: 'heart',
   }, {
     id: 'love',
     active: 'loves',
-    passive: 'is loved by',
+    passive: 'loved by',
     color: 'red',
     icon: 'heart',
   }, {
     id: 'learn',
     active: 'learns',
-    passive: 'is learned by',
+    passive: 'learned by',
     color: 'blue',
     icon: 'study',
   }, {
     id: 'teach',
     active: 'teaches',
-    passive: 'is teached by',
+    passive: 'teached by',
     color: 'yellow',
     icon: 'study',
   }, 
@@ -29,26 +29,26 @@ export const profileToTopic = [
 export const profileToLocation = [
   {
     id: 'visit',
-    active: 'is visiting',
-    passive: 'is visited by',
+    active: 'visiting',
+    passive: 'visited by',
     color: 'green',
     icon: 'heart',
   }, {
     id: 'live',
-    active: 'is living in',
-    passive: 'is living here',
+    active: 'living in',
+    passive: 'living here',
     color: 'red',
     icon: 'house',
   }, {
     id: 'going',
-    active: 'is going to',
-    passive: 'is the destination of',
+    active: 'going to',
+    passive: 'the destination of',
     color: 'blue',
     icon: 'shoe',
   }, {
     id: 'work',
-    active: 'is working in',
-    passive: 'is workingplace of',
+    active: 'working in',
+    passive: 'workingplace of',
     color: 'yellow',
     icon: 'study',
   }, 
@@ -63,7 +63,7 @@ export const topicToTopic = [
     icon: '',
   }, {
     id: 'category',
-    active: 'is a',
+    active: 'a',
     passive: 'contains',
     color: 'blue',
     icon: '',
@@ -73,7 +73,7 @@ export const topicToTopic = [
 export const topicToLocation = [
   {
     id: 'in',
-    active: 'is in',
+    active: 'in',
     passive: 'contains',
     color: 'blue',
     icon: '',
