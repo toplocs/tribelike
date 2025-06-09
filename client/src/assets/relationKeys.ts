@@ -1,11 +1,5 @@
 export const profileToTopic = [
   {
-    id: '',
-    active: 'is related to',
-    passive: 'is related to',
-    color: 'blue',
-    icon: '',
-  }, {
     id: 'like',
     active: 'likes',
     passive: 'is liked by',
@@ -34,12 +28,6 @@ export const profileToTopic = [
 
 export const profileToLocation = [
   {
-    id: '',
-    active: 'is related to',
-    passive: 'is related to',
-    color: 'blue',
-    icon: '',
-  }, {
     id: 'visit',
     active: 'is visiting',
     passive: 'is visited by',

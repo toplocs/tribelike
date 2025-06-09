@@ -29,7 +29,7 @@
     </Droppable>
 
     <Droppable
-      v-for="relationKey of topicToTopic"
+      v-for="relationKey of topics"
       :id="relationKey.id"
       :title="`${relationKey.active} topic`"
       :groups="['topic']"
@@ -52,7 +52,7 @@
     </Droppable>
 
     <Droppable
-      v-for="relationKey of topicToLocation"
+      v-for="relationKey of locations"
       :id="relationKey.id"
       :title="`${relationKey.active} location`"
       :groups="['location']"
@@ -86,9 +86,9 @@ import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useRelation } from '@/composables/relationProvider';
 import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
 
-const { relationKeys } = defineProps<{
-  sphere: string;
-  relationKeys: string[];
+const { topics, locations } = defineProps<{
+  topics: Object[];
+  locations: Object[];
 }>();
 const {
   relations,
