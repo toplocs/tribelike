@@ -74,10 +74,6 @@ const { topics, locations } = defineProps<{
 const { profile } = useProfile();
 const { relations, populateRelation } = useRelation();
 const populated = ref([]);
-const capitalized = computed(() => {
-  const value = props.relationKey.active;
-  return value.charAt(0).toUpperCase() + value.slice(1);
-});
 
 watchEffect(async () => {
   if (!relations.value || relations.value.length === 0) return;

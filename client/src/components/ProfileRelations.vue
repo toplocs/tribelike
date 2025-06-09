@@ -1,43 +1,41 @@
 <template>
-  <div v-if="populated.length > 0" class="flex flex-row gap-1">
-   <b>{{ capitalized }}:</b>
-    <div class="flex flex-wrap gap-1">
+  <div
+    v-for="relationKey of profiles"
+    class="mt-4 flex flex-wrap gap-1"
+  >
+    <u>{{ relationKey.passive }} profile:</u>
+    <span v-for="relation of populated">
       <router-link
-        v-for="relation of populated"
-        :to="`/profile/${relation.one?.id}`">
+        v-if="relation.type == relationKey.id"
+        :to="`/profile/${relation.one?.id}`"
+      >
         <ProfileBadge :username="relation.one?.username" />
       </router-link>
-    </div>
+    </span>
   </div>
 </template>
 
+//
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue';
 import Title from '@/components/common/Title.vue';
 import ProfileBadge from '@/components/badges/ProfileBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useTopic } from '@/composables/topicProvider';
 import { useRelation } from '@/composables/relationProvider';
 
-const props = defineProps({
-  relationKey: {
-    type: Object,
-    required: true,
-  }
-});
+const { profiles } = defineProps<{
+  profiles: Object[];
+}>();
 const { profile } = useProfile();
-const { byType, populateRelation } = useRelation();
+const { relations, populateRelation } = useRelation();
 const populated = ref([]);
-const capitalized = computed(() => {
-  const value = props.relationKey.passive;
-  return value.charAt(0).toUpperCase() + value.slice(1);
-});
 
 watchEffect(async () => {
-  const relations = byType.value[props.relationKey.id];
-  if (!relations) return;
+  console.log(relations);
+  if (!relations.value || relations.value.length === 0) return;
   populated.value = await Promise.all(
-    relations.map(x => populateRelation(['profiles'], x))
+    relations.value.map(x => populateRelation(['profiles'], x))
   );
 });
 </script>
