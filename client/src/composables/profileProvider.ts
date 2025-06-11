@@ -30,11 +30,26 @@ export function profileProvider() {
   }
 
   const editProfile = async (formData: FormData) => {
+    if (gun.user().is) {
+      const id = profile.value?.id;
+      const data = Object.fromEntries(formData.entries());
+      const email = data.email.toLowerCase();
+      const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+      profile.value = {
+        ...data,
+        image: `https://gravatar.com/avatar/${hash}`,
+      }
+      const node = gun.get(`profile/${id}`).put(profile.value);
+
+      return node;
+    }
+    /*
     const id = profile.value?.id;
     await removeProfile(id);
     const node = await createProfile(formData);    
 
     return node;
+    */
   }
 
   const removeProfile = async (id: string) => {
