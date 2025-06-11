@@ -1,6 +1,19 @@
 <template>
   <Container>
-    <div class="w-full">    
+    <div class="w-full">  
+
+      <section v-for="slot of pluginSlots">
+        <Card
+          v-if="slot.component == 'Main'"
+          class="mb-4"
+        >
+          <PluginComponent
+            :plugin="slot.plugin"
+            :position="slot.component"
+          />
+        </Card>
+      </section>
+
       <Card class="flex flex-col gap-4">
         <Headline>{{ sphere?.title}} is ...</Headline>
         <SphereRelations
@@ -35,8 +48,9 @@
 
       <RelationButtons :for="sphere?.type" />
 
-      <section v-for="slot of slots">
+      <section v-for="slot of pluginSlots">
         <PluginComponent
+          v-if="slot.component == 'Sidebar'"
           :plugin="slot.plugin"
           :position="slot.component"
         />
@@ -47,6 +61,7 @@
   </Container>
 </template>
 
+//
 <script setup lang="ts">
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
@@ -80,7 +95,7 @@ const type = computed(() => {
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
 const pluginSlots = computed(() => (
-  slots.map(x => x.slot == 'InfoView')
+  slots.value.filter(x => x.slot == 'InfoView')
 ));
 
 onMounted(async () => {

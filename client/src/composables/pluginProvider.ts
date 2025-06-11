@@ -25,18 +25,16 @@ export function pluginProvider() {
         .map()
         .once(data => {
           if (data) {
-            const exists = slots.value.some(x => x.slot === data.slot);
             const slot = { plugin: plugin, ...data };
-            if (!exists) slots.value?.push(slot);
+            slots.value?.push(slot);
           }
         });
 
         gun.get(plugin.tabs)
         .map()
         .once(data => {
-          if (data && data.value) {
-            const exists = tabs.value.some(x => x.value === data.value);
-            if (!exists) tabs.value?.push(data);
+          if (data) {
+            tabs.value?.push(data);
           }
         });
       }

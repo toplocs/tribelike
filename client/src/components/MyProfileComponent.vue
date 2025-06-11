@@ -20,7 +20,7 @@
 
     <section>
       <Card class="flex flex-col gap-4">
-        <Headline>{{profile?.username}} ...</Headline>
+        <Headline>{{profile?.username}} is ...</Headline>
         <SphereRelations
           :topics="profileToTopic"
           :locations="profileToLocation"

@@ -3,7 +3,7 @@
     <NavBar />
 
     <div class="mx-auto max-w-5xl">
-      <RouterView />
+      <RouterView :key="$route.params.id" />
     </div>
     
     <Footer />

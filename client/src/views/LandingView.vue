@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-screen flex flex-col justify-center">
+  <div className="min-h-[80vh] flex flex-col justify-center">
     <div class="my-4 mx-auto max-w-md">
       <h1 class="text-center uppercase tracking-wide text-sm dark:text-white">
         <p class="text-lg font-bold">
