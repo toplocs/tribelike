@@ -43,7 +43,6 @@
           :groups="[relation.two?.type]"
           @start="dragged = relation"
         >
-         {{ relation.two?.type }}, {{ relationKey.id }}
           <TopicBadge
             v-if="relation.two?.type == 'topic'"
             :title="relation.two?.title"
@@ -84,7 +83,6 @@ const version = ref(0);
 
 const handleDrop = async (e: string) => {
   const changes = dragged.value?.type === e ? false: true;
-  console.log(changes);
   if (changes) await updateRelation(dragged.value?.id, e);
   dragged.value = null;
 }
