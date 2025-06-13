@@ -18,7 +18,7 @@
       v-for="interest in defaultInterests"
       :to="`/interest/${interest.id}`"
     >
-      <InterestBadge
+      <TopicBadge
         :key="interest.id"
         :title="interest.title"
         :remove="() => removeInterest(interest)"
@@ -31,7 +31,7 @@
 import axios from 'axios';
 import { ref, inject, computed } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Search from '@/components/search/Index.vue';
 

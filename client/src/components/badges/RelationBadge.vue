@@ -1,44 +1,50 @@
 <template>
-  <router-link :to="`/${relation.to.isA}/${relation.to.id}`">
-    <InterestBadge
-      v-if="relation.from.isA == 'interest'"
-      :title="relation.to.title"
-      :remove="() => removeRelation(relation.id)"
-    />
+  <router-link :to="`/sphere/${data.id}`">
+    <TopicBadge
+      v-if="is == 'topic'" 
+      :id="data.id"
+      :title="data.title"
+      :remove="handleRemove"
+    >
+      <Icon :icon="relation.type" />
+      –
+    </TopicBadge>
 
     <LocationBadge
-      v-if="relation.from.isA == 'location'"
-      :title="relation.to.title"
-      :remove="() => removeRelation(relation.id)"
+      v-if="is == 'location'" 
+      :id="data.id"
+      :title="data.title"
+      :remove="handleRemove"
     />
   </router-link>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import type { PropType } from 'vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import { computed } from 'vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
+import Icon from '@/components/common/Icon.vue';
+import { useRelation } from '@/composables/relationProvider';
 
 const props = defineProps({
+  is: {
+    type: String,
+    required: true,
+  },
   relation: {
-    type: Object as PropType<Relation>,
+    type: Object,
     required: true,
   },
 });
+const { removeRelation } = useRelation();
+const data = computed(() => props.relation?.two);
 
-const emit = defineEmits(['removeRelation'])
-
-const removeRelation = async (id: string) => {
-  try {
-    const response = await axios.delete(`/api/v2/relation/${id}`);
-    emit('removeRelation', id);
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
+const handleRemove = async () => {
+  const result = await removeRelation(
+    props.relation?.one?.id,
+    props.relation?.type,
+    props.relation?.two?.id
+  );
 }
-
 
 </script>

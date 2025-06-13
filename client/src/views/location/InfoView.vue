@@ -2,11 +2,6 @@
   <Container>
     <div class="w-full space-y-4">
       <Card>
-        <AddLocationRelation 
-          v-model:interestRelations="interestRelations"
-          v-model:locationRelations="locationRelations"
-          v-model:profileRelations="profileRelations"
-        />
       </Card>
 
       <Card v-if="interestRelations?.length">
@@ -60,7 +55,7 @@
           class="mt-2 space-x-1 space-y-2"
         >
           <h3 className="mb-2">{{data.label}}:</h3>
-          <InterestBadge
+          <TopicBadge
             v-for="relation in profileRelations.filter(x => x.key == data.value)"
             :title="relation.Profile.username"
           />
@@ -167,7 +162,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';
@@ -176,17 +170,16 @@ import Card from '@/components/common/Card.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Map from '@/components/MapComponent.vue';
 import Divider from '@/components/common/Divider.vue';
-import AddLocationRelation from '@/components/AddLocationRelation.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import ActivityListItem from '@/components/list/ActivityListItem.vue';
 import AddLocationButton from '@/components/AddLocationButton.vue';
 import Dialog from '@/components/common/Dialog.vue';
 import LinkDialog from '@/components/dialog/LinkDialog.vue';
 import RelationListItem from '@/components/list/RelationListItem.vue';
-import relationKeys from '@/assets/relationKeys';
+import { interestToInterest } from '@/assets/relationKeys';
 
 const route = useRoute();
 const interestRelations = ref([]);

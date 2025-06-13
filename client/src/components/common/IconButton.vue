@@ -49,7 +49,7 @@ const props = defineProps({
 
 const tooltipTarget = ref(null);
 const buttonClasses = computed(() =>
-  `relative inline-flex items-center justify-center 
+  `relative cursor-pointer inline-flex items-center justify-center 
    bg-gray-200 dark:bg-gray-700
    text-blue-500 dark:text-blue-400 
    rounded-lg px-2 py-2 

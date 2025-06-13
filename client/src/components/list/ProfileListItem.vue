@@ -22,7 +22,7 @@
           :key="interest.id"
           :to="`/interest/${interest.id}`"
         >
-          <InterestBadge
+          <TopicBadge
             :key="interest.id"
             :title="interest.title"
           />
@@ -33,10 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref } from 'vue';
 import { TrashIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 

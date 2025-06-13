@@ -1,45 +1,27 @@
 <template>
   <Container>
-    <div class="w-full">
+    <div class="w-full space-y-4">
       <Card>
-        <Title>
-          Profile Settings
-        </Title>
-        <Callout v-if="errorMessage" color="red">
-          {{ errorMessage }}
-        </Callout>
+        <Headline>{{ profile?.username }}'s Relations</Headline>
+        <div class="mb-4">
+          <AddRelations />
+        </div>
 
-        <Callout v-if="successMessage" color="green">
-          {{ successMessage }}
-        </Callout>
+        <DragDropRelations
+          :topics="profileToTopic"
+          :locations="profileToLocation"
+        />
+      </Card>
 
-        <form
-			    ref="form"
-			    @submit.prevent="onSubmit"
-			    class="flex flex-col gap-4"
-			  >
-			    <input name="profileId" type="hidden" :value="profile?.id" />
-
-			    <ProfileSettings :profile="profile" />
-
-			    <SubmitButton className="w-full mt-4">
-			      Update Settings
-			    </SubmitButton>
-			  </form>
+      <Card>
+          <Headline>Settings</Headline>
+			   <ProfileSettingsForm
+          :profile="profile"
+        />
       </Card>
     </div>
       
     <Sidebar class="space-y-4">
-      <div class="flex flex-row items-center justify-between">
-        <Title>
-          Account Settings
-        </Title>
-        <router-link to="/settings">
-          <IconButton :icon="Cog6ToothIcon"/>
-        </router-link>
-      </div>
-      <Divider />
-
       <div class="flex flex-row items-center justify-between">
         <Title>
           Delete Profile
@@ -66,64 +48,62 @@
         </div>
       </div>
       <Divider />
+
+      <button
+        @click="handleLogout"
+        className="inline-flex justify-center w-full mt-2 px-4 py-2 text-sm font-medium border border-red-600 dark:border-red-400 text-red-600 dark:text-red-400 bg-transparent rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
+      > Logout
+      </button>
     </Sidebar>
 
   </Container>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, onMounted } from 'vue';
 import { useRoute, useRouter} from 'vue-router';
+import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import Title from '@/components/common/Title.vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import ProfileSettings from '@/components/ProfileSettings.vue';
-import SubmitButton from '@/components/common/SubmitButton.vue';
+import ProfileSettingsForm from '@/components/forms/ProfileSettings.vue';
 import Callout from '@/components/common/Callout.vue';
 import Sidebar from '@/components/SideBar.vue';
 import Divider from '@/components/common/Divider.vue';
 import IconButton from '@/components/common/IconButton.vue';
-import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import Headline from '@/components/common/Headline.vue';
+import AddRelations from '@/components/AddRelations.vue';
+import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { relationProvider } from '@/composables/relationProvider';
+import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
 
 const route = useRoute();
 const router = useRouter();
-const { userProfiles } = useUser();
-const { profile, editProfile, removeProfile } = useProfile();
-const errorMessage = ref('');
-const successMessage = ref('');
-const form = ref<HTMLFormElement | null>(null);
-
-const onSubmit = async () => {
-  try {
-    const formData = new FormData(form.value ?? undefined);
-    const changes = Object.fromEntries(formData.entries());
-    const response = await editProfile(changes);
-    if (response.ok) {
-      successMessage.value = 'Your profile has been updated successfully!';
-      profile.value = changes;
-    }
-
-  } catch (error) {
-    console.error(error);
-    errorMessage.value = error;
-  }
-}
+const { user, logout, userProfiles } = useUser();
+const { profile, removeProfile } = useProfile();
 
 const onDelete = async () => {
   try {
     await removeProfile(route.params.id);
-    userProfiles.value = userProfiles.value.filter(
-      x => x.id !== route.params.id
-    );
 
     router.push(`/profiles`);
   } catch (error) {
     console.error(error);
   }
 }
+
+const handleLogout = async () => {
+  try {
+    await logout();
+    router.push('/login');
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+relationProvider(route.params.id);
 </script>

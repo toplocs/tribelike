@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import multer from 'multer';
-import ProfileController from '../../controllers/ProfileController';
+import ProfileController from '../../controllers/profileController';
 import { authenticate } from '../../middleware/authenticate';
 
 const upload = multer();
 const router = Router();
-router.use(authenticate);
 
 router.get('/user/profiles', authenticate, ProfileController.GetAllProfilesForUser);
 

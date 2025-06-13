@@ -3,7 +3,7 @@
     <NavBar />
 
     <div class="mx-auto max-w-5xl">
-      <RouterView />
+      <RouterView :key="$route.params.id" />
     </div>
     
     <Footer />
@@ -17,14 +17,20 @@ import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/FooterComponent.vue';
 import { userProvider } from '@/composables/userProvider';
 import { profileProvider } from '@/composables/profileProvider';
-import { interestProvider } from '@/composables/interestProvider';
+import { topicProvider } from '@/composables/topicProvider';
+import { sphereProvider } from '@/composables/sphereProvider';
+import { pluginProvider } from '@/composables/pluginProvider';
 
 const title = ref('Tribelike');
+const settings = ref('');
 
 provide('title', title);
+provide('settings', settings);
 
 userProvider();
 profileProvider();
-interestProvider();
+topicProvider();
+sphereProvider();
 
+pluginProvider();
 </script>

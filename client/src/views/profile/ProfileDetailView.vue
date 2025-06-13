@@ -36,11 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
-
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 import Container from '@/components/common/Container.vue';
@@ -50,33 +48,35 @@ import ProfileListItem from '@/components/list/ProfileListItem.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { relationProvider } from '@/composables/relationProvider';
 
 const route = useRoute();
 const router = useRouter();
 const { profile, selectProfile } = useProfile();
 const { user, profiles } = useUser();
 const title = inject<{value: string | null}>('title');
+const settings = inject('settings');
 
 const select = async (selected: Profile) => {
-  selectProfile(selected.id);
+  await selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
 
 watch(() => profile.value, () => {
-  title.value = (
-    profile.value?.username + ' – ' + profile.value?.type
-  );
+  title.value = profile.value?.username + ' – ' + profile.value?.type;
+  settings.value = `/profile/${route.params.id}/settings`;
 });
 
-onMounted(() => {
-  title.value = (
-    profile.value?.username + ' – ' + profile.value?.type
-  );
+onMounted(async () => {
+  await selectProfile(route.params.id);
+  title.value = profile.value?.username + ' – ' + profile.value?.type;
+  settings.value = `/profile/${route.params.id}/settings`;
 });
 
 onUnmounted(() => {
-  if (title) {
-    title.value = null;
-  }
+  title.value = null;
+  settings.value = null;
 });
+
+relationProvider(route.params.id);
 </script>

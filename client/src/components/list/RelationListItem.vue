@@ -1,6 +1,6 @@
 <template>
   <router-link :to="`/${path}/${relationId}`">
-    <InterestBadge
+    <TopicBadge
       v-if="path == 'interest'"
       :title="relationTitle"
       :remove="() => removeRelation(relation)"
@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 
 const props = defineProps({

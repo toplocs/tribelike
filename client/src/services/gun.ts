@@ -1,7 +1,12 @@
 import Gun from 'gun' // You can also use 'gun' here
 import 'gun/sea' // Optional: for user authentication
+import 'gun/lib/unset'; //optional
+import 'gun/lib/radix'; // optional: for radix index structure
+import 'gun/lib/radisk'; // optional: if you're using radisk storage
+import 'gun/lib/store'; // optional: if using indexed storage
+import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 
-const gun = Gun(['http://localhost:3000/gun']);
+const gun = Gun({ peers: ['http://localhost:3000/gun'], rad: true });
 
 gun.clear = function() {
 	// Clear localStorage
@@ -18,6 +23,15 @@ gun.clear = function() {
 	});
 
 	console.log('Local data cleared');
+}
+
+gun.lookup = async function(key: string, id: string) {
+	const ref = await gun.get(key).get(id).then();
+  const soul = ref?._?.['>'] && Object.keys(ref._['>'])[0];
+  if (!soul) return null;
+  const data = await gun.get(soul).then();
+
+  return data ? { id, ...data } : null;
 }
 
 export default gun;

@@ -8,7 +8,7 @@
           v-for="interest in wiki?.interests"
           :to="`/interest/${interest.id}`"
         >
-          <InterestBadge
+          <TopicBadge
             :key="interest.id"
             :title="interest.title"
           />
@@ -80,7 +80,7 @@ import { ref, computed, watchEffect } from 'vue';
 import Title from '@/components/common/Title.vue';
 import Callout from '@/components/common/Callout.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import WikiEdit from './WikiEdit.vue';
 
 const props = defineProps({

@@ -1,40 +1,51 @@
 <template>
-  <div class="relative w-full" ref="selectContainer">
+  <div class="min-w-[400px] relative" ref="selectContainer">
     <input
       v-model="inputValue"
       type="text"
       :placeholder="placeholder"
       @focus="openDropdown"
       @input="onInput"
-      class="w-full rounded-md border p-2 shadow-sm outline-none transition sm:text-sm border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-950/50 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 dark:focus:ring-blue-700 dark:focus:border-blue-700"
+      class="rounded-md border w-full p-2 shadow-sm outline-none transition sm:text-sm border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-950/50 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 dark:focus:ring-blue-700 dark:focus:border-blue-700"
     />
 
     <div
       v-if="options.length && isOpen"
-      class="absolute p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
+      class="absolute space-x-1 space-y-1 p-2 z-10 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg"
       id="select-options"
     >
-      <InterestBadge
-        v-for="option of filteredOptions"
-        :title="option.title"
-        @click="selectOption(option)"
-      />
+      <span  v-for="option of filteredOptions" :key="option.id">
+        <TopicBadge
+          v-if="option.type == 'topic'"
+          :title="option.title"
+          :id="option.id"
+          @click="selectOption(option)"
+        />
+
+        <LocationBadge
+        v-if="option.type == 'location'"
+          :title="option.title"
+          :id="option.id"
+          @click="selectOption(option)"
+        />
+      </span>
 
       <Button
         v-if="!filteredOptions.length"
         @click="clickButton"
-      >
-        Create new
+      > Create new
       </Button>
     </div>
   </div>
 </template>
 
+//
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import Button from '@/components/common/Button.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
+import LocationBadge from '@/components/badges/LocationBadge.vue';
 
 const props = defineProps({
   options: {

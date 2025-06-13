@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import LandingView from '@/views/LandingView.vue';
@@ -17,31 +16,37 @@ import ProfileCreateView from '@/views/profile/ProfileCreateView.vue';
 import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
+/*
 //Interest
-import InterestCreateView from '@/views/InterestCreateView.vue';
-import InterestDetailView from '@/views/InterestDetailView.vue';
-import InterestInfoView from '@/views/interest/InfoView.vue';
-import InterestDiscussionView from '@/views/interest/DiscussionView.vue';
-import InterestPluginsView from '@/views/interest/PluginsView.vue';
-import InterestSettingsView from '@/views/interest/SettingsView.vue';
+import InterestInfoView from '@/views/topic/InfoView.vue';
+import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
+import InterestPluginsView from '@/views/topic/PluginsView.vue';
+import InterestSettingsView from '@/views/topic/SettingsView.vue';
+
+//Topic
+import TopicCreateView from '@/views/topic/CreateView.vue';
+import TopicDetailView from '@/views/topic/DetailView.vue';
 
 //Location
-import LocationCreateView from '@/views/LocationCreateView.vue';
-import LocationDetailView from '@/views/LocationDetailView.vue';
+import LocationCreateView from '@/views/location/LocationCreateView.vue';
+import LocationDetailView from '@/views/location/LocationDetailView.vue';
 import LocationInfoView from '@/views/location/InfoView.vue';
 import LocationDiscussionView from '@/views/location/DiscussionView.vue';
 import LocationPluginsView from '@/views/location/PluginsView.vue';
 import LocationSettingsView from '@/views/location/SettingsView.vue';
+*/
+
+//Sphere
+import SphereCreateView from '@/views/sphere/CreateView.vue';
+import SphereDetailView from '@/views/sphere/DetailView.vue';
+import SphereInfoView from '@/views/sphere/InfoView.vue';
+import SphereSettingsView from '@/views/sphere/SettingsView.vue';
 
 import GunRegisterView from '@/views/GunRegisterView.vue';
 import GunLoginView from '@/views/GunLoginView.vue';
+import PluginLoaderView from '@/views/PluginLoaderView.vue';
 
-import {
-  BasePluginRoutes,
-  //ProfilePluginRoutes,
-  InterestPluginRoutes,
-  LocationPluginRoutes,
-} from './plugins.ts';
+import { addPluginRoutes } from './plugins';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -141,41 +146,45 @@ const router = createRouter({
         },
       ]
     },
-
-    //Interests
+/*
+    //Topics
     {
-      path: '/interest/create',
-      name: 'interestCreate',
-      component: InterestCreateView,
-      //meta: { requiresAuth: true },
+      path: '/topic/create',
+      name: 'topicCreate',
+      component: TopicCreateView,
+      meta: { requiresAuth: true },
     },
     {
-      path: '/interest/:title',
-      component: InterestDetailView,
+      path: '/topic/:id',
+      name: 'topicDetail',
+      component: TopicDetailView,
       props: true,
       children: [
         {
           path: '',
-          name: 'interestActivity',
+          name: 'topicInfo',
           component: InterestInfoView,
         },
-
         {
           path: 'discussions',
-          name: 'interestDiscussion',
+          name: 'topicDiscussion',
           component: InterestDiscussionView,
         },
         {
           path: 'plugins',
-          name: 'interestPlugins',
+          name: 'topicPlugins',
           component: InterestPluginsView,
         },
         {
           path: 'settings',
-          name: 'interestSettings',
+          name: 'topicSettings',
           component: InterestSettingsView,
         },
-        ...InterestPluginRoutes,
+        {
+          path: ':pluginPath(.*)*',
+          name: 'pluginLoader',
+          component: PluginLoaderView,
+        },
       ],
     },
 
@@ -213,16 +222,47 @@ const router = createRouter({
           name: 'locationSettings',
           component: LocationSettingsView,
         },
-        ...LocationPluginRoutes,
       ],
     },
-    ...BasePluginRoutes,
+*/
+    //Spheres
+    {
+      path: '/sphere/create',
+      name: 'sphereCreate',
+      component: SphereCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/sphere/:id',
+      name: 'sphereDetail',
+      component: SphereDetailView,
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'sphereInfo',
+          component: SphereInfoView,
+        },
+        {
+          path: 'settings',
+          name: 'sphereSettings',
+          component: SphereSettingsView,
+        },
+        {
+          path: ':pluginPath(.*)*',
+          name: 'pluginLoader',
+          component: PluginLoaderView,
+        },
+      ],
+    },
 
   ]
 });
 
-router.beforeEach(async (to, from, next) => {
+addPluginRoutes(router);
 
+router.beforeEach(async (to, from, next) => {
+  //middleware functions here
   next();
 });
 

@@ -7,13 +7,12 @@
   />
 </template>
 
+//
 <script setup lang="ts">
-import axios from 'axios';
-//import { Octokit, App } from "https://esm.sh/octokit";
 import { ref, inject, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Search from '@/components/search/Index.vue';
 

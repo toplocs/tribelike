@@ -26,7 +26,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { startRegistration } from '@simplewebauthn/browser';

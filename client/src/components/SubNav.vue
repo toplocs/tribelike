@@ -12,7 +12,7 @@
       >
         <button
           :class="[
-            'flex whitespace-nowrap truncate max-w-xs outline-none -mb-px px-2 py-2 transition duration-100',
+            'cursor-pointer flex whitespace-nowrap truncate max-w-xs outline-none -mb-px px-2 py-2 transition duration-100',
             tab.value === selectedTab
               ? 'border-b-2 border-blue-500 text-blue-600'
               : 'border-transparent hover:border-b-2 hover:border-gray-300 text-gray-500 hover:text-gray-700',

@@ -8,25 +8,30 @@
           <IconButton :icon="HomeIcon" />
         </router-link>
         
-        <span v-if="title" class="flex flex-row gap-2">
+        <span class="flex flex-row gap-2">
           <Title float="left">
-            {{ title }}
+            {{ title || 'Tribelike' }}
           </Title>
         </span>
       </span>
 
       <span
-        v-if="user"
+        v-if="user && profile"
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
-          <FindMixed v-if="!hideSearch" />
+          <FindSphere v-if="!hideSearch" />
 
           <IconButton
             :icon="MagnifyingGlassIcon"
             @click="toggleSearch"
           />
 
+          <router-link to="/sphere/create">
+            <IconButton :icon="PlusIcon" />
+          </router-link>
+
+          <!--
           <Dropdown name="dropdown1" className="min-w-40">
             <template #trigger>
               <IconButton :icon="PlusIcon" />
@@ -34,39 +39,25 @@
 
             <template #default="{ closeDropdown }">
               <ul>
-                <router-link to="/interest/create" @click.native="closeDropdown">
+                <router-link
+                  to="/sphere/create"
+                  @click.native="closeDropdown"
+                >
                   <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create interest
-                  </li>
-                </router-link>
-                <router-link to="/location/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create location
-                  </li>
-                </router-link>
-
-                <Divider />
-
-                <router-link to="/chat/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create chat
-                  </li>
-                </router-link>
-
-                <router-link to="/wiki/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create wiki
-                  </li>
-                </router-link>
-
-                <router-link to="/event/create" @click.native="closeDropdown">
-                  <li class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    Create event
+                    Create a Sphere
                   </li>
                 </router-link>
               </ul>
             </template>
           </Dropdown>
+          -->
+
+          <router-link
+            v-if="settings"
+            :to="settings"
+          >
+            <IconButton :icon="Cog6ToothIcon" />
+          </router-link>
 
           <!-- <Dropdown name="dropdown2" className="min-w-40">
             <template #trigger>
@@ -79,9 +70,9 @@
           </Dropdown> -->
         </div>
 
-        <router-link :to="`/profile/${profile.id}`">
+        <router-link :to="`/profile/${profile?.id}`">
           <img
-            :src="profile.image"
+            :src="profile?.image"
             alt="logo"
             width="30"
             height="30"
@@ -107,31 +98,33 @@
   </div>
 </template>
 
+//
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, inject, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   HomeIcon,
   MagnifyingGlassIcon,
   PlusIcon,
-  BellIcon
+  BellIcon,
+  Cog6ToothIcon
 } from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
-import InterestBadge from './badges/InterestBadge.vue';
-import LocationBadge from './badges/LocationBadge.vue';
 import Dropdown from './common/Dropdown.vue';
-import FindMixed from './search/FindMixed.vue';
+import FindSphere from './search/FindSphere.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
+import { useSphere } from '@/composables/sphereProvider';
 
 const router = useRouter();
 const { user } = useUser();
 const { profile } = useProfile();
+const { sphere } = useSphere();
 const title = inject('title');
+const settings = inject('settings');
 const hideSearch = ref(true);
 const dropdown = ref(null);
 

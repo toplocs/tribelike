@@ -12,7 +12,7 @@
           show the map (with location markers later)
         </span>-->
         <span />
-        <span v-if="!session">
+        <span v-if="false">
           <router-link
             to="/login"
             class="hover:underline"
@@ -34,5 +34,5 @@
 import { inject } from 'vue';
 import Container from '@/components/common/Container.vue';
 
-const session = inject('session');
+
 </script>

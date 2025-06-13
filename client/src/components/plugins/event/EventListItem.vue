@@ -16,7 +16,7 @@
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
         <LocationBadge :title="event?.location.title" />
-        <InterestBadge
+        <TopicBadge
           v-for="interest in event.interests"
           :key="interest.id"
           :title="interest.title"
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
-import InterestBadge from '@/components/badges/InterestBadge.vue';
+import TopicBadge from '@/components/badges/TopicBadge.vue';
 
 const props = defineProps({
   event: {
