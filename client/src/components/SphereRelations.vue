@@ -21,37 +21,48 @@
 
   <Divider />
 
-  <div
-    v-for="relationKey of topics"
-    class="mt-4 flex flex-wrap gap-1"
-  >
-    <u>{{ relationKey.active }} topic:</u>
-    <span v-for="relation of populated">
-      <router-link
-        v-if="relation.type == relationKey.id"
-        :to="`/sphere/${relation.two?.id}`"
+  <template v-for="relationKey in topics" :key="relationKey.id">
+    <div
+      v-if="populated.some(relation => relation.type === relationKey.id)"
+      class="mt-4 flex flex-wrap gap-1"
+    >
+      <u>{{ relationKey.active }} topic:</u>
+      <span
+        v-for="relation in populated"
+        :key="relation.id"
       >
-        <TopicBadge :title="relation.two?.title" />
-      </router-link>
-    </span>
-  </div>
+        <router-link
+          v-if="relation.type === relationKey.id"
+          :to="`/sphere/${relation.two?.id}`"
+        >
+          <TopicBadge :title="relation.two?.title" />
+        </router-link>
+      </span>
+    </div>
+  </template>
+
 
   <Divider />
 
-  <div
-    v-for="relationKey of locations"
-    class="mt-4 flex flex-wrap gap-1"
-  >
-    <u>{{ relationKey.active }} location:</u>
-    <span v-for="relation of populated">
-      <router-link
-        v-if="relation.type == relationKey.id"
-        :to="`/sphere/${relation.two?.id}`"
+  <template v-for="relationKey in locations" :key="relationKey.id">
+    <div
+      v-if="populated.some(relation => relation.type === relationKey.id)"
+      class="mt-4 flex flex-wrap gap-1"
+    >
+      <u>{{ relationKey.active }} location:</u>
+      <span
+        v-for="relation in populated"
+        :key="relation.id"
       >
-        <LocationBadge :title="relation.two?.title" />
-      </router-link>
-    </span>
-  </div>
+        <router-link
+          v-if="relation.type === relationKey.id"
+          :to="`/sphere/${relation.two?.id}`"
+        >
+          <LocationBadge :title="relation.two?.title" />
+        </router-link>
+      </span>
+    </div>
+  </template>
 
 
 </template>

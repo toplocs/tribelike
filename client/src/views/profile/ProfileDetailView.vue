@@ -58,7 +58,7 @@ const title = inject<{value: string | null}>('title');
 const settings = inject('settings');
 
 const select = async (selected: Profile) => {
-  selectProfile(selected.id);
+  await selectProfile(selected.id);
   router.push(`/profile/${selected.id}`);
 }
 
@@ -67,7 +67,8 @@ watch(() => profile.value, () => {
   settings.value = `/profile/${route.params.id}/settings`;
 });
 
-onMounted(() => {
+onMounted(async () => {
+  await selectProfile(route.params.id);
   title.value = profile.value?.username + ' – ' + profile.value?.type;
   settings.value = `/profile/${route.params.id}/settings`;
 });
