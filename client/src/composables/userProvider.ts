@@ -117,11 +117,9 @@ export function userProvider() {
     user.value = null;
     profiles.value = [];
     gun.user().leave();
+    localStorage.removeItem('gun/alias');
+    localStorage.removeItem('gun/auth');
   }
-
-  watch(() => user.value, (newValue) => {
-    gun.user().put(newValue)
-  });
 
   onMounted(() => {
     gun.user().recall({ sessionStorage: true });

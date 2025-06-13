@@ -8,7 +8,7 @@
     }"
   >
     <u v-if="title" class="text-sm">
-      {{ capitalized }}:
+      {{ title }}:
     </u>
 
     <slot />
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useDroppable } from '@vue-dnd-kit/core';
+import { useDroppable, DnDOperations } from '@vue-dnd-kit/core';
 
 const emit = defineEmits<{
   (e: 'drop'): void;
@@ -30,16 +30,11 @@ const { title, id, groups } = defineProps<{
   groups: string[];
 }>();
 
-const capitalized = computed(() => {
-  if (!title) return '';
-  return title.charAt(0).toUpperCase() + title.slice(1);
-});
-
 const { elementRef, isOvered, isAllowed } = useDroppable({
   id,
   groups,
   events: {
-    onDrop: (e) => emit('drop', id)
+    onDrop: (e) => emit('drop', id),
   },
 });
 </script>

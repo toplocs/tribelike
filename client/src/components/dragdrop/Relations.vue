@@ -1,8 +1,8 @@
 <template>
-  <div class="space-y-2">
+  <div class="space-y-2" :id="version" :key="version">
     <Droppable
       id="relation"
-      title="Related to"
+      title="related to"
       :groups="['topic', 'location']"
       @drop="handleDrop"
       class="flex flex-row flex-wrap gap-1 items-center cursor-pointer"
@@ -29,10 +29,10 @@
     </Droppable>
 
     <Droppable
-      v-for="relationKey of topics"
+      v-for="relationKey of relationKeys"
       :id="relationKey.id"
-      :title="`${relationKey.active} topic`"
-      :groups="['topic']"
+      :title="`${relationKey.active}`"
+      :groups="relationKey.accepts"
       @drop="handleDrop"
       class="flex flex-row flex-wrap gap-1 items-center cursor-pointer"
     >
@@ -40,33 +40,17 @@
         <Draggable
           v-if="relation.type == relationKey.id"
           :data="relation"
-          :groups="['topic']"
+          :groups="[relation.two?.type]"
           @start="dragged = relation"
         >
+         {{ relation.two?.type }}, {{ relationKey.id }}
           <TopicBadge
+            v-if="relation.two?.type == 'topic'"
             :title="relation.two?.title"
             :remove="() => handleRemove(relation)"
           />
-        </Draggable>
-      </span>
-    </Droppable>
-
-    <Droppable
-      v-for="relationKey of locations"
-      :id="relationKey.id"
-      :title="`${relationKey.active} location`"
-      :groups="['location']"
-      @drop="handleDrop"
-      class="flex flex-row flex-wrap gap-1 cursor-pointer"
-    >
-      <span v-for="relation of populated">
-        <Draggable
-          v-if="relation.type == relationKey.id"
-          :data="relation"
-          :groups="['location']"
-          @start="dragged = relation"
-        >
           <LocationBadge
+            v-if="relation.two?.type == 'location'"
             :title="relation.two?.title"
             :remove="() => handleRemove(relation)"
           />
@@ -78,16 +62,15 @@
 
 //
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
 import Droppable from './Droppable.vue';
 import Draggable from './Draggable.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
 import { useRelation } from '@/composables/relationProvider';
 
-const { topics, locations } = defineProps<{
-  topics: Object[];
-  locations: Object[];
+const { relationKeys } = defineProps<{
+  relationKeys: Object[];
 }>();
 const {
   relations,
@@ -95,13 +78,15 @@ const {
   removeRelation,
   populateRelation
 } = useRelation();
-const dropped = ref<string | null>(null);
 const dragged = ref<Relation | null>(null);
 const populated = ref([]);
+const version = ref(0);
 
 const handleDrop = async (e: string) => {
   const changes = dragged.value?.type === e ? false: true;
+  console.log(changes);
   if (changes) await updateRelation(dragged.value?.id, e);
+  dragged.value = null;
 }
 
 const handleRemove = async (relation: Object) => {
@@ -117,5 +102,6 @@ watchEffect(async () => {
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['spheres'], x))
   );
+  version.value += 1;
 });
 </script>

@@ -9,8 +9,13 @@
             <AddRelations />
           </div>
           <DragDropRelations
-            :topics="topicToTopic"
-            :locations="topicToLocation"
+            v-if="sphere?.type == 'topic'"
+            :relationKeys="topicRelations"
+          />
+
+          <DragDropRelations
+            v-if="sphere?.type == 'location'"
+            :relationKeys="locationRelations"
           />
         </Card>
       </section>
@@ -68,7 +73,7 @@ import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
+import { topicRelations, locationRelations } from '@/assets/relationKeys';
 
 const { sphere } = useSphere();
 const { slots } = usePlugins();

@@ -39,7 +39,6 @@
         name="type"
         placeholder="Select the type"
         :options="[
-          { label: 'None', value: '' },
           { label: 'Topic', value: 'topic' },
           { label: 'Location', value: 'location' }
         ]"
@@ -78,8 +77,11 @@ const onSubmit = async () => {
   errorMessage.value = '';
   try {
     const formData = new FormData(form.value);
+    const type = formData.get('type');
+    if (type != 'topic' && type != 'location') {
+      throw new Error('Please, select a type');
+    }
     const result = await createSphere(formData);
-    //create relation
 
     return router.push(`/sphere/${result.id}`);
   } catch (error) {

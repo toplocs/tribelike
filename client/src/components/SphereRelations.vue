@@ -26,7 +26,7 @@
       v-if="populated.some(relation => relation.type === relationKey.id)"
       class="mt-4 flex flex-wrap gap-1"
     >
-      <u>{{ relationKey.active }} topic:</u>
+      <u>{{ relationKey.active }}</u>
       <span
         v-for="relation in populated"
         :key="relation.id"
@@ -49,7 +49,7 @@
       v-if="populated.some(relation => relation.type === relationKey.id)"
       class="mt-4 flex flex-wrap gap-1"
     >
-      <u>{{ relationKey.active }} location:</u>
+      <u>{{ relationKey.active }}</u>
       <span
         v-for="relation in populated"
         :key="relation.id"
