@@ -11,16 +11,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import RelationButton from '@/components/RelationButton.vue';
-import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
+import { profileRelations } from '@/assets/relationKeys';
 
 const props = defineProps<{
   for: 'topic' | 'location',
 }>();
 
-const relationMap = {
-  topic: profileToTopic,
-  location: profileToLocation,
-};
-
-const relationKeys = computed(() => relationMap[props.for] || []);
+const relationKeys = computed(() =>
+  profileRelations.filter(x => x.accepts.includes(props.for))
+);
 </script>
