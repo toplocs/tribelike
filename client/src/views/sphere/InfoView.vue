@@ -1,7 +1,6 @@
 <template>
   <Container>
-    <div class="w-full">  
-
+    <div class="w-full">
       <section v-for="slot of pluginSlots">
         <Card
           v-if="slot.component == 'Main'"
@@ -17,20 +16,18 @@
       <Card class="flex flex-col gap-4">
         <Headline>{{ sphere?.title}} is ...</Headline>
         <SphereRelations
-          :topics="topicToTopic"
-          :locations="topicToLocation"
+          v-if="sphere?.type == 'topic'"
+          :topics="topicRelations"
+        />
+        <SphereRelations
+          v-if="sphere?.type == 'location'"
+          :locations="locationRelations"
         />
 
         <Divider />
 
         <ProfileRelations
-          v-if="sphere?.type == 'topic'"
-          :profiles="profileToTopic"
-        />
-
-        <ProfileRelations
-          v-if="sphere?.type == 'location'"
-          :profiles="profileToLocation"
+          :profiles="profileRelations.filter(x => x.accepts.includes(sphere?.type))"
         />
       </Card>
     </div>
@@ -80,10 +77,9 @@ import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
 import {
-    topicToTopic,
-    topicToLocation,
-    profileToTopic,
-    profileToLocation
+    topicRelations,
+    locationRelations,
+    profileRelations
 } from '@/assets/relationKeys';
 
 const { profile } = useProfile();
