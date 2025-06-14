@@ -1,6 +1,13 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
+        <Card>
+          <Headline>Settings</Headline>
+         <ProfileSettingsForm
+          :profile="profile"
+        />
+      </Card>
+
       <Card>
         <Headline>{{ profile?.username }}'s Relations</Headline>
         <div class="mb-4">
@@ -8,15 +15,7 @@
         </div>
 
         <DragDropRelations
-          :topics="profileToTopic"
-          :locations="profileToLocation"
-        />
-      </Card>
-
-      <Card>
-          <Headline>Settings</Headline>
-			   <ProfileSettingsForm
-          :profile="profile"
+          :relationKeys="profileRelations"
         />
       </Card>
     </div>
@@ -79,7 +78,7 @@ import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';
 import { relationProvider } from '@/composables/relationProvider';
-import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
+import { profileRelations } from '@/assets/relationKeys';
 
 const route = useRoute();
 const router = useRouter();
