@@ -38,22 +38,25 @@ app.use(express.urlencoded({extended: false}));
 
 // Serve docs 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
-
-// Serve static client
-const clientBuildPath = path.join(__dirname, '../../client/dist');
-console.log("Client folder:", clientBuildPath);
-if (fs.existsSync(clientBuildPath)) {
-  app.use(express.static(clientBuildPath));
-} else {
-  app.get('/', (req, res) => {
-    res.send(`Client build folder does not exist. Not serving client`);
-  });
-}
-
 // Read Authentication Token from Header and add session to request
-app.use(sessionMiddleware);
+//app.use(sessionMiddleware);
 
-app.use('/', routes);
+// Serve static files from src/views
+const viewsPath = path.join(__dirname, 'views');
+app.use(express.static(viewsPath));
+
+// 1. Static files
+app.use(express.static(viewsPath));
+
+// 2. Real routes (docs, API, etc.)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+app.use('/api', routes);
+
+// 3. Catch-all for SPA (after all others)
+app.get(/^\/(?!api|docs).*/, (req, res) => {
+  res.sendFile(path.join(viewsPath, 'index.html'));
+});
+
 
 function startServer() {
   if (enable_https) {

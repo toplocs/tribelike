@@ -17,7 +17,7 @@
     "test": "pnpm vitest dev --run",
     "check": "pnpm -F !root check",
     "lint": "pnpm -F !root lint",
-    "build": "pnpm -F !root build",
+    "build": "pnpm -F !root build-only",
     "generate:openapi": "pnpm -F server generate:openapi",
     "start": "pnpm -F server start",
     "certs": "mkcert 'localhost'",
