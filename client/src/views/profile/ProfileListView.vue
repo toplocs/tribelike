@@ -36,8 +36,6 @@ import BackButton from '@/components/common/BackButton.vue';
 import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileListItem from '@/components/list/ProfileListItem.vue';
-import Dialog from '@/components/dialog/DialogComponent.vue';
-import ProfileAddDialog from '@/components/dialog/ProfileAddDialog.vue';
 import { type User } from '@tribelike/types/user';
 import { useUser } from '@/composables/userProvider';
 import { useProfile } from '@/composables/profileProvider';

@@ -100,11 +100,11 @@ export const locationRelations = [
   },
 ];
 
-export const relationTypes = [
+export const relationKeys = [
   ...profileRelations,
   ...topicRelations,
   ...locationRelations,
 ];
 
-export const relationTypeIds = Array.from(new Set(relationTypes.map(r => r.id)));
+export const relationKeyIds = Array.from(new Set(relationKeys.map(r => r.id)));
 

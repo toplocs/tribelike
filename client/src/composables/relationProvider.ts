@@ -1,5 +1,4 @@
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
-import { relationTypeIds } from '@/assets/relationKeys';
 import gun from '@/services/gun';
 
 export function relationProvider(
