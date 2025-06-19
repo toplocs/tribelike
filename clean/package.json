@@ -1,5 +1,5 @@
 {
-  "name": "tribelike-server",
+  "name": "@tribelike/clean",
   "version": "1.0.0",
   "description": "Express + Gun server with static views",
   "main": "dist/server.js",

@@ -5,6 +5,7 @@
   "workspaces": [
     "client",
     "server",
+    "clean",
     "types"
   ],
   "engines": {
@@ -12,6 +13,7 @@
       "pnpm": ">=3"
   },
   "scripts": {
+    "clean": "pnpm -F clean dev",
     "dev": "pnpm -F server dev & pnpm -F client dev",
     "dev:https": "pnpm -F server dev:https & pnpm -F client dev:https",
     "test": "pnpm vitest dev --run",
