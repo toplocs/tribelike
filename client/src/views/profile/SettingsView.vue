@@ -1,9 +1,9 @@
 <template>
   <Container>
     <div class="w-full space-y-4">
-        <Card>
-          <Headline>Settings</Headline>
-         <ProfileSettingsForm
+      <Card>
+        <Headline>Settings</Headline>
+        <ProfileSettingsForm
           :profile="profile"
         />
       </Card>
@@ -17,6 +17,20 @@
         <DragDropRelations
           :relationKeys="profileRelations"
         />
+      </Card>
+
+      <Card>
+        <div class="mb-4">
+          <Headline>Developer Area</Headline>
+          <ApiKeys />
+        </div>
+
+        <Divider />
+
+        <div class="my-4">
+          <Headline>Plugins</Headline>
+          <ManagePlugins />
+        </div>
       </Card>
     </div>
       
@@ -58,8 +72,8 @@
   </Container>
 </template>
 
+//
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue';
 import { useRoute, useRouter} from 'vue-router';
 import { Cog6ToothIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import Title from '@/components/common/Title.vue';
@@ -73,6 +87,8 @@ import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
+import ApiKeys from '@/components/ApiKeys.vue';
+import ManagePlugins from '@/components/ManagePlugins.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 import { useUser } from '@/composables/userProvider';
