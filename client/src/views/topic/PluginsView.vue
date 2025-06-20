@@ -6,16 +6,6 @@
           A list of all available plugins:
         </Title>
       </div>
-
-      <ul
-        v-for="plugin in plugins"
-        :key="plugin.id"
-      >
-        <PluginListItem
-          :plugin="plugin"
-          :profileId="profile?.id"
-        />
-      </ul>
     </Card>
   </div>
 </template>
@@ -26,7 +16,6 @@ import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
-import PluginListItem from '@/components/list/PluginListItem.vue';
 import defaultPluginSettings from '@/assets/pluginSettings';
 
 const router = useRouter();

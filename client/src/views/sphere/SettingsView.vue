@@ -48,7 +48,7 @@
     <Sidebar>
       <div className="mb-8">
         <Title>Plugin Settings:</Title>
-        <PluginListItem
+        <PluginSettingsItem
           v-for="slot of slots"
           :plugin="slot.plugin"
         />
@@ -67,7 +67,7 @@ import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicForm from '@/components/forms/Topic.vue';
-import PluginListItem from '@/components/list/PluginListItem.vue';
+import PluginSettingsItem from '@/components/list/PluginSettingsItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
