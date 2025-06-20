@@ -1,17 +1,39 @@
 <template>
   <form @submit.prevent="addPlugin" class="space-y-6">
-    <Callout v-if="successMessage" type="success">{{ successMessage }}</Callout>
-    <Callout v-if="errorMessage" type="error">{{ errorMessage }}</Callout>
+    <Callout v-if="successMessage" color="green">
+      {{ successMessage }}
+    </Callout>
+    <Callout v-if="errorMessage" color="red">
+      {{ errorMessage }}
+    </Callout>
 
     <div>
       <label for="name" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Plugin Name</label>
-      <TextInput v-model="formData.name" id="name" type="text" placeholder="Location" />
+      <TextInput
+        v-model="formData.name"
+        id="name"
+        type="text"
+        placeholder="Plugin name"
+      />
     </div>
 
     <div>
       <label for="url" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Plugin URL</label>
-      <TextInput v-model="formData.url" id="url" type="text" placeholder="https://example.com/plugin.js" />
+      <TextInput
+        v-model="formData.url"
+        id="url"
+        type="text"
+        placeholder="https://example.com/plugin.js"
+      />
     </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-900 dark:text-gray-100">Plugin ID</label>
+      <div class="text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 p-2 rounded">
+        {{ id }}
+      </div>
+    </div>
+
 
     <!-- Slots -->
     <div>
@@ -113,32 +135,45 @@
     </div>
 
     <SubmitButton type="submit">
-      Add Plugin
+      Update Plugins
     </SubmitButton>
   </form>
 </template>
 
 //
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import TextInput from '@/components/common/TextInput.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import Callout from '@/components/common/Callout.vue';
+import gun from '@/services/gun'; 
 
+const { selected } = defineProps({
+  selected: {
+    type: Object,
+    default: null,
+  }
+})
 const emit = defineEmits(['plugin-added']);
-
 const formData = ref({
   name: '',
   url: '',
-  slots: [{ slot: 'InfoView', component: 'Main' }],
+  slots: [{
+    slot: 'InfoView',
+    component: 'Main'
+  }],
   paths: [],
   tabs: []
 });
-
 const successMessage = ref('');
 const errorMessage = ref('');
-
-const gun = window.gun; // Assuming GunDB is globally available
+const id = computed(() => {
+  return formData.value.name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '_')
+    + '_plugin';
+});
 
 const addPlugin = () => {
   const { name, url, slots, paths, tabs } = formData.value;
@@ -149,46 +184,45 @@ const addPlugin = () => {
     return;
   }
 
-  const id = name.toLowerCase().replace(/\s+/g, '_');
-  const chain = gun.get(id);
+  const pluginId = id.value;
+  const chain = gun.get(pluginId);
 
-  chain.once((data: any) => {
-    if (data) {
-      errorMessage.value = 'Plugin already exists.';
-      successMessage.value = '';
-    } else {
-      const node = chain.put({ id, name, url });
+  chain.once((existing: any) => {
+    const node = chain.put({ id: pluginId, name, url });
 
-      const slotChain = gun.get(`${id}/slots`);
-      slots.forEach(s => slotChain.set(s));
+    // Clear previous data
+    gun.get(`${pluginId}/slots`).map().once((s: any, k: string) => {
+      if (k) gun.get(`${pluginId}/slots`).get(k).put(null);
+    });
+    gun.get(`${pluginId}/paths`).map().once((p: any, k: string) => {
+      if (k) gun.get(`${pluginId}/paths`).get(k).put(null);
+    });
+    gun.get(`${pluginId}/tabs`).map().once((t: any, k: string) => {
+      if (k) gun.get(`${pluginId}/tabs`).get(k).put(null);
+    });
 
-      const pathChain = gun.get(`${id}/paths`);
-      paths.forEach(p => pathChain.set(p));
+    // Re-add updated data
+    const slotChain = gun.get(`${pluginId}/slots`);
+    slots.forEach(s => slotChain.set(s));
 
-      const tabChain = gun.get(`${id}/tabs`);
-      tabs.forEach(t => tabChain.set(t));
+    const pathChain = gun.get(`${pluginId}/paths`);
+    paths.forEach(p => pathChain.set(p));
 
-      node.get('slots').put(slotChain);
-      node.get('paths').put(pathChain);
-      node.get('tabs').put(tabChain);
+    const tabChain = gun.get(`${pluginId}/tabs`);
+    tabs.forEach(t => tabChain.set(t));
 
-      gun.get('plugins').set(node);
+    node.get('slots').put(slotChain);
+    node.get('paths').put(pathChain);
+    node.get('tabs').put(tabChain);
 
-      successMessage.value = 'Plugin added successfully!';
-      errorMessage.value = '';
-      emit('plugin-added');
+    gun.get('plugins').set(node);
 
-      // Reset form
-      formData.value = {
-        name: '',
-        url: '',
-        slots: [{ slot: 'InfoView', component: 'Main' }],
-        paths: [],
-        tabs: []
-      };
-    }
+    successMessage.value = existing ? 'Plugin updated!' : 'Plugin added successfully!';
+    errorMessage.value = '';
+    emit('plugin-added');
   });
 };
+
 
 // Helpers to add/remove items
 const addSlot = () => formData.value.slots.push({ slot: '', component: '' });
@@ -199,4 +233,39 @@ const removePath = (index: number) => formData.value.paths.splice(index, 1);
 
 const addTab = () => formData.value.tabs.push({ value: '', href: '' });
 const removeTab = (index: number) => formData.value.tabs.splice(index, 1);
+
+const loadSelectedPlugin = (pluginId: string) => {
+  formData.value = {
+    name: '',
+    url: '',
+    slots: [],
+    paths: [],
+    tabs: []
+  };
+
+  gun.get(pluginId).once((data: any) => {
+    if (data) {
+      formData.value.name = data.name || '';
+      formData.value.url = data.url || '';
+    }
+  });
+
+  gun.get(`${pluginId}/slots`).map().once((data: any) => {
+    if (data?.slot) formData.value.slots.push({ ...data });
+  });
+
+  gun.get(`${pluginId}/paths`).map().once((data: any) => {
+    if (data?.path) formData.value.paths.push({ ...data });
+  });
+
+  gun.get(`${pluginId}/tabs`).map().once((data: any) => {
+    if (data?.value) formData.value.tabs.push({ ...data });
+  });
+};
+
+watch(() => selected, (newVal) => {
+  if (newVal) {
+    loadSelectedPlugin(newVal.id);
+  }
+}, { immediate: true });
 </script>
