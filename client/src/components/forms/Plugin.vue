@@ -3,6 +3,7 @@
     <Callout v-if="successMessage" color="green">
       {{ successMessage }}
     </Callout>
+
     <Callout v-if="errorMessage" color="red">
       {{ errorMessage }}
     </Callout>
@@ -217,14 +218,12 @@ const addPlugin = () => {
 
     gun.get('plugins').set(node);
 
-    successMessage.value = existing ? 'Plugin updated!' : 'Plugin added successfully!';
+    successMessage.value = existing ? `${name} Plugin updated!` : `${name} Plugin added successfully!`;
     errorMessage.value = '';
     emit('plugin-added');
   });
 };
 
-
-// Helpers to add/remove items
 const addSlot = () => formData.value.slots.push({ slot: '', component: '' });
 const removeSlot = (index: number) => formData.value.slots.splice(index, 1);
 
