@@ -6,12 +6,16 @@ import Gun from 'gun';
 const app = express();
 const port = 3000;
 
-// Serve static files from 'views' inside dist/
-app.use(express.static(path.join(__dirname, 'views')));
+// Serve static files - check if we're in dev or production
+const viewsPath = process.env.NODE_ENV === 'production' 
+  ? path.join(__dirname, 'views')
+  : path.join(__dirname, '..', 'dist', 'views');
+
+app.use(express.static(viewsPath));
 
 // Fallback to index.html for SPA routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  res.sendFile(path.join(viewsPath, 'index.html'));
 });
 
 const server = http.createServer(app);

@@ -1,37 +1,77 @@
 # TopLocs TribeLike
 
-TopLocs stands for topic- and location-based interests. TribeLike builds a community platform where you can meet likeminded people.
+TopLocs stands for topic- and location-based interests. TribeLike is a **decentralized P2P community platform** where you can meet likeminded people.
 
-Interactions can be added with plugins, like chat, wiki, events ...
+## 🚀 Architecture
 
-## Tech-Stack
+TribeLike uses a **peer-to-peer architecture** powered by [Gun.js](https://gun.eco/):
+- **No central server** - Just a minimal relay for P2P communication
+- **Offline-first** - Works without internet connection
+- **User-owned data** - Your data stays with you
+- **Real-time sync** - Changes propagate instantly between peers
 
-- Typescript server and vuejs web frontend.
-- Plugins can be written in any language.
+## Tech Stack
 
+- **Frontend**: Vue.js 3 with TypeScript
+- **P2P Database**: Gun.js
+- **Authentication**: WebAuthn/Passkeys + Gun SEA
+- **Server**: Minimal Express relay (26 lines of code!)
+- **Plugins**: Extensible plugin system
+
+## Features
+
+- **Multiple Profiles** - Work, Family, Friends contexts
+- **Topics & Locations** - Find people by interests and places
+- **Universal Relations** - Connect any entities together
+- **Built-in Plugins**:
+  - 💬 Chat - Real-time messaging
+  - 📅 Events - Event management
+  - 📝 Wiki - Collaborative documentation
 
 ## Project Setup
-Install `node` and `pnpm`.
 
-Setup a database and .env files, and run
+Requirements:
+- Node.js >= 20
+- pnpm >= 3
 
 ```sh
+# Install dependencies
 pnpm install
+
+# Build everything (client + server)
+pnpm build
+
+# Start the P2P relay server
+cd server
 pnpm dev
-pnpm db:deploy  # if needed
 ```
 
-### Using docker 
-Start the server and database
+Open http://localhost:3000 in your browser.
+
+## Development
 
 ```sh
-docker compose up
+# Run client and server in dev mode
+pnpm dev
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
 ```
 
-Run a DB Migration / Create Database initially
-```sh
-docker compose exec server pnpm db:deploy
-```
+## How it Works
+
+1. The server (`/server`) is just a Gun.js relay
+2. All application logic runs in the browser
+3. Data is stored in Gun's distributed graph database
+4. Peers sync directly with each other
+5. The server only helps peers discover each other
+
+## Contributing
+
+Contributions are welcome! Please check out our [issues](https://github.com/toplocs/tribelike/issues) for areas where you can help.
 
 ## Open Source
 MIT License. Feedback and contributions are welcome.

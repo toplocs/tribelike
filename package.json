@@ -5,7 +5,6 @@
   "workspaces": [
     "client",
     "server",
-    "clean",
     "types"
   ],
   "engines": {
@@ -13,13 +12,12 @@
       "pnpm": ">=3"
   },
   "scripts": {
-    "clean": "pnpm -F clean dev",
     "dev": "pnpm -F server dev & pnpm -F client dev",
     "dev:https": "pnpm -F server dev:https & pnpm -F client dev:https",
     "test": "pnpm vitest dev --run",
     "check": "pnpm -F !root check",
     "lint": "pnpm -F !root lint",
-    "build": "pnpm -F !root build-only",
+    "build": "pnpm -F client build-only && pnpm -F server build",
     "generate:openapi": "pnpm -F server generate:openapi",
     "start": "pnpm -F server start",
     "certs": "mkcert 'localhost'",
