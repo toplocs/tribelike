@@ -1,6 +1,6 @@
 .env
 server/data/*
-.cache/**/*
+.cache
 
 # Logs
 logs

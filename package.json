@@ -8,8 +8,8 @@
     "types"
   ],
   "engines": {
-      "node": ">=20",
-      "pnpm": ">=3"
+    "node": ">=20",
+    "pnpm": ">=3"
   },
   "scripts": {
     "dev": "pnpm -F server dev & pnpm -F client dev",
@@ -28,10 +28,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@vitest/ui": "^3.1.1",
-    "jsdom": "^26.0.0",
-    "prettier": "^3.5.3",
-    "typescript": "~5.8.2",
-    "vitest": "^3.1.1"
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.8.3",
+    "vitest": "^3.2.4"
   }
 }
