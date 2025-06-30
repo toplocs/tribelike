@@ -135,7 +135,10 @@
       </button>
     </div>
 
-    <SubmitButton type="submit">
+    <SubmitButton
+      type="submit"
+      :resetTrigger="errorMessage"
+    >
       Update Plugins
     </SubmitButton>
   </form>
@@ -187,11 +190,24 @@ const addPlugin = () => {
 
   const pluginId = id.value;
   const chain = gun.get(pluginId);
+
   chain.once((existing: any) => {
     const node = chain.put({ id: pluginId, name, url });
 
+    // Clear previous data
+    gun.get(`${pluginId}/slots`).map().once((s: any, k: string) => {
+      if (k) gun.get(`${pluginId}/slots`).get(k).put(null);
+    });
+    gun.get(`${pluginId}/paths`).map().once((p: any, k: string) => {
+      if (k) gun.get(`${pluginId}/paths`).get(k).put(null);
+    });
+    gun.get(`${pluginId}/tabs`).map().once((t: any, k: string) => {
+      if (k) gun.get(`${pluginId}/tabs`).get(k).put(null);
+    });
+
     // Re-add updated data
     const slotChain = gun.get(`${pluginId}/slots`);
+    slotChain.map().once(x => slotChain.unset(x));
     slots.forEach(s => slotChain.set(s));
 
     const pathChain = gun.get(`${pluginId}/paths`);
@@ -213,10 +229,7 @@ const addPlugin = () => {
 };
 
 const addSlot = () => formData.value.slots.push({ slot: '', component: '' });
-const removeSlot = (index: number) => {
-  formData.value.slots.splice(index, 1);
-  gun.get(`${id.value}/slots`).unset(formData.value.slots.splice(index, 1));
-};
+const removeSlot = (index: number) => formData.value.slots.splice(index, 1);
 
 const addPath = () => formData.value.paths.push({ path: '', component: '' });
 const removePath = (index: number) => formData.value.paths.splice(index, 1);
