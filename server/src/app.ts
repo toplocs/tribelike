@@ -7,7 +7,7 @@ import fs from 'fs';
 import https from "https";
 import http from "http";
 import { sessionMiddleware } from './middleware';
-import routes from './routes';
+// import routes from './routes';
 import { initGun } from './gun';
 
 import swaggerUi from "swagger-ui-express";
@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 // Serve docs 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 // Serve static client
 const clientBuildPath = path.join(__dirname, '../../client/dist');
@@ -51,9 +51,9 @@ if (fs.existsSync(clientBuildPath)) {
 }
 
 // Read Authentication Token from Header and add session to request
-app.use(sessionMiddleware);
+// app.use(sessionMiddleware);
 
-app.use('/', routes);
+// app.use('/', routes);
 
 function startServer() {
   if (enable_https) {
@@ -76,5 +76,22 @@ function startServer() {
 
 if (require.main === module) {
   const server = startServer();
-  initGun(server);
+  const gun = initGun(server);
+
+  // setInterval(() => {
+  //   const opt_peers = gun.back('opt.peers');
+  //   console.log('Gun peers:', opt_peers);
+  //   gun.on('in', function (msg: any, context: any) {
+  //     console.log(`In-peer: ${context}, message id: ${msg['#']}`);
+  //   });
+  // }, 2000);
+
+
+  // let connectedPeers = _.filter(Object.values(opt_peers), (peer) => {
+  //   return  peer
+  //       && peer.wire
+  //       && peer.wire.readyState === 1
+  //       && peer.wire.OPEN === 1
+  //       && peer.wire.constructor.name === 'WebSocket';
+  // });
 }

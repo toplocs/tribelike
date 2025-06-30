@@ -10,20 +10,14 @@ export function profileProvider() {
   const interests = ref<Interest>([]);
   const locations = ref<Location>([]);
 
-  const createProfile = async (formData: FormData) => {
-    const id = crypto.randomUUID();
-    const data = Object.fromEntries(formData.entries());
+  const createProfile = async (data: Profile) => {
     const email = data.email.toLowerCase();
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     profile.value = {
       ...data,
-      id: id,
+      id: crypto.randomUUID(),
       image: `https://gravatar.com/avatar/${hash}`,
     }
-
-    const node = gun.user().get(`profile/${id}`).put(profile.value);
-    gun.user().get('profiles').set(node);
-    gun.get('profiles').get(id).set(node);
 
     return profile.value;
   }
@@ -34,40 +28,62 @@ export function profileProvider() {
     return profile.value;
   }
 
-  const removeProfile = async (id: string) => {
-    if (gun.user().is) {
-      const node = gun.user().get(`profile/${id}`);
-      node.then(() => {
-        gun.user().get('profiles').unset(node);
-        gun.get('profiles').get(id).unset(node);
-        profile.value = null;
-      });
-    }
+  const removeProfile = async () => {
+    profile.value = null;
   }
 
   const selectProfile = (id: string) => {
     localStorage.setItem('profileId', id || null);
+    gun.user()
+    .get('profiles')
+    .get(id)
+    .once(data => {
+      profile.value = data;
+    });
+  }
+
+  const createRelation = (key, id) => {
+    relations.value.push({
+      key: key,
+      from: profile.value.id,
+      to: id,
+    });
+  }
+
+  watch(() => profile.value, (newValue) => {
     if (gun.user().is) {
       gun.user()
-      .get(`profile/${id}`)
-      .once(data => {
-        if (data) {
-          profile.value = data;
-        }
-      });
+      .get('profiles')
+      .get(newValue.id)
+      .put(newValue);
     }
-  }
+  });
 
   onMounted(() => {
     const id = localStorage.getItem('profileId');
     if (gun.user().is) {
       gun.user()
       .get('profiles')
-      .map()
-      .once((data) => {
-        if (data && data.id === id) {
-          profile.value = data;
-        }
+      .get(id)
+      .on(data => {
+        console.log('test')
+        profile.value = data;
+      });
+
+      gun.user()
+      .get('profiles')
+      .get(id)
+      .get('interests')
+      .once(data => {
+        interests.value = data;
+      });
+
+      gun.user()
+      .get('profiles')
+      .get(id)
+      .get('locations')
+      .once(data => {
+        locations.value = data;
       });
 
       //listeners in profileService
