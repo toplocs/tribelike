@@ -34,7 +34,11 @@ const checkStatus = async () => {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
-    await fetch(props.plugin.url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
+    await fetch(props.plugin.url, {
+      method: 'HEAD',
+      mode: 'no-cors',
+      signal: controller.signal
+    });
     clearTimeout(timeout);
     isOnline.value = true;
   } catch {

@@ -13,16 +13,14 @@
               Profiles
               <div class="flex justify-between items-center"></div>
               <router-link to="/profiles/create">
-                <button
-                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-transparent shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                > Create new profile
-                </button>
+                <ActionButton title="Create a new profile" /> 
               </router-link>
             </div>
           </Title>
           <ul
             v-for="x in profiles"
             :key="x.id"
+            class="mt-2"
           >
             <ProfileListItem
               :profile="x"
@@ -42,6 +40,7 @@ import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 import Container from '@/components/common/Container.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileListItem from '@/components/list/ProfileListItem.vue';

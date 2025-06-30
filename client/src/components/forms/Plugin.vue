@@ -187,20 +187,8 @@ const addPlugin = () => {
 
   const pluginId = id.value;
   const chain = gun.get(pluginId);
-
   chain.once((existing: any) => {
     const node = chain.put({ id: pluginId, name, url });
-
-    // Clear previous data
-    gun.get(`${pluginId}/slots`).map().once((s: any, k: string) => {
-      if (k) gun.get(`${pluginId}/slots`).get(k).put(null);
-    });
-    gun.get(`${pluginId}/paths`).map().once((p: any, k: string) => {
-      if (k) gun.get(`${pluginId}/paths`).get(k).put(null);
-    });
-    gun.get(`${pluginId}/tabs`).map().once((t: any, k: string) => {
-      if (k) gun.get(`${pluginId}/tabs`).get(k).put(null);
-    });
 
     // Re-add updated data
     const slotChain = gun.get(`${pluginId}/slots`);
@@ -225,7 +213,10 @@ const addPlugin = () => {
 };
 
 const addSlot = () => formData.value.slots.push({ slot: '', component: '' });
-const removeSlot = (index: number) => formData.value.slots.splice(index, 1);
+const removeSlot = (index: number) => {
+  formData.value.slots.splice(index, 1);
+  gun.get(`${id.value}/slots`).unset(formData.value.slots.splice(index, 1));
+};
 
 const addPath = () => formData.value.paths.push({ path: '', component: '' });
 const removePath = (index: number) => formData.value.paths.splice(index, 1);
@@ -242,23 +233,24 @@ const loadSelectedPlugin = (pluginId: string) => {
     tabs: []
   };
 
-  gun.get(pluginId).once((data: any) => {
+  const chain = gun.get(pluginId);
+
+  chain.once((data: any) => {
     if (data) {
       formData.value.name = data.name || '';
       formData.value.url = data.url || '';
     }
-  });
+    gun.get(`${pluginId}/slots`).map().once((data: any) => {
+      if (data?.slot) formData.value.slots.push({ ...data });
+    });
 
-  gun.get(`${pluginId}/slots`).map().once((data: any) => {
-    if (data?.slot) formData.value.slots.push({ ...data });
-  });
+    gun.get(`${pluginId}/paths`).map().once((data: any) => {
+      if (data?.path) formData.value.paths.push({ ...data });
+    });
 
-  gun.get(`${pluginId}/paths`).map().once((data: any) => {
-    if (data?.path) formData.value.paths.push({ ...data });
-  });
-
-  gun.get(`${pluginId}/tabs`).map().once((data: any) => {
-    if (data?.value) formData.value.tabs.push({ ...data });
+    gun.get(`${pluginId}/tabs`).map().once((data: any) => {
+      if (data?.value) formData.value.tabs.push({ ...data });
+    });
   });
 };
 
