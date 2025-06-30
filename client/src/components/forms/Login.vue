@@ -50,7 +50,10 @@
     </div>
     -->
 
-    <SubmitButton className="w-full mt-4">
+    <SubmitButton
+      className="w-full mt-4"
+      :resetTrigger="errorMessage"
+    >
       Sign In
     </SubmitButton>
   </form>
