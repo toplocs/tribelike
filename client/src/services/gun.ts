@@ -6,7 +6,9 @@ import 'gun/lib/radisk'; // optional: if you're using radisk storage
 import 'gun/lib/store'; // optional: if using indexed storage
 import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 
-const gun = Gun({ peers: ['http://localhost:3000/gun'], rad: true });
+const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
+
+const gun = Gun({ peers, rad: true });
 
 gun.clear = function() {
 	// Clear localStorage

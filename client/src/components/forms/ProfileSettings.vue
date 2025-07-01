@@ -86,7 +86,10 @@
       />
     </div>
 
-    <SubmitButton className="w-full mt-4">
+    <SubmitButton
+      :resetTrigger="errorMessage"
+      className="w-full mt-4"
+    >
       Update Profile
     </SubmitButton>
   </form>
