@@ -1,5 +1,6 @@
 .env
 server/data/*
+server/ra-data/*
 .cache/**/*
 
 # Logs
