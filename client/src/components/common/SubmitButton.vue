@@ -36,8 +36,8 @@ const props = defineProps({
     default: ''
   },
   resetTrigger: {
-    type: Number,
-    default: 0
+    type: Boolean,
+    default: false,
   }
 });
 const pending = ref(false);
