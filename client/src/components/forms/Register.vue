@@ -49,7 +49,7 @@
     </div>
 
     <SubmitButton
-      :resetTrigger="successMessage"
+      :resetTrigger="errorMessage && 0"
       className="w-full mt-4"
     >
       Send

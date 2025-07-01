@@ -21,9 +21,9 @@
     <section>
       <Card class="flex flex-col gap-4">
         <Headline>{{profile?.username}} is ...</Headline>
-        <SphereRelations
-          :topics="profileToTopic"
-          :locations="profileToLocation"
+         <SphereRelations
+          :topics="profileRelations.filter(x => x.accepts.includes('topic'))"
+          :locations="profileRelations.filter(x => x.accepts.includes('location'))"
         />
       </Card>
     </section>
@@ -39,7 +39,7 @@ import Headline from '@/components/common/Headline.vue';
 import SphereRelations from '@/components/SphereRelations.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useRelation } from '@/composables/relationProvider';
-import { profileToTopic, profileToLocation } from '@/assets/relationKeys';
+import { profileRelations } from '@/assets/relationKeys';
 
 /*const props = defineProps({
   profile: {
