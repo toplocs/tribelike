@@ -1,8 +1,3 @@
-export const profileToTopic = [];
-export const profileToLocation = [];
-export const topicToLocation = [];
-export const topicToTopic = [];
-
 export const profileRelations = [
   {
     id: 'like',
