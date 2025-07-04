@@ -102,3 +102,9 @@ export const relationKeys = [
 ];
 
 export const relationKeyIds = Array.from(new Set(relationKeys.map(r => r.id)));
+
+// Filtered exports for specific relation types
+export const profileToTopic = profileRelations.filter(r => r.accepts.includes('topic'));
+export const profileToLocation = profileRelations.filter(r => r.accepts.includes('location'));
+export const topicToTopic = topicRelations.filter(r => r.accepts.includes('topic'));
+export const locationToLocation = locationRelations.filter(r => r.accepts.includes('location'));
