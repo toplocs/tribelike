@@ -87,7 +87,7 @@
     </div>
 
     <SubmitButton
-      :resetTrigger="errorMessage && 0"
+      :resetTrigger="errorMessage"
       className="w-full mt-4"
     >
       Update Profile
