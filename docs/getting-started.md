@@ -34,17 +34,9 @@ git clone git@github.com:toplocs/wiki-plugin.git
 git clone git@github.com:toplocs/location-plugin.git
 git clone git@github.com:toplocs/link-plugin.git
 
-# Proof of Concepts & Technology Tests
-git clone git@github.com:toplocs/gun-sign.git
-git clone git@github.com:toplocs/gun-playground.git
-git clone git@github.com:toplocs/decentral-auth.git
-git clone git@github.com:toplocs/project-playground.git
-
 # Development Tools
 git clone git@github.com:toplocs/demo-plugin.git
 
-# Project Management
-git clone git@github.com:toplocs/Funding.git
 ```
 
 #### 3. Verify Your Setup
@@ -58,12 +50,8 @@ toplocs/
 ├── wiki-plugin/         # Wiki plugin  
 ├── location-plugin/     # Location plugin
 ├── link-plugin/         # Link plugin
-├── gun-sign/            # Gun.js server PoC
-├── gun-playground/      # Gun.js testing
-├── decentral-auth/      # Auth PoC
-├── project-playground/  # Architecture testing
 ├── demo-plugin/         # Plugin development framework
-└── Funding/             # Grant applications
+
 ```
 
 ## 🤖 Setting Up Claude Code Context
@@ -85,8 +73,6 @@ Please:
 1. Read the documentation in tribelike/docs/ to understand the ecosystem
 2. Help me set up the development environment
 3. Provide guidance on where to start based on what I want to work on
-
-My goal is to: [DESCRIBE YOUR GOAL - e.g., "develop a new plugin", "contribute to core platform", "understand the architecture"]
 ```
 
 ### Alternative: Quick Context Setup
@@ -171,7 +157,7 @@ npm run dev  # Web development
 
 #### 3. P2P/Backend Development
 **Start with:** `tribelike/server/` and Gun.js PoCs
-- Minimal Express server (26 lines!)
+- Minimal Express server
 - Gun.js relay configuration
 - P2P networking
 
@@ -190,14 +176,6 @@ npm run dev  # Web development
 - Improve location features
 - Add offline functionality
 - Enhance mobile UI
-
-### For Researchers/Experimenters
-
-#### Study the PoCs
-- `gun-sign/` - Custom Gun.js server
-- `decentral-auth/` - WebAuthn + Gun.js auth
-- `gun-playground/` - Gun.js testing
-- `project-playground/` - Architecture patterns
 
 ## 🔧 Development Workflow
 

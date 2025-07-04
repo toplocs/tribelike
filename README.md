@@ -24,8 +24,8 @@ For a detailed explanation of the P2P architecture, see [docs/architecture.md](.
 
 - **Multiple Profiles** - Work, Family, Friends contexts
 - **Topics & Locations** - Find people by interests and places
-- **Universal Relations** - Connect any entities together
-- **Built-in Plugins**:
+- **Universal Relations** - Connect topics, locations or any entity
+- **Plugins**:
   - 💬 Chat - Real-time messaging
   - 📅 Events - Event management
   - 📝 Wiki - Collaborative documentation
@@ -65,11 +65,11 @@ pnpm lint
 
 ## How it Works
 
-1. The server (`/server`) is just a Gun.js relay
-2. All application logic runs in the browser
+1. The server (`/server`) is a Gun.js relay
+2. Application logic runs in the browser
 3. Data is stored in Gun's distributed graph database
 4. Peers sync directly with each other
-5. The server only helps peers discover each other
+5. The server helps peers to discover each other
 
 ## Documentation
 
@@ -83,7 +83,7 @@ pnpm lint
 
 If you're a new developer, start with the **[Getting Started Guide](./docs/getting-started.md)** which includes:
 - Complete ecosystem setup instructions
-- How to get Claude Code context
+- How to get shared Claude Code context
 - Development environment configuration
 - Contribution guidelines
 

@@ -22,10 +22,8 @@ toplocs/ (workspace folder)
 │   ├── gun-playground/      # PoC: Gun.js development environment
 │   ├── decentral-auth/      # PoC: WebAuthn + Gun.js authentication
 │   └── project-playground/  # PoC: Architecture testing & patterns
-├── 🛠️  Development Tools
-│   └── demo-plugin/         # Plugin development framework
-└── 📋 Project Management
-    └── Funding/             # Grant applications & funding docs
+└── 🛠️  Development Tools
+    └── demo-plugin/         # Plugin development framework
 ```
 
 ## Core Architecture
