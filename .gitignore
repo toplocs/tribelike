@@ -1,7 +1,9 @@
 .env
+.cache
+.cache/**/*
+
 server/data/*
 server/ra-data/*
-.cache/**/*
 
 # Logs
 logs

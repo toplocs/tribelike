@@ -18,19 +18,6 @@ Setup a database and .env files, and run
 ```sh
 pnpm install
 pnpm dev
-pnpm db:deploy  # if needed
-```
-
-### Using docker 
-Start the server and database
-
-```sh
-docker compose up
-```
-
-Run a DB Migration / Create Database initially
-```sh
-docker compose exec server pnpm db:deploy
 ```
 
 ## Open Source
