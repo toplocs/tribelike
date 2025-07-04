@@ -9,8 +9,13 @@
             <AddRelations />
           </div>
           <DragDropRelations
-            :topics="topicToTopic"
-            :locations="topicToLocation"
+            v-if="sphere?.type == 'topic'"
+            :relationKeys="topicRelations"
+          />
+
+          <DragDropRelations
+            v-if="sphere?.type == 'location'"
+            :relationKeys="locationRelations"
           />
         </Card>
       </section>
@@ -43,7 +48,7 @@
     <Sidebar>
       <div className="mb-8">
         <Title>Plugin Settings:</Title>
-        <PluginListItem
+        <PluginSettingsItem
           v-for="slot of slots"
           :plugin="slot.plugin"
         />
@@ -62,13 +67,13 @@ import Sidebar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicForm from '@/components/forms/Topic.vue';
-import PluginListItem from '@/components/list/PluginListItem.vue';
+import PluginSettingsItem from '@/components/list/PluginSettingsItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { topicToTopic, topicToLocation } from '@/assets/relationKeys';
+import { topicRelations, locationRelations } from '@/assets/relationKeys';
 
 const { sphere } = useSphere();
 const { slots } = usePlugins();

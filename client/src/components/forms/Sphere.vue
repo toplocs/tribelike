@@ -47,7 +47,10 @@
       />
     </div>
 
-    <SubmitButton className="w-full mt-4">
+    <SubmitButton
+      :resetTrigger="errorMessage && 0"
+      className="w-full mt-4"
+    >
       Create Sphere
     </SubmitButton>
   </form>

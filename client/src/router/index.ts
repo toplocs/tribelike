@@ -16,26 +16,6 @@ import ProfileCreateView from '@/views/profile/ProfileCreateView.vue';
 import ProfileDetailView from '@/views/profile/ProfileDetailView.vue';
 import ProfileSettingsView from '@/views/profile/SettingsView.vue';
 
-/*
-//Interest
-import InterestInfoView from '@/views/topic/InfoView.vue';
-import InterestDiscussionView from '@/views/topic/DiscussionView.vue';
-import InterestPluginsView from '@/views/topic/PluginsView.vue';
-import InterestSettingsView from '@/views/topic/SettingsView.vue';
-
-//Topic
-import TopicCreateView from '@/views/topic/CreateView.vue';
-import TopicDetailView from '@/views/topic/DetailView.vue';
-
-//Location
-import LocationCreateView from '@/views/location/LocationCreateView.vue';
-import LocationDetailView from '@/views/location/LocationDetailView.vue';
-import LocationInfoView from '@/views/location/InfoView.vue';
-import LocationDiscussionView from '@/views/location/DiscussionView.vue';
-import LocationPluginsView from '@/views/location/PluginsView.vue';
-import LocationSettingsView from '@/views/location/SettingsView.vue';
-*/
-
 //Sphere
 import SphereCreateView from '@/views/sphere/CreateView.vue';
 import SphereDetailView from '@/views/sphere/DetailView.vue';
