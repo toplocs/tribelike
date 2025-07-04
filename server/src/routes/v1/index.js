@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const activity_1 = __importDefault(require("../../api/activity"));
+const discussion_1 = __importDefault(require("../../api/discussion"));
+const interest_1 = __importDefault(require("../../api/interest"));
+const location_1 = __importDefault(require("../../api/location"));
+const plugin_1 = __importDefault(require("../../api/plugin"));
+const relation_1 = __importDefault(require("../../api/relation"));
+// import authRouter from '../../api/auth';
+// import userRouter from '../../api/user';
+// import profileRouter from '../../api/profile';
+const router = (0, express_1.Router)();
+router.use('/activity', activity_1.default);
+router.use('/discussion', discussion_1.default);
+router.use('/interest', interest_1.default);
+router.use('/location', location_1.default);
+router.use('/plugin', plugin_1.default);
+router.use('/relation', relation_1.default);
+// router.use('/auth', authRouter);
+// router.use('/user', userRouter);
+// router.use('/profile', profileRouter);
+exports.default = router;
