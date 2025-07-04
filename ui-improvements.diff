@@ -1,0 +1,89 @@
+diff --git a/client/src/components/common/ActionButton.vue b/client/src/components/common/ActionButton.vue
+index 5c2ea5ec..cbd47a40 100644
+--- a/client/src/components/common/ActionButton.vue
++++ b/client/src/components/common/ActionButton.vue
+@@ -1,7 +1,7 @@
+ <template>
+   <button
+     @click="useAction"
+-    class="w-full cursor-pointer inline-flex justify-center px-4 py-2 text-sm font-medium rounded-lg text-green-600 dark:text-green-300 bg-green-50 dark:bg-green-800 hover:bg-green-100 dark:hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
++    class="w-full h-full cursor-pointer inline-flex justify-center px-4 py-2 text-sm font-medium rounded-lg text-green-600 dark:text-green-300 bg-green-50 dark:bg-green-800 hover:bg-green-100 dark:hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400"
+   > {{ title }}
+   </button>
+ </template>
+diff --git a/client/src/components/common/SubmitButton.vue b/client/src/components/common/SubmitButton.vue
+index 56628aa2..c77a64d3 100644
+--- a/client/src/components/common/SubmitButton.vue
++++ b/client/src/components/common/SubmitButton.vue
+@@ -36,8 +36,8 @@ const props = defineProps({
+     default: ''
+   },
+   resetTrigger: {
+-    type: Boolean,
+-    default: false,
++    type: Number,
++    default: 0
+   }
+ });
+ const pending = ref(false);
+@@ -58,4 +58,4 @@ watch(() => props.resetTrigger, () => {
+ });
+ 
+ const buttonClass = computed(() => `cursor-pointer inline-flex justify-center px-4 py-2 text-sm font-medium border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-transparent rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 ${props.className}`);
+-</script>
+\ No newline at end of file
++</script>
+diff --git a/client/src/components/forms/ProfileSettings.vue b/client/src/components/forms/ProfileSettings.vue
+index f60fe116..3d16a0a9 100644
+--- a/client/src/components/forms/ProfileSettings.vue
++++ b/client/src/components/forms/ProfileSettings.vue
+@@ -87,7 +87,7 @@
+     </div>
+ 
+     <SubmitButton
+-      :resetTrigger="errorMessage && 0"
++      :resetTrigger="errorMessage"
+       className="w-full mt-4"
+     >
+       Update Profile
+diff --git a/client/src/views/profile/SettingsView.vue b/client/src/views/profile/SettingsView.vue
+index 2c098f46..b221da1a 100644
+--- a/client/src/views/profile/SettingsView.vue
++++ b/client/src/views/profile/SettingsView.vue
+@@ -18,6 +18,20 @@
+           :relationKeys="profileRelations"
+         />
+       </Card>
++
++      <Card>
++        <div class="mb-4">
++          <Headline>Developer Area</Headline>
++          <ApiKeys />
++        </div>
++
++        <Divider />
++
++        <div class="my-4">
++          <Headline>Plugins</Headline>
++          <ManagePlugins />
++        </div>
++      </Card>
+     </div>
+       
+     <Sidebar class="space-y-4">
+@@ -73,6 +87,8 @@ import IconButton from '@/components/common/IconButton.vue';
+ import Headline from '@/components/common/Headline.vue';
+ import AddRelations from '@/components/AddRelations.vue';
+ import DragDropRelations from '@/components/dragdrop/Relations.vue';
++import ApiKeys from '@/components/ApiKeys.vue';
++import ManagePlugins from '@/components/ManagePlugins.vue';
+ import Dialog from '@/components/dialog/DialogComponent.vue';
+ import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
+ import { useUser } from '@/composables/userProvider';
+@@ -105,4 +121,4 @@ const handleLogout = async () => {
+ }
+ 
+ relationProvider(route.params.id);
+-</script>
+\ No newline at end of file
++</script>

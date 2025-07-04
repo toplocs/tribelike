@@ -1,5 +1,6 @@
 <template>
   <RelationProvider>
+    <!--
     <Banner v-if="space == 'local'">
       You are viewing the local version of {{ sphere?.title }}.
       <b
@@ -8,6 +9,7 @@
       > Switch to global
       </b>
     </Banner>
+    -->
 
     <SubNav
       :initialTab="tab"
