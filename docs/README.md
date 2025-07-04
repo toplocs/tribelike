@@ -1,18 +1,32 @@
-# TopLocs Documentation
+# TopLocs Tribelike Documentation
 
-Welcome to the TopLocs ecosystem documentation. This directory contains comprehensive guides for developers working with the TopLocs decentralized community platform.
+## 📚 Centralized Documentation Hub
 
-## 📚 Documentation Overview
+**All comprehensive TopLocs documentation is now centralized in the workspace repository:**
 
-### Core Documentation
-- **[Getting Started](./getting-started.md)** - Complete setup guide for new developers and Claude Code context
-- **[Ecosystem Overview](./ecosystem.md)** - Complete overview of all TopLocs repositories and relationships
-- **[Architecture](./architecture.md)** - Complete P2P architecture overview, Gun.js integration, and data structures
-- **[Plugin Development](./plugin-development.md)** - Comprehensive guide for creating plugins with Module Federation
+👉 **[Complete Documentation Hub](https://github.com/toplocs/toplocs-workspace/tree/main/docs)**
 
-### Development Tools
-- **[Debug Guide](./debug-guide.md)** - Browser console commands and debugging techniques
-- **[Debug Tools](./debug-tools.md)** - Implementation guide for debug tools and monitoring
+## 📁 Documentation Structure
+
+The centralized docs are organized as:
+
+- **[🚀 Getting Started](https://github.com/toplocs/toplocs-workspace/blob/main/docs/workspace/getting-started.md)** - Complete setup guide
+- **[🏗️ Architecture](https://github.com/toplocs/toplocs-workspace/blob/main/docs/project/architecture.md)** - P2P platform technical details
+- **[🌐 Ecosystem](https://github.com/toplocs/toplocs-workspace/blob/main/docs/project/ecosystem.md)** - Repository relationships
+- **[🔌 Plugin Development](https://github.com/toplocs/toplocs-workspace/blob/main/docs/development/plugin-development.md)** - Create and maintain plugins
+- **[🐛 Debug Guide](https://github.com/toplocs/toplocs-workspace/blob/main/docs/development/debug-guide.md)** - Troubleshooting and tools
+
+## 🤖 AI Development Context
+
+For AI-assisted development, use the comprehensive context in the workspace:
+
+👉 **[CLAUDE.md](https://github.com/toplocs/toplocs-workspace/blob/main/CLAUDE.md)**
+
+## 🌐 Live Documentation Site
+
+Browse the complete documentation at:
+
+👉 **https://toplocs.github.io/toplocs-workspace/**
 
 ## 🏗️ Architecture Quick Reference
 
@@ -131,41 +145,43 @@ gunDebug.clear()        // Clear all Gun data
 - [WebAuthn Guide](https://webauthn.guide/) - Modern authentication
 - [Module Federation](https://module-federation.github.io/) - Plugin system
 
-### Repository Structure
-For a complete overview of all TopLocs repositories, see [ecosystem.md](./ecosystem.md).
+## ℹ️ Why Centralized?
 
-```
-toplocs/ (workspace)
-├── tribelike/           # Core platform (THIS REPOSITORY)
-├── locations/           # Mobile app
-├── *-plugin/           # Plugin repositories
-├── gun-*/              # Gun.js proof of concepts
-├── demo-plugin/        # Plugin development template
-└── project-playground/ # Architecture testing
-```
+The documentation is centralized in the toplocs-workspace for:
 
-## 🤝 Contributing
+- **📍 Single Source of Truth**: No duplicate or conflicting information
+- **🔄 Automatic Updates**: AI-powered synchronization with all repositories
+- **🔍 Better Discoverability**: Organized structure with clear navigation
+- **👥 Team Consistency**: Everyone accesses the same current information
+- **🤖 AI Integration**: Comprehensive context for intelligent development assistance
 
-1. **Read the Architecture Guide** - Understand the P2P principles
-2. **Try Plugin Development** - Start with the demo-plugin template
-3. **Use Debug Tools** - Familiarize yourself with debugging techniques
-4. **Follow the Patterns** - Study existing code and maintain consistency
+## 💡 Tribelike-Specific Documentation
+
+This repository contains tribelike-specific information:
+- CLAUDE.md with development context for this repository
+- README.md with repository overview and setup
+- Implementation-specific guides and technical details
+
+## 🤝 Contributing to Tribelike
+
+1. **Read the centralized documentation** first in toplocs-workspace
+2. **Understand P2P principles** and Gun.js architecture
+3. **Follow existing patterns** in the codebase
+4. **Test with multiple browser tabs** for P2P features
+5. **Maintain offline-first functionality**
 
 ### Development Tips
 - Use Gun.js for all data persistence
 - Follow the universal relations system
-- Test with multiple browser tabs for P2P features
-- Maintain offline-first functionality
+- Check the centralized debug guide for troubleshooting
+- Use the workspace CLAUDE.md for AI development assistance
 
 ## 🆘 Getting Help
 
-- **Architecture Questions**: See [architecture.md](./architecture.md)
-- **Plugin Development**: See [plugin-development.md](./plugin-development.md)
-- **Debugging Issues**: See [debug-guide.md](./debug-guide.md)
-- **Technical Setup**: See [debug-tools.md](./debug-tools.md)
-
-For additional help, check the [GitHub issues](https://github.com/toplocs/tribelike/issues) or start a discussion.
+- **General Questions**: See [toplocs-workspace documentation](https://github.com/toplocs/toplocs-workspace/tree/main/docs)
+- **Tribelike Issues**: Check [GitHub issues](https://github.com/toplocs/tribelike/issues)
+- **Development Help**: Use the centralized [AI context](https://github.com/toplocs/toplocs-workspace/blob/main/CLAUDE.md)
 
 ---
 
-*This documentation covers the core TopLocs ecosystem. For specific repository documentation, check the individual README files in each project.*
+**For all general TopLocs documentation, visit the centralized hub! 🚀**

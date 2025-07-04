@@ -10,7 +10,7 @@ TribeLike uses a **peer-to-peer architecture** powered by [Gun.js](https://gun.e
 - **User-owned data** - Your data stays with you
 - **Real-time sync** - Changes propagate instantly between peers
 
-For a detailed explanation of the P2P architecture, see [docs/architecture.md](./docs/architecture.md).
+For a detailed explanation of the P2P architecture, see the [centralized documentation](https://github.com/toplocs/toplocs-workspace/blob/main/docs/project/architecture.md).
 
 ## Tech Stack
 
@@ -73,16 +73,23 @@ pnpm lint
 
 ## Documentation
 
-- **[Getting Started](./docs/getting-started.md)** - New developer setup guide and Claude Code context
-- [Architecture](./docs/architecture.md) - P2P architecture overview
-- [Plugin Development](./docs/plugin-development.md) - How to create plugins
-- [Debug Guide](./docs/debug-guide.md) - Debug tools and commands
-- [Debug Tools](./docs/debug-tools.md) - Debug tools implementation
+📚 **All comprehensive documentation is centralized in the workspace:**
+
+👉 **[Complete Documentation Hub](https://github.com/toplocs/toplocs-workspace/tree/main/docs)**
+
+### General TopLocs Documentation
+- **[Getting Started](https://github.com/toplocs/toplocs-workspace/blob/main/docs/workspace/getting-started.md)** - AI-powered ecosystem setup
+- **[Architecture](https://github.com/toplocs/toplocs-workspace/blob/main/docs/project/architecture.md)** - P2P architecture overview
+- **[Plugin Development](https://github.com/toplocs/toplocs-workspace/blob/main/docs/development/plugin-development.md)** - How to create plugins
+- **[Debug Guide](https://github.com/toplocs/toplocs-workspace/blob/main/docs/development/debug-guide.md)** - Debug tools and commands
+
+### Tribelike-Specific Documentation
+- **[Development Guide](./docs/DEVELOPMENT.md)** - Tribelike technical details, data architecture, and development patterns
 
 ## New to TopLocs?
 
-If you're a new developer, start with the **[Getting Started Guide](./docs/getting-started.md)** which includes:
-- Complete ecosystem setup instructions
+If you're a new developer, start with the **[Getting Started Guide](https://github.com/toplocs/toplocs-workspace/blob/main/docs/workspace/getting-started.md)** which includes:
+- AI-powered complete ecosystem setup
 - How to get shared Claude Code context
 - Development environment configuration
 - Contribution guidelines
