@@ -5,6 +5,7 @@ Welcome to the TopLocs ecosystem documentation. This directory contains comprehe
 ## 📚 Documentation Overview
 
 ### Core Documentation
+- **[Ecosystem Overview](./ecosystem.md)** - Complete overview of all TopLocs repositories and relationships
 - **[Architecture](./architecture.md)** - Complete P2P architecture overview, Gun.js integration, and data structures
 - **[Plugin Development](./plugin-development.md)** - Comprehensive guide for creating plugins with Module Federation
 
@@ -130,9 +131,11 @@ gunDebug.clear()        // Clear all Gun data
 - [Module Federation](https://module-federation.github.io/) - Plugin system
 
 ### Repository Structure
+For a complete overview of all TopLocs repositories, see [ecosystem.md](./ecosystem.md).
+
 ```
-toplocs/
-├── tribelike/           # Core platform
+toplocs/ (workspace)
+├── tribelike/           # Core platform (THIS REPOSITORY)
 ├── locations/           # Mobile app
 ├── *-plugin/           # Plugin repositories
 ├── gun-*/              # Gun.js proof of concepts
