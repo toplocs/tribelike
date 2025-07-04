@@ -22,7 +22,7 @@
 import axios from 'axios';
 import { ref, inject, computed } from 'vue';
 import Title from '@/components/common/Title.vue';
-import ProfileSettings from '@/components/ProfileSettings.vue';
+import ProfileSettings from '@/components/forms/ProfileSettings.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 
 const props = defineProps({
