@@ -5,6 +5,7 @@ Welcome to the TopLocs ecosystem documentation. This directory contains comprehe
 ## 📚 Documentation Overview
 
 ### Core Documentation
+- **[Getting Started](./getting-started.md)** - Complete setup guide for new developers and Claude Code context
 - **[Ecosystem Overview](./ecosystem.md)** - Complete overview of all TopLocs repositories and relationships
 - **[Architecture](./architecture.md)** - Complete P2P architecture overview, Gun.js integration, and data structures
 - **[Plugin Development](./plugin-development.md)** - Comprehensive guide for creating plugins with Module Federation

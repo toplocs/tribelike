@@ -73,10 +73,19 @@ pnpm lint
 
 ## Documentation
 
+- **[Getting Started](./docs/getting-started.md)** - New developer setup guide and Claude Code context
 - [Architecture](./docs/architecture.md) - P2P architecture overview
 - [Plugin Development](./docs/plugin-development.md) - How to create plugins
 - [Debug Guide](./docs/debug-guide.md) - Debug tools and commands
 - [Debug Tools](./docs/debug-tools.md) - Debug tools implementation
+
+## New to TopLocs?
+
+If you're a new developer, start with the **[Getting Started Guide](./docs/getting-started.md)** which includes:
+- Complete ecosystem setup instructions
+- How to get Claude Code context
+- Development environment configuration
+- Contribution guidelines
 
 ## Contributing
 
