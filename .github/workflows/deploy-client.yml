@@ -12,6 +12,11 @@ on:
         required: false
         type: string
         default: ''
+      gun_peers:
+        description: 'Gun.js peer URLs (comma-separated). Leave empty for no peers'
+        required: false
+        type: string
+        default: ''
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -66,6 +71,15 @@ jobs:
           fi
           
           echo "🔧 Building with BASE_PATH=${BASE_PATH}"
+          
+          # Set Gun.js peers if provided
+          if [[ -n "${{ github.event.inputs.gun_peers }}" ]]; then
+            export VITE_GUN_PEERS="${{ github.event.inputs.gun_peers }}"
+            echo "🔫 Using Gun peers: ${VITE_GUN_PEERS}"
+          else
+            export VITE_GUN_PEERS=""
+            echo "🔫 No Gun peers configured (local storage only)"
+          fi
           
           # Build client without TypeScript checking due to upstream type errors
           # This is temporary until type issues are resolved in the main codebase

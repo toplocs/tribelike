@@ -28,7 +28,10 @@ You can manually trigger deployment from the Actions tab:
 1. Go to Actions → Deploy Client to GitHub Pages
 2. Click "Run workflow"
 3. (Optional) Enter a custom base path
-4. Click "Run workflow"
+4. (Optional) Enter Gun.js peer URLs (comma-separated)
+   - Leave empty for local storage only (no sync)
+   - Example: `https://example.com/gun,https://peer2.com/gun`
+5. Click "Run workflow"
 
 ### Configuration
 
@@ -52,6 +55,16 @@ The workflow automatically determines the correct base path:
 - **Project pages**: Uses `/repository-name`
 - **Custom domain**: Uses `/`
 - **Manual override**: Specify via workflow input
+
+#### Gun.js Peers
+
+Control data synchronization:
+
+- **Empty (default)**: Local storage only, no peer sync
+- **Custom peers**: Comma-separated list of Gun.js peer URLs
+- **Production example**: `https://yourdomain.com/gun`
+
+Note: When empty, each deployment instance will have isolated data.
 
 ### How It Works
 
