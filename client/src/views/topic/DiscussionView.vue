@@ -25,7 +25,7 @@ import { useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import DiscussionListItem from '@/components/list/DiscussionListItem.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 
 const route = useRoute();
 const interest = inject('interest');

@@ -63,7 +63,7 @@ import { ref, inject, watchEffect, onMounted } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import Divider from '@/components/common/Divider.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicForm from '@/components/forms/Topic.vue';

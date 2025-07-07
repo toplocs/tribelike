@@ -24,7 +24,7 @@
 import { ref, onMounted } from 'vue';
 import BigButton from '@/components/common/BigButton.vue';
 import { useProfile } from '@/composables/profileProvider';
-import relationKeys from '@/assets/relationKeys.ts';
+import { relationKeys } from '@/assets/relationKeys';
 
 const props = defineProps({
 

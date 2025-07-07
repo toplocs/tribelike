@@ -3,6 +3,11 @@
     "private": true,
     "version": "1.0.0",
     "description": "Shared types",
+    "main": "./index.ts",
+    "exports": {
+        "./User": "./User.ts",
+        "./Profile": "./Profile.ts"
+    },
     "devDependencies": {
         "@types/uuid": "^10.0.0",
         "typescript": "^5.8.2"

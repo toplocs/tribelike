@@ -67,7 +67,7 @@ import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
 import ProfileSettingsForm from '@/components/forms/ProfileSettings.vue';
 import Callout from '@/components/common/Callout.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Divider from '@/components/common/Divider.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
