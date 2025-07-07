@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';;
+import SideBar from '@/components/SideBar.vue';
 import Card from '@/components/common/Card.vue';
 import Divider from '@/components/common/Divider.vue';
 import SphereRelations from '@/components/SphereRelations.vue';

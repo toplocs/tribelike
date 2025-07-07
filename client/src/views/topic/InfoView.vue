@@ -5,7 +5,7 @@
         <section class="mb-8">
           <div class="space-y-4">
             <Headline>Other Topics:</Headline>
-            <TopicRelations
+            <SphereRelations
               v-for="relationKey of topicToTopic"
               :relationKey="relationKey"
             />
@@ -48,12 +48,12 @@
 <script setup lang="ts">
 import { ref, inject, computed, watchEffect, onMounted } from 'vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import Divider from '@/components/common/Divider.vue';
 import Card from '@/components/common/Card.vue';
-import TopicRelations from '@/components/TopicRelations.vue';
+import SphereRelations from '@/components/SphereRelations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import Headline from '@/components/common/Headline.vue';
