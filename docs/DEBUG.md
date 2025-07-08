@@ -193,10 +193,29 @@ gun.back('opt.peers')
 gunStats()  // Shows connected peers count
 
 // Example with real Gun.js public peers
-gun.opt({peers: ['https://gun-manhattan.herokuapp.com/gun']})
+gun.opt({peers: ['wss://gun-manhattan.herokuapp.com/gun']})
 
 // Note: This adds to existing peers, doesn't replace them
 // Data will start syncing immediately after peer connection
+
+// IMPORTANT: Use wss:// for WebSocket connections, not https://
+gun.opt({peers: ['wss://example.com/gun']})  // ✅ Correct
+gun.opt({peers: ['https://example.com/gun']}) // ❌ Won't connect
+
+// Troubleshooting: If peers don't connect
+// 1. Check peer format (must be wss:// for WebSockets)
+gun.back('opt.peers')  // Should show: {url: "wss://...", ...}
+
+// 2. Test WebSocket directly
+const ws = new WebSocket('wss://example.com/gun')
+ws.onopen = () => console.log('WebSocket works!')
+ws.onerror = (e) => console.log('WebSocket error:', e)
+
+// 3. Gun.js may not accept peers after initialization
+// Consider reloading with peer in URL parameter (future feature)
+
+// 4. Alternative: Create new Gun instance (experimental)
+const gun2 = Gun({peers: ['wss://example.com/gun']})
 ```
 
 ## Technical Details
