@@ -21,7 +21,10 @@ if (debugMode) {
       console.log('- gunStats()     // Show statistics');
       console.log('- gunRecent()    // Show recent activity');
       console.log('- gunClear()     // Clear logs');
-      console.log('- gunLog         // Full logger object');
+      console.log('- gunGraph()     // Show complete local graph');
+      console.log('- gunStorage()   // Show Gun data in localStorage');
+      console.log('- gunWatch(path) // Watch a specific path');
+      console.log('- gun            // Direct Gun instance access');
     }
   });
 }

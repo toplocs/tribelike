@@ -54,6 +54,10 @@ gunStats()     // Show current statistics
 gunRecent()    // Show last 10 events
 gunRecent(20)  // Show last 20 events
 gunClear()     // Clear log history
+gunGraph()     // Show complete local graph
+gunStorage()   // Show Gun data in localStorage
+gunWatch(path) // Watch a specific path for changes
+gun            // Direct Gun instance access
 ```
 
 ### Full logger object access:
@@ -97,10 +101,20 @@ gunStats()
 ### Monitor Specific Data
 ```javascript
 // Watch for specific paths in real-time
+gunWatch('profile/123')  // Logs all updates to this path
+gunWatch('relations')    // Monitor relations changes
+
+// Check recent activity
 gunRecent()  // Shows recent activity
 
 // Then trigger an action in the app and run again:
 gunRecent()  // See what Gun.js operations happened
+
+// Inspect the local graph
+gunGraph()  // Shows all data nodes in memory
+
+// Check localStorage
+gunStorage()  // Shows all Gun-related keys
 ```
 
 ### Find Performance Issues
@@ -120,6 +134,18 @@ https://example.com?debug=peer
 # Watch the console for:
 # [Gun.PEER] url {status: "disconnected"}
 # [Gun.PEER] url {status: "connected"}
+```
+
+### Direct Gun Access
+```javascript
+// Direct Gun.js operations for advanced debugging
+gun.get('profile/123').once(console.log)  // Read data once
+gun.get('relations').map().on(console.log) // Monitor all relations
+
+// Check Gun internals
+gun._.opt      // Gun options
+gun._.graph    // In-memory graph
+gun.back('opt.peers')  // Peer connections
 ```
 
 ## Technical Details

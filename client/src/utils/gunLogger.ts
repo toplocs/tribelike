@@ -54,6 +54,12 @@ class GunLogger {
     (window as any).gunStats = () => this.printStats();
     (window as any).gunRecent = (count?: number) => this.showRecent(count);
     (window as any).gunClear = () => this.clear();
+    (window as any).gunGraph = () => this.showGraph();
+    (window as any).gunStorage = () => this.showStorage();
+    (window as any).gunWatch = (path: string) => this.watch(path);
+    
+    // Expose gun instance for direct access in debug mode
+    (window as any).gun = gun;
   }
   
   private interceptGunMethods() {
@@ -193,6 +199,36 @@ class GunLogger {
       console.log(`[${event.type}] ${event.path} - ${timeAgo}`);
     });
     console.groupEnd();
+  }
+  
+  // Show complete local graph
+  showGraph() {
+    const graph = gun._.graph || {};
+    console.group('%c🌐 Gun Graph', 'color: #009688; font-weight: bold');
+    console.log(`Total nodes: ${Object.keys(graph).length}`);
+    console.log('Graph:', graph);
+    console.groupEnd();
+    return graph;
+  }
+  
+  // Show Gun data in localStorage
+  showStorage() {
+    console.group('%c💾 Gun Storage', 'color: #FF5722; font-weight: bold');
+    const gunKeys = Object.keys(localStorage).filter(key => key.startsWith('gun/') || key === 'radata');
+    console.log(`Gun keys in localStorage: ${gunKeys.length}`);
+    gunKeys.forEach(key => {
+      const value = localStorage.getItem(key);
+      console.log(`${key}: ${value?.substring(0, 100)}${value && value.length > 100 ? '...' : ''}`);
+    });
+    console.groupEnd();
+  }
+  
+  // Watch a specific path
+  watch(path: string) {
+    console.log(`%c👁️  Watching: ${path}`, 'color: #E91E63; font-weight: bold');
+    gun.get(path).on((data: any, key: string) => {
+      console.log(`%c[WATCH] ${path}`, 'color: #E91E63; font-weight: bold', { key, data, timestamp: Date.now() });
+    });
   }
 }
 
