@@ -1,5 +1,6 @@
 .env
-.cache
+server/data/*
+server/ra-data/*
 .cache/**/*
 
 server/data/*
