@@ -172,6 +172,33 @@ gun._.graph    // In-memory graph
 gun.back('opt.peers')  // Peer connections
 ```
 
+### Adding Peers Dynamically
+
+If you deployed to GitHub Pages without peers, you can add them later via the browser console:
+
+```javascript
+// First, enable debug mode to access gun instance
+// Visit: https://toplocs.github.io/tribelike/?debug=true#/
+
+// Add a single peer
+gun.opt({peers: ['https://example.com/gun']})
+
+// Add multiple peers
+gun.opt({peers: ['https://peer1.com/gun', 'https://peer2.com/gun']})
+
+// Check current peers and their status
+gun.back('opt.peers')
+
+// Monitor peer connection status
+gunStats()  // Shows connected peers count
+
+// Example with real Gun.js public peers
+gun.opt({peers: ['https://gun-manhattan.herokuapp.com/gun']})
+
+// Note: This adds to existing peers, doesn't replace them
+// Data will start syncing immediately after peer connection
+```
+
 ## Technical Details
 
 The debug logger:
