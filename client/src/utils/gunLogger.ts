@@ -58,11 +58,20 @@ class GunLogger {
   
   private interceptGunMethods() {
     const originalGet = gun.get.bind(gun);
+    const originalPut = gun.put.bind(gun);
     
     // Intercept .get() calls
     gun.get = (...args: any[]) => {
       this.log('GET', args[0], { timestamp: Date.now() });
       return originalGet(...args);
+    };
+    
+    // Intercept .put() calls
+    gun.put = (...args: any[]) => {
+      const data = args[0];
+      const key = typeof data === 'object' && data ? Object.keys(data)[0] : 'data';
+      this.log('PUT', key, { timestamp: Date.now(), size: JSON.stringify(data).length });
+      return originalPut(...args);
     };
     
     // Intercept .on() for monitoring subscriptions

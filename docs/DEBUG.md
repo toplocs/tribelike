@@ -29,8 +29,9 @@ There are two ways to enable debug logging in production:
 Debug specific Gun.js operations:
 - `?debug=peer` - Only peer connections
 - `?debug=get` - Only GET operations
+- `?debug=put` - Only PUT operations
 - `?debug=subscribe` - Only subscriptions
-- `?debug=get,peer` - Multiple types (comma-separated)
+- `?debug=get,put` - Multiple types (comma-separated)
 
 ### Examples
 ```bash
@@ -68,13 +69,15 @@ gunLog.clear()        // Same as gunClear()
 
 ### Gun.js Operations
 - **GET** (🟢 green) - Data requests
+- **PUT** (🔵 blue) - Data writes (includes size)
 - **SUBSCRIBE** (🟣 purple) - Real-time subscriptions
 - **PEER** (🟠 orange) - Peer connection status
 
 ### Example Output
 ```
 [Gun.GET] profile/123 {timestamp: 1701234567890}
-[Gun.SUBSCRIBE] relations {timestamp: 1701234567891}
+[Gun.PUT] profile {timestamp: 1701234567891, size: 256}
+[Gun.SUBSCRIBE] relations {timestamp: 1701234567892}
 [Gun.PEER] https://example.com/gun {status: "connected"}
 ```
 
