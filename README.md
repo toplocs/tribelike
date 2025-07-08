@@ -85,6 +85,7 @@ pnpm lint
 
 ### Tribelike-Specific Documentation
 - **[Development Guide](./docs/DEVELOPMENT.md)** - Tribelike technical details, data architecture, and development patterns
+- **[Debug Tools](./docs/DEBUG.md)** - Gun.js debug logging and monitoring tools
 
 ## New to TopLocs?
 

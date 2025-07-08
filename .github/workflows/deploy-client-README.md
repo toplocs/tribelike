@@ -31,7 +31,10 @@ You can manually trigger deployment from the Actions tab:
 4. (Optional) Enter Gun.js peer URLs (comma-separated)
    - Leave empty for local storage only (no sync)
    - Example: `https://example.com/gun,https://peer2.com/gun`
-5. Click "Run workflow"
+5. (Optional) Enable debug mode
+   - Check the box to enable Gun.js debug logging in the deployment
+   - Useful for troubleshooting production issues
+6. Click "Run workflow"
 
 ### Configuration
 
@@ -65,6 +68,14 @@ Control data synchronization:
 - **Production example**: `https://yourdomain.com/gun`
 
 Note: When empty, each deployment instance will have isolated data.
+
+#### Debug Mode
+
+Enable comprehensive Gun.js logging:
+
+- **Build-time flag**: Enables debug logging for all users
+- **Alternative**: Users can always add `?debug=true` to any deployment
+- **Use case**: Troubleshooting production deployments
 
 ### How It Works
 
