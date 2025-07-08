@@ -52,25 +52,49 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         
+      - name: Detect GitHub Pages URL
+        id: pages-url
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Try to get the GitHub Pages URL via API
+          if pages_url=$(gh api "repos/${{ github.repository }}/pages" --jq '.html_url' 2>/dev/null); then
+            echo "📍 GitHub Pages URL detected: $pages_url"
+            echo "pages_url=$pages_url" >> $GITHUB_OUTPUT
+            
+            # Determine base path from the actual Pages URL
+            if [[ "$pages_url" == *".github.io/${{ github.event.repository.name }}"* ]]; then
+              echo "📂 Standard project pages detected"
+              echo "auto_base_path=/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+            else
+              echo "🌐 Custom domain or user/org pages detected"
+              echo "auto_base_path=/" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ Could not detect Pages URL (Pages might not be enabled yet)"
+            # Fallback to repository name logic
+            if [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
+              echo "auto_base_path=/" >> $GITHUB_OUTPUT
+            else
+              echo "auto_base_path=/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+            fi
+          fi
+        
       - name: Build project
         run: |
-          # Automatically set base path for GitHub Pages
-          # - For custom domains or user/org pages (*.github.io): use root path "/"
-          # - For project pages: use repository name as base path
-          # - Allow override via workflow input
-          
+          # Set base path - manual override takes precedence over auto-detection
           if [[ -n "${{ github.event.inputs.base_path }}" ]]; then
             # Use custom base path if provided
             export BASE_PATH="${{ github.event.inputs.base_path }}"
-          elif [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
-            # User/org pages use root path
-            export BASE_PATH="/"
+            echo "🔧 Using manual base path override: ${BASE_PATH}"
           else
-            # Project pages use repository name
-            export BASE_PATH="/${{ github.event.repository.name }}"
+            # Use auto-detected base path from Pages API
+            export BASE_PATH="${{ steps.pages-url.outputs.auto_base_path }}"
+            echo "🔧 Using auto-detected base path: ${BASE_PATH}"
+            if [[ -n "${{ steps.pages-url.outputs.pages_url }}" ]]; then
+              echo "📍 Pages URL: ${{ steps.pages-url.outputs.pages_url }}"
+            fi
           fi
-          
-          echo "🔧 Building with BASE_PATH=${BASE_PATH}"
           
           # Set Gun.js peers if provided
           if [[ -n "${{ github.event.inputs.gun_peers }}" ]]; then
