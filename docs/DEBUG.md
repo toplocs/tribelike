@@ -180,11 +180,11 @@ If you deployed to GitHub Pages without peers, you can add them later via the br
 // First, enable debug mode to access gun instance
 // Visit: https://toplocs.github.io/tribelike/?debug=true#/
 
-// Add a single peer
-gun.opt({peers: ['https://example.com/gun']})
+// Add a single peer (use wss:// for WebSocket connections)
+gun.opt({peers: ['wss://example.com/gun']})
 
 // Add multiple peers
-gun.opt({peers: ['https://peer1.com/gun', 'https://peer2.com/gun']})
+gun.opt({peers: ['wss://peer1.com/gun', 'wss://peer2.com/gun']})
 
 // Check current peers and their status
 gun.back('opt.peers')
