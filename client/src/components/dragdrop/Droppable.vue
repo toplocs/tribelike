@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useDroppable, DnDOperations } from '@vue-dnd-kit/core';
+import { useDroppable } from '@vue-dnd-kit/core';
 
 const emit = defineEmits<{
   (e: 'drop'): void;
