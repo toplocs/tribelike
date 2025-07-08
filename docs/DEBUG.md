@@ -25,6 +25,10 @@ There are two ways to enable debug logging in production:
 - `?debug=silent` - Logger active but no console output
 - `&quiet` - Suppress activation messages
 
+**Important for Hash Routing**: Query parameters must come BEFORE the hash (#):
+- ✅ Correct: `https://example.com?debug=true#/login`
+- ❌ Wrong: `https://example.com#/login?debug=true`
+
 ### Filtered Debugging
 Debug specific Gun.js operations:
 - `?debug=peer` - Only peer connections
@@ -34,6 +38,8 @@ Debug specific Gun.js operations:
 - `?debug=get,put` - Multiple types (comma-separated)
 
 ### Examples
+
+**With History Mode (clean URLs):**
 ```bash
 # Full debug
 https://example.com?debug=true
@@ -43,6 +49,24 @@ https://example.com?debug=peer&quiet
 
 # Silent mode (logs stored but not displayed)
 https://example.com?debug=silent
+```
+
+**With Hash Mode (default for GitHub Pages):**
+```bash
+# Full debug on landing page
+https://example.com?debug=true#/
+
+# Debug on login page
+https://example.com?debug=true#/login
+
+# Only peer connections on profiles page
+https://example.com?debug=peer#/profiles
+
+# Multiple parameters
+https://example.com?debug=true&quiet#/sphere/123
+
+# GitHub Pages default URL example
+https://toplocs.github.io/tribelike/?debug=true#/login
 ```
 
 ## Console Commands
