@@ -56,7 +56,7 @@ export function sphereProvider() {
 
       setTimeout(() => resolve(results), 300);
     });
-  };
+  }
 
   function incrementLastChar(str: string) { //utils
     const last = str.slice(-1);

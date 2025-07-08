@@ -1,59 +1,61 @@
 <template>
   <Container>
-    <div class="w-full space-y-4">
-      <Card>
-        <Headline>Settings</Headline>
-        <ProfileSettingsForm
-          :profile="profile"
-        />
-      </Card>
+    <div class="w-full flex flex-row gap-4">
+      <div class="w-full space-y-4">
+        <Card>
+          <Headline>Settings</Headline>
+          <ProfileSettingsForm
+            :profile="profile"
+          />
+        </Card>
 
-      <Card>
-        <Headline>{{ profile?.username }}'s Relations</Headline>
-        <div class="mb-4">
-          <AddRelations />
-        </div>
+        <Card>
+          <Headline>{{ profile?.username }}'s Relations</Headline>
+          <div class="mb-4">
+            <AddRelations />
+          </div>
 
-        <DragDropRelations
-          :relationKeys="profileRelations"
-        />
-      </Card>
-    </div>
-      
-    <Sidebar class="space-y-4">
-      <div class="flex flex-row items-center justify-between">
-        <Title>
-          Delete Profile
-        </Title>
-        <div class="ml-auto">
-          <Dialog>
-            <template #trigger="{ openDialog }">
-              <IconButton :icon="TrashIcon"
-                class="text-red-200 hover:text-red-400"
-                @click.stop="openDialog"
-              />
-            </template>
-  
-            <template #content="{ closeDialog }">
-              <ConfirmDialog
-                text="Do you want to delete the profile?"
-                :closeDialog="(x) => {
-                  if (x == true) onDelete();
-                  closeDialog();
-                }"
-              />
-            </template>
-          </Dialog>
-        </div>
+          <DragDropRelations
+            :relationKeys="profileRelations"
+          />
+        </Card>
       </div>
-      <Divider />
+        
+      <Sidebar class="min-w-[200px] space-y-4">
+        <div class="flex flex-row items-center justify-between">
+          <Title>
+            Delete Profile
+          </Title>
+          <div class="ml-auto">
+            <Dialog>
+              <template #trigger="{ openDialog }">
+                <IconButton :icon="TrashIcon"
+                  class="text-red-200 hover:text-red-400"
+                  @click.stop="openDialog"
+                />
+              </template>
+    
+              <template #content="{ closeDialog }">
+                <ConfirmDialog
+                  text="Do you want to delete the profile?"
+                  :closeDialog="(x) => {
+                    if (x == true) onDelete();
+                    closeDialog();
+                  }"
+                />
+              </template>
+            </Dialog>
+          </div>
+        </div>
+        <Divider />
 
-      <button
-        @click="handleLogout"
-        className="inline-flex justify-center w-full mt-2 px-4 py-2 text-sm font-medium border border-red-600 dark:border-red-400 text-red-600 dark:text-red-400 bg-transparent rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
-      > Logout
-      </button>
-    </Sidebar>
+        <button
+          @click="handleLogout"
+          className="inline-flex justify-center w-full mt-2 px-4 py-2 text-sm font-medium border border-red-600 dark:border-red-400 text-red-600 dark:text-red-400 bg-transparent rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400"
+        > Logout
+        </button>
+      </Sidebar>
+    </div>
 
   </Container>
 </template>

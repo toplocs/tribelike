@@ -53,12 +53,14 @@ The workflow will automatically detect your repository structure and deploy acco
 
 #### Base Path
 
-The workflow automatically determines the correct base path:
+The workflow automatically determines the correct base path by querying the GitHub Pages API:
 
+- **Custom domain**: Uses `/` (detected via Pages API)
 - **User/Org pages** (`username.github.io`): Uses `/`
 - **Project pages**: Uses `/repository-name`
-- **Custom domain**: Uses `/`
 - **Manual override**: Specify via workflow input
+
+The workflow queries GitHub's Pages API to detect your actual deployment URL, ensuring correct base path detection even with custom domains configured in GitHub Pages settings.
 
 #### Gun.js Peers
 
@@ -84,6 +86,14 @@ Control how URLs are handled:
   - Requires server-side routing configuration
   - Better for SEO and user experience
   - Use only if your hosting supports SPA routing
+
+#### Debug Mode
+
+Enable comprehensive Gun.js logging:
+
+- **Build-time flag**: Enables debug logging for all users
+- **Alternative**: Users can always add `?debug=true` to any deployment
+- **Use case**: Troubleshooting production deployments
 
 ### How It Works
 
