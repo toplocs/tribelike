@@ -17,6 +17,14 @@ on:
         required: false
         type: string
         default: ''
+      router_mode:
+        description: 'Router mode: hash (default, works on all static hosts) or history (requires server config)'
+        required: false
+        type: choice
+        options:
+          - hash
+          - history
+        default: 'hash'
       debug_mode:
         description: 'Enable Gun.js debug logging (true/false). Adds ?debug=true to deployment'
         required: false
@@ -109,6 +117,10 @@ jobs:
             export VITE_GUN_PEERS=""
             echo "🔫 No Gun peers configured (local storage only)"
           fi
+          
+          # Set router mode (defaults to hash for static hosting)
+          export VITE_ROUTER_MODE="${{ github.event.inputs.router_mode || 'hash' }}"
+          echo "🔧 Using router mode: ${VITE_ROUTER_MODE}"
           
           # Set debug mode if requested
           if [[ "${{ github.event.inputs.debug_mode }}" == "true" ]]; then

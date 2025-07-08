@@ -31,10 +31,11 @@ You can manually trigger deployment from the Actions tab:
 4. (Optional) Enter Gun.js peer URLs (comma-separated)
    - Leave empty for local storage only (no sync)
    - Example: `https://example.com/gun,https://peer2.com/gun`
-5. (Optional) Enable debug mode
-   - Check the box to enable Gun.js debug logging in the deployment
-   - Useful for troubleshooting production issues
-6. Click "Run workflow"
+5. (Optional) Select router mode:
+   - **hash** (default): Works on all static hosts, URLs like `/#/login`
+   - **history**: Clean URLs like `/login`, requires server configuration
+6. (Optional) Enable debug mode for Gun.js logging
+7. Click "Run workflow"
 
 ### Configuration
 
@@ -71,6 +72,21 @@ Control data synchronization:
 
 Note: When empty, each deployment instance will have isolated data.
 
+#### Router Mode
+
+Control how URLs are handled:
+
+- **hash mode** (default): 
+  - URLs use hash fragments: `https://example.com/#/login`
+  - Works on any static hosting (GitHub Pages, S3, etc.)
+  - No server configuration needed
+  
+- **history mode**:
+  - Clean URLs: `https://example.com/login`
+  - Requires server-side routing configuration
+  - Better for SEO and user experience
+  - Use only if your hosting supports SPA routing
+
 #### Debug Mode
 
 Enable comprehensive Gun.js logging:
@@ -105,3 +121,8 @@ Enable comprehensive Gun.js logging:
 - Ensure GitHub Pages is enabled in repository settings
 - Wait a few minutes for the deployment to propagate
 - Check that your base path matches your Pages configuration
+
+**404 errors on direct URL access (e.g., /login)**
+- This happens with history mode on static hosts
+- Solution: Use hash mode (default) for GitHub Pages
+- Alternative: Deploy to a host with SPA routing support
