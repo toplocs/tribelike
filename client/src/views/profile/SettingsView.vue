@@ -19,20 +19,6 @@
             :relationKeys="profileRelations"
           />
         </Card>
-
-        <Card>
-          <div class="mb-4">
-            <Headline>Developer Area</Headline>
-            <ApiKeys />
-          </div>
-
-          <Divider />
-
-          <div class="my-4">
-            <Headline>Plugins</Headline>
-            <ManagePlugins />
-          </div>
-        </Card>
       </div>
         
       <Sidebar class="min-w-[200px] space-y-4">
@@ -89,8 +75,6 @@ import IconButton from '@/components/common/IconButton.vue';
 import Headline from '@/components/common/Headline.vue';
 import AddRelations from '@/components/AddRelations.vue';
 import DragDropRelations from '@/components/dragdrop/Relations.vue';
-import ApiKeys from '@/components/ApiKeys.vue';
-import ManagePlugins from '@/components/ManagePlugins.vue';
 import Dialog from '@/components/dialog/DialogComponent.vue';
 import ConfirmDialog from '@/components/dialog/ConfirmDialog.vue';
 import { useUser } from '@/composables/userProvider';
