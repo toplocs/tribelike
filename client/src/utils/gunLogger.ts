@@ -18,8 +18,8 @@ class GunLogger {
   constructor() {
     const params = new URLSearchParams(location.search);
     
-    // Enable for dev or with ?debug=true
-    this.enabled = import.meta.env.DEV || params.has('debug');
+    // Enable for dev, with ?debug=true, or via build-time flag
+    this.enabled = import.meta.env.DEV || params.has('debug') || import.meta.env.VITE_DEBUG_MODE === 'true';
     
     if (!this.enabled) return;
     

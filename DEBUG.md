@@ -6,10 +6,17 @@
 Debug tools are automatically enabled when running `pnpm dev`.
 
 ### Production
-Add `?debug=true` to the URL to enable debug logging in production:
-```
-https://example.com?debug=true
-```
+There are two ways to enable debug logging in production:
+
+1. **URL Parameter** - Add `?debug=true` to any deployment:
+   ```
+   https://example.com?debug=true
+   ```
+
+2. **Build-time Flag** - Enable for all users via GitHub Actions:
+   - When deploying, check "Enable debug mode" in workflow inputs
+   - Sets `VITE_DEBUG_MODE=true` during build
+   - Useful for troubleshooting deployment issues
 
 ## URL Parameters
 

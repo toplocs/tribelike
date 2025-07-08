@@ -10,7 +10,7 @@ import VueDnDKitPlugin from '@vue-dnd-kit/core';
 
 // Debug mode activation (?debug=true works in production!)
 const params = new URLSearchParams(location.search);
-const debugMode = import.meta.env.DEV || params.has('debug');
+const debugMode = import.meta.env.DEV || params.has('debug') || import.meta.env.VITE_DEBUG_MODE === 'true';
 const quietMode = params.has('quiet');
 
 if (debugMode) {

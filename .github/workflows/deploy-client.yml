@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: ''
+      debug_mode:
+        description: 'Enable Gun.js debug logging (true/false). Adds ?debug=true to deployment'
+        required: false
+        type: boolean
+        default: false
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -79,6 +84,12 @@ jobs:
           else
             export VITE_GUN_PEERS=""
             echo "🔫 No Gun peers configured (local storage only)"
+          fi
+          
+          # Set debug mode if requested
+          if [[ "${{ github.event.inputs.debug_mode }}" == "true" ]]; then
+            export VITE_DEBUG_MODE="true"
+            echo "🐛 Debug mode enabled"
           fi
           
           # Build client without TypeScript checking due to upstream type errors
