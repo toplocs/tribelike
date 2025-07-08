@@ -7,6 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig({
+  base: process.env.BASE_PATH || '/',
   plugins: [
     vue(),
     vueJsx(),

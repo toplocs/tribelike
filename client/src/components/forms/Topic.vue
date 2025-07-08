@@ -60,7 +60,7 @@ import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';

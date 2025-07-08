@@ -33,7 +33,7 @@ import axios from 'axios';
 import { ref, inject, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 
 import Plugins from '@/components/plugins/Plugins.vue';

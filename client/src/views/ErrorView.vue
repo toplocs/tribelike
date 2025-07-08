@@ -12,7 +12,7 @@
 import { ref, inject } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 

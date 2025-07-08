@@ -27,7 +27,7 @@ import { ref, inject, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import FriendListItem from '@/components/list/FriendListItem.vue';
 import SphereForm from '@/components/forms/Sphere.vue';
 </script>

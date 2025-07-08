@@ -6,38 +6,18 @@ import path from 'path';
 import fs from 'fs';
 import https from "https";
 import http from "http";
-import { sessionMiddleware } from './middleware';
-import routes from './routes';
 import { initGun } from './gun';
-
-import swaggerUi from "swagger-ui-express";
-import swaggerOutput from "./swagger_output.json";
 
 import { 
   corsOptions, 
   rpID, port, enable_https, certificate } from './config';
 
-declare global {
-  namespace Express {
-    interface Request {
-      session: {
-        userId: string;
-        loggedIn: boolean;
-        token: string;
-        expires: Date;
-      }
-    }
-  }
-}
 const app = express();
 
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-
-// Serve docs 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 // Serve static client
 const clientBuildPath = path.join(__dirname, '../../client/dist');
@@ -49,11 +29,6 @@ if (fs.existsSync(clientBuildPath)) {
     res.send(`Client build folder does not exist. Not serving client`);
   });
 }
-
-// Read Authentication Token from Header and add session to request
-app.use(sessionMiddleware);
-
-app.use('/', routes);
 
 function startServer() {
   if (enable_https) {

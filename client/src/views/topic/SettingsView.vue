@@ -48,13 +48,13 @@
 import { ref, inject, watchEffect, onMounted } from 'vue';
 import Card from '@/components/common/Card.vue';
 import Container from '@/components/common/Container.vue';
-import Sidebar from '@/components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import Title from '@/components/common/Title.vue';
 import Headline from '@/components/common/Headline.vue';
 import TopicForm from '@/components/forms/Topic.vue';
 import PluginListItem from '@/components/list/PluginListItem.vue';
 import AddRelations from '@/components/AddRelations.vue';
-import DragDropRelations from '@/components/DragDropRelations.vue';
+import DragDropRelations from '@/components/dragdrop/Relations.vue';
 import ProfileRelations from '@/components/ProfileRelations.vue';
 import { useTopic } from '@/composables/topicProvider';
 import { usePlugins } from '@/composables/pluginProvider';
