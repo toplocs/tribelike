@@ -15,31 +15,48 @@
     No plugins found.
   </div>
 
-  <PluginForm :selected="selected" @plugin-added="fetchPlugins" />
+  <div ref="formRef">
+    <PluginForm
+      :selected="selected"
+      :locked="selected && true"
+      @plugins-changed="handleChange"
+    />
+  </div>
 </template>
 
 //
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import PluginItem from '@/components/list/PluginItem.vue';
 import PluginForm from '@/components/forms/Plugin.vue';
 import gun from '@/services/gun'; 
 
 const plugins = ref<any[]>([]);
 const selected = ref(null);
+const formRef = ref<HTMLElement | null>(null);
+
+const handleChange = () => {
+  fetchPlugins();
+  selected.value = null;
+}
 
 const fetchPlugins = () => {
   const pluginList: any[] = [];
 
-  gun.get('plugins')
+  gun.user()
+  .get('plugins')
   .map()
-  .once((data) => {
-    if (data?.url) {
+  .once((data, key) => {
+    if (data) {
       pluginList.push(data);
       plugins.value = [...pluginList];
     }
   });
 }
+
+watch(selected, async (newVal, oldVal) => {
+  formRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
 onMounted(fetchPlugins);
 </script>

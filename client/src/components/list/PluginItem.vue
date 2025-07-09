@@ -4,7 +4,14 @@
     @click="$emit('select', plugin)"
   >
     <div class="flex items-center justify-between">
-      <strong class="text-gray-900 dark:text-gray-100">{{ plugin.name }}</strong>
+      <span>
+        <strong class="text-gray-900 dark:text-gray-100">
+          {{ plugin.name }}
+        </strong>
+        <span class="text-gray-500 text-sm">
+          ({{ plugin.id }})
+        </span>
+      </span>
       <span
         :class="[
           'inline-block w-3 h-3 rounded-full',
@@ -16,6 +23,7 @@
   </li>
 </template>
 
+//
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 

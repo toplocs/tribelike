@@ -53,7 +53,6 @@ const loadPlugin = async () => {
     }
   } catch (e) {
     console.error('Failed to load remote plugin:', e);
-
   }
 };
 
