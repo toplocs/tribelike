@@ -9,7 +9,7 @@ export function pluginProvider() {
   const tabs = ref<Tab[]>([]);
 
   const createPlugin = async (config: Object, url: string) => {
-    const id = crypto.randomUUID();
+    const id = crypto.randomUUID(); //content id über die url
     const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
     const plugin = {
       id: id,
