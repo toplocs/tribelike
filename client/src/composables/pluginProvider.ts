@@ -37,8 +37,23 @@ export function pluginProvider() {
 
   const removePlugin = async (pluginId: string) => {
     const node = gun.get(`plugin/${pluginId}`);
+
+    node.get('paths').map().once((path, key) => {
+      node.get('paths').get(key).put(null);
+    });
+
+    node.get('slots').map().once((slot, key) => {
+      node.get('slots').get(key).put(null);
+    });
+
+    node.get('tabs').map().once((tab, key) => {
+      node.get('tabs').get(key).put(null);
+    });
+
     gun.user().get('plugins').unset(node);
     gun.get('plugins').get(pluginId).unset(node);
+
+    node.put(null);
   }
 
 
