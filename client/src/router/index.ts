@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 
 import LandingView from '@/views/LandingView.vue';
 import LoginView from '@/views/LoginView.vue';
@@ -28,8 +28,19 @@ import PluginLoaderView from '@/views/PluginLoaderView.vue';
 
 import { addPluginRoutes } from './plugins';
 
+// Determine router mode based on environment variable
+const routerMode = import.meta.env.VITE_ROUTER_MODE || 'hash';
+const history = routerMode === 'history' 
+  ? createWebHistory(import.meta.env.BASE_URL)
+  : createWebHashHistory();
+
+// Log router mode in development
+if (import.meta.env.DEV) {
+  console.log(`🔧 Router mode: ${routerMode}`);
+}
+
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history,
   scrollBehavior(to, from, savedPosition) {
     return { top: 0, behavior: 'smooth' }
   },
