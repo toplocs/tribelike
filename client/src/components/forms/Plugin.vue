@@ -157,9 +157,7 @@ const formData = ref({
 const successMessage = ref('');
 const errorMessage = ref('');
 
-const handleRemove = async () => {
-  await removePlugin(selected?.id);
-  emit('plugins-changed');
+const resetForm = () => {
   formData.value = {
     id: '',
     name: '',
@@ -172,6 +170,12 @@ const handleRemove = async () => {
   errorMessage.value = '';
 }
 
+const handleRemove = async () => {
+  await removePlugin(selected?.id);
+  emit('plugins-changed');
+  resetForm();
+}
+
 const handleSubmit = async () => {
   errorMessage.value = '';
   const { name, url, slots, paths, tabs } = formData.value;
@@ -181,7 +185,7 @@ const handleSubmit = async () => {
     return;
   }
   const config = await loadPlugin({ name, url });
-  console.log(config);
+  resetForm();
   if (config) {
     await createPlugin(config, url);
     successMessage.value = 'Plugin has been created!';
