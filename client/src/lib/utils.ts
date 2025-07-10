@@ -13,3 +13,7 @@ export const bufferDecode = (value) => {
     .padEnd(value.length + (4 - (value.length % 4)) % 4, "=");
   return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
 };
+
+export function cn(...classes: unknown[]) {
+  return classes.filter(Boolean).join(' ')
+};
