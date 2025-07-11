@@ -202,8 +202,9 @@ const loadPlugin = async (plugin: Object) => {
         format: 'esm',
         from: 'vite'
       });
-      const module = await getRemote(plugin.name, './config');
+      const module = await getRemote(plugin.name, './PluginConfig');
       const config = await unwrapModule(module);
+      console.log(config)
 
       return config;
     }

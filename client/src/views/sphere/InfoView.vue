@@ -91,10 +91,11 @@ const type = computed(() => {
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
 const pluginSlots = computed(() => (
-  slots.value.filter(x => x.slot == 'InfoView')
+  slots.value.filter(x => x.page == 'Info')
 ));
 
 onMounted(async () => {
+  console.log(pluginSlots.value)
   tab.value = 'Info';
 });
 </script>

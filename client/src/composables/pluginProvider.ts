@@ -8,29 +8,31 @@ export function pluginProvider() {
   const slots = ref<Slot[]>([]);
   const tabs = ref<Tab[]>([]);
 
-  const createPlugin = async (config: Object, url: string) => {
-    const id = crypto.randomUUID(); //content id über die url
-    const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+  const createPlugin = async (config, url) => {
+    const id = config.id || crypto.randomUUID();
+    const hash = CryptoJS.SHA256(config.author).toString(CryptoJS.enc.Hex);
+
     const plugin = {
       id: id,
       name: config.name,
-      url: url,
-      pubkey: config.pubkey,
-    }
+      author: config.author,
+      description: config.description,
+      url: url || config.url,
+      version: config.version,
+      hash: hash
+    };
 
     const node = gun.get(`plugin/${id}`).put(plugin);
-    config.paths.forEach(path => {
-      node.get('paths').set(path);
-    });
-    config.slots.forEach(slot => {
-      node.get('slots').set(slot);
-    });
-    config.tabs.forEach(tab => {
-      node.get('tabs').set(tab);
-    });
+
+    console.log(config.slots);
+    
+    node.get('slots').put(config.slots);
+    node.get('paths').put(config.paths);
+    node.get('tabs').put(config.tabs);
+
 
     gun.user().get('plugins').set(node);
-    gun.get('plugins').get(id).set(node);
+    gun.get('plugins').get(id).put(node);
 
     return node;
   }
@@ -61,26 +63,32 @@ export function pluginProvider() {
     gun.get('plugins')
     .map()
     .once(plugin => {
+      if (plugin.name == 'Link') console.log(plugin)
+
       if (plugin) {
         plugins.value?.push(plugin);
-        gun.get(plugin.paths)
-        .map()
+
+        gun.get(`plugin/${plugin.id}`)
+        .get('paths')
         .once(data => {
           if (data) {
             routes.value?.push(data);
           }
         });
 
-        gun.get(plugin.slots)
+        gun.get(`plugin/${plugin.id}`)
+        .get('slots')
         .map()
         .once(data => {
+          console.log(data);
           if (data) {
             const slot = { plugin: plugin, ...data };
             slots.value?.push(slot);
           }
         });
 
-        gun.get(plugin.tabs)
+        gun.get(`plugin/${plugin.id}`)
+        .get('tabs')
         .map()
         .once(data => {
           if (data) {
