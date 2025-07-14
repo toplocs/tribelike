@@ -232,6 +232,7 @@ const loadSelectedPlugin = (pluginId: string) => {
     }
   });
   chain.get('slots').map().once((data: any) => {
+    console.log(data);
     if (data) formData.value.slots.push({ ...data });
   });
   chain.get('paths').map().once((data: any) => {

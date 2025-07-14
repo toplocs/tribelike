@@ -26,13 +26,13 @@ export function pluginProvider() {
 
     console.log(config.slots);
     
-    node.get('slots').put(config.slots);
-    node.get('paths').put(config.paths);
-    node.get('tabs').put(config.tabs);
+    config.slots?.forEach(slot => node.get('slots').set(slot));
+    config.paths?.forEach(path => node.get('paths').set(path));
+    config.tabs?.forEach(tab => node.get('tabs').set(tab));
 
 
     gun.user().get('plugins').set(node);
-    gun.get('plugins').get(id).put(node);
+    gun.get('plugins').set(node);
 
     return node;
   }
@@ -63,13 +63,12 @@ export function pluginProvider() {
     gun.get('plugins')
     .map()
     .once(plugin => {
-      if (plugin.name == 'Link') console.log(plugin)
-
       if (plugin) {
         plugins.value?.push(plugin);
 
         gun.get(`plugin/${plugin.id}`)
         .get('paths')
+        .map()
         .once(data => {
           if (data) {
             routes.value?.push(data);
@@ -80,7 +79,6 @@ export function pluginProvider() {
         .get('slots')
         .map()
         .once(data => {
-          console.log(data);
           if (data) {
             const slot = { plugin: plugin, ...data };
             slots.value?.push(slot);
