@@ -6,9 +6,11 @@ import 'gun/lib/radisk'; // optional: if you're using radisk storage
 import 'gun/lib/store'; // optional: if using indexed storage
 import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
 const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
 
 const gun = Gun({ peers, rad: true });
+const root = gun.get(`toplocs_v${APP_VERSION}`);
 
 gun.clear = function() {
 	// Clear localStorage
@@ -36,4 +38,4 @@ gun.lookup = async function(key: string, id: string) {
   return data ? { id, ...data } : null;
 }
 
-export default gun;
+export default root;

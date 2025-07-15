@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto flex flex-col">
+  <div class="min-w-sm mx-auto flex flex-col">
     <FindSphere />
     <br />
 
@@ -21,6 +21,7 @@
     </div>
   </div>
 </template>
+
 //
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
