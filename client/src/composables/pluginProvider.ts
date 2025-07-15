@@ -7,7 +7,7 @@ export function pluginProvider() {
   const routes = ref<Route[]>([]);
   const slots = ref<Slot[]>([]);
   const tabs = ref<Tab[]>([]);
-
+  
   const createPlugin = async (config, url) => {
     const id = config.id || crypto.randomUUID();
     const hash = CryptoJS.SHA256(config.author).toString(CryptoJS.enc.Hex);

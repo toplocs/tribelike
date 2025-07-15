@@ -17,6 +17,19 @@ on:
         required: false
         type: string
         default: ''
+      router_mode:
+        description: 'Router mode: hash (default, works on all static hosts) or history (requires server config)'
+        required: false
+        type: choice
+        options:
+          - hash
+          - history
+        default: 'hash'
+      debug_mode:
+        description: 'Enable Gun.js debug logging (true/false). Adds ?debug=true to deployment'
+        required: false
+        type: boolean
+        default: false
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -52,25 +65,49 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         
+      - name: Detect GitHub Pages URL
+        id: pages-url
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Try to get the GitHub Pages URL via API
+          if pages_url=$(gh api "repos/${{ github.repository }}/pages" --jq '.html_url' 2>/dev/null); then
+            echo "📍 GitHub Pages URL detected: $pages_url"
+            echo "pages_url=$pages_url" >> $GITHUB_OUTPUT
+            
+            # Determine base path from the actual Pages URL
+            if [[ "$pages_url" == *".github.io/${{ github.event.repository.name }}"* ]]; then
+              echo "📂 Standard project pages detected"
+              echo "auto_base_path=/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+            else
+              echo "🌐 Custom domain or user/org pages detected"
+              echo "auto_base_path=/" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ Could not detect Pages URL (Pages might not be enabled yet)"
+            # Fallback to repository name logic
+            if [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
+              echo "auto_base_path=/" >> $GITHUB_OUTPUT
+            else
+              echo "auto_base_path=/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+            fi
+          fi
+        
       - name: Build project
         run: |
-          # Automatically set base path for GitHub Pages
-          # - For custom domains or user/org pages (*.github.io): use root path "/"
-          # - For project pages: use repository name as base path
-          # - Allow override via workflow input
-          
+          # Set base path - manual override takes precedence over auto-detection
           if [[ -n "${{ github.event.inputs.base_path }}" ]]; then
             # Use custom base path if provided
             export BASE_PATH="${{ github.event.inputs.base_path }}"
-          elif [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
-            # User/org pages use root path
-            export BASE_PATH="/"
+            echo "🔧 Using manual base path override: ${BASE_PATH}"
           else
-            # Project pages use repository name
-            export BASE_PATH="/${{ github.event.repository.name }}"
+            # Use auto-detected base path from Pages API
+            export BASE_PATH="${{ steps.pages-url.outputs.auto_base_path }}"
+            echo "🔧 Using auto-detected base path: ${BASE_PATH}"
+            if [[ -n "${{ steps.pages-url.outputs.pages_url }}" ]]; then
+              echo "📍 Pages URL: ${{ steps.pages-url.outputs.pages_url }}"
+            fi
           fi
-          
-          echo "🔧 Building with BASE_PATH=${BASE_PATH}"
           
           # Set Gun.js peers if provided
           if [[ -n "${{ github.event.inputs.gun_peers }}" ]]; then
@@ -79,6 +116,16 @@ jobs:
           else
             export VITE_GUN_PEERS=""
             echo "🔫 No Gun peers configured (local storage only)"
+          fi
+          
+          # Set router mode (defaults to hash for static hosting)
+          export VITE_ROUTER_MODE="${{ github.event.inputs.router_mode || 'hash' }}"
+          echo "🔧 Using router mode: ${VITE_ROUTER_MODE}"
+          
+          # Set debug mode if requested
+          if [[ "${{ github.event.inputs.debug_mode }}" == "true" ]]; then
+            export VITE_DEBUG_MODE="true"
+            echo "🐛 Debug mode enabled"
           fi
           
           # Build client without TypeScript checking due to upstream type errors
