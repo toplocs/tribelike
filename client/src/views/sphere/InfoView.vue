@@ -1,5 +1,5 @@
 <template>
-  <Container>
+  <Container class="space-x-4">
     <div class="w-full">
       <section v-for="slot of pluginSlots">
         <Card
