@@ -41,7 +41,6 @@ const colorMap = {
   yellow: 'bg-yellow-400 hover:bg-yellow-500',
 };
 
-
 const emit = defineEmits(['useAction'])
 
 const useAction = () => {

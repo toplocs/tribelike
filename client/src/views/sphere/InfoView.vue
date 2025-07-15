@@ -1,5 +1,5 @@
 <template>
-  <Container>
+  <Container class="space-x-4">
     <div class="w-full">
       <section v-for="slot of pluginSlots">
         <Card
@@ -45,11 +45,11 @@
 
       <RelationButtons :for="sphere?.type" />
 
-      <section v-for="slot of pluginSlots">
+      <section v-for="x of pluginSlots">
         <PluginComponent
-          v-if="slot.component == 'Sidebar'"
-          :plugin="slot.plugin"
-          :position="slot.component"
+          v-if="x.slot == 'Sidebar'"
+          :plugin="x.plugin"
+          :position="x.component"
         />
       </section>
 
@@ -91,8 +91,12 @@ const type = computed(() => {
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
 const pluginSlots = computed(() => (
-  slots.value.filter(x => x.slot == 'InfoView')
+  slots.value.filter(x => x.page == 'Info' && x.entity == 'Topic')
 ));
+
+watchEffect(() => {
+  console.log(pluginSlots.value)
+});
 
 onMounted(async () => {
   tab.value = 'Info';

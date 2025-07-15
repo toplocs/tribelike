@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 flex flex-wrap gap-2">
+  <div class="mt-4 min-w-[200px] flex flex-col flex-wrap gap-2">
     <RelationButton
       v-for="relationKey in relationKeys"
       :key="relationKey"

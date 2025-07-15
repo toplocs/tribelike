@@ -57,6 +57,7 @@ const loadPlugin = async () => {
 };
 
 onMounted(async () => {
+  console.log(props)
   await loadPlugin();
 });
 </script>

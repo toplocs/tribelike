@@ -10,14 +10,15 @@
       </b>
     </Banner>
     -->
-
-    <SubNav
-      :initialTab="tab"
-      :tabs="[
-        { value: 'Info', href: `/sphere/${route.params.id}` },
-        ...routedTabs,
-      ]"
-    />
+    <div class="mx-2">
+      <SubNav
+        :initialTab="tab"
+        :tabs="[
+          { value: 'Info', href: `/sphere/${route.params.id}` },
+          ...routedTabs,
+        ]"
+      />
+    </div>
 
     <router-view />
   </RelationProvider>
@@ -27,6 +28,7 @@
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Banner from '@/components/common/Banner.vue';
+import Container from '@/components/common/Container.vue';
 import RelationProvider from '@/components/RelationProvider.vue';
 import SubNav from '@/components/SubNav.vue';
 import { useProfile } from '@/composables/profileProvider';
