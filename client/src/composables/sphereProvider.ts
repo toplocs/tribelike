@@ -8,7 +8,7 @@ export function sphereProvider() {
   const journal = ref([]);
 
   const setSphere = (id: string) => {
-    gun.get(`sphere/${id}/${space.value}`)
+    gun.get(`sphere/${id}`)
     .once((data) => {
       if (data) {
         sphere.value = data;
@@ -30,7 +30,7 @@ export function sphereProvider() {
       id: id,
       ...data,
     };
-    const node = gun.get(`sphere/${id}/local`).put(sphere.value);
+    const node = gun.get(`sphere/${id}`).put(sphere.value);
     gun.get('spheres').get(id).set(node);
     gun.get('spheres/titles').get(sphere.value?.title.toLowerCase()).set(node);
 
@@ -45,10 +45,12 @@ export function sphereProvider() {
       const start = term.toLowerCase();
       const end = incrementLastChar(start);
 
+      console.log('Search')
       gun.get('spheres/titles')
       .get({ '.': { '>': start, '<': end }, '%': 50000 }) //50kb
       .map()
       .once((data, key) => {
+        console.log(data);
         if (data && !results.find(x => x.id === data.id)) {
           results.push(data);
         }
@@ -65,7 +67,7 @@ export function sphereProvider() {
   }
 
   onMounted(() => {
-    gun.get(`sphere/${sphere.value?.id}/${space.value}`)
+    gun.get(`sphere/${sphere.value?.id}`)
     .once((data) => {
       if (data) {
         sphere.value = data;

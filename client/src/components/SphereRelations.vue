@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-wrap gap-1">
     <u>related to:</u>
-    <span v-for="relation of populated">
+    <span
+      v-for="relation of populated"
+      :key="relation.id"
+    >
       <router-link
         v-if="relation.type == 'relation'"
         :to="`/sphere/${relation.two?.id}`"
@@ -58,8 +61,6 @@
       </span>
     </div>
   </template>
-
-
 </template>
 
 //
@@ -82,7 +83,10 @@ const { relations, populateRelation } = useRelation();
 const populated = ref([]);
 
 watchEffect(async () => {
-  if (!relations.value || relations.value.length === 0) return;
+  if (!relations.value || relations.value.length === 0) {
+    populated.value = [];
+    return;
+  }
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['spheres'], x))
   );
