@@ -69,6 +69,7 @@ const handleClick = async () => {
       relationKey.id,
       sphere.value?.id,
     );
+    console.log(result);
     if (result) {
       await removeRelation(
         profile.value?.id,
