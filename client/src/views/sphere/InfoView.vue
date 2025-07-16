@@ -97,10 +97,6 @@ const pluginSlots = computed(() => (
   slots.value.filter(x => x.page == 'Info' && x.entity == 'Topic')
 ));
 
-watchEffect(() => {
-  console.log(pluginSlots.value)
-});
-
 onMounted(async () => {
   tab.value = 'Info';
 });

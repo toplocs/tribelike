@@ -51,7 +51,8 @@ onMounted(async () => {
   .map()
   .once((refNode, key) => {
     if (!refNode) return;
-    gun.get(`sphere/${key}/local`).once((data) => {
+    if (spheres.value.length > 100) return; //limit to 100 entries
+    gun.get(`sphere/${key}`).once((data) => {
       if (data) spheres.value.push(data);
     });
   });
