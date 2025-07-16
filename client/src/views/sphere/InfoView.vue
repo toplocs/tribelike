@@ -43,7 +43,10 @@
         <LocationBadge :title="type" />
       </div>
 
-      <RelationButtons :for="sphere?.type" />
+      <RelationButtons
+        v-if="profile"
+        :for="sphere?.type"
+      />
 
       <section v-for="x of pluginSlots">
         <PluginComponent
