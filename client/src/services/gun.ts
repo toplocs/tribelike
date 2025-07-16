@@ -12,7 +12,7 @@ const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
 const gun = Gun({ peers, rad: true });
 const root = gun.get(`toplocs_v${APP_VERSION}`);
 
-gun.clear = function() {
+root.clear = function() {
 	// Clear localStorage
 	localStorage.clear();
 
@@ -29,8 +29,8 @@ gun.clear = function() {
 	console.log('Local data cleared');
 }
 
-gun.lookup = async function(key: string, id: string) {
-	const ref = await gun.get(key).get(id).then();
+root.lookup = async function(key: string, id: string) {
+	const ref = await root.get(key).get(id).then();
   const soul = ref?._?.['>'] && Object.keys(ref._['>'])[0];
   if (!soul) return null;
   const data = await gun.get(soul).then();

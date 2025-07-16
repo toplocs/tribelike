@@ -2,6 +2,8 @@ import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'v
 import { relationKeyIds } from '@/assets/relationKeys';
 import gun from '@/services/gun';
 
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
+
 export function relationProvider(
   base: string,
 ) {
@@ -50,20 +52,39 @@ export function relationProvider(
     }
   }
 
+
   const removeRelation = async (
     one: string = instance.value,
     type: string,
     two: string
   ) => {
+    const relationIndex = relations.value.findIndex(
+      x => x.one === one && x.type === type && x.two === two
+    );
+    
+    if (relationIndex === -1) {
+      console.error('Relation not found');
+      return relations.value;
+    }
+
     const path = `relations/${one}/${type}/${two}`;
     const node = gun.get(path);
-    node.then(() => {
-      gun.get(one).get('relations').unset(node);
-      gun.get(two).get('relations').unset(node);
-    });
 
+    await new Promise<void>((resolve) => {
+      node.once((data) => {
+        if (data) {
+          gun.get(one).get('relations').unset(node);
+          gun.get(two).get('relations').unset(node);
+          node.put(null);
+        }
+        resolve();
+      });
+    });
+    relations.value.splice(relationIndex, 1);
+    
     return relations.value;
   }
+
 
   const populateRelation = async (
     keys: string[],
@@ -86,13 +107,10 @@ export function relationProvider(
     type: string,
     two: string,
   ): Promise<Relation | undefined> => {
-    const chain = await gun.get(one)
-    .get('relations')
-    .then();
-
+    const chain = await gun.get(one).get('relations').then();
     if (!chain) return false;
 
-    return chain[`relations/${one}/${type}/${two}`]? true: false;
+    return chain[`toplocs_v${APP_VERSION}/relations/${one}/${type}/${two}`]? true: false;
   }
 
   const listen = (id: String) => {
