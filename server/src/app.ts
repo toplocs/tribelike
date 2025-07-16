@@ -20,13 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 // Serve static client
-const clientBuildPath = path.join(__dirname, '../../client/dist');
-console.log("Client folder:", clientBuildPath);
-if (fs.existsSync(clientBuildPath)) {
-  app.use(express.static(clientBuildPath));
+const viewsBuildPath = path.join(__dirname, './views');
+console.log("Views folder:", viewsBuildPath);
+if (fs.existsSync(viewsBuildPath)) {
+  app.use(express.static(viewsBuildPath));
 } else {
   app.get('/', (req, res) => {
-    res.send(`Client build folder does not exist. Not serving client`);
+    res.send(`Views build folder does not exist. Not serving client`);
   });
 }
 

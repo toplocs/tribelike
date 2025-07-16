@@ -7,7 +7,7 @@
     "dev": "DEVELOPMENT=true nodemon src/app.ts",
     "test": "pnpm vitest",
     "build": "pnpm --package=typescript dlx tsc",
-    "start": "NODE_PATH=./build node build/app.js"
+    "start": "NODE_PATH=./src node src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,6 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
-    "@tribelike/types": "workspace:*",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",

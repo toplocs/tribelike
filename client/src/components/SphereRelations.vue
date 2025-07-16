@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-wrap gap-1">
     <u>related to:</u>
-    <span v-for="relation of populated">
+    <span
+      v-for="relation of populated"
+      :key="relation.id"
+    >
       <router-link
         v-if="relation.type == 'relation'"
         :to="`/sphere/${relation.two?.id}`"
@@ -18,8 +21,6 @@
       </router-link>
     </span>
   </div>
-
-  <Divider />
 
   <template v-for="relationKey in topics" :key="relationKey.id">
     <div
@@ -41,9 +42,6 @@
     </div>
   </template>
 
-
-  <Divider />
-
   <template v-for="relationKey in locations" :key="relationKey.id">
     <div
       v-if="populated.some(relation => relation.type === relationKey.id)"
@@ -63,8 +61,6 @@
       </span>
     </div>
   </template>
-
-
 </template>
 
 //
@@ -87,7 +83,10 @@ const { relations, populateRelation } = useRelation();
 const populated = ref([]);
 
 watchEffect(async () => {
-  if (!relations.value || relations.value.length === 0) return;
+  if (!relations.value || relations.value.length === 0) {
+    populated.value = [];
+    return;
+  }
   populated.value = await Promise.all(
     relations.value.map(x => populateRelation(['spheres'], x))
   );

@@ -43,7 +43,10 @@
         <LocationBadge :title="type" />
       </div>
 
-      <RelationButtons :for="sphere?.type" />
+      <RelationButtons
+        v-if="profile"
+        :for="sphere?.type"
+      />
 
       <section v-for="x of pluginSlots">
         <PluginComponent
@@ -93,10 +96,6 @@ const type = computed(() => {
 const pluginSlots = computed(() => (
   slots.value.filter(x => x.page == 'Info' && x.entity == 'Topic')
 ));
-
-watchEffect(() => {
-  console.log(pluginSlots.value)
-});
 
 onMounted(async () => {
   tab.value = 'Info';

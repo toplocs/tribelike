@@ -1,5 +1,5 @@
 <template>
-  <Container>
+  <Container class="space-x-4">
     <div class="w-full space-y-4">
 
       <section>
@@ -46,7 +46,7 @@
     </div>
       
     <Sidebar>
-      <div className="mb-8">
+      <div className="min-w-[200px] mb-8">
         <Title>Plugin Settings:</Title>
         <PluginSettingsItem
           v-for="slot of slots"

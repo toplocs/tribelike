@@ -8,7 +8,7 @@ export function sphereProvider() {
   const journal = ref([]);
 
   const setSphere = (id: string) => {
-    gun.get(`sphere/${id}/${space.value}`)
+    gun.get(`sphere/${id}`)
     .once((data) => {
       if (data) {
         sphere.value = data;
@@ -30,9 +30,9 @@ export function sphereProvider() {
       id: id,
       ...data,
     };
-    const node = gun.get(`sphere/${id}/local`).put(sphere.value);
+    const node = gun.get(`sphere/${id}`).put(sphere.value);
     gun.get('spheres').get(id).set(node);
-    gun.get('spheres/titles').get(sphere.value?.title.toLowerCase()).set(node);
+    gun.get(`sphere_${sphere.value?.title.toLowerCase()}`).put(node);
 
     return sphere.value;
   }
@@ -42,11 +42,10 @@ export function sphereProvider() {
     return new Promise((resolve) => {
       const results: any[] = [];
 
-      const start = term.toLowerCase();
+      const start = 'sphere_'+term.toLowerCase();
       const end = incrementLastChar(start);
 
-      gun.get('spheres/titles')
-      .get({ '.': { '>': start, '<': end }, '%': 50000 }) //50kb
+      gun.get({ '.': { '>': start, '<': end }, '%': 50000 }) //50kb
       .map()
       .once((data, key) => {
         if (data && !results.find(x => x.id === data.id)) {
@@ -54,7 +53,7 @@ export function sphereProvider() {
         }
       });
 
-      setTimeout(() => resolve(results), 300);
+      setTimeout(() => resolve(results), 600);
     });
   }
 
@@ -65,7 +64,7 @@ export function sphereProvider() {
   }
 
   onMounted(() => {
-    gun.get(`sphere/${sphere.value?.id}/${space.value}`)
+    gun.get(`sphere/${sphere.value?.id}`)
     .once((data) => {
       if (data) {
         sphere.value = data;
