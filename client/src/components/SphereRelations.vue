@@ -19,8 +19,6 @@
     </span>
   </div>
 
-  <Divider />
-
   <template v-for="relationKey in topics" :key="relationKey.id">
     <div
       v-if="populated.some(relation => relation.type === relationKey.id)"
@@ -40,9 +38,6 @@
       </span>
     </div>
   </template>
-
-
-  <Divider />
 
   <template v-for="relationKey in locations" :key="relationKey.id">
     <div
