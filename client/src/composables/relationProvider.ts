@@ -59,30 +59,13 @@ export function relationProvider(
     type: string,
     two: string
   ) => {
-    const relationIndex = relations.value.findIndex(
-      x => x.one === one && x.type === type && x.two === two
-    );
-    
-    if (relationIndex === -1) {
-      console.error('Relation not found');
-      return relations.value;
-    }
-
     const path = `relations/${one}/${type}/${two}`;
     const node = gun.get(path);
-
-    await new Promise<void>((resolve) => {
-      node.once((data) => {
-        if (data) {
-          gun.get(one).get('relations').unset(node);
-          gun.get(two).get('relations').unset(node);
-          node.put(null);
-        }
-        resolve();
-      });
+    node.then(() => {
+      gun.get(one).get('relations').unset(node);
+      gun.get(two).get('relations').unset(node);
     });
-    relations.value.splice(relationIndex, 1);
-    
+
     return relations.value;
   }
 
