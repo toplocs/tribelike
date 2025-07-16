@@ -7,7 +7,7 @@
     "dev": "DEVELOPMENT=true nodemon src/app.ts",
     "test": "pnpm vitest",
     "build": "pnpm --package=typescript dlx tsc",
-    "start": "NODE_PATH=./build node build/app.js"
+    "start": "NODE_PATH=./src node src/app.js"
   },
   "keywords": [],
   "author": "",
