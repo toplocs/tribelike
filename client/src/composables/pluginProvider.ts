@@ -9,7 +9,7 @@ export function pluginProvider() {
   const tabs = ref<Tab[]>([]);
   
   const createPlugin = async (config, url) => {
-    const id = config.id || crypto.randomUUID();
+    const id = crypto.randomUUID();
     const hash = CryptoJS.SHA256(config.author).toString(CryptoJS.enc.Hex);
 
     const plugin = {
@@ -17,15 +17,13 @@ export function pluginProvider() {
       name: config.name,
       author: config.author,
       description: config.description,
-      url: url || config.url,
+      url: url,
       version: config.version,
       hash: hash
     };
 
     const node = gun.get(`plugin/${id}`).put(plugin);
 
-    console.log(config.slots);
-    
     config.slots?.forEach(slot => node.get('slots').set(slot));
     config.paths?.forEach(path => node.get('paths').set(path));
     config.tabs?.forEach(tab => node.get('tabs').set(tab));
