@@ -15,7 +15,12 @@ export default defineConfig({
     federation({
       name: 'tribelike',
       shared: ['vue', 'tailwindcss'],
-      remotes: [],
+      remotes: {
+        test: { //DO NOT REMOVE 
+          external: '',
+          format: 'var',
+        },
+      },
     })
   ],
   resolve: {
