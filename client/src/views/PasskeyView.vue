@@ -9,7 +9,7 @@
         {{ errorMessage }}
       </Callout>
       <Callout v-if="successMessage" color="green">
-        {{ errorMessage }}
+        {{ successMessage }}
       </Callout>
 
       <p>
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { startRegistration } from '@simplewebauthn/browser';
 import BackButton from '@/components/common/BackButton.vue';
@@ -50,21 +50,36 @@ import Callout from '@/components/common/Callout.vue';
 
 const router = useRouter();
 const errorMessage = ref('');
+const successMessage = ref('');
+const registrationEmail = ref<string>('');
 const form = ref<HTMLFormElement | null>(null);
 
-const resendMagicLink = async (formData: FormData) => {
+onMounted(() => {
+  // Retrieve email from sessionStorage set during registration
+  const storedEmail = sessionStorage.getItem('registrationEmail');
+  if (storedEmail) {
+    registrationEmail.value = storedEmail;
+  }
+});
+
+const resendMagicLink = async () => {
+  if (!registrationEmail.value) {
+    errorMessage.value = 'Registration email not found. Please register again.';
+    return;
+  }
+
   try {
     const response = await axios.post(
       `/api/auth/magicLink`, {
-      to: 'yannik@yx3m1.com',
-      subject: 'Resend link',
-      name: 'Yannik',
+      to: registrationEmail.value,
+      subject: 'Email verification link',
+      name: registrationEmail.value.split('@')[0],
     });
 
     return response.data;
   } catch(error: any) {
     console.error(error);
-    errorMessage.value = error.response.data;
+    errorMessage.value = error.response?.data || 'Failed to resend email';
   }
 }
 

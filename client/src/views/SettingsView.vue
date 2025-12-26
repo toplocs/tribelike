@@ -15,6 +15,7 @@
 import { ref, inject, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Card from '@/components/common/Card.vue';
+import { useUser } from '@/composables/userProvider';
 
 const router = useRouter();
 const { logout } = useUser();
