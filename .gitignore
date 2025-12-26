@@ -3,9 +3,6 @@ server/data/*
 server/ra-data/*
 .cache/**/*
 
-server/data/*
-server/ra-data/*
-
 # Logs
 logs
 *.log
@@ -43,3 +40,6 @@ coverage
 
 new
 dnode
+
+docs
+TIME_TRACKING.md

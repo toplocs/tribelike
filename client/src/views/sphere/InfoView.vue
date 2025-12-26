@@ -1,14 +1,14 @@
 <template>
   <Container class="space-x-4">
     <div class="w-full">
-      <section v-for="slot of pluginSlots">
+      <section v-for="x of pluginSlots">
         <Card
-          v-if="slot.component == 'Main'"
+          v-if="x.slot == 'Content'"
           class="mb-4"
         >
           <PluginComponent
-            :plugin="slot.plugin"
-            :position="slot.component"
+            :plugin="x.plugin"
+            :position="x.component"
           />
         </Card>
       </section>
@@ -94,10 +94,11 @@ const type = computed(() => {
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
 const pluginSlots = computed(() => (
-  slots.value.filter(x => x.page == 'Info' && x.entity == 'Topic')
+  slots.value.filter(x => x.page == 'Info' && x.entity == type.value)
 ));
 
 onMounted(async () => {
+  console.log(type.value);
   tab.value = 'Info';
 });
 </script>
