@@ -105,7 +105,7 @@ import CommentList from '@/components/CommentList.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
-import { commentProvider, useComment } from '@/composables/commentProvider';
+import { commentProvider } from '@/composables/commentProvider';
 import {
     topicRelations,
     locationRelations,
@@ -117,9 +117,8 @@ const { sphere } = useSphere();
 const { slots } = usePlugins();
 const tab = inject('tab');
 
-// Initialise comment provider
-commentProvider();
-const { comments, loading: commentsLoading } = useComment();
+// Initialise comment provider - returns the composable directly
+const { comments, loading: commentsLoading, loadComments } = commentProvider();
 
 const type = computed(() => {
   const type2 = sphere.value?.type;
@@ -140,7 +139,6 @@ onMounted(async () => {
 
   // Load comments when sphere is ready
   if (sphere.value?.id) {
-    const { loadComments } = useComment();
     await loadComments(sphere.value.id);
   }
 });
