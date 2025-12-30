@@ -29,8 +29,10 @@ import PluginLoaderView from '@/views/PluginLoaderView.vue';
 import { addPluginRoutes } from './plugins';
 
 // Determine router mode based on environment variable
-const routerMode = import.meta.env.VITE_ROUTER_MODE || 'hash';
-const history = routerMode === 'history' 
+// Default to 'history' for clean URLs (requires SPA fallback on server)
+// Can be overridden with VITE_ROUTER_MODE=hash for hash-based routing
+const routerMode = import.meta.env.VITE_ROUTER_MODE || 'history';
+const history = routerMode === 'history'
   ? createWebHistory(import.meta.env.BASE_URL)
   : createWebHashHistory();
 

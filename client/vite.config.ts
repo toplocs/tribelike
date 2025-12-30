@@ -16,7 +16,7 @@ export default defineConfig({
       name: 'tribelike',
       shared: ['vue', 'tailwindcss'],
       remotes: {
-        test: { //DO NOT REMOVE 
+        test: { //DO NOT REMOVE
           external: '',
           format: 'var',
         },
@@ -26,6 +26,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
+  server: {
+    middlewareMode: false,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
     }
   },
   build: {

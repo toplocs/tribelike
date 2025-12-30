@@ -115,10 +115,12 @@ const onDelete = async () => {
 
 const handleLogout = async () => {
   try {
+    console.log('Starting logout...');
     await logout();
-    router.push('/login');
+    console.log('Logout complete, redirecting to login...');
+    await router.push('/login');
   } catch (error) {
-    console.error(error);
+    console.error('Logout failed:', error);
   }
 }
 

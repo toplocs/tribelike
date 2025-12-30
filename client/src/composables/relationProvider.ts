@@ -9,6 +9,7 @@ export function relationProvider(
 ) {
   const instance = ref<String>(base);
   const relations = ref<Relation[]>([]);
+  let relationListener: any = null;
 
   const createRelation = async (
     one: string = instance.value,
@@ -97,7 +98,13 @@ export function relationProvider(
   }
 
   const listen = (id: String) => {
-    gun.get(id)
+    // Clean up old listener first
+    if (relationListener) {
+      relationListener.off();
+      relationListener = null;
+    }
+
+    relationListener = gun.get(id)
     .get('relations')
     .map()
     .on((data, key) => {
@@ -116,14 +123,15 @@ export function relationProvider(
 
   const clear = (id) => {
     relations.value = [];
-    gun.get(id)
-    .get('relations')
-    .map()
-    .off();
+    // Properly stop the listener
+    if (relationListener) {
+      relationListener.off();
+      relationListener = null;
+    }
   }
 
   watch(() => instance.value, (newId) => {
-    clear(instance.value);
+    // Don't need to call clear() separately - listen() handles cleanup now
     listen(newId);
   });
   

@@ -26,7 +26,7 @@ import { useRelation } from '@/composables/relationProvider';
 import gun from '@/services/gun';
 
 const { profile } = useProfile();
-const { createSphere } = useSphere();
+const { createSphere, searchSphereByTitle } = useSphere();
 const {
   relations,
   createRelation,
@@ -46,7 +46,11 @@ const handleSelect = async (selected: Object) => {
 }
 
 const handleClick = async (title: String) => {
+  if (!title) return;
 
+  // Search for spheres with the given title
+  const results = await searchSphereByTitle(title, 10);
+  options.value = results;
 }
 
 const handleRemove = async (relation: Relation) => {
@@ -61,13 +65,30 @@ watchEffect(async () => {
 });
 
 onMounted(async () => {
-  gun.get('spheres')
-  .map()
-  .once((refNode, key) => {
-    if (!refNode) return;
-    gun.get(`sphere/${key}`).once((data) => {
-      if (data) options.value.push(data);
+  // Load popular spheres on-demand rather than all spheres
+  // This reduces initial sync load significantly
+  // User can search for specific spheres if needed
+  const recentSpheres = await new Promise((resolve) => {
+    const results: any[] = [];
+    const limit = 10;
+
+    gun.get('spheres')
+    .map()
+    .once((refNode, key) => {
+      if (results.length >= limit) return;
+      if (!refNode) return;
+
+      gun.get(`sphere/${key}`).once((data) => {
+        if (data && results.length < limit) {
+          results.push(data);
+        }
+      });
     });
+
+    // Resolve with results after timeout
+    setTimeout(() => resolve(results), 1000);
   });
+
+  options.value = recentSpheres;
 });
 </script>

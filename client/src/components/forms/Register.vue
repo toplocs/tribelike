@@ -81,19 +81,26 @@ const form = ref<HTMLFormElement | null>(null);
 async function onSubmit() {
   try {
     const formData = new FormData(form.value ?? undefined);
+    const email = formData.get('email') as string;
     const credentials = await register(formData);
+
+    // Store email temporarily for the passkey setup view
+    sessionStorage.setItem('registrationEmail', email);
+
+    // Wait for credentials to sync to Gun before logging in
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const result = await login(formData);
     if (result) {
       for (let profileType of defaultProfiles) {
         const newData = new FormData();
-        const email = formData.get('email');
         const username = formData.get('username');
         newData.append('type', profileType);
         newData.append('username', username);
-        newData.append('email',email);
+        newData.append('email', email);
         await createProfile(newData);
       }
-      
+
       router.push('/profiles');
     }
   } catch (error: any) {

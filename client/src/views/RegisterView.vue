@@ -77,19 +77,33 @@ const router = useRouter();
 const errorMessage = ref('');
 const form = ref<HTMLFormElement | null>(null);
 
-const resendMagicLink = async (formData: FormData) => {
+const resendMagicLink = async () => {
+  // Get email from form
+  if (!form.value) {
+    errorMessage.value = 'Form not found';
+    return;
+  }
+
+  const formData = new FormData(form.value);
+  const email = formData.get('email') as string;
+
+  if (!email) {
+    errorMessage.value = 'Please enter your email address';
+    return;
+  }
+
   try {
     const response = await axios.post(
       `/api/auth/magicLink`, {
-      to: 'yannik@yx3m1.com',
-      subject: 'Resend link',
-      name: 'Yannik',
+      to: email,
+      subject: 'Magic link for account registration',
+      name: email.split('@')[0],
     });
 
     return response.data;
   } catch(error: any) {
     console.error(error);
-    errorMessage.value = error.response.data;
+    errorMessage.value = error.response?.data || 'Failed to resend magic link';
   }
 }
 

@@ -1,6 +1,7 @@
 import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import CryptoJS from 'crypto-js';
 import gun from '@/services/gun';
+import { waitForGunReady } from '@/utils/gunReady';
 
 export function pluginProvider() {
   const plugins = ref<Plugin[]>([]);
@@ -57,40 +58,48 @@ export function pluginProvider() {
   }
 
 
-  onMounted(() => {
+  const loadPluginData = (plugin: Plugin) => {
+    // Defer loading of nested plugin data - only load when accessed
+    gun.get(`plugin/${plugin.id}`)
+    .get('paths')
+    .map()
+    .once(data => {
+      if (data) {
+        routes.value?.push(data);
+      }
+    });
+
+    gun.get(`plugin/${plugin.id}`)
+    .get('slots')
+    .map()
+    .once(data => {
+      if (data) {
+        const slot = { plugin: plugin, ...data };
+        slots.value?.push(slot);
+      }
+    });
+
+    gun.get(`plugin/${plugin.id}`)
+    .get('tabs')
+    .map()
+    .once(data => {
+      if (data) {
+        tabs.value?.push(data);
+      }
+    });
+  }
+
+  onMounted(async () => {
+    // Wait for Gun to be ready before loading plugins
+    await waitForGunReady();
+
     gun.get('plugins')
     .map()
     .once(plugin => {
       if (plugin) {
         plugins.value?.push(plugin);
-
-        gun.get(`plugin/${plugin.id}`)
-        .get('paths')
-        .map()
-        .once(data => {
-          if (data) {
-            routes.value?.push(data);
-          }
-        });
-
-        gun.get(`plugin/${plugin.id}`)
-        .get('slots')
-        .map()
-        .once(data => {
-          if (data) {
-            const slot = { plugin: plugin, ...data };
-            slots.value?.push(slot);
-          }
-        });
-
-        gun.get(`plugin/${plugin.id}`)
-        .get('tabs')
-        .map()
-        .once(data => {
-          if (data) {
-            tabs.value?.push(data);
-          }
-        });
+        // Defer loading nested data
+        loadPluginData(plugin);
       }
     });
   });

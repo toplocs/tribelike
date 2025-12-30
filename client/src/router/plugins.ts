@@ -2,29 +2,58 @@ import { defineAsyncComponent } from 'vue';
 import PluginView from '@/views/PluginView.vue';
 import gun from '@/services/gun';
 
-export const addPluginRoutes = (router: any) => { //sync loading
-  gun.get('plugins')
-  .map()
-  .once(plugin => {
-    if (plugin && plugin.paths) {
+// Validate route path pattern to prevent path-to-regexp errors
+const isValidRoutePath = (path: any): boolean => {
+  if (!path || typeof path !== 'string') return false;
+  // Reject URLs (should be route patterns like /path or /path/:id)
+  if (path.startsWith('http://') || path.startsWith('https://')) return false;
+  // Reject paths with invalid characters for route patterns
+  if (path.includes('?') || path.includes('#')) return false;
+  return true;
+};
+
+export const addPluginRoutes = (router: any) => {
+  // Defer plugin route loading to avoid startup sync load
+  // Load plugin routes when first accessed via lazy-loading
+  const loadPluginRoutesDeferred = async () => {
+    gun.get('plugins')
+    .map()
+    .once(plugin => {
+      if (!plugin || !plugin.paths) return;
+
       gun.get(plugin.paths)
       .map()
       .once(data => {
-        if (data && data.path) {
+        if (!data || !data.path) return;
+
+        // Validate route path before adding
+        if (!isValidRoutePath(data.path)) {
+          console.warn(`Invalid plugin route path: "${data.path}" (from plugin: ${plugin.id})`);
+          return;
+        }
+
+        try {
           const route = {
             path: data.path,
-            name: data.component,
+            name: data.component || `plugin_${plugin.id}`,
             component: PluginView,
             props: {
               plugin: plugin,
               component: data.component,
             },
-          }
+          };
           router.addRoute('sphereDetail', route);
+        } catch (error) {
+          console.error(`Failed to add plugin route: ${data.path}`, error);
+          // Log the problematic data for debugging
+          console.error('Problematic plugin data:', { plugin, data });
         }
       });
-    }
-  });
+    });
+  };
+
+  // Load plugin routes after a short delay to avoid startup sync overload
+  setTimeout(loadPluginRoutesDeferred, 2000);
 }
 
 /*export const getPluginRoutes = async () => { //async loading
