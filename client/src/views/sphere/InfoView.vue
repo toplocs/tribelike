@@ -136,9 +136,12 @@ const pluginSlots = computed(() => (
 onMounted(async () => {
   console.log(type.value);
   tab.value = 'Info';
+});
 
-  // Load comments when sphere is ready
+// Reload comments whenever sphere changes
+watchEffect(async () => {
   if (sphere.value?.id) {
+    console.log('🔄 Sphere changed, reloading comments for:', sphere.value.id);
     await loadComments(sphere.value.id);
   }
 });

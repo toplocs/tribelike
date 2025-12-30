@@ -134,45 +134,69 @@ export function commentProvider() {
       console.log('Sample localStorage keys:', allKeys.slice(0, 5));
     }
 
-          // Add to sphere's comment index at: sphere/{sphereId}/comments/{id}
-          console.log('Adding comment to sphere index:', `sphere/${sphereId}/comments/${id}`);
-          gun
-            .get(`sphere/${sphereId}`)
-            .get('comments')
-            .get(id)
-            .put(comment)
-            .then(() => {
-              console.log('✓ Comment added to sphere index:', sphereId);
-
-              // If reply, add to parent's replies: comment/{parentId}/replies/{id}
-              if (parentId) {
-                console.log('Adding reply to parent:', `comment/${parentId}/replies/${id}`);
-                gun
-                  .get(`comment/${parentId}`)
-                  .get('replies')
-                  .get(id)
-                  .put(comment)
-                  .then(() => {
-                    console.log('✓ Reply added to parent:', parentId);
-                  });
-              }
-
-              console.log('✓ Comment fully saved to Gun.js:', comment);
-
-              // Immediately add to local state for instant UI feedback
-              const commentWithVotes: CommentWithVotes = {
-                ...comment,
-                voteCount: 0,
-                userVote: null,
-                replyCount: 0,
-              };
-              comments.value.push(commentWithVotes);
-              console.log('✓ Comment added to local state:', commentWithVotes);
-
-              resolve(comment);
-            });
-        });
+                // 3. If reply, add to parent's replies
+                if (parentId) {
+                  console.log('Adding reply to parent:', `comment/${parentId}/replies/${id}`);
+                  gun
+                    .get(`comment/${parentId}`)
+                    .get('replies')
+                    .get(id)
+                    .put(comment)
+                    .once(() => {
+                      console.log('✓ Reply added to parent:', parentId);
+                      addCommentToLocalState(comment);
+                      resolve(comment);
+                    });
+                } else {
+                  addCommentToLocalState(comment);
+                  resolve(comment);
+                }
+              });
+          });
+      } catch (err) {
+        console.error('Error creating comment:', err);
+        error.value = `Failed to create comment: ${err}`;
+        reject(err);
+      }
     });
+  };
+
+  /**
+   * Helper to add comment to local state
+   */
+  const addCommentToLocalState = (comment: Comment) => {
+    const commentWithVotes: CommentWithVotes = {
+      ...comment,
+      voteCount: 0,
+      userVote: null,
+      replyCount: 0,
+    };
+    comments.value.push(commentWithVotes);
+    console.log('✓ Comment added to local state:', commentWithVotes);
+
+    // Debug: Check if data is in localStorage
+    checkStorageDebug(comment.id);
+  };
+
+  /**
+   * Debug function to verify data is in localStorage
+   */
+  const checkStorageDebug = (commentId: string) => {
+    console.log('🔍 Checking localStorage for comment:', commentId);
+    const allKeys = Object.keys(localStorage);
+    console.log('📦 Total localStorage keys:', allKeys.length);
+
+    const relevantKeys = allKeys.filter(k => k.includes(commentId) || k.includes('comment'));
+    if (relevantKeys.length > 0) {
+      console.log('✓ Found relevant keys in localStorage:', relevantKeys);
+      relevantKeys.forEach(key => {
+        const value = localStorage.getItem(key);
+        console.log(`  ${key}:`, value ? JSON.parse(value) : 'null');
+      });
+    } else {
+      console.warn('⚠️ No relevant keys found in localStorage');
+      console.log('Sample localStorage keys:', allKeys.slice(0, 5));
+    }
   };
 
   /**
@@ -194,6 +218,7 @@ export function commentProvider() {
       userVoteCache.clear();
 
       console.log('📂 Loading comments for sphere:', sphereId);
+      console.log('🔍 Querying Gun.js at: sphere/' + sphereId + '/comments');
 
       // Wait for initial comments to load before setting loading to false
       const initialLoadPromise = new Promise<void>((resolveInitialLoad) => {
