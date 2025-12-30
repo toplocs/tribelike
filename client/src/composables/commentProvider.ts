@@ -134,19 +134,45 @@ export function commentProvider() {
       console.log('Sample localStorage keys:', allKeys.slice(0, 5));
     }
 
-    console.log('Comment saved to Gun.js:', comment);
+          // Add to sphere's comment index at: sphere/{sphereId}/comments/{id}
+          console.log('Adding comment to sphere index:', `sphere/${sphereId}/comments/${id}`);
+          gun
+            .get(`sphere/${sphereId}`)
+            .get('comments')
+            .get(id)
+            .put(comment)
+            .then(() => {
+              console.log('✓ Comment added to sphere index:', sphereId);
 
-    // Immediately add to local state for instant UI feedback
-    const commentWithVotes: CommentWithVotes = {
-      ...comment,
-      voteCount: 0,
-      userVote: null,
-      replyCount: 0,
-    };
-    comments.value.push(commentWithVotes);
-    console.log('Comment added to local state:', commentWithVotes);
+              // If reply, add to parent's replies: comment/{parentId}/replies/{id}
+              if (parentId) {
+                console.log('Adding reply to parent:', `comment/${parentId}/replies/${id}`);
+                gun
+                  .get(`comment/${parentId}`)
+                  .get('replies')
+                  .get(id)
+                  .put(comment)
+                  .then(() => {
+                    console.log('✓ Reply added to parent:', parentId);
+                  });
+              }
 
-    return comment;
+              console.log('✓ Comment fully saved to Gun.js:', comment);
+
+              // Immediately add to local state for instant UI feedback
+              const commentWithVotes: CommentWithVotes = {
+                ...comment,
+                voteCount: 0,
+                userVote: null,
+                replyCount: 0,
+              };
+              comments.value.push(commentWithVotes);
+              console.log('✓ Comment added to local state:', commentWithVotes);
+
+              resolve(comment);
+            });
+        });
+    });
   };
 
   /**
