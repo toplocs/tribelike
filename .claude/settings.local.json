@@ -24,7 +24,8 @@
       "WebFetch(domain:docs.pinata.cloud)",
       "Bash(gh pr view:*)",
       "Bash(git fetch:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(kill:*)"
     ],
     "deny": []
   }

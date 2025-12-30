@@ -62,6 +62,16 @@ export function commentProvider() {
 
       console.log('Comment created successfully');
 
+      // Immediately add to local state for instant UI feedback
+      const commentWithVotes: CommentWithVotes = {
+        ...comment,
+        voteCount: 0,
+        userVote: null,
+        replyCount: 0,
+      };
+      comments.value.push(commentWithVotes);
+      console.log('Comment added to local state:', commentWithVotes);
+
       return comment;
     } catch (e) {
       error.value = `Failed to create comment: ${e}`;
