@@ -133,6 +133,20 @@ export function commentProvider() {
       console.warn('⚠️ No relevant keys found in localStorage');
       console.log('Sample localStorage keys:', allKeys.slice(0, 5));
     }
+
+    console.log('Comment saved to Gun.js:', comment);
+
+    // Immediately add to local state for instant UI feedback
+    const commentWithVotes: CommentWithVotes = {
+      ...comment,
+      voteCount: 0,
+      userVote: null,
+      replyCount: 0,
+    };
+    comments.value.push(commentWithVotes);
+    console.log('Comment added to local state:', commentWithVotes);
+
+    return comment;
   };
 
   /**
