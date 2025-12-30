@@ -17,7 +17,7 @@ For a detailed explanation of the P2P architecture, see the [centralized documen
 - **Frontend**: Vue.js 3 with TypeScript
 - **P2P Database**: Gun.js
 - **Authentication**: WebAuthn/Passkeys + Gun SEA
-- **Server**: Minimal Express relay (26 lines of code!)
+- **Server**: gunDB relay, filtering unsigned data
 - **Plugins**: Extensible plugin system
 
 ## Features
@@ -26,6 +26,7 @@ For a detailed explanation of the P2P architecture, see the [centralized documen
 - **Topics & Locations** - Find people by interests and places
 - **Universal Relations** - Connect topics, locations or any entity
 - **Plugins**:
+  - Locations - Maps
   - 💬 Chat - Real-time messaging
   - 📅 Events - Event management
   - 📝 Wiki - Collaborative documentation

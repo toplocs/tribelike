@@ -1,4 +1,9 @@
+.claude/settings.local.json
+
+# Ignore environment variables
 .env
+
+# gun data
 server/data/*
 server/ra-data/*
 .cache/**/*
