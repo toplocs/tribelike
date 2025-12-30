@@ -56,6 +56,8 @@ const handleSubmit = async () => {
     return;
   }
 
+  console.log('Submitting comment:', { text: commentText.value, sphereId: props.sphereId, parentId: props.parentId });
+
   isSubmitting.value = true;
   localError.value = null;
 
@@ -65,11 +67,15 @@ const handleSubmit = async () => {
     props.parentId || null
   );
 
+  console.log('Comment creation result:', result);
+
   if (result) {
+    console.log('Comment created successfully, clearing form');
     commentText.value = '';
     localError.value = null;
   } else {
     localError.value = providerError.value || 'Failed to post comment.';
+    console.error('Comment creation failed:', providerError.value);
   }
 
   isSubmitting.value = false;

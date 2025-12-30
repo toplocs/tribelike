@@ -47,19 +47,20 @@ export function commentProvider() {
         createdAt: new Date().toISOString(),
       };
 
+      console.log('Creating comment:', comment);
+
       // Store comment at primary location
-      const node = gun.get(`comment/${id}`).put(comment);
+      gun.get(`comment/${id}`).put(comment);
 
-      // Add to global comments index
-      gun.get('comments').get(id).set(node);
-
-      // Add to sphere's comments
-      gun.get(`sphere/${sphereId}`).get('comments').set(node);
+      // Add to sphere's comments (store comment ID in an object key)
+      gun.get(`sphere/${sphereId}`).get('comments').get(id).put(comment);
 
       // If reply, add to parent's replies
       if (parentId) {
-        gun.get(`comment/${parentId}`).get('replies').set(node);
+        gun.get(`comment/${parentId}`).get('replies').get(id).put(comment);
       }
+
+      console.log('Comment created successfully');
 
       return comment;
     } catch (e) {
@@ -89,12 +90,19 @@ export function commentProvider() {
       userVoteCache.clear();
 
       // Listen to all comments for this sphere
+      console.log('Setting up listener for sphere:', sphereId);
+
       commentListener = gun
         .get(`sphere/${sphereId}`)
         .get('comments')
         .map()
         .on(async (data: any) => {
-          if (!data || !data.id) return;
+          console.log('Listener triggered with data:', data);
+
+          if (!data || !data.id) {
+            console.warn('Ignoring data without id:', data);
+            return;
+          }
 
           try {
             // Load vote counts for this comment
@@ -112,6 +120,8 @@ export function commentProvider() {
               userVote,
               replyCount,
             };
+
+            console.log('Adding comment:', commentWithVotes);
 
             if (existingIndex >= 0) {
               comments.value[existingIndex] = commentWithVotes;
