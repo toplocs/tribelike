@@ -15,13 +15,6 @@
     No plugins found.
   </div>
 
-  <div ref="formRef">
-    <PluginForm
-      :selected="selected"
-      :locked="selected && true"
-      @plugins-changed="handleChange"
-    />
-  </div>
 </template>
 
 //

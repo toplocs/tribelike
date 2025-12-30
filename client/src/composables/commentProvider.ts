@@ -48,56 +48,91 @@ export function commentProvider() {
 
     console.log('Creating comment:', comment);
 
-    // Store comment at primary location: comment/{id}
-    // IMPORTANT: Use .then() to wait for Gun.js to actually persist to storage
-    console.log('Saving comment to Gun.js at:', `comment/${id}`);
+    return new Promise<Comment>((resolve, reject) => {
+      try {
+        // 1. Store comment at primary location: comment/{id}
+        // Use round-trip write: put() then once() to ensure persistence to storage
+        console.log('Saving comment to Gun.js at:', `comment/${id}`);
+        gun
+          .get(`comment/${id}`)
+          .put(comment)
+          .once(() => {
+            // Verify data is persisted by reading it back
+            console.log('✓ Comment persisted to Gun.js:', id);
 
-    return new Promise<Comment>((resolve) => {
-      gun
-        .get(`comment/${id}`)
-        .put(comment)
-        .then(async () => {
-          console.log('✓ Comment persisted to Gun.js:', id);
+            // 2. Add comment data to sphere's comment index
+            console.log('Adding comment to sphere index:', `sphere/${sphereId}/comments/${id}`);
+            gun
+              .get(`sphere/${sphereId}`)
+              .get('comments')
+              .get(id)
+              .put(comment)
+              .once(() => {
+                console.log('✓ Comment added to sphere index:', sphereId);
 
-          // Add to sphere's comment index at: sphere/{sphereId}/comments/{id}
-          console.log('Adding comment to sphere index:', `sphere/${sphereId}/comments/${id}`);
-          gun
-            .get(`sphere/${sphereId}`)
-            .get('comments')
-            .get(id)
-            .put(comment)
-            .then(() => {
-              console.log('✓ Comment added to sphere index:', sphereId);
-
-              // If reply, add to parent's replies: comment/{parentId}/replies/{id}
-              if (parentId) {
-                console.log('Adding reply to parent:', `comment/${parentId}/replies/${id}`);
-                gun
-                  .get(`comment/${parentId}`)
-                  .get('replies')
-                  .get(id)
-                  .put(comment)
-                  .then(() => {
-                    console.log('✓ Reply added to parent:', parentId);
-                  });
-              }
-
-              console.log('✓ Comment fully saved to Gun.js:', comment);
-
-              // Immediately add to local state for instant UI feedback
-              const commentWithVotes: CommentWithVotes = {
-                ...comment,
-                voteCount: 0,
-                userVote: null,
-                replyCount: 0,
-              };
-              comments.value.push(commentWithVotes);
-              console.log('✓ Comment added to local state:', commentWithVotes);
-
-              resolve(comment);
-            });
-        });
+                // 3. If reply, add to parent's replies
+                if (parentId) {
+                  console.log('Adding reply to parent:', `comment/${parentId}/replies/${id}`);
+                  gun
+                    .get(`comment/${parentId}`)
+                    .get('replies')
+                    .get(id)
+                    .put(comment)
+                    .once(() => {
+                      console.log('✓ Reply added to parent:', parentId);
+                      addCommentToLocalState(comment);
+                      resolve(comment);
+                    });
+                } else {
+                  addCommentToLocalState(comment);
+                  resolve(comment);
+                }
+              });
+          });
+      } catch (err) {
+        console.error('Error creating comment:', err);
+        error.value = `Failed to create comment: ${err}`;
+        reject(err);
+      }
     });
+  };
+
+  /**
+   * Helper to add comment to local state
+   */
+  const addCommentToLocalState = (comment: Comment) => {
+    const commentWithVotes: CommentWithVotes = {
+      ...comment,
+      voteCount: 0,
+      userVote: null,
+      replyCount: 0,
+    };
+    comments.value.push(commentWithVotes);
+    console.log('✓ Comment added to local state:', commentWithVotes);
+
+    // Debug: Check if data is in localStorage
+    checkStorageDebug(comment.id);
+  };
+
+  /**
+   * Debug function to verify data is in localStorage
+   */
+  const checkStorageDebug = (commentId: string) => {
+    console.log('🔍 Checking localStorage for comment:', commentId);
+    const allKeys = Object.keys(localStorage);
+    console.log('📦 Total localStorage keys:', allKeys.length);
+
+    const relevantKeys = allKeys.filter(k => k.includes(commentId) || k.includes('comment'));
+    if (relevantKeys.length > 0) {
+      console.log('✓ Found relevant keys in localStorage:', relevantKeys);
+      relevantKeys.forEach(key => {
+        const value = localStorage.getItem(key);
+        console.log(`  ${key}:`, value ? JSON.parse(value) : 'null');
+      });
+    } else {
+      console.warn('⚠️ No relevant keys found in localStorage');
+      console.log('Sample localStorage keys:', allKeys.slice(0, 5));
+    }
   };
 
   /**
@@ -118,52 +153,34 @@ export function commentProvider() {
       userVoteCache.clear();
 
       console.log('📂 Loading comments for sphere:', sphereId);
+      console.log('🔍 Querying Gun.js at: sphere/' + sphereId + '/comments');
 
-      // Load comment IDs from Gun.js at: sphere/{sphereId}/comments
-      const sphereCommentIndex = await new Promise<any>((resolve) => {
-        console.log('🔍 Querying Gun.js for comment index at:', `sphere/${sphereId}/comments`);
-        console.log('📍 Full Gun.js path:', `toplocs_v${APP_VERSION}/sphere/${sphereId}/comments`);
+      // Wait for initial comments to load before setting loading to false
+      const initialLoadPromise = new Promise<void>((resolveInitialLoad) => {
+        let hasInitialized = false;
 
-        gun
+        // Set up listener for comments using .map().once() pattern (like wiki-plugin)
+        commentListener = gun
           .get(`sphere/${sphereId}`)
           .get('comments')
-          .once((data: any) => {
-            console.log('📦 Retrieved comment index from Gun.js:', data);
+          .on((data: any) => {
+            console.log('📊 Comments index data received:', data);
             console.log('📊 Data type:', typeof data);
-            console.log('📊 Data keys:', data ? Object.keys(data) : 'null');
-            resolve(data || {});
-          });
-      });
+            if (data) {
+              console.log('📊 Data keys:', Object.keys(data).filter(k => !k.startsWith('_')));
+            }
+          })
+          .map()
+          .once(async (commentData: any) => {
+            console.log('📝 Listener fired - Loading comment from Gun.js:', commentData);
 
-      // Extract comment IDs (filter out Gun.js metadata keys starting with '_')
-      const allKeys = Object.keys(sphereCommentIndex);
-      const commentIds = allKeys.filter((key) => !key.startsWith('_'));
-      console.log(`✓ Found ${commentIds.length} comments in sphere ${sphereId}`);
-      if (commentIds.length > 0) {
-        console.log('📋 Comment IDs:', commentIds);
-      } else if (allKeys.length > 0) {
-        console.log('⚠️ All keys (including metadata):', allKeys);
-      }
+            if (!commentData || !commentData.id) {
+              console.warn('⚠️ Ignoring data without id:', commentData);
+              return;
+            }
 
-      // Load full comment data for each ID
-      const commentPromises = commentIds.map((commentId) => {
-        return new Promise<void>((resolve) => {
-          console.log(`📝 Loading comment data from Gun.js at: comment/${commentId}`);
-          console.log(`📍 Full path: toplocs_v${APP_VERSION}/comment/${commentId}`);
-
-          gun
-            .get(`comment/${commentId}`)
-            .once(async (commentData: any) => {
-              console.log(`✓ Retrieved comment from Gun.js:`, commentId);
-              console.log(`  Data:`, commentData);
-
-              if (!commentData || !commentData.id) {
-                console.warn(`⚠️ Comment data missing or invalid for ${commentId}:`, commentData);
-                resolve();
-                return;
-              }
-
-              // Load vote counts and user's vote
+            try {
+              // Load vote counts and user's vote for this comment
               const voteCount = await loadVoteCounts(commentData.id);
               const userVote = await getUserVote(commentData.id);
               const replyCount = await loadReplyCount(commentData.id);
@@ -183,65 +200,37 @@ export function commentProvider() {
                 comments.value.push(commentWithVotes);
               }
 
-              console.log(`Added comment to local state:`, commentWithVotes);
-              resolve();
-            });
-        });
+              console.log(`✓ Comment loaded and added to local state:`, commentWithVotes);
+
+              // Mark initial load as complete after first comment loads
+              if (!hasInitialized) {
+                hasInitialized = true;
+                console.log('📚 Initial comment batch loaded, stopping loading spinner');
+                resolveInitialLoad();
+              }
+            } catch (err) {
+              console.error(`Failed to load comment ${commentData.id}:`, err);
+            }
+          });
+
+        // Also resolve after a timeout in case there are no comments
+        setTimeout(() => {
+          if (!hasInitialized) {
+            hasInitialized = true;
+            console.log('📚 Timeout reached, no comments found');
+            resolveInitialLoad();
+          }
+        }, 1000);
       });
 
-      console.log(`Loading ${commentPromises.length} comments...`);
-      await Promise.all(commentPromises);
-      console.log(`Finished loading comments. Total in state: ${comments.value.length}`);
-
-      // Then, set up listener for future changes
-      console.log('Setting up listener for sphere:', sphereId);
-      commentListener = gun
-        .get(`sphere/${sphereId}`)
-        .get('comments')
-        .map()
-        .on(async (data: any) => {
-          console.log('Listener triggered with data:', data);
-
-          if (!data || !data.id) {
-            console.warn('Ignoring data without id:', data);
-            return;
-          }
-
-          try {
-            // Load full comment data
-            gun
-              .get(`comment/${data.id}`)
-              .once(async (fullData: any) => {
-                if (!fullData || !fullData.id) return;
-
-                const voteCount = await loadVoteCounts(fullData.id);
-                const userVote = await getUserVote(fullData.id);
-                const replyCount = await loadReplyCount(fullData.id);
-
-                const commentWithVotes: CommentWithVotes = {
-                  ...fullData,
-                  voteCount,
-                  userVote,
-                  replyCount,
-                };
-
-                const existingIndex = comments.value.findIndex(c => c.id === fullData.id);
-                if (existingIndex >= 0) {
-                  comments.value[existingIndex] = commentWithVotes;
-                } else {
-                  comments.value.push(commentWithVotes);
-                }
-              });
-          } catch (e) {
-            console.error(`Failed to load comment ${data.id}:`, e);
-          }
-        });
-
+      // Wait for initial load before hiding spinner
+      await initialLoadPromise;
       loading.value = false;
-      console.log('Comments loaded. Count:', comments.value.length);
+      console.log('📚 Comments loaded. Count:', comments.value.length);
     } catch (e) {
       error.value = `Failed to load comments: ${e}`;
       loading.value = false;
+      console.error('Error loading comments:', e);
     }
   };
 
