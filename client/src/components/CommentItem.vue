@@ -1,72 +1,74 @@
 <template>
-  <div :class="depthClass" class="mb-4">
-    <Card class="p-4">
-      <!-- Author info and timestamp -->
-      <div class="flex items-center gap-2 mb-2">
-        <span class="font-semibold text-sm">{{ authorName }}</span>
-        <span class="text-xs text-gray-500">{{ formattedTime }}</span>
-      </div>
+  <div :class="depthClass" class="border-l-2 border-gray-200 dark:border-gray-700 pl-4 py-3">
+    <!-- Author info and timestamp -->
+    <div class="flex items-center gap-2 mb-2">
+      <span class="font-semibold text-sm">{{ authorName }}</span>
+      <span class="text-xs text-gray-500">{{ formattedTime }}</span>
+    </div>
 
-      <!-- Comment text -->
-      <p class="mb-3 text-sm whitespace-pre-wrap">{{ comment.text }}</p>
+    <!-- Comment text -->
+    <p class="mb-3 text-sm whitespace-pre-wrap text-gray-900 dark:text-gray-100">{{ comment.text }}</p>
 
-      <!-- Actions row -->
-      <div class="flex gap-4 items-center text-xs">
-        <!-- Vote buttons -->
-        <div class="flex items-center gap-1 bg-gray-100 dark:bg-slate-700 rounded px-2 py-1">
-          <button
-            @click="handleVote(1)"
-            :class="{ 'text-green-600 font-bold': comment.userVote === 1 }"
-            class="hover:text-green-600 transition"
-            :disabled="!isAuthenticated"
-          >
-            ↑
-          </button>
-          <span class="w-6 text-center">{{ comment.voteCount }}</span>
-          <button
-            @click="handleVote(-1)"
-            :class="{ 'text-red-600 font-bold': comment.userVote === -1 }"
-            class="hover:text-red-600 transition"
-            :disabled="!isAuthenticated"
-          >
-            ↓
-          </button>
-        </div>
-
-        <!-- Reply button -->
+    <!-- Actions row -->
+    <div class="flex gap-4 items-center text-xs">
+      <!-- Vote buttons -->
+      <div class="flex items-center gap-2">
         <button
-          v-if="depth < 5"
-          @click="showReplyForm = !showReplyForm"
-          class="hover:text-blue-600 transition"
+          @click="handleVote(1)"
+          :class="{ 'text-green-600 font-bold': comment.userVote === 1 }"
+          class="hover:text-green-600 transition px-1"
           :disabled="!isAuthenticated"
+          title="Upvote"
         >
-          Reply ({{ comment.replyCount }})
+          ↑
         </button>
-
-        <span v-if="voteError" class="text-red-500">{{ voteError }}</span>
+        <span class="w-4 text-center text-xs">{{ comment.voteCount }}</span>
+        <button
+          @click="handleVote(-1)"
+          :class="{ 'text-red-600 font-bold': comment.userVote === -1 }"
+          class="hover:text-red-600 transition px-1"
+          :disabled="!isAuthenticated"
+          title="Downvote"
+        >
+          ↓
+        </button>
       </div>
 
-      <!-- Reply form -->
-      <div v-if="showReplyForm && depth < 5" class="mt-4">
-        <CommentForm
-          :sphereId="comment.sphereId"
-          :parentId="comment.id"
-          placeholder="Write a reply..."
-        />
-      </div>
+      <!-- Divider -->
+      <span class="text-gray-300 dark:text-gray-600">•</span>
 
-      <!-- Nested replies -->
-      <div v-if="replies.length > 0" class="mt-4">
-        <CommentList :comments="replies" :depth="depth + 1" />
-      </div>
-    </Card>
+      <!-- Reply button -->
+      <button
+        v-if="depth < 5"
+        @click="showReplyForm = !showReplyForm"
+        class="hover:text-blue-600 transition text-gray-600 dark:text-gray-400"
+        :disabled="!isAuthenticated"
+      >
+        Reply ({{ comment.replyCount }})
+      </button>
+
+      <span v-if="voteError" class="text-red-500">{{ voteError }}</span>
+    </div>
+
+    <!-- Reply form -->
+    <div v-if="showReplyForm && depth < 5" class="mt-4">
+      <CommentForm
+        :sphereId="comment.sphereId"
+        :parentId="comment.id"
+        placeholder="Write a reply..."
+      />
+    </div>
+
+    <!-- Nested replies -->
+    <div v-if="replies.length > 0" class="mt-4">
+      <CommentList :comments="replies" :depth="depth + 1" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { CommentWithVotes } from '@/types';
-import Card from '@/components/common/Card.vue';
 import CommentForm from '@/components/forms/CommentForm.vue';
 import CommentList from '@/components/CommentList.vue';
 import { useComment } from '@/composables/commentProvider';

@@ -34,25 +34,25 @@
       <Card class="flex flex-col gap-4">
         <Headline>Discussion</Headline>
 
-        <CommentForm
-          v-if="profile"
-          :sphereId="sphere?.id"
-          :parentId="null"
-        />
-
-        <div v-if="commentsLoading" class="text-center py-4">
-          <p class="text-gray-500">Loading comments...</p>
+        <!-- Comment form (always show if authenticated) -->
+        <div v-if="profile" class="pb-4 border-b border-gray-200 dark:border-gray-700">
+          <CommentForm
+            :sphereId="sphere?.id"
+            :parentId="null"
+          />
         </div>
 
+        <!-- Loading state -->
+        <div v-if="commentsLoading" class="text-center py-8">
+          <p class="text-gray-500 dark:text-gray-400">Loading comments...</p>
+        </div>
+
+        <!-- Comments list -->
         <CommentList
-          v-else-if="topLevelComments.length > 0"
+          v-else
           :comments="topLevelComments"
           :depth="0"
         />
-
-        <div v-else class="text-center py-4 text-gray-500">
-          No comments yet. Be the first to comment!
-        </div>
       </Card>
     </div>
 

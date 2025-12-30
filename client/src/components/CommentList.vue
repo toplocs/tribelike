@@ -1,15 +1,15 @@
 <template>
-  <div class="comment-list">
-    <div v-if="sortedComments.length === 0" class="text-center py-8 text-gray-500">
-      No comments yet. Be the first to comment!
-    </div>
-
+  <div class="comment-list space-y-0">
     <CommentItem
       v-for="comment in sortedComments"
       :key="comment.id"
       :comment="comment"
       :depth="depth"
     />
+
+    <div v-if="sortedComments.length === 0 && depth === 0" class="py-8 text-center text-gray-500 dark:text-gray-400">
+      No comments yet. Be the first to comment!
+    </div>
   </div>
 </template>
 

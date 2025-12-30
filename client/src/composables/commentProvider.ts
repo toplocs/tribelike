@@ -91,17 +91,62 @@ export function commentProvider() {
       if (commentListener) {
         commentListener.off();
       }
-      if (voteListener) {
-        voteListener.off();
-      }
 
       comments.value = [];
       voteCache.clear();
       userVoteCache.clear();
 
-      // Listen to all comments for this sphere
-      console.log('Setting up listener for sphere:', sphereId);
+      console.log('Loading comments for sphere:', sphereId);
 
+      // First, load existing comments from Gun.js
+      const sphereComments = await new Promise<any>((resolve) => {
+        gun
+          .get(`sphere/${sphereId}`)
+          .get('comments')
+          .once((data: any) => {
+            console.log('Loaded existing comments data:', data);
+            resolve(data || {});
+          });
+      });
+
+      // Process existing comments
+      const commentPromises = Object.keys(sphereComments)
+        .filter((key) => !key.startsWith('_')) // Skip Gun.js metadata
+        .map(async (key) => {
+          const commentId = key;
+          return new Promise<void>((resolve) => {
+            gun
+              .get(`comment/${commentId}`)
+              .once(async (data: any) => {
+                if (data && data.id) {
+                  console.log('Loaded comment:', data);
+                  const voteCount = await loadVoteCounts(data.id);
+                  const userVote = await getUserVote(data.id);
+                  const replyCount = await loadReplyCount(data.id);
+
+                  const commentWithVotes: CommentWithVotes = {
+                    ...data,
+                    voteCount,
+                    userVote,
+                    replyCount,
+                  };
+
+                  const existingIndex = comments.value.findIndex(c => c.id === data.id);
+                  if (existingIndex >= 0) {
+                    comments.value[existingIndex] = commentWithVotes;
+                  } else {
+                    comments.value.push(commentWithVotes);
+                  }
+                }
+                resolve();
+              });
+          });
+        });
+
+      await Promise.all(commentPromises);
+
+      // Then, set up listener for future changes
+      console.log('Setting up listener for sphere:', sphereId);
       commentListener = gun
         .get(`sphere/${sphereId}`)
         .get('comments')
@@ -115,35 +160,37 @@ export function commentProvider() {
           }
 
           try {
-            // Load vote counts for this comment
-            const voteCount = await loadVoteCounts(data.id);
-            const userVote = await getUserVote(data.id);
+            // Load full comment data
+            gun
+              .get(`comment/${data.id}`)
+              .once(async (fullData: any) => {
+                if (!fullData || !fullData.id) return;
 
-            // Load reply count
-            const replyCount = await loadReplyCount(data.id);
+                const voteCount = await loadVoteCounts(fullData.id);
+                const userVote = await getUserVote(fullData.id);
+                const replyCount = await loadReplyCount(fullData.id);
 
-            // Check if comment already exists
-            const existingIndex = comments.value.findIndex(c => c.id === data.id);
-            const commentWithVotes: CommentWithVotes = {
-              ...data,
-              voteCount,
-              userVote,
-              replyCount,
-            };
+                const commentWithVotes: CommentWithVotes = {
+                  ...fullData,
+                  voteCount,
+                  userVote,
+                  replyCount,
+                };
 
-            console.log('Adding comment:', commentWithVotes);
-
-            if (existingIndex >= 0) {
-              comments.value[existingIndex] = commentWithVotes;
-            } else {
-              comments.value.push(commentWithVotes);
-            }
+                const existingIndex = comments.value.findIndex(c => c.id === fullData.id);
+                if (existingIndex >= 0) {
+                  comments.value[existingIndex] = commentWithVotes;
+                } else {
+                  comments.value.push(commentWithVotes);
+                }
+              });
           } catch (e) {
             console.error(`Failed to load comment ${data.id}:`, e);
           }
         });
 
       loading.value = false;
+      console.log('Comments loaded. Count:', comments.value.length);
     } catch (e) {
       error.value = `Failed to load comments: ${e}`;
       loading.value = false;
