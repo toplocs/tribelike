@@ -77,6 +77,21 @@ export function commentProvider() {
 
                 console.log('Comment saved successfully to Gun.js:', comment);
 
+                // Also backup to localStorage for reliability
+                const backupKey = `gundb_comment_${id}`;
+                localStorage.setItem(backupKey, JSON.stringify(comment));
+                console.log('Comment backed up to localStorage:', backupKey);
+
+                // Also store comment ID in sphere's comment list (localStorage backup)
+                const sphereCommentsKey = `gundb_sphere_comments_${sphereId}`;
+                const sphereCommentsList = localStorage.getItem(sphereCommentsKey);
+                const commentIds = sphereCommentsList ? JSON.parse(sphereCommentsList) : [];
+                if (!commentIds.includes(id)) {
+                  commentIds.push(id);
+                  localStorage.setItem(sphereCommentsKey, JSON.stringify(commentIds));
+                  console.log('Comment ID added to sphere comments list:', sphereCommentsKey);
+                }
+
                 // Immediately add to local state for instant UI feedback
                 const commentWithVotes: CommentWithVotes = {
                   ...comment,
@@ -118,44 +133,75 @@ export function commentProvider() {
 
       console.log('Loading comments for sphere:', sphereId);
 
-      // First, load existing comments from Gun.js
-      const sphereComments = await new Promise<any>((resolve) => {
-        console.log('Fetching comments from sphere:', sphereId);
-        gun
-          .get(`sphere/${sphereId}`)
-          .get('comments')
-          .once((data: any) => {
-            console.log('Loaded existing comments data from Gun.js:', data);
-            resolve(data || {});
-          }, { wait: 1000 }); // Wait up to 1 second for data
-      });
+      // First, try to get comment IDs from localStorage backup
+      let commentIds: string[] = [];
+      const sphereCommentsKey = `gundb_sphere_comments_${sphereId}`;
+      const localStorageCommentIds = localStorage.getItem(sphereCommentsKey);
+      if (localStorageCommentIds) {
+        try {
+          commentIds = JSON.parse(localStorageCommentIds);
+          console.log('Loaded comment IDs from localStorage:', commentIds.length, 'comments');
+        } catch (e) {
+          console.error('Failed to parse localStorage comment IDs:', e);
+        }
+      }
 
-      console.log('Processing sphere comments:', Object.keys(sphereComments).length, 'entries');
+      // Also try to load existing comments from Gun.js as backup
+      if (commentIds.length === 0) {
+        const sphereComments = await new Promise<any>((resolve) => {
+          console.log('Fetching comments from sphere:', sphereId);
+          gun
+            .get(`sphere/${sphereId}`)
+            .get('comments')
+            .once((data: any) => {
+              console.log('Loaded existing comments data from Gun.js:', data);
+              resolve(data || {});
+            }, { wait: 1000 }); // Wait up to 1 second for data
+        });
+
+        commentIds = Object.keys(sphereComments).filter((key) => !key.startsWith('_'));
+        console.log('Processing sphere comments from Gun.js:', commentIds.length, 'entries');
+      }
 
       // Process existing comments
-      const commentPromises = Object.keys(sphereComments)
-        .filter((key) => !key.startsWith('_')) // Skip Gun.js metadata
-        .map(async (key) => {
-          const commentId = key;
+      const commentPromises = commentIds
+        .map((commentId) => {
           return new Promise<void>((resolve) => {
             console.log('Loading comment data for:', commentId);
             gun
               .get(`comment/${commentId}`)
               .once(async (data: any) => {
                 console.log('Loaded comment data from Gun.js:', commentId, data);
-                if (data && data.id) {
-                  const voteCount = await loadVoteCounts(data.id);
-                  const userVote = await getUserVote(data.id);
-                  const replyCount = await loadReplyCount(data.id);
+                let commentData = data;
+
+                // If no data from Gun.js, try localStorage backup
+                if (!commentData || !commentData.id) {
+                  console.log('No Gun.js data, checking localStorage backup for:', commentId);
+                  const backupKey = `gundb_comment_${commentId}`;
+                  const backupData = localStorage.getItem(backupKey);
+                  if (backupData) {
+                    try {
+                      commentData = JSON.parse(backupData);
+                      console.log('Loaded comment from localStorage backup:', commentId, commentData);
+                    } catch (e) {
+                      console.error('Failed to parse localStorage backup:', e);
+                    }
+                  }
+                }
+
+                if (commentData && commentData.id) {
+                  const voteCount = await loadVoteCounts(commentData.id);
+                  const userVote = await getUserVote(commentData.id);
+                  const replyCount = await loadReplyCount(commentData.id);
 
                   const commentWithVotes: CommentWithVotes = {
-                    ...data,
+                    ...commentData,
                     voteCount,
                     userVote,
                     replyCount,
                   };
 
-                  const existingIndex = comments.value.findIndex(c => c.id === data.id);
+                  const existingIndex = comments.value.findIndex(c => c.id === commentData.id);
                   if (existingIndex >= 0) {
                     comments.value[existingIndex] = commentWithVotes;
                   } else {
@@ -163,7 +209,7 @@ export function commentProvider() {
                     comments.value.push(commentWithVotes);
                   }
                 } else {
-                  console.warn('Skipping invalid comment data:', commentId, data);
+                  console.warn('Skipping invalid comment data:', commentId, commentData);
                 }
                 resolve();
               });

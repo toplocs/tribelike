@@ -9,7 +9,38 @@ import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
 const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
 
-const gun = Gun({ peers, rad: true });
+// Check if localStorage is available
+const hasLocalStorage = typeof localStorage !== 'undefined';
+console.log('Browser localStorage available:', hasLocalStorage);
+
+// Configure Gun with proper persistence
+// Gun uses localStorage by default if available, but we can also use IndexedDB
+const gunConfig: any = {
+  peers,
+  rad: true,
+};
+
+// Add localStorage adapter if available
+if (hasLocalStorage) {
+  // Gun will automatically persist to localStorage
+  gunConfig.localStorage = true;
+}
+
+const gun = Gun(gunConfig);
+
+console.log('Gun.js initialized with config:', gunConfig);
+
+// Test persistence: check if we can read/write to localStorage
+if (hasLocalStorage) {
+  try {
+    localStorage.setItem('__gun_test__', 'test');
+    const test = localStorage.getItem('__gun_test__');
+    localStorage.removeItem('__gun_test__');
+    console.log('localStorage persistence test: OK');
+  } catch (e) {
+    console.warn('localStorage persistence test failed:', e);
+  }
+}
 const root = gun.get(`toplocs_v${APP_VERSION}`);
 
 root.clear = function() {
