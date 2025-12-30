@@ -9,39 +9,34 @@ import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
 const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
 
-// Check if localStorage is available
-const hasLocalStorage = typeof localStorage !== 'undefined';
-console.log('Browser localStorage available:', hasLocalStorage);
+console.log('🔫 Initializing Gun.js with peers:', peers);
+console.log('📍 App version:', APP_VERSION);
 
-// Configure Gun with proper persistence
-// Gun uses localStorage by default if available, but we can also use IndexedDB
+// Configure Gun with persistence enabled
+// Gun.js will automatically use localStorage for persistence in browser
 const gunConfig: any = {
   peers,
   rad: true,
+  // Do NOT disable default persistence
 };
-
-// Add localStorage adapter if available
-if (hasLocalStorage) {
-  // Gun will automatically persist to localStorage
-  gunConfig.localStorage = true;
-}
 
 const gun = Gun(gunConfig);
 
-console.log('Gun.js initialized with config:', gunConfig);
+console.log('✓ Gun.js initialized');
+console.log('  - Storage: localStorage (automatic)');
+console.log('  - RAD: enabled');
+console.log('  - Peers:', peers.length > 0 ? peers : 'none (local only)');
 
-// Test persistence: check if we can read/write to localStorage
-if (hasLocalStorage) {
-  try {
-    localStorage.setItem('__gun_test__', 'test');
-    const test = localStorage.getItem('__gun_test__');
-    localStorage.removeItem('__gun_test__');
-    console.log('localStorage persistence test: OK');
-  } catch (e) {
-    console.warn('localStorage persistence test failed:', e);
-  }
-}
+// Verify Gun.js can access storage
+const storageTest = gun.get('__storage_test__');
+storageTest.put({ test: true }).then(() => {
+  console.log('✓ Gun.js storage persistence: WORKING');
+}).catch((err) => {
+  console.error('✗ Gun.js storage persistence: FAILED', err);
+});
+
 const root = gun.get(`toplocs_v${APP_VERSION}`);
+console.log('✓ Created root node:', `toplocs_v${APP_VERSION}`);
 
 root.clear = function() {
 	// Clear localStorage
