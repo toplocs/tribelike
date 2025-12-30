@@ -25,56 +25,76 @@ export function commentProvider() {
     sphereId: string,
     parentId: string | null = null
   ): Promise<Comment | null> => {
+    error.value = null;
+
+    if (!gun.user().is) {
+      error.value = 'You must be authenticated to comment.';
+      return null;
+    }
+    if (!profile.value?.id) {
+      error.value = 'No profile selected.';
+      return null;
+    }
+
+    const id = crypto.randomUUID();
+    const comment: Comment = {
+      id,
+      text,
+      authorId: profile.value.id,
+      sphereId,
+      parentId,
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log('Creating comment:', comment);
+
     try {
-      error.value = null;
+      // Store comment at primary location and wait for save
+      return new Promise<Comment>((resolve, reject) => {
+        gun
+          .get(`comment/${id}`)
+          .put(comment, (ack: any) => {
+            console.log('Comment saved at primary location:', id, ack);
 
-      if (!gun.user().is) {
-        error.value = 'You must be authenticated to comment.';
-        return null;
-      }
-      if (!profile.value?.id) {
-        error.value = 'No profile selected.';
-        return null;
-      }
+            // Add to sphere's comments (store comment ID in an object key)
+            gun
+              .get(`sphere/${sphereId}`)
+              .get('comments')
+              .get(id)
+              .put(comment, (ack2: any) => {
+                console.log('Comment added to sphere:', sphereId, ack2);
 
-      const id = crypto.randomUUID();
-      const comment: Comment = {
-        id,
-        text,
-        authorId: profile.value.id,
-        sphereId,
-        parentId,
-        createdAt: new Date().toISOString(),
-      };
+                // If reply, add to parent's replies
+                if (parentId) {
+                  gun
+                    .get(`comment/${parentId}`)
+                    .get('replies')
+                    .get(id)
+                    .put(comment, (ack3: any) => {
+                      console.log('Reply added to parent:', parentId, ack3);
+                    });
+                }
 
-      console.log('Creating comment:', comment);
+                console.log('Comment saved successfully to Gun.js:', comment);
 
-      // Store comment at primary location
-      gun.get(`comment/${id}`).put(comment);
+                // Immediately add to local state for instant UI feedback
+                const commentWithVotes: CommentWithVotes = {
+                  ...comment,
+                  voteCount: 0,
+                  userVote: null,
+                  replyCount: 0,
+                };
+                comments.value.push(commentWithVotes);
+                console.log('Comment added to local state:', commentWithVotes);
 
-      // Add to sphere's comments (store comment ID in an object key)
-      gun.get(`sphere/${sphereId}`).get('comments').get(id).put(comment);
-
-      // If reply, add to parent's replies
-      if (parentId) {
-        gun.get(`comment/${parentId}`).get('replies').get(id).put(comment);
-      }
-
-      console.log('Comment created successfully');
-
-      // Immediately add to local state for instant UI feedback
-      const commentWithVotes: CommentWithVotes = {
-        ...comment,
-        voteCount: 0,
-        userVote: null,
-        replyCount: 0,
-      };
-      comments.value.push(commentWithVotes);
-      console.log('Comment added to local state:', commentWithVotes);
-
-      return comment;
+                resolve(comment);
+              });
+          });
+      });
     } catch (e) {
-      error.value = `Failed to create comment: ${e}`;
+      const errorMsg = `Failed to create comment: ${e}`;
+      error.value = errorMsg;
+      console.error(errorMsg);
       return null;
     }
   };
@@ -100,14 +120,17 @@ export function commentProvider() {
 
       // First, load existing comments from Gun.js
       const sphereComments = await new Promise<any>((resolve) => {
+        console.log('Fetching comments from sphere:', sphereId);
         gun
           .get(`sphere/${sphereId}`)
           .get('comments')
           .once((data: any) => {
-            console.log('Loaded existing comments data:', data);
+            console.log('Loaded existing comments data from Gun.js:', data);
             resolve(data || {});
-          });
+          }, { wait: 1000 }); // Wait up to 1 second for data
       });
+
+      console.log('Processing sphere comments:', Object.keys(sphereComments).length, 'entries');
 
       // Process existing comments
       const commentPromises = Object.keys(sphereComments)
@@ -115,11 +138,12 @@ export function commentProvider() {
         .map(async (key) => {
           const commentId = key;
           return new Promise<void>((resolve) => {
+            console.log('Loading comment data for:', commentId);
             gun
               .get(`comment/${commentId}`)
               .once(async (data: any) => {
+                console.log('Loaded comment data from Gun.js:', commentId, data);
                 if (data && data.id) {
-                  console.log('Loaded comment:', data);
                   const voteCount = await loadVoteCounts(data.id);
                   const userVote = await getUserVote(data.id);
                   const replyCount = await loadReplyCount(data.id);
@@ -135,15 +159,20 @@ export function commentProvider() {
                   if (existingIndex >= 0) {
                     comments.value[existingIndex] = commentWithVotes;
                   } else {
+                    console.log('Adding loaded comment to state:', commentWithVotes);
                     comments.value.push(commentWithVotes);
                   }
+                } else {
+                  console.warn('Skipping invalid comment data:', commentId, data);
                 }
                 resolve();
               });
           });
         });
 
+      console.log('Waiting for all comments to load...');
       await Promise.all(commentPromises);
+      console.log('All comments loaded. Total:', comments.value.length);
 
       // Then, set up listener for future changes
       console.log('Setting up listener for sphere:', sphereId);
