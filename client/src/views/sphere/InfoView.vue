@@ -136,6 +136,12 @@ const pluginSlots = computed(() => (
 onMounted(async () => {
   console.log(type.value);
   tab.value = 'Info';
+
+  // Load comments when sphere is ready
+  if (sphere.value?.id) {
+    const { loadComments } = useComment();
+    await loadComments(sphere.value.id);
+  }
 });
 
 // Reload comments whenever sphere changes
