@@ -30,6 +30,30 @@
           :profiles="profileRelations.filter(x => x.accepts.includes(sphere?.type))"
         />
       </Card>
+
+      <Card class="flex flex-col gap-4">
+        <Headline>Discussion</Headline>
+
+        <CommentForm
+          v-if="profile"
+          :sphereId="sphere?.id"
+          :parentId="null"
+        />
+
+        <div v-if="commentsLoading" class="text-center py-4">
+          <p class="text-gray-500">Loading comments...</p>
+        </div>
+
+        <CommentList
+          v-else-if="topLevelComments.length > 0"
+          :comments="topLevelComments"
+          :depth="0"
+        />
+
+        <div v-else class="text-center py-4 text-gray-500">
+          No comments yet. Be the first to comment!
+        </div>
+      </Card>
     </div>
 
     <Sidebar class="space-y-4">
@@ -76,9 +100,12 @@ import RelationButtons from '@/components/RelationButtons.vue';
 import PluginComponent from '@/components/PluginComponent.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
+import CommentForm from '@/components/forms/CommentForm.vue';
+import CommentList from '@/components/CommentList.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
+import { commentProvider, useComment } from '@/composables/commentProvider';
 import {
     topicRelations,
     locationRelations,
@@ -89,10 +116,20 @@ const { profile } = useProfile();
 const { sphere } = useSphere();
 const { slots } = usePlugins();
 const tab = inject('tab');
+
+// Initialise comment provider
+commentProvider();
+const { comments, loading: commentsLoading } = useComment();
+
 const type = computed(() => {
   const type2 = sphere.value?.type;
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
+
+const topLevelComments = computed(() =>
+  comments.value.filter(c => c.parentId === null)
+);
+
 const pluginSlots = computed(() => (
   slots.value.filter(x => x.page == 'Info' && x.entity == type.value)
 ));
@@ -100,5 +137,11 @@ const pluginSlots = computed(() => (
 onMounted(async () => {
   console.log(type.value);
   tab.value = 'Info';
+
+  // Load comments when sphere is ready
+  if (sphere.value?.id) {
+    const { loadComments } = useComment();
+    await loadComments(sphere.value.id);
+  }
 });
 </script>
