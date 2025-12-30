@@ -34,6 +34,11 @@ export const cookieOptions: CookieOptions = {
   secure: false,   // Allow cookies over HTTP for localhost
 }
 
+export const pinataApiKey: string = process.env.PINATA_API_KEY || '';
+export const pinataApiSecret: string = process.env.PINATA_API_SECRET || '';
+export const pinataJwt: string = process.env.PINATA_JWT || '';
+export const pinataGatewayUrl: string = process.env.PINATA_GATEWAY_URL || 'https://gateway.pinata.cloud/ipfs';
+
 const certificatesKey = `${__dirname}/../../localhost-key.pem`;
 const certificatesCert = `${__dirname}/../../localhost.pem`;
 

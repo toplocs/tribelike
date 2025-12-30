@@ -106,16 +106,16 @@ export function userProvider() {
                   user.value = data;
                 });
 
-                // Set up profiles subscription
-                profilesRef = gun.user()
-                .get('profiles')
-                .map()
-                .on((data, key) => {
-                  if (data) {
-                    const exists = profiles.value.some(x => x.id === data.id);
-                    if (!exists) profiles.value.push(data);
-                  }
-                });
+                // Load profiles once - avoid continuous map().on() which syncs all profiles
+                gun.user()
+                  .get('profiles')
+                  .map()
+                  .once((data, key) => {
+                    if (data) {
+                      const exists = profiles.value.some(x => x.id === data.id);
+                      if (!exists) profiles.value.push(data);
+                    }
+                  });
 
                 resolve(ack.get);
               }
@@ -168,25 +168,23 @@ export function userProvider() {
 
   onMounted(() => {
     gun.user().recall({ sessionStorage: true });
-    if (gun.user().is) {
-      // Set up user subscription
+    if (gun.user().is && !userRef) {
+      // Only set up subscriptions if not already authenticated
+      // This prevents duplicate subscriptions after login
       userRef = gun.user().on((data) => {
         user.value = data;
       });
 
-      // Set up profiles subscription
-      profilesRef = gun.user()
-      .get('profiles')
-      .map()
-      .on((data, key) => {
-        if (data) {
-          const exists = profiles.value.some(x => x.id === data.id);
-          if (!exists) profiles.value.push(data);
-        } else {
-          const id = key.replace('profile/', '');
-          profiles.value = profiles.value.filter(x => x.id !== id);
-        }
-      });
+      // Load profiles once - avoid continuous map().on() which syncs all profiles
+      gun.user()
+        .get('profiles')
+        .map()
+        .once((data, key) => {
+          if (data) {
+            const exists = profiles.value.some(x => x.id === data.id);
+            if (!exists) profiles.value.push(data);
+          }
+        });
     }
   });
 

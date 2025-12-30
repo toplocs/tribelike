@@ -35,9 +35,15 @@ export function profileProvider() {
       const data = Object.fromEntries(formData.entries());
       const email = data.email.toLowerCase();
       const hash = CryptoJS.SHA256(email).toString(CryptoJS.enc.Hex);
+
+      // Use provided image (IPFS/custom) or fall back to Gravatar
+      const image = data.image && data.image !== ''
+        ? data.image
+        : `https://gravatar.com/avatar/${hash}`;
+
       profile.value = {
         ...data,
-        image: `https://gravatar.com/avatar/${hash}`,
+        image,
       }
       const node = gun.get(`profile/${id}`).put(profile.value);
 

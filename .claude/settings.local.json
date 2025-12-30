@@ -8,7 +8,20 @@
       "Bash(git rev-parse:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Skill(pr)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(pnpm -F server build:*)",
+      "Bash(pnpm list:*)",
+      "Bash(pnpm:*)",
+      "Bash(timeout 5 pnpm:*)",
+      "Bash(cat:*)",
+      "Bash(rm:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "WebFetch(domain:docs.pinata.cloud)"
     ],
     "deny": []
   }

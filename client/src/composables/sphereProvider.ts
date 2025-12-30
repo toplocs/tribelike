@@ -38,16 +38,19 @@ export function sphereProvider() {
   }
 
 
-  const searchSphereByTitle = async (term: string): Promise<any[]> => {
+  const searchSphereByTitle = async (term: string, limit: number = 10): Promise<any[]> => {
     return new Promise((resolve) => {
       const results: any[] = [];
 
       const start = 'sphere_'+term.toLowerCase();
       const end = incrementLastChar(start);
 
-      gun.get({ '.': { '>': start, '<': end }, '%': 50000 }) //50kb
+      gun.get({ '.': { '>': start, '<': end }, '%': 10000 }) //10kb limit to reduce sync load
       .map()
       .once((data, key) => {
+        // Stop processing once we reach the limit
+        if (results.length >= limit) return;
+
         if (data && !results.find(x => x.id === data.id)) {
           results.push(data);
         }

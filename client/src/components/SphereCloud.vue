@@ -47,14 +47,28 @@ const handleClick = async (value: String) => {
 }
 
 onMounted(async () => {
-  gun.get('spheres') //use a real search query function
-  .map()
-  .once((refNode, key) => {
-    if (!refNode) return;
-    if (spheres.value.length > 100) return; //limit to 100 entries
-    gun.get(`sphere/${key}`).once((data) => {
-      if (data) spheres.value.push(data);
+  // Load a limited number of spheres instead of scanning all
+  const recentSpheres = await new Promise((resolve) => {
+    const results: any[] = [];
+    const limit = 50; // Reduced from 100 to further reduce sync load
+
+    gun.get('spheres')
+    .map()
+    .once((refNode, key) => {
+      if (results.length >= limit) return;
+      if (!refNode) return;
+
+      gun.get(`sphere/${key}`).once((data) => {
+        if (data && results.length < limit) {
+          results.push(data);
+        }
+      });
     });
+
+    // Resolve after timeout
+    setTimeout(() => resolve(results), 1000);
   });
+
+  spheres.value = recentSpheres;
 });
 </script>

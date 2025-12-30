@@ -8,7 +8,7 @@ exports.getGun = getGun;
 const gun_1 = __importDefault(require("gun"));
 let gun;
 function initGun(server) {
-    gun = (0, gun_1.default)({ peers: [], web: server, file: 'ra-data' });
+    gun = (0, gun_1.default)({ peers: [], file: 'ra-data' });
     return gun;
 }
 function getGun() {

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.certificate = exports.cookieOptions = exports.corsOptions = exports.origin = exports.rpID = exports.rpName = exports.port = exports.enable_https = exports.url = void 0;
+exports.certificate = exports.pinataGatewayUrl = exports.pinataJwt = exports.pinataApiSecret = exports.pinataApiKey = exports.cookieOptions = exports.corsOptions = exports.origin = exports.rpID = exports.rpName = exports.port = exports.enable_https = exports.url = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config();
@@ -31,6 +31,10 @@ exports.cookieOptions = {
     sameSite: 'lax', // Works well in development
     secure: false, // Allow cookies over HTTP for localhost
 };
+exports.pinataApiKey = process.env.PINATA_API_KEY || '';
+exports.pinataApiSecret = process.env.PINATA_API_SECRET || '';
+exports.pinataJwt = process.env.PINATA_JWT || '';
+exports.pinataGatewayUrl = process.env.PINATA_GATEWAY_URL || 'https://gateway.pinata.cloud/ipfs';
 const certificatesKey = `${__dirname}/../../localhost-key.pem`;
 const certificatesCert = `${__dirname}/../../localhost.pem`;
 let certificate = { key: '', cert: '' };

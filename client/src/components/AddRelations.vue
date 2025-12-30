@@ -25,7 +25,7 @@ import gun from '@/services/gun';
 
 const router = useRouter();
 const { profile } = useProfile();
-const { sphere, createSphere } = useSphere();
+const { sphere, createSphere, searchSphereByTitle } = useSphere();
 const { relations, createRelation } = useRelation();
 const options = ref([]);
 const type = ref('relation');
@@ -40,6 +40,7 @@ const handleSelect = async (selected: Object) => {
 }
 
 const handleClick = async (value: String) => {
+  if (!value) return;
   router.push(`/sphere/create?title=${value}`)
 }
 
@@ -56,14 +57,29 @@ const handleSubmit = async () => {
 }
 
 onMounted(async () => {
-  gun.get('spheres') //use the real search function
-  .map()
-  .once((refNode, key) => {
-    if (!refNode) return;
-    gun.get(`sphere/${key}/local`)
-    .once((data) => {
-      if (data) options.value.push(data);
+  // Load limited local spheres instead of scanning all
+  const localSpheres = await new Promise((resolve) => {
+    const results: any[] = [];
+    const limit = 20;
+
+    gun.get('spheres')
+    .map()
+    .once((refNode, key) => {
+      if (results.length >= limit) return;
+      if (!refNode) return;
+
+      gun.get(`sphere/${key}/local`)
+      .once((data) => {
+        if (data && results.length < limit) {
+          results.push(data);
+        }
+      });
     });
+
+    // Resolve after timeout
+    setTimeout(() => resolve(results), 1000);
   });
+
+  options.value = localSpheres;
 });
 </script>
