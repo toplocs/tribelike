@@ -14,6 +14,9 @@ export function commentProvider() {
   const voteCache = new Map<string, number>();
   const userVoteCache = new Map<string, number | null>();
 
+  // Call composables at the top level
+  const { profile } = useProfile();
+
   /**
    * Create a new comment or reply
    */
@@ -29,8 +32,6 @@ export function commentProvider() {
         error.value = 'You must be authenticated to comment.';
         return null;
       }
-
-      const { profile } = useProfile();
       if (!profile.value?.id) {
         error.value = 'No profile selected.';
         return null;
@@ -148,8 +149,6 @@ export function commentProvider() {
         error.value = 'Vote value must be 1 (upvote) or -1 (downvote).';
         return false;
       }
-
-      const { profile } = useProfile();
       if (!profile.value?.id) {
         error.value = 'No profile selected.';
         return false;
@@ -241,7 +240,6 @@ export function commentProvider() {
    */
   const getUserVote = async (commentId: string): Promise<number | null> => {
     try {
-      const { profile } = useProfile();
       if (!profile.value?.id) {
         return null;
       }
