@@ -152,6 +152,9 @@ export function userProvider() {
       // Clear session storage (Gun uses localStorage for persistence)
       sessionStorage.clear();
 
+      // Clear profileId from localStorage to prevent profile from being shown after logout
+      localStorage.removeItem('profileId');
+
       console.log('Logout completed successfully');
     } catch (error) {
       console.error('Error during logout:', error);

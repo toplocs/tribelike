@@ -20,7 +20,7 @@
         class="flex flex-row w-full max-w-md"
       >
         <div className="w-full flex flex-row justify-end items-center gap-2">
-          <FindSphere v-if="!hideSearch" />
+          <SphereSearch v-if="!hideSearch" />
 
           <IconButton
             :icon="MagnifyingGlassIcon"
@@ -111,7 +111,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import Title from './common/Title.vue';
 import Dropdown from './common/Dropdown.vue';
-import FindSphere from './search/FindSphere.vue';
+import SphereSearch from './search/SphereSearch.vue';
 import IconButton from './common/IconButton.vue';
 import Divider from './common/Divider.vue';
 import NotificationList from './list/NotificationList.vue';

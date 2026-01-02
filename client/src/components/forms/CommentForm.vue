@@ -38,6 +38,10 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: 'Write a comment...',
 });
 
+const emit = defineEmits<{
+  success: [];
+}>();
+
 const commentText = ref('');
 const isSubmitting = ref(false);
 const localError = ref<string | null>(null);
@@ -73,6 +77,7 @@ const handleSubmit = async () => {
     console.log('Comment created successfully, clearing form');
     commentText.value = '';
     localError.value = null;
+    emit('success');
   } else {
     localError.value = providerError.value || 'Failed to post comment.';
     console.error('Comment creation failed:', providerError.value);

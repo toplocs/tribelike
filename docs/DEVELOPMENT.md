@@ -79,6 +79,15 @@ Relations connect any two entities with typed relationships defined in `client/s
   - Automatic sync across peers
   - Full persistence to localStorage with Round-trip writes (`.put().once()`)
 
+### Feed & Profile Discovery
+- `feedProvider()`: Manages personal and global activity feeds
+  - Personal feed: Comments from spheres user follows
+  - Global feed: Recent comments from all spheres (for logged-out users)
+- `BrowseProfilesView`: Profile discovery page at `/browse-profiles`
+  - Shows all community profiles in a grid layout
+  - Placeholder for future profile-to-profile relations feature
+  - Works for both logged-in and logged-out users
+
 ## 🔌 Plugin Architecture
 
 Plugins extend functionality without modifying core code:
@@ -91,14 +100,55 @@ Plugins extend functionality without modifying core code:
 
 ### Component Structure
 - **Common components**: `client/src/components/common/` - Reusable UI primitives
-- **Forms**: `client/src/components/forms/` - Entity creation/editing forms  
+- **Forms**: `client/src/components/forms/` - Entity creation/editing forms
 - **Views**: `client/src/views/` - Full page components organized by entity type
 - **Badges**: `client/src/components/badges/` - Entity display components
+- **Search**: `client/src/components/search/SphereSearch.vue` - Header search for discovering spheres
+
+### Sphere Search Component
+
+The `SphereSearch.vue` component provides real-time sphere discovery in the page header:
+
+**Features:**
+- Keyboard navigation (↑↓ arrows, Enter to select, Escape to close)
+- Loading skeletons during Gun.js 600ms lookup
+- Result cards with sphere metadata (title, description, member count)
+- Dark mode support with proper focus states
+- Click-outside-to-close functionality
+- Clear button to reset search
+- Mobile-responsive design
+
+**Implementation Details:**
+- Debounced input (300ms) to reduce Gun.js queries
+- Uses `sphereProvider().searchSphereByTitle()` for lexicographic range queries
+- Minimum 3 characters before search triggers
+- Displays up to 10 results
+- Auto-closes dropdown and clears search on sphere selection
+
+**Known Limitations:**
+- **Unicode characters** (e.g., "ü", "ö", "ñ") in sphere titles may not be found due to Gun.js lexicographic range query limitations. The `incrementLastChar()` utility function doesn't properly handle unicode charCodes. Workaround: search using base ASCII equivalents (e.g., "Nurnberg" instead of "Nürnberg") or use the first 3 ASCII characters of the name.
+- **Search is case-insensitive** but relies on exact character matching after lowercasing
+
+**Location in codebase:**
+- Component: `client/src/components/search/SphereSearch.vue`
+- Integration: `client/src/components/NavBar.vue` (line 23)
+- Provider: `client/src/composables/sphereProvider.ts`
+- Search logic: `sphereProvider().searchSphereByTitle(term, limit?)`
 
 ### Drag & Drop Relations
 The relation system includes drag-and-drop functionality via FormKit:
 - `client/src/components/dragdrop/` - Drag-and-drop components
 - Relations can be visually reorganized and updated
+
+### Routing & Public Pages
+Key routes and navigation:
+- `/` - Landing page (shows activity feed, publicly accessible)
+- `/login` - Authentication page
+- `/profiles` - User's own profile management (requires authentication)
+- `/browse-profiles` - Profile discovery page showing all community members (public)
+- `/profile/{id}` - View individual profile details
+- `/sphere/{id}` - Community/discussion space
+- Profile-to-profile relations will extend `/browse-profiles` to show filtered/recommended profiles based on user interests
 
 ### Testing
 - Server tests in `server/tests/` using Vitest
@@ -110,6 +160,12 @@ The relation system includes drag-and-drop functionality via FormKit:
 1. WebAuthn credential creation/verification
 2. Derived Gun.js username/password from WebAuthn rawId
 3. Gun user session with encrypted private data space
+
+### State Clearing on Logout
+When users logout, the application properly clears all authentication and profile state:
+- `userProvider.logout()` clears user state and removes `profileId` from localStorage
+- `profileProvider` watches authentication state and clears profile state when `isAuthenticated` becomes false
+- This ensures that the frontpage displays "Stranger" instead of the previous user's name after logout
 
 ## 💾 Data Persistence  
 
