@@ -218,7 +218,6 @@ export function commentProvider() {
       userVoteCache.clear();
 
       console.log('📂 Loading comments for sphere:', sphereId);
-      console.log('🔍 Querying Gun.js at: sphere/' + sphereId + '/comments');
 
       // Wait for initial comments to load before setting loading to false
       const initialLoadPromise = new Promise<void>((resolveInitialLoad) => {
