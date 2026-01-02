@@ -1,5 +1,5 @@
 <template>
-  <div className="min-h-[80vh] flex flex-col justify-center">
+  <div className="min-h-[80vh] flex flex-col">
     <div class="my-4 mx-auto max-w-md">
       <h1 class="text-center uppercase tracking-wide text-sm dark:text-white">
         <p class="text-lg font-bold">
@@ -9,8 +9,8 @@
       </h1>
     </div>
 
-    <Container>
-      <SphereCloud />
+    <Container className="flex-1">
+      <FeedView />
     </Container>
   </div>
 </template>
@@ -18,7 +18,7 @@
 //
 <script setup lang="ts">
 import Container from '@/components/common/Container.vue';
-import SphereCloud from '@/components/SphereCloud.vue';
+import FeedView from '@/views/FeedView.vue';
 import { useProfile } from '@/composables/profileProvider';
 
 const { profile } = useProfile();

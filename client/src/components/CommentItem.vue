@@ -20,17 +20,19 @@
       <div class="flex items-center gap-2">
         <button
           @click="handleVote(1)"
-          :class="{ 'text-green-600 font-bold': comment.userVote === 1 }"
+          :class="{ 'text-green-600 font-bold': currentUserVote === 1 }"
           class="hover:text-green-600 transition px-1"
           :disabled="!isAuthenticated"
           title="Upvote"
         >
           ↑
         </button>
-        <span class="w-4 text-center text-xs">{{ currentVoteCount }}</span>
+        <span :class="{ 'text-green-600 font-bold': currentUserVote === 1, 'text-red-600 font-bold': currentUserVote === -1 }" class="w-6 text-center text-xs">
+          {{ currentUserVote > 0 ? '+' : '' }}{{ currentUserVote !== 0 ? currentUserVote : '' }}
+        </span>
         <button
           @click="handleVote(-1)"
-          :class="{ 'text-red-600 font-bold': comment.userVote === -1 }"
+          :class="{ 'text-red-600 font-bold': currentUserVote === -1 }"
           class="hover:text-red-600 transition px-1"
           :disabled="!isAuthenticated"
           title="Downvote"
@@ -49,7 +51,7 @@
         class="hover:text-blue-600 transition text-gray-600 dark:text-gray-400"
         :disabled="!isAuthenticated"
       >
-        Reply ({{ comment.replyCount }})
+        Reply ({{ replies.length }})
       </button>
 
       <span v-if="voteError" class="text-red-500">{{ voteError }}</span>
@@ -61,12 +63,18 @@
         :sphereId="comment.sphereId"
         :parentId="comment.id"
         placeholder="Write a reply..."
+        @success="showReplyForm = false"
       />
     </div>
 
     <!-- Nested replies -->
-    <div v-if="replies.length > 0" class="mt-4">
-      <CommentList :comments="replies" :depth="depth + 1" />
+    <div v-if="replies.length > 0" class="mt-4 space-y-0">
+      <CommentItem
+        v-for="reply in replies"
+        :key="reply.id"
+        :comment="reply"
+        :depth="depth + 1"
+      />
     </div>
   </div>
 </template>
@@ -75,7 +83,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import type { CommentWithVotes } from '@/types';
 import CommentForm from '@/components/forms/CommentForm.vue';
-import CommentList from '@/components/CommentList.vue';
 import { useComment } from '@/composables/commentProvider';
 import { useProfile } from '@/composables/profileProvider';
 import gun from '@/services/gun';
@@ -93,7 +100,7 @@ const showReplyForm = ref(false);
 const authorName = ref('Anonymous');
 const voteError = ref<string | null>(null);
 let replyListener: any = null;
-const currentVoteCount = ref<number>(0);
+const currentUserVote = ref<number>(0); // Track user's personal vote: -1, 0, or 1
 
 const { voteComment, error: commentError } = useComment();
 const { profile } = useProfile();
@@ -136,12 +143,12 @@ const loadReplies = async () => {
 
     replyComments.value = [];
 
-    // Load replies once (not continuous listening to save memory)
+    // Use .on() for continuous listening to catch new replies as they're created
     replyListener = gun
       .get(`comment/${props.comment.id}`)
       .get('replies')
       .map()
-      .once((data: any) => {
+      .on((data: any) => {
         if (!data || !data.id) return;
 
         const replyWithVotes: CommentWithVotes = {
@@ -182,8 +189,8 @@ onMounted(async () => {
     console.error('Failed to load author profile:', e);
   }
 
-  // Initialize vote count from comment props (no continuous listener needed)
-  currentVoteCount.value = props.comment.voteCount;
+  // Initialize user's vote from comment props
+  currentUserVote.value = props.comment.userVote || 0;
 
   // Load replies for this comment
   await loadReplies();
@@ -204,34 +211,31 @@ const handleVote = async (value: number) => {
 
   voteError.value = null;
 
-  // Calculate immediate vote count update for optimistic feedback
-  const previousVoteCount = currentVoteCount.value;
-  const previousUserVote = props.comment.userVote;
+  // Store previous vote for optimistic update reversal
+  const previousUserVote = currentUserVote.value;
 
-  // Update vote count immediately for instant feedback
+  // Update user's vote immediately for instant feedback
   if (previousUserVote === value) {
     // Same vote clicked - remove it (toggle off)
-    currentVoteCount.value -= value;
-  } else if (previousUserVote !== null) {
-    // Different vote - update it
-    currentVoteCount.value = currentVoteCount.value - previousUserVote + value;
+    currentUserVote.value = 0;
   } else {
-    // No existing vote - add new one
-    currentVoteCount.value += value;
+    // Different vote or no existing vote - set to new value
+    currentUserVote.value = value;
   }
 
-  console.log(`📊 Vote optimistic update: ${previousVoteCount} → ${currentVoteCount.value}`);
+  console.log(`📊 Vote optimistic update: ${previousUserVote} → ${currentUserVote.value}`);
 
   // Send vote to Gun.js in background
+  // voteComment handles toggle logic internally - pass the clicked value
   const success = await voteComment(props.comment.id, value);
 
   if (!success) {
     // Revert optimistic update on failure
-    currentVoteCount.value = previousVoteCount;
+    currentUserVote.value = previousUserVote;
     voteError.value = commentError.value || 'Failed to vote.';
-    console.error('Vote failed, reverted to:', previousVoteCount);
+    console.error('Vote failed, reverted to:', previousUserVote);
   } else {
-    console.log('✓ Vote successful, count:', currentVoteCount.value);
+    console.log('✓ Vote successful, current vote:', currentUserVote.value);
   }
 };
 </script>

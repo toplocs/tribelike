@@ -27,6 +27,7 @@ import GunLoginView from '@/views/GunLoginView.vue';
 import PluginLoaderView from '@/views/PluginLoaderView.vue';
 
 import { addPluginRoutes } from './plugins';
+import BrowseProfilesView from '@/views/BrowseProfilesView.vue';
 
 // Determine router mode based on environment variable
 // Default to 'history' for clean URLs (requires SPA fallback on server)
@@ -111,6 +112,11 @@ const router = createRouter({
     },
 
     //Profiles
+    {
+      path: '/browse-profiles',
+      name: 'browseProfiles',
+      component: BrowseProfilesView,
+    },
     {
       path: '/profiles',
       name: 'profiles',
