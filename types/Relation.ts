@@ -1,4 +1,4 @@
-import { Uuid, GenericObject } from './Uuid';
+import type { Uuid, GenericObject } from './Uuid';
 
 export let ProfileInterestKeys = [
     'favorite', 'doing', 

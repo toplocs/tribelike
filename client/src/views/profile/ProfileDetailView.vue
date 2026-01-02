@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import { ref, inject, watch, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import type { Profile } from '../../../types/Profile';
 import MyProfileComponent from '@/components/MyProfileComponent.vue';
 import ProfileComponent from '@/components/ProfileComponent.vue';
 import ActionButton from '@/components/common/ActionButton.vue';

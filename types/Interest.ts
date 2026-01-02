@@ -1,13 +1,13 @@
-import { Uuid } from './Uuid';
-import { GroupedProfiles } from './Profile';
+import type { Uuid } from './Uuid';
+import type { GroupedProfiles } from './Profile';
 import type {
     ProfileInterestKeyType,
     LocationInterestKeyType,
     InterestInterestKeyType
 } from './Relation';
-import { Activity } from './Activity';
-import { Discussion } from './Discussion';
-import { GroupedLocations } from './Location';
+import type { Activity } from './Activity';
+import type { Discussion } from './Discussion';
+import type { GroupedLocations } from './Location';
 
 export type GroupedInterests = {
     [key in ProfileInterestKeyType | LocationInterestKeyType | InterestInterestKeyType]: Interest[];

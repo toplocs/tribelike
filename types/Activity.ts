@@ -1,6 +1,6 @@
-import { Uuid } from './Uuid';
-import { Interest } from './Interest';
-import { Location } from './Location';
+import type { Uuid } from './Uuid';
+import type { Interest } from './Interest';
+import type { Location } from './Location';
 
 export interface Activity {
     id: Uuid;
