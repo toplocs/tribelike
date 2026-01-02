@@ -1,4 +1,4 @@
-import { Uuid } from './Uuid';
+import type { Uuid } from './Uuid';
 
 export interface Discussion {
     id: Uuid;

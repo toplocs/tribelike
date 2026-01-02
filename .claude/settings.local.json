@@ -26,7 +26,10 @@
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
       "Bash(kill:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(xargs:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh pr list:*)"
     ],
     "deny": []
   }

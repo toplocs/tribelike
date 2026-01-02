@@ -1,6 +1,5 @@
 import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import CryptoJS from 'crypto-js';
-import { useUser } from '@/composables/userProvider';
 import gun from '@/services/gun';
 
 export const defaultProfiles = ['Work', 'Hobby', 'Family'];
@@ -81,6 +80,13 @@ export function profileProvider() {
     }
   }
 
+  const clearProfile = () => {
+    profile.value = null;
+    relations.value = null;
+    interests.value = [];
+    locations.value = [];
+  }
+
   onMounted(() => {
     const id = localStorage.getItem('profileId');
     if (gun.user().is) {
@@ -94,6 +100,24 @@ export function profileProvider() {
       });
 
       //listeners in profileService
+    } else {
+      // Clear profile if user is not authenticated
+      clearProfile();
+    }
+
+    // Watch for user authentication state changes
+    try {
+      const userInjection = inject('user');
+      if (userInjection) {
+        watch(() => userInjection.isAuthenticated.value, (newValue) => {
+          if (!newValue) {
+            // Clear profile when user logs out
+            clearProfile();
+          }
+        });
+      }
+    } catch (e) {
+      // User provider not available
     }
   });
 

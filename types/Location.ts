@@ -1,12 +1,12 @@
-import { GroupedProfiles } from './Profile';
-import { GroupedInterests } from './Interest';
+import type { GroupedProfiles } from './Profile';
+import type { GroupedInterests } from './Interest';
 import type {
     LocationInterestKeyType,
     ProfileLocationKeyType,
     LocationLocationKeyType
 } from './Relation';
-import { Activity } from './Activity';
-import { Discussion } from './Discussion';
+import type { Activity } from './Activity';
+import type { Discussion } from './Discussion';
 
 export type GroupedLocations = {
     [key in LocationLocationKeyType |ProfileLocationKeyType | LocationInterestKeyType]: Location[];

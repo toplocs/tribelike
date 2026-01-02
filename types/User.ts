@@ -1,5 +1,5 @@
-import { GenericObject, Uuid } from './Uuid';
-import { Profile } from './Profile';
+import type { GenericObject, Uuid } from './Uuid';
+import type { Profile } from './Profile';
 
 export interface User extends GenericObject {
     id: Uuid;

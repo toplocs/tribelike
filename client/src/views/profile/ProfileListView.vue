@@ -32,6 +32,7 @@
 import axios from 'axios';
 import { ref, provide, inject, computed, watch, onMounted, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
+import type { Profile } from '../../../types/Profile';
 import BackButton from '@/components/common/BackButton.vue';
 import Card from '@/components/common/Card.vue';
 import Title from '@/components/common/Title.vue';
