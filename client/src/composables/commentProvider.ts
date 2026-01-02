@@ -143,9 +143,10 @@ export function commentProvider() {
       loading.value = true;
       error.value = null;
 
-      // Clean up old listeners
+      // Clean up old listeners completely
       if (commentListener) {
         commentListener.off();
+        commentListener = null;
       }
 
       comments.value = [];
@@ -153,59 +154,58 @@ export function commentProvider() {
       userVoteCache.clear();
 
       console.log('📂 Loading comments for sphere:', sphereId);
-      console.log('🔍 Querying Gun.js at: sphere/' + sphereId + '/comments');
 
       // Wait for initial comments to load before setting loading to false
       const initialLoadPromise = new Promise<void>((resolveInitialLoad) => {
         let hasInitialized = false;
+        let commentCount = 0;
 
-        // Set up listener for comments using .map().once() pattern (like wiki-plugin)
+        // Use .map().on() for real-time updates, but limit scope
         commentListener = gun
           .get(`sphere/${sphereId}`)
           .get('comments')
-          .on((data: any) => {
-            console.log('📊 Comments index data received:', data);
-            console.log('📊 Data type:', typeof data);
-            if (data) {
-              console.log('📊 Data keys:', Object.keys(data).filter(k => !k.startsWith('_')));
-            }
-          })
           .map()
-          .once(async (commentData: any) => {
-            console.log('📝 Listener fired - Loading comment from Gun.js:', commentData);
-
+          .on(async (commentData: any) => {
             if (!commentData || !commentData.id) {
-              console.warn('⚠️ Ignoring data without id:', commentData);
               return;
             }
 
             try {
+              // Clean Gun.js metadata before processing
+              const cleanComment = {
+                id: commentData.id,
+                text: commentData.text,
+                authorId: commentData.authorId,
+                sphereId: commentData.sphereId,
+                parentId: commentData.parentId,
+                createdAt: commentData.createdAt,
+              };
+
               // Load vote counts and user's vote for this comment
-              const voteCount = await loadVoteCounts(commentData.id);
-              const userVote = await getUserVote(commentData.id);
-              const replyCount = await loadReplyCount(commentData.id);
+              const voteCount = await loadVoteCounts(cleanComment.id);
+              const userVote = await getUserVote(cleanComment.id);
+              const replyCount = await loadReplyCount(cleanComment.id);
 
               const commentWithVotes: CommentWithVotes = {
-                ...commentData,
+                ...cleanComment,
                 voteCount,
                 userVote,
                 replyCount,
               };
 
               // Check if already in local state, update or add
-              const existingIndex = comments.value.findIndex(c => c.id === commentData.id);
+              const existingIndex = comments.value.findIndex(c => c.id === cleanComment.id);
               if (existingIndex >= 0) {
                 comments.value[existingIndex] = commentWithVotes;
               } else {
                 comments.value.push(commentWithVotes);
+                commentCount++;
               }
 
-              console.log(`✓ Comment loaded and added to local state:`, commentWithVotes);
-
-              // Mark initial load as complete after first comment loads
-              if (!hasInitialized) {
+              // Mark initial load as complete after first batch of comments
+              if (!hasInitialized && commentCount >= 1) {
                 hasInitialized = true;
-                console.log('📚 Initial comment batch loaded, stopping loading spinner');
+                console.log('📚 Initial comments loaded, count:', commentCount);
                 resolveInitialLoad();
               }
             } catch (err) {
@@ -213,7 +213,7 @@ export function commentProvider() {
             }
           });
 
-        // Also resolve after a timeout in case there are no comments
+        // Resolve after timeout in case there are no comments
         setTimeout(() => {
           if (!hasInitialized) {
             hasInitialized = true;
@@ -305,7 +305,7 @@ export function commentProvider() {
   };
 
   /**
-   * Load aggregated vote count for a comment
+   * Load aggregated vote count for a comment (one-time read, not continuous)
    */
   const loadVoteCounts = async (commentId: string): Promise<number> => {
     try {
@@ -315,14 +315,23 @@ export function commentProvider() {
       }
 
       return new Promise((resolve) => {
+        const timeoutId = setTimeout(() => {
+          // Timeout after 500ms to prevent hanging
+          resolve(0);
+        }, 500);
+
         gun.get(`comment/${commentId}`).get('votes').once((votes: any) => {
+          clearTimeout(timeoutId);
+
           if (!votes) {
+            voteCache.set(commentId, 0);
             resolve(0);
             return;
           }
 
           let totalVotes = 0;
           Object.keys(votes).forEach((key) => {
+            if (key.startsWith('_')) return; // Skip Gun.js metadata
             const vote = votes[key];
             if (vote?.value) {
               totalVotes += vote.value;

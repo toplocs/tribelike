@@ -148,7 +148,50 @@ gunStats()  // Large graph nodes count = potential memory issue
 
 // Monitor subscription patterns
 // Use ?debug=subscribe to see all real-time listeners
+
+// Navigate between multiple pages then check again:
+gunRecent()  // Should show mostly new operations, not repeated duplicates
 ```
+
+### Detect Listener Memory Leaks
+
+Memory leaks occur when listeners (`.on()`) accumulate without being cleaned up. Navigate between pages with comments and check for patterns:
+
+```javascript
+// After navigating between multiple pages:
+
+// 1. Check memory usage (should stay flat, not climb)
+gunStats()
+// Look at: "Memory: X MB"
+// Should be similar before and after navigation
+
+// 2. Check for accumulating listeners
+gunRecent(50)
+// Look for repeated patterns like:
+// [Gun.SUBSCRIBE] sphere/123/comments
+// [Gun.SUBSCRIBE] comment/abc/votes
+// If you see the SAME path repeatedly after navigation = memory leak
+
+// 3. Check recent events for duplicate listeners
+gunRecent()
+// Count how many times you see the same subscription
+// It should be minimal (0-2 times) not increasing with each navigation
+
+// 4. Profile with DevTools
+// Open Performance tab, record while navigating
+// Memory should stay flat, not climb over time
+```
+
+**Signs of a memory leak:**
+- `gunStats()` shows memory climbing (e.g., 12MB → 18MB → 24MB)
+- `gunRecent()` shows repeated subscriptions to the same paths
+- DevTools memory profile shows increasing memory over multiple page navigations
+- Console shows repeated "listener fired" logs for the same data
+
+**Fix:** See [BEST-PRACTISES.md - Memory Management & Listener Lifecycle](./BEST-PRACTISES.md#-memory-management--listener-lifecycle)
+- Replace `.on()` with `.once()` for non-realtime data
+- Ensure listeners are cleaned up: `listener.off(); listener = null;`
+- Filter Gun.js metadata (`_` property) from Vue state
 
 ### Debug Connection Problems
 ```bash
