@@ -9,8 +9,34 @@ import 'gun/lib/rindexed'; // required for IndexedDB + RAD
 const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
 const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
 
-const gun = Gun({ peers, rad: true });
+console.log('🔫 Initializing Gun.js with peers:', peers);
+console.log('📍 App version:', APP_VERSION);
+
+// Configure Gun with persistence enabled
+// Gun.js will automatically use localStorage for persistence in browser
+const gunConfig: any = {
+  peers,
+  rad: true,
+  // Do NOT disable default persistence
+};
+
+const gun = Gun(gunConfig);
+
+console.log('✓ Gun.js initialized');
+console.log('  - Storage: localStorage (automatic)');
+console.log('  - RAD: enabled');
+console.log('  - Peers:', peers.length > 0 ? peers : 'none (local only)');
+
+// Verify Gun.js can access storage
+const storageTest = gun.get('__storage_test__');
+storageTest.put({ test: true }).then(() => {
+  console.log('✓ Gun.js storage persistence: WORKING');
+}).catch((err) => {
+  console.error('✗ Gun.js storage persistence: FAILED', err);
+});
+
 const root = gun.get(`toplocs_v${APP_VERSION}`);
+console.log('✓ Created root node:', `toplocs_v${APP_VERSION}`);
 
 root.clear = function() {
 	// Clear localStorage

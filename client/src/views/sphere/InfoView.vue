@@ -30,6 +30,30 @@
           :profiles="profileRelations.filter(x => x.accepts.includes(sphere?.type))"
         />
       </Card>
+
+      <Card class="flex flex-col gap-4">
+        <Headline>Discussion</Headline>
+
+        <!-- Comment form (always show if authenticated) -->
+        <div v-if="profile" class="pb-4 border-b border-gray-200 dark:border-gray-700">
+          <CommentForm
+            :sphereId="sphere?.id"
+            :parentId="null"
+          />
+        </div>
+
+        <!-- Loading state -->
+        <div v-if="commentsLoading" class="text-center py-8">
+          <p class="text-gray-500 dark:text-gray-400">Loading comments...</p>
+        </div>
+
+        <!-- Comments list -->
+        <CommentList
+          v-else
+          :comments="topLevelComments"
+          :depth="0"
+        />
+      </Card>
     </div>
 
     <Sidebar class="space-y-4">
@@ -76,9 +100,12 @@ import RelationButtons from '@/components/RelationButtons.vue';
 import PluginComponent from '@/components/PluginComponent.vue';
 import TopicBadge from '@/components/badges/TopicBadge.vue';
 import LocationBadge from '@/components/badges/LocationBadge.vue';
+import CommentForm from '@/components/forms/CommentForm.vue';
+import CommentList from '@/components/CommentList.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { usePlugins } from '@/composables/pluginProvider';
+import { commentProvider } from '@/composables/commentProvider';
 import {
     topicRelations,
     locationRelations,
@@ -89,10 +116,19 @@ const { profile } = useProfile();
 const { sphere } = useSphere();
 const { slots } = usePlugins();
 const tab = inject('tab');
+
+// Initialise comment provider - returns the composable directly
+const { comments, loading: commentsLoading, loadComments } = commentProvider();
+
 const type = computed(() => {
   const type2 = sphere.value?.type;
   if (type2) return type2.charAt(0).toUpperCase() + type2.slice(1)
 })
+
+const topLevelComments = computed(() =>
+  comments.value.filter(c => c.parentId === null)
+);
+
 const pluginSlots = computed(() => (
   slots.value.filter(x => x.page == 'Info' && x.entity == type.value)
 ));
@@ -100,5 +136,13 @@ const pluginSlots = computed(() => (
 onMounted(async () => {
   console.log(type.value);
   tab.value = 'Info';
+});
+
+// Reload comments whenever sphere changes
+watchEffect(async () => {
+  if (sphere.value?.id) {
+    console.log('🔄 Sphere changed, reloading comments for:', sphere.value.id);
+    await loadComments(sphere.value.id);
+  }
 });
 </script>

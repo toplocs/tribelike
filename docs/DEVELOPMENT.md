@@ -65,6 +65,20 @@ Relations connect any two entities with typed relationships defined in `client/s
 - `client/src/services/gun.ts`: Gun.js configuration with custom methods
 - `server/src/gun.ts`: Server-side Gun relay initialization
 
+### Comments System
+- `commentProvider()`: Reddit-like comments with voting and nested replies
+- Data structure:
+  - `comment/{id}`: Primary comment storage (single source of truth)
+  - `sphere/{sphereId}/comments/{id}`: Comment index for efficient querying
+  - `comment/{parentId}/replies/{id}`: Nested reply structure
+  - `vote/{id}`: Vote records for tallying
+- Features:
+  - Real-time comment loading with `.map().once()` listeners
+  - Vote tallying and user vote tracking
+  - Nested reply support
+  - Automatic sync across peers
+  - Full persistence to localStorage with Round-trip writes (`.put().once()`)
+
 ## 🔌 Plugin Architecture
 
 Plugins extend functionality without modifying core code:
