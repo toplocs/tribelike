@@ -29,7 +29,11 @@
       "Bash(git log:*)",
       "Bash(xargs:*)",
       "Bash(gh pr close:*)",
-      "Bash(gh pr list:*)"
+      "Bash(gh pr list:*)",
+      "WebFetch(domain:internetcomputer.org)",
+      "WebFetch(domain:docs.internetcomputer.org)",
+      "WebSearch",
+      "WebFetch(domain:identitysupport.dfinity.org)"
     ],
     "deny": []
   }

@@ -1,6 +1,7 @@
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 import { bufferDecode, bufferEncode } from '@/lib/utils';
+import { generateAccountNumber, storeAccountNumber, verifyAccountNumber } from '@/lib/accountNumber';
 
 export function userProvider() {
   const user = ref<User | null>(null);
@@ -38,19 +39,29 @@ export function userProvider() {
             const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
             const passwordDerived = bufferEncode(hashBuffer);
 
+            // Generate unique account number
+            const accountNumber = await generateAccountNumber();
+
             chain.put({
               id: bufferEncode(rawId),
               credential: JSON.stringify({
                 clientDataJSON: bufferEncode(cred.clientDataJSON),
                 attestationObject: bufferEncode(cred.attestationObject),
-              })
+              }),
+              accountNumber: accountNumber,
+              hasRecovery: true,
+              createdAt: Date.now()
             });
+
+            // Store account number mappings
+            await storeAccountNumber(accountNumber, email);
 
             gun.user().create(emailDerived, passwordDerived, (ack) => {
               if (ack.err) {
                 reject(new Error(`Create failed: ${ack.err}`));
               } else {
-                resolve(ack);
+                // Return account number along with acknowledgement
+                resolve({ ...ack, accountNumber });
               }
             });
           } catch(e) {
@@ -130,6 +141,96 @@ export function userProvider() {
     });
   }
 
+  const recoverAccount = async (email: string, accountNumber: number) => {
+    return new Promise(async (resolve, reject) => {
+      // 1. Verify email + account number combination
+      gun.get('credentials')
+        .get(email)
+        .once(async (data) => {
+          if (!data) {
+            reject(new Error('Account not found'));
+            return;
+          }
+
+          if (data.accountNumber !== accountNumber) {
+            reject(new Error('Invalid account number'));
+            return;
+          }
+
+          try {
+            // 2. Create new WebAuthn credential
+            const challenge = crypto.getRandomValues(new Uint8Array(32));
+            const publicKey = {
+              challenge,
+              rp: { name: 'Toplocs' },
+              user: {
+                id: new Uint8Array(8),
+                name: email,
+                displayName: email,
+              },
+              pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+              authenticatorSelection: { userVerification: 'preferred' },
+              timeout: 60000,
+              attestation: 'none'
+            };
+
+            const cred = await navigator.credentials.create({ publicKey });
+            const rawId = cred.rawId;
+            const emailDerived = bufferEncode(rawId);
+
+            const hashBuffer = await crypto.subtle.digest('SHA-256', rawId);
+            const passwordDerived = bufferEncode(hashBuffer);
+
+            // 3. Update credentials with new passkey
+            gun.get('credentials').get(email).put({
+              id: bufferEncode(rawId),
+              credential: JSON.stringify({
+                clientDataJSON: bufferEncode(cred.clientDataJSON),
+                attestationObject: bufferEncode(cred.attestationObject),
+              }),
+              accountNumber: accountNumber, // Keep same account number
+              hasRecovery: true,
+              recoveredAt: Date.now() // Track recovery event
+            });
+
+            // 4. Authenticate with Gun using new credentials
+            gun.user().auth(emailDerived, passwordDerived, (ack) => {
+              if (ack.err) {
+                reject(new Error(`Recovery auth failed: ${ack.err}`));
+              } else {
+                // Clean up old subscriptions before setting up new ones
+                if (userRef) userRef.off();
+                if (profilesRef) profilesRef.off();
+
+                // Clear profiles array for new user
+                profiles.value = [];
+
+                // Set up user subscription
+                userRef = gun.user().on((data) => {
+                  user.value = data;
+                });
+
+                // Load profiles
+                gun.user()
+                  .get('profiles')
+                  .map()
+                  .once((data, key) => {
+                    if (data) {
+                      const exists = profiles.value.some(x => x.id === data.id);
+                      if (!exists) profiles.value.push(data);
+                    }
+                  });
+
+                resolve(ack.get);
+              }
+            });
+          } catch (e) {
+            reject(new Error(`Recovery failed: ${e}`));
+          }
+        });
+    });
+  }
+
   const logout = async () => {
     try {
       // Clean up subscriptions first
@@ -203,7 +304,8 @@ export function userProvider() {
     isAuthenticated,
     register,
     login,
-    logout
+    logout,
+    recoverAccount
   });
 }
 

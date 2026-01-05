@@ -1,7 +1,6 @@
 <template>
   <div className="min-h-screen flex flex-col justify-center items-center">
     <Card className="pb-10 max-w-sm">
-      <BackButton href="/" />
       <h3 className="mb-8 text-center text-lg font-semibold">
         Create an account
       </h3>
@@ -67,7 +66,6 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { startRegistration } from '@simplewebauthn/browser';
-import BackButton from '@/components/common/BackButton.vue';
 import SubmitButton from '@/components/common/SubmitButton.vue';
 import TextInput from '@/components/common/TextInput.vue';
 import Card from '@/components/common/Card.vue';
