@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import gun from '@/services/gun';
 import { useProfile } from '@/composables/profileProvider';
 import type { CommentWithVotes } from '@/types';
@@ -193,6 +193,8 @@ export function feedProvider() {
 
     for (const sphereId of sphereIds) {
       await new Promise<void>((resolve) => {
+        let hasInitialized = false;
+
         gun
           .get(`sphere/${sphereId}`)
           .get('comments')
@@ -230,7 +232,13 @@ export function feedProvider() {
             }
           });
 
-        setTimeout(resolve, 200);
+        // Wait for all comments to load (Gun.js .once() calls complete)
+        setTimeout(() => {
+          if (!hasInitialized) {
+            hasInitialized = true;
+            resolve();
+          }
+        }, 500);
       });
     }
 
@@ -401,17 +409,6 @@ export function feedProvider() {
    */
   onUnmounted(() => {
     clear();
-  });
-
-  /**
-   * Watch for profile changes and reload feed
-   */
-  watchEffect(async () => {
-    if (profile.value?.id) {
-      await loadPersonalFeed(profile.value.id);
-    } else {
-      await loadGlobalFeed();
-    }
   });
 
   return {

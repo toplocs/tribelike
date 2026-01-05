@@ -131,6 +131,7 @@
 </template>
 
 <script setup lang="ts">
+import { watchEffect } from 'vue';
 import { feedProvider } from '@/composables/feedProvider';
 import { useProfile } from '@/composables/profileProvider';
 import FeedCommentCard from '@/components/FeedCommentCard.vue';
@@ -144,5 +145,16 @@ const {
   hasMore,
   showCTABanner,
   loadMore,
+  loadGlobalFeed,
+  loadPersonalFeed,
 } = feedProvider();
+
+// Load feed when component mounts or profile changes
+watchEffect(async () => {
+  if (profile.value?.id) {
+    await loadPersonalFeed(profile.value.id);
+  } else {
+    await loadGlobalFeed();
+  }
+});
 </script>
