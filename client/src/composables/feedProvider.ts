@@ -86,12 +86,27 @@ export function feedProvider() {
       }
 
       return new Promise((resolve) => {
+        let resolved = false;
+
+        const timeoutId = setTimeout(() => {
+          if (!resolved) {
+            resolved = true;
+            console.warn(`getUserVote timeout for comment ${commentId}`);
+            userVoteCache.set(cacheKey, null);
+            resolve(null);
+          }
+        }, 1000);
+
         gun
           .get(`vote_index/${profile.value!.id}/${commentId}`)
           .once((vote: any) => {
-            const voteValue = vote?.value || null;
-            userVoteCache.set(cacheKey, voteValue);
-            resolve(voteValue);
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timeoutId);
+              const voteValue = vote?.value || null;
+              userVoteCache.set(cacheKey, voteValue);
+              resolve(voteValue);
+            }
           });
       });
     } catch (e) {
@@ -106,18 +121,33 @@ export function feedProvider() {
   const loadReplyCount = async (commentId: string): Promise<number> => {
     try {
       return new Promise((resolve) => {
+        let resolved = false;
+
+        const timeoutId = setTimeout(() => {
+          if (!resolved) {
+            resolved = true;
+            console.warn(`loadReplyCount timeout for comment ${commentId}`);
+            resolve(0);
+          }
+        }, 1000);
+
         gun
           .get(`comment/${commentId}`)
           .get('replies')
           .once((replies: any) => {
-            if (!replies) {
-              resolve(0);
-              return;
+            if (!resolved) {
+              resolved = true;
+              clearTimeout(timeoutId);
+
+              if (!replies) {
+                resolve(0);
+                return;
+              }
+              const count = Object.keys(replies).filter(
+                (key) => !key.startsWith('_') && replies[key] !== null
+              ).length;
+              resolve(count);
             }
-            const count = Object.keys(replies).filter(
-              (key) => !key.startsWith('_') && replies[key] !== null
-            ).length;
-            resolve(count);
           });
       });
     } catch (e) {
@@ -222,20 +252,34 @@ export function feedProvider() {
       const sphereIds = await new Promise<string[]>((resolve) => {
         const ids: string[] = [];
         const maxSpheres = 50;
+        let resolved = false;
+
+        const timeoutId = setTimeout(() => {
+          if (!resolved) {
+            resolved = true;
+            console.warn('loadGlobalFeed: sphere list fetch timeout');
+            resolve([]);
+          }
+        }, 1500);
 
         gun.get('spheres').once((spheresData: any) => {
-          if (!spheresData) {
-            resolve([]);
-            return;
-          }
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timeoutId);
 
-          Object.keys(spheresData).forEach((key) => {
-            if (!key.startsWith('_') && ids.length < maxSpheres) {
-              ids.push(key);
+            if (!spheresData) {
+              resolve([]);
+              return;
             }
-          });
 
-          resolve(ids);
+            Object.keys(spheresData).forEach((key) => {
+              if (!key.startsWith('_') && ids.length < maxSpheres) {
+                ids.push(key);
+              }
+            });
+
+            resolve(ids);
+          }
         });
       });
 
