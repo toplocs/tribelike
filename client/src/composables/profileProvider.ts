@@ -1,4 +1,5 @@
 import { ref, inject, provide, watch, onMounted, onUnmounted } from 'vue';
+import type { Ref } from 'vue';
 import CryptoJS from 'crypto-js';
 import gun from '@/services/gun';
 

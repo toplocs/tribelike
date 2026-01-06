@@ -1,4 +1,5 @@
 import { ref, computed, inject, provide, watch, onMounted, onUnmounted } from 'vue';
+import type { Ref } from 'vue';
 import { relationKeyIds } from '@/assets/relationKeys';
 import gun from '@/services/gun';
 
