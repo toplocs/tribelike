@@ -6,6 +6,7 @@ import EmailLoginView from '@/views/EmailLoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import RegisterFinishView from '@/views/RegisterFinishView.vue';
 import RegisterExpiredView from '@/views/RegisterExpiredView.vue';
+import RecoveryView from '@/views/RecoveryView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import PasskeyView from '@/views/PasskeyView.vue';
 import MagicLinkView from '@/views/MagicLinkView.vue';
@@ -73,6 +74,11 @@ const router = createRouter({
           component: EmailLoginView,
         },
       ]
+    },
+    {
+      path: '/recover',
+      name: 'recover',
+      component: RecoveryView,
     },
     {
       path: '/register',

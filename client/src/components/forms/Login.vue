@@ -56,6 +56,15 @@
     >
       Sign In
     </SubmitButton>
+
+    <div class="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
+      <router-link
+        to="/recover"
+        class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+      >
+        Lost access to your device?
+      </router-link>
+    </div>
   </form>
 </template>
 
