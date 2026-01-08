@@ -64,4 +64,5 @@ root.lookup = async function(key: string, id: string) {
   return data ? { id, ...data } : null;
 }
 
+export { gun, APP_VERSION };
 export default root;

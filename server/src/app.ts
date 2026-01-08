@@ -20,6 +20,22 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+// Gun relay will handle /gun WebSocket connections at HTTP server level
+// We need to skip /gun in Express so it can be handled at the HTTP server level
+
+// Skip /gun requests - the HTTP server's upgrade handler will manage WebSocket connections
+// For non-upgrade requests, return 200 to indicate the endpoint exists
+app.use('/gun', (req, res) => {
+  // Gun client might check if endpoint exists via GET before upgrading to WebSocket
+  // Just return 200 OK - the HTTP server will handle the actual WebSocket upgrade
+  if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === 'websocket') {
+    // This shouldn't happen as the HTTP server should handle it first
+    // But just in case, don't do anything - let it fall through
+    return;
+  }
+  res.status(200).end();
+});
+
 // API Routes
 app.post('/api/v2/pinata/upload-url', async (req, res) => {
   try {
@@ -44,7 +60,8 @@ if (fs.existsSync(viewsBuildPath)) {
 
   // SPA fallback: serve index.html for all non-API routes
   // This allows Vue Router to handle client-side routing
-  app.get(/^(?!\/api)/, (req, res) => {
+  // Exclude /gun because Gun handles WebSocket upgrades at the HTTP server level
+  app.get(/^(?!\/api|\/gun)/, (req, res) => {
     // Don't serve index.html for API routes (they should 404 if not handled)
     if (req.path.startsWith('/api')) {
       res.status(404).json({ error: 'Not found' });
@@ -67,15 +84,43 @@ function startServer() {
   if (enable_https) {
     console.log(`starting https server on ${port}...`);
     const server = https.createServer(certificate, app);
+
     server.listen(port, rpID, () => {
       console.log(`🚀 HTTPS Server ready at https://${rpID}:${port}`);
+
+      // Initialize Gun AFTER listening
+      console.log('⚡ Initializing Gun relay...');
+      try {
+        const gunInstance = initGun(server);
+        console.log('⚡ Gun relay initialised');
+      } catch (error) {
+        console.error('⚡ Gun relay failed:', error);
+      }
+
+      console.log(`🔫 Gun relay available at wss://${rpID}:${port}/gun`);
     });
 
     return server;
   } else {
     console.log(`Starting http server on ${port}...`);
-    const server = http.createServer(app).listen(port, rpID, () => {
+    const server = http.createServer(app);
+
+    // DO NOT initialize Gun here - we'll do it after listening
+    // This ensures the server is fully set up before Gun attaches handlers
+
+    server.listen(port, rpID, () => {
       console.log(`🚀 HTTP Server ready at http://${rpID}:${port}`);
+
+      // NOW initialize Gun after server is listening
+      console.log('⚡ Initializing Gun relay...');
+      try {
+        const gunInstance = initGun(server);
+        console.log('⚡ Gun relay initialised');
+      } catch (error) {
+        console.error('⚡ Gun relay failed:', error);
+      }
+
+      console.log(`🔫 Gun relay available at ws://${rpID}:${port}/gun`);
     });
 
     return server;
@@ -83,6 +128,5 @@ function startServer() {
 }
 
 if (require.main === module) {
-  const server = startServer();
-  initGun(server);
+  startServer();
 }

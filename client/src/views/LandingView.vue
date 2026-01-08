@@ -15,7 +15,6 @@
   </div>
 </template>
 
-//
 <script setup lang="ts">
 import Container from '@/components/common/Container.vue';
 import FeedView from '@/views/FeedView.vue';

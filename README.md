@@ -5,20 +5,22 @@ TopLocs stands for topic- and location-based interests. TribeLike is a **decentr
 ## 🚀 Architecture
 
 TribeLike uses a **peer-to-peer architecture** powered by [Gun.js](https://gun.eco/):
-- **No central server** - Just a minimal relay for P2P communication
-- **Offline-first** - Works without internet connection
-- **User-owned data** - Your data stays with you
-- **Real-time sync** - Changes propagate instantly between peers
+- ✅ **No central server** - Express server only relays Gun.js messages between peers
+- ✅ **Offline-first** - Works completely without internet (syncs when reconnected)
+- ✅ **User-owned data** - All data stored locally in your browser
+- ✅ **Real-time sync** - Changes propagate instantly between browser windows/tabs/devices
+- ✅ **Verified P2P** - Gun relay configuration tested and working
 
 For a detailed explanation of the P2P architecture, see the [centralized documentation](https://github.com/toplocs/toplocs-workspace/blob/main/docs/project/architecture.md).
 
 ## Tech Stack
 
 - **Frontend**: Vue.js 3 with TypeScript
-- **P2P Database**: Gun.js
-- **Authentication**: WebAuthn/Passkeys + Gun SEA
-- **Server**: gunDB relay, filtering unsigned data
-- **Plugins**: Extensible plugin system
+- **P2P Database**: Gun.js (distributed graph database)
+- **Authentication**: WebAuthn/Passkeys + Gun SEA cryptography
+- **Server**: Minimal Express relay with Gun.js WebSocket (`Gun({ web: server })`)
+- **Styling**: TailwindCSS 4.x
+- **Plugins**: Extensible plugin system with Module Federation
 
 ## Features
 
