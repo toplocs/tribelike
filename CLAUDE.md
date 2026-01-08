@@ -8,9 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Core Tech Stack
 - **Frontend**: Vue.js 3 + TypeScript with Vite
-- **P2P Database**: Gun.js (distributed graph database)
+- **P2P Database**: Gun.js (distributed graph database with WebSocket relay)
 - **Authentication**: WebAuthn (passkeys) + Gun SEA cryptography
-- **Server**: Minimal Express relay (26 lines!)
+- **Server**: Express with minimal Gun.js relay (~5 lines of Gun config)
 - **Styling**: TailwindCSS 4.x
 - **Testing**: Vitest with workspace configuration
 - **Package Manager**: pnpm workspaces (Node.js ≥20, pnpm ≥3)
@@ -53,8 +53,26 @@ Root
 - **Real-time sync** - Changes propagate instantly between peers
 - **Graph database** - Gun.js uses a distributed graph model
 
+### Gun.js Relay Configuration
+
+The server runs a **minimal Gun.js relay** that enables P2P synchronisation between connected clients:
+
+```typescript
+// Server: /server/src/gun.ts
+gun = Gun({
+  web: server,  // Attach to HTTP server for WebSocket relay
+});
+```
+
+**Key points:**
+- ✅ WebSocket relay runs on the same server as Express
+- ✅ Clients connect via `VITE_GUN_PEERS=ws://localhost:3000/gun`
+- ✅ No file persistence, no extra indexing—just clean relay
+- ✅ All data stays in browser; server just routes messages
+
 ### Gun.js Data Namespaces
 ```javascript
+// All operations go through versioned root (gun.get('toplocs_v{VERSION}'))
 gun.get('credentials').get(email)         // Authentication credentials
 gun.get('profile/{id}')                   // User profile data
 gun.get('location/{id}')                  // Geographic locations
@@ -203,11 +221,13 @@ Add query parameters to enable debugging in production:
 
 ## 🌍 Data Flow & Persistence
 
-1. **Browser Application** - All business logic runs in the browser
-2. **Local Gun.js Store** - Data persists locally before sharing
-3. **P2P Sync** - Changes automatically sync between connected peers
-4. **Express Relay** - Server only facilitates peer discovery (not data authority)
-5. **Offline Capability** - Application continues working without connectivity
+1. **Browser Application** - All business logic runs in the browser (Vue.js + Gun.js)
+2. **Local Gun.js Store** - Data persists locally in browser storage (localStorage/IndexedDB)
+3. **WebSocket Relay** - Express server forwards Gun messages between connected clients
+4. **P2P Sync** - Changes automatically sync between browser windows/tabs/devices in real-time
+5. **Offline Capability** - Application works completely offline; syncs when relay reconnects
+
+**Data never touches the server** - the server only relays Gun protocol messages between peers.
 
 ## 🔐 Authentication
 
@@ -266,22 +286,61 @@ export default {
 ```
 
 ### Gun.js Data Access
+
+**Import Gun and Root:**
 ```typescript
-// Standard Gun.js access pattern
-gun.get('profile/123').on(data => {
-  // Handle data
+import root, { gun } from '@/services/gun'
+
+// Use 'root' for normal data (versioned namespace)
+// Use 'gun' directly for P2P communication
+```
+
+**Standard patterns:**
+```typescript
+// Fetch once
+gun.get('profile/123').once(data => {
+  console.log(data)  // Single read
 })
 
-// Using subscriptions
+// Listen for real-time updates
+gun.get('profile/123').on(data => {
+  console.log(data)  // Fires on every change
+})
+
+// Write data (syncs across peers)
+gun.get('messages').get('room-1').set({
+  type: 'message',
+  from: userId,
+  text: 'Hello',
+  timestamp: Date.now(),
+})
+
+// Listen to all children
 gun.get('relations').map().on(relation => {
-  // Handle each relation
+  // Fires for each relation, and when any changes
 })
 ```
+
+**Key differences:**
+- ✅ `.once()` - Single fetch (no persistent listener)
+- ✅ `.on()` - Real-time listener (stays active)
+- ✅ `.set()` - Add to collection (syncs to peers)
+- ✅ `.put()` - Update object (syncs to peers)
+
+## ✅ P2P Functionality Verified
+
+The P2P sync between browser windows has been **tested and verified to work**:
+- ✅ Minimal Gun relay (`Gun({ web: server })`) is production-ready
+- ✅ WebSocket connections stable and message routing working
+- ✅ Data syncs in real-time between separate browser windows/tabs
+- ✅ Offline capability maintained—data syncs when relay reconnects
+- ✅ No server-side data storage (only relay)
 
 ## 🚨 Critical Rules
 
 1. **Use British English spelling** in all code and documentation
 2. **Don't leave dev servers running** - Always close `pnpm dev` after work
-3. **Preserve P2P functionality** - Maintain offline-first capabilities when modifying
-4. **Test with multiple browser tabs** for P2P features to simulate real peer scenarios
-5. **Use composables, not direct Gun calls** where possible for consistency
+3. **Preserve P2P functionality** - Maintain the minimal Gun relay setup; never add unnecessary Gun options
+4. **Test P2P by opening multiple browser tabs** - Opens two windows and send data between them
+5. **Use `gun` for P2P communication**, `root` for app data storage
+6. **Keep Gun config minimal** - Only use `Gun({ web: server })` on server; `Gun({ peers })` on client

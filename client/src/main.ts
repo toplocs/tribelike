@@ -3,10 +3,15 @@ import './assets/main.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import root, { gun } from './services/gun';
 
 import 'vue3-openlayers/styles.css';
 import OpenLayersMap from 'vue3-openlayers';
 import VueDnDKitPlugin from '@vue-dnd-kit/core';
+
+// Expose root and gun to window for console debugging
+(window as any).root = root;
+(window as any).gun = gun;
 
 // Debug mode activation (?debug=true works in production!)
 const params = new URLSearchParams(location.search);

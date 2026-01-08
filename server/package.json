@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "DEVELOPMENT=true nodemon src/app.ts",
+    "gun-minimal": "ts-node src/gun-minimal.ts",
     "test": "pnpm vitest",
     "build": "pnpm --package=typescript dlx tsc",
     "start": "NODE_PATH=./src node src/app.js"

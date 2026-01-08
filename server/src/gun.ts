@@ -2,8 +2,12 @@ import Gun from 'gun';
 
 let gun: any;
 
-export function initGun(server: Object) {
-  gun = Gun({ peers: [], file: 'ra-data' });
+export function initGun(server: any) {
+  // Attach Gun relay to the HTTP/HTTPS server for WebSocket support
+  gun = Gun({
+    web: server,
+    peers: [],
+  });
 
   return gun;
 }

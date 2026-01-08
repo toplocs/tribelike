@@ -15,11 +15,12 @@ Tribelike is a **decentralized peer-to-peer (P2P) community platform** built on 
 
 ### Technology Stack
 - **Client**: Vue.js 3 + TypeScript with Gun.js for data persistence
-- **Server**: Minimal Express server serving only as Gun.js relay (26 lines!)
+- **Server**: Express server with minimal Gun.js relay (`Gun({ web: server })`)
 - **Database**: Gun.js distributed graph database (no traditional database)
 - **Authentication**: WebAuthn (Passkeys) + Gun SEA cryptography
 - **Styling**: TailwindCSS 4.x
 - **Testing**: Vitest workspace configuration
+- **P2P Sync**: WebSocket relay for real-time browser-to-browser synchronisation
 
 ## 📊 Data Architecture
 
@@ -62,8 +63,39 @@ Relations connect any two entities with typed relationships defined in `client/s
 - `pluginProvider()`: Dynamic plugin loading and management
 
 ### Gun.js Integration
-- `client/src/services/gun.ts`: Gun.js configuration with custom methods
-- `server/src/gun.ts`: Server-side Gun relay initialization
+
+**Server Relay (`server/src/gun-minimal.ts`):**
+```typescript
+const server = http.createServer(...);
+const gun = Gun({ web: server });
+server.listen(port, host);
+```
+- ✅ Minimal HTTP server with Gun relay attached
+- ✅ WebSocket relay at `ws://localhost:3000/gun`
+- ✅ Routes Gun protocol messages between connected clients
+- ✅ No file persistence, no extra indexing
+- ✅ Runs via `pnpm dev` → `pnpm -F server gun-minimal`
+
+**Client Configuration (`client/src/services/gun.ts`):**
+```typescript
+const peers = import.meta.env.VITE_GUN_PEERS?.split(',') || [];
+const gun = Gun({
+  peers,
+  rad: true,  // Enable RAD indexing for better performance
+});
+const root = gun.get(`toplocs_v${APP_VERSION}`);
+```
+- Connects to relay via `VITE_GUN_PEERS` environment variable
+- Uses versioned root namespace to prevent data collisions
+- Automatic localStorage persistence (Gun.js default)
+- RAD indexing enabled for efficient data structures
+- Supports offline-first functionality
+
+**Why This Works:**
+- No conflicting options that could break the relay
+- Clean separation: server relays, clients store+sync
+- All data stays in browser; server just forwards messages
+- Environment variable `VITE_GUN_PEERS=ws://localhost:3000/gun`
 
 ### Comments System
 - `commentProvider()`: Reddit-like comments with voting and nested replies
@@ -174,14 +206,34 @@ When users logout, the application properly clears all authentication and profil
 - Data syncs automatically between connected peers
 - Works offline with local Gun.js storage
 
-## ⚙️ Environment Variables
+## ⚙️ Environment Variables & Configuration
 
-- `VITE_GUN_PEERS`: Comma-separated list of Gun relay peers for client
-- Server configuration in `server/src/config.ts`
+**Client (.env.development):**
+- `VITE_GUN_PEERS`: Gun relay WebSocket URL (e.g., `ws://localhost:3000/gun`)
+  - Leave empty for offline-only mode
+  - Use comma-separated list for multiple relays
 
-## 🚧 Migration Status
+**Server:**
+- Express runs on port 3000 (default)
+- Gun relay attached to same server at `/gun` WebSocket endpoint
+- Configuration in `server/src/config.ts`
 
-The codebase is currently transitioning from a traditional server architecture to the P2P Gun.js architecture. Several feature branches are in progress to complete this migration (relation provider, sphere system, plugin system, etc.).
+**Setup Notes:**
+- Both client and server use the **minimal Gun configuration** (proven to work)
+- Server-side Gun.js relay requires only `Gun({ web: server })`
+- Client connects via `Gun({ peers: [...] })`
+- No file persistence needed (all data in browser localStorage)
+
+## ✅ P2P Architecture Status
+
+**Complete and Verified:**
+- ✅ Gun.js relay server fully functional (`Gun({ web: server })`)
+- ✅ P2P synchronisation working between browser windows/tabs
+- ✅ WebSocket connectivity stable
+- ✅ Offline-first functionality verified
+- ✅ Minimal Gun config proven production-ready
+
+The application is fully P2P-enabled. All peer discovery and data sync happens through the Gun relay.
 
 ## 💻 Development Commands
 

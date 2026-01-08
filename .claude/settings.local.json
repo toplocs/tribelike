@@ -31,7 +31,9 @@
       "Bash(gh pr close:*)",
       "Bash(gh pr list:*)",
       "Bash(git pull:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "WebFetch(domain:gun.eco)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }

@@ -8,6 +8,7 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig({
   base: process.env.BASE_PATH || '/',
+  envDir: '..', // Read .env from root directory (monorepo setup)
   plugins: [
     vue(),
     vueJsx(),

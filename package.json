@@ -12,7 +12,7 @@
     "pnpm": ">=3"
   },
   "scripts": {
-    "dev": "pnpm -F server dev & pnpm -F client dev",
+    "dev": "pnpm -F server gun-minimal & pnpm -F client dev",
     "dev:https": "pnpm -F server dev:https & pnpm -F client dev:https",
     "test": "pnpm vitest dev --run",
     "check": "pnpm -F !root check",
