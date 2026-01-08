@@ -1,8 +1,17 @@
 <template>
   <span
-    class="inline-flex items-center gap-x-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-blue-200 text-blue-900 ring-blue-800/30 cursor-pointer dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30"
+    class="inline-flex items-center gap-2 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-medium border border-gray-200 bg-white text-gray-700 cursor-pointer dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition-all hover:border-gray-300 dark:hover:border-gray-600"
   >
-    <UserIcon class="w-4 h-4" />
+    <img
+      v-if="image"
+      :src="image"
+      :alt="username"
+      class="w-4 h-4 rounded-full object-cover flex-shrink-0"
+    />
+    <UserIcon
+      v-else
+      class="w-4 h-4 flex-shrink-0 text-gray-400"
+    />
 
     <span>{{ username || 'Anonym' }}</span>
   </span>
@@ -13,6 +22,9 @@ import { UserIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
   username: {
+    type: String,
+  },
+  image: {
     type: String,
   },
 });

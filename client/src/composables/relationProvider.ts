@@ -104,6 +104,20 @@ export function relationProvider(
       relationListener = null;
     }
 
+    // First, load existing relations with .once()
+    gun.get(id)
+    .get('relations')
+    .map()
+    .once((data, key) => {
+      if (data) {
+        const exists = relations.value.some(x => x.id === data.id);
+        if (!exists) {
+          relations.value.push(data);
+        }
+      }
+    });
+
+    // Then, listen for future changes with .on()
     relationListener = gun.get(id)
     .get('relations')
     .map()
