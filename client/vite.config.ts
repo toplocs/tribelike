@@ -21,7 +21,7 @@ export default defineConfig({
           format: 'var',
         },
       },
-    })
+    } as any)
   ],
   resolve: {
     alias: {

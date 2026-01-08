@@ -20,7 +20,6 @@ import TopicBadge from '@/components/badges/TopicBadge.vue';
 import { useProfile } from '@/composables/profileProvider';
 import { useSphere } from '@/composables/sphereProvider';
 import { useRelation } from '@/composables/relationProvider';
-import { topicToTopic } from '@/assets/relationKeys.ts';
 import gun from '@/services/gun';
 
 const router = useRouter();
