@@ -4,7 +4,7 @@ export const profileRelations = [
     active: 'liking',
     passive: 'liked by',
     color: 'green',
-    icon: 'heart',
+    icon: 'like',
     accepts: ['topic'],
   }, {
     id: 'love',
@@ -25,7 +25,7 @@ export const profileRelations = [
     active: 'teaching',
     passive: 'teached by',
     color: 'yellow',
-    icon: 'study',
+    icon: 'teaches',
     accepts: ['topic'],
   }, {
     id: 'visit',
